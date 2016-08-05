@@ -1,0 +1,1366 @@
+namespace ast {
+/**
+@page frame_attributes Frame Attributes
+
+@section Frame_Attributes Frame Attributes
+
+@subsection Frame_ActiveUnit ActiveUnit
+
+Pay attention to units when one @ref Frame is used to match another
+(by @ref Frame.findFrame or @ref Frame.convert)? (bool)
+
+If the `ActiveUnit` flag is set in both
+template and target @ref Frame "Frames" then the returned @ref Mapping takes into account
+any differences in axis units. The default value for simple @ref Frame "Frames" is
+zero, which preserves the behaviour of versions of AST prior to version 2.0.
+
+If the `ActiveUnit` flag of either @ref Frame is `false`
+then the @ref Mapping will ignore any difference in the @ref Frame_Unit "Unit" attributes of
+corresponding template and target axes. In this mode, the @ref Frame_Unit "Unit"
+attributes are purely descriptive commentary for the benefit of
+human readers and do not influence the @ref Mapping "Mappings" between @ref Frame "Frames".
+This is the behaviour which all @ref Frame "Frames" had in older version of AST,
+prior to the introduction of this attribute.
+
+If the `ActiveUnit` flag of both @ref Frame "Frames" is `true`
+then the @ref Mapping from template to target will take account of any
+difference in the axis @ref Frame_Unit "Unit" attributes, where-ever possible. For
+instance, if corresponding target and template axes have @ref Frame_Unit "Unit" strings of
+"km" and "m", then the @ref FrameSet class will use a @ref ZoomMap to connect
+them which introduces a scaling of 1000. If no @ref Mapping can be found
+between the corresponding units string, then an error is reported.
+In this mode, it is assumed that values of the @ref Frame_Unit "Unit" attribute conform
+to the syntax for units strings described in the FITS WCS Paper I
+"Representations of world coordinates in FITS" (Greisen & Calabretta).
+Particularly, any of the named unit symbols, functions, operators or
+standard multiplier prefixes listed within that paper can be used within
+a units string. A units string may contain symbols for unit which are
+not listed in the FITS paper, but transformation to any other units
+will then not be possible (except to units which depend only on the
+same unknown units - thus "flops" can be transformed to "Mflops"
+even though "flops" is not a standard FITS unit symbol).
+
+A range of common non-standard variations of unit names and multiplier
+prefixes are also allowed, such as adding an "s" to the end of Angstrom,
+using a lower case "a" at the start of "angstrom", "micron" instead of
+"um", "sec" instead of "s", etc.
+
+If the `ActiveUnit` flag is `true`, setting a new @ref Frame_Unit "Unit" value for an
+axis may also change its @ref Frame_Label "Label" and @ref Frame_Symbol "Symbol" attributes.For instance, if
+an axis has @ref Frame_Unit "Unit" "Hz" and @ref Frame_Label "Label" "frequency", then changing its @ref Frame_Unit "Unit" to
+"log(Hz)" will change its @ref Frame_Label "Label" to "log( frequency )". In addition,
+the Axis Format attribute will be cleared when-ever a new value
+is assigned to the @ref Frame_Unit "Unit" attribute.
+
+Note, if a `true` value is set for the `ActiveUnit` flag, then changing a
+@ref Frame_Unit "Unit" value for the current @ref Frame within a @ref FrameSet will result in the
+@ref Frame being re-mapped (that is, the @ref Mapping "Mappings" which define the
+relationships between @ref Frame "Frames" within the @ref FrameSet will be modified to
+take into account the change in Units).
+
+### Applicability
+
+- @ref SkyFrame
+
+   The `ActiveUnit` flag for a @ref SkyFrame is always `false` (any value
+   supplied using this routine is ignored).
+
+- @ref SpecFrame
+
+   The `ActiveUnit` flag for a @ref SpecFrame is always `true` (any value
+   supplied using this routine is ignored).
+
+- @ref FluxFrame
+
+   The `ActiveUnit` flag for a @ref FluxFrame is always `true` (any value
+   supplied using this routine is ignored).
+
+- @ref CmpFrame
+
+   The default `ActiveUnit` flag for a @ref CmpFrame is `true` if both of the
+   component @ref Frame "Frames" are using active units, and `false` otherwise. When
+   a new value is set for the `ActiveUnit` flag, the flag value
+   is propagated to the component @ref Frame "Frames". This change will be
+   reflected through all references to the component @ref Frame "Frames", not
+   just those encapsulated within the @ref CmpFrame.
+
+- @ref Region
+
+   @ref Region "Regions" always use active units if possible.
+
+### Notes
+
+- The `ActiveUnit` flag is not truly a @ref Frame attribute because it can only be accessed
+    using @ref Frame.getActiveUnit @ref Frame.setActiveUnit. It cannot be @ref Object.test "tested"
+    or @ref Object.clear "cleared" (nor read or set using the protected @ref Object attribute accessors).
+
+@subsection Frame_AlignSystem AlignSystem
+
+Coordinate system in which to align the Frame. (string)
+
+This attribute controls how a @ref Frame behaves when it is used (by
+@ref Frame.findFrame or @ref Frame.convert) as a template to match another (target)
+@ref Frame. It identifies the coordinate system in which the two Frames
+will be aligned by the match.
+
+The values which may be assigned to this attribute, and its default
+value, depend on the class of @ref Frame and are described in the
+`Applicability` section below. In general, the @ref Frame_AlignSystem "AlignSystem" attribute
+will accept any of the values which may be assigned to the @ref Frame_System "System" attribute.
+
+The @ref Mapping returned by @ref Frame.findFrame or @ref Frame.convert will use the
+coordinate system specified by the @ref Frame_AlignSystem "AlignSystem" attribute as an
+intermediate coordinate system. The total returned @ref Mapping will first
+map positions from the first @ref Frame into this intermediate coordinate
+system, using the attributes of the first @ref Frame. It will then map
+these positions from the intermediate coordinate system into the
+second @ref Frame, using the attributes of the second @ref Frame.
+
+### Applicability
+
+@ref Frame
+
+   The @ref Frame_AlignSystem "AlignSystem" attribute for a basic @ref Frame always equals "Cartesian",
+   and may not be altered.
+
+@ref CmpFrame
+
+   The @ref Frame_AlignSystem "AlignSystem" attribute for a @ref CmpFrame always equals "Compound",
+   and may not be altered.
+
+@ref FrameSet
+
+   The @ref Frame_AlignSystem "AlignSystem" attribute of a @ref FrameSet is the same as that of its
+   @ref FrameSet.getCurrent "current frame".
+
+@ref SkyFrame
+
+   The default @ref Frame_AlignSystem "AlignSystem" attribute for a @ref SkyFrame is "ICRS".
+
+@ref SpecFrame
+
+   The default @ref Frame_AlignSystem "AlignSystem" attribute for a @ref SpecFrame is "Wave"
+   (wavelength).
+
+@ref TimeFrame
+
+   The default @ref Frame_AlignSystem "AlignSystem" attribute for a @ref TimeFrame is "MJD".
+
+
+@subsection Frame_Bottom Bottom(axis)
+
+The lowest axis value to be displayed (for instance, by the astGrid method). (double)
+
+### Applicability
+
+Frame
+
+    The default supplied by the Frame class is to display all axis
+    values, without any limit.
+
+SkyFrame
+
+    The SkyFrame class re-defines the default Bottom value to -90 degrees
+    for latitude axes, and 0 degrees for co-latitude axes. The
+    default for longitude axes is to display all axis values.
+
+
+@subsection Frame_Digits Digits or Digits(axis)
+
+Number of digits of precision. (int)
+
+This attribute specifies how many digits of precision are
+required by default when a coordinate value is formatted for a
+@ref Frame axis (e.g. using @ref Frame.format). Its value may be set either
+for a @ref Frame as a whole, or (by subscripting the attribute name
+with the number of an axis) for each axis individually. Any
+value set for an individual axis will over-ride the value for
+the @ref Frame as a whole.
+
+Note that the @ref Frame_Digits Digits value acts only as a means of determining a
+default @ref Frame_Format Format string. Its effects are over-ridden if a @ref Frame_Format Format
+string is set explicitly for an axis. However, if the @ref Frame_Format Format
+attribute specifies the precision using the string ".*", then
+the @ref Frame_Digits Digits attribute is used to determine the number of decimal
+places to produce.
+
+### Applicability
+
+- @ref Frame
+
+    The default @ref Frame_Digits Digits value supplied by the @ref Frame class is 7. If
+    a value less than 1 is supplied, then 1 is used instead.
+
+- @ref FrameSet
+
+    The @ref Frame_Digits Digits attribute of a @ref FrameSet (or one of its axes) is
+    the same as that of its current @ref Frame (as specified by the
+    Current attribute).
+
+- @ref Plot
+
+    The default @ref Frame_Digits Digits value used by the @ref Plot class when drawing
+    annotated axis labels is the smallest value which results in all
+    adjacent labels being distinct.
+
+- @ref TimeFrame
+
+    The @ref Frame_Digits Digits attribute is ignored when a @ref TimeFrame formats a value
+    as a date and time string (see the @ref Frame_Format Format attribute).
+
+
+@subsection Frame_Direction Direction(axis)
+
+Display axis in conventional direction? (bool)
+
+This attribute is a boolean value which suggests how the axes of
+a @ref Frame should be displayed (e.g.) in graphical output. By
+default, it has the value one, indicating that they should be
+shown in the conventional sense (increasing left to right for an
+abscissa, and bottom to top for an ordinate). If `false`,
+this attribute indicates that the direction should be reversed,
+as would often be done for an astronomical magnitude or a right
+ascension axis.
+
+### Applicability
+
+- @ref Frame
+
+    The default @ref Frame_Direction Direction value supplied by the @ref Frame class is 1,
+    indicating that all axes should be displayed in the
+    conventional direction.
+
+- @ref SkyFrame
+
+    The @ref SkyFrame class re-defines the default @ref Frame_Direction Direction value to
+    suggest that certain axes (e.g. right ascension) should be
+    plotted in reverse when appropriate.
+
+- @ref FrameSet
+
+    The @ref Frame_Direction Direction attribute of a @ref FrameSet axis is the same as
+    that of its current @ref Frame (as specified by the Current
+    attribute).
+
+- @ref Plot
+
+    The @ref Frame_Direction Direction attribute of the base @ref Frame in a @ref Plot is set to
+    indicate the sense of the two graphics axes, as implied by the
+    graphics bounding box supplied when the @ref Plot was created.
+
+### Notes
+
+- The @ref Frame_Direction Direction attribute does not directly affect the behaviour
+of the AST library. Instead, it serves as a hint to applications
+programs about the orientation in which they may wish to display
+any data associated with the @ref Frame. Applications are free to
+ignore this hint if they wish.
+
+
+@subsection Frame_Domain Domain
+
+Coordinate system domain. (string)
+
+This attribute contains a string which identifies the physical
+domain of the coordinate system that a @ref Frame describes.
+
+The @ref Frame_Domain Domain attribute also controls how a @ref Frame behaves when it is
+used (by @ref Frame.findFrame) as a template to match another (target)
+@ref Frame. It does this by specifying the @ref Frame_Domain Domain that the target
+@ref Frame should have in order to match the template. If the @ref Frame_Domain Domain
+value in the template @ref Frame is set, then only targets with the
+same @ref Frame_Domain Domain value will be matched. If the template's @ref Frame_Domain Domain
+value is not set, however, then the target's @ref Frame_Domain Domain will be
+ignored.
+
+### Applicability
+
+- @ref Frame
+
+    The default @ref Frame_Domain Domain value supplied by the @ref Frame class is an
+    empty string.
+
+- @ref SkyFrame
+
+    The @ref SkyFrame class re-defines the default @ref Frame_Domain Domain value to be
+    "SKY".
+
+- @ref CmpFrame
+
+    The @ref CmpFrame class re-defines the default @ref Frame_Domain Domain value to be
+    of the form "<dom1>-<dom2>", where `<dom1>` and `<dom2>` are the
+    Domains of the two component @ref Frame "Frames". If both these Domains are
+    blank, then the string "CMP" is used as the default @ref Frame_Domain Domain name.
+
+- @ref FrameSet
+
+    The @ref Frame_Domain Domain attribute of a @ref FrameSet is the same as that of its
+    current @ref Frame (as specified by the Current attribute).
+
+- @ref SpecFrame
+
+    The @ref SpecFrame class re-defines the default @ref Frame_Domain Domain value to be
+    "SPECTRUM".
+
+- @ref DSBSpecFrame
+
+    The @ref DSBSpecFrame class re-defines the default @ref Frame_Domain Domain value to be
+    "DSBSPECTRUM".
+
+- @ref FluxFrame
+
+    The @ref FluxFrame class re-defines the default @ref Frame_Domain Domain value to be
+    "FLUX".
+
+- @ref SpecFluxFrame
+
+    The @ref FluxFrame class re-defines the default @ref Frame_Domain Domain value to be
+    "SPECTRUM-FLUX".
+
+- @ref TimeFrame
+
+    The @ref TimeFrame class re-defines the default @ref Frame_Domain Domain value to be
+    "TIME".
+
+### Notes
+
+- All @ref Frame_Domain Domain values are converted to upper case and white space
+is removed before use.
+
+
+@subsection Frame_Dut1 Dut1
+
+The UT1-UTC correction (sec). (double)
+
+This attribute is used when calculating the Local Apparent Sidereal
+Time corresponding to @ref SkyFrame's @ref Frame_Epoch Epoch value (used when converting
+positions to or from the "AzEl" system). It should be set to the
+difference, in seconds, between the UT1 and UTC timescales at the
+moment in time represented by the @ref SkyFrame's @ref Frame_Epoch Epoch attribute. The
+value to use is unpredictable and depends on changes in the earth's
+rotation speed. Values for UT1-UTC can be obtained from the
+International Earth Rotation and Reference Systems Service
+(IERS) at http://www.iers.org/.
+
+Currently, the correction is always less than 1 second. This is
+ensured by the occasional introduction of leap seconds into the UTC
+timescale. Therefore no great error will usually result if no value
+is assigned to this attribute (in which case a default value of
+zero is used). However, it is possible that a decision may be taken
+at some time in the future to abandon the introduction of leap
+seconds, in which case the DUT correction could grow to significant
+sizes.
+
+
+@subsection Frame_Epoch Epoch
+
+Epoch of observation. (string or double in, double out)
+
+This attribute is used to qualify the coordinate systems described by
+a @ref Frame, by giving the moment in time when the coordinates are known
+to be correct. Often, this will be the date of observation, and is
+important in cases where coordinates systems move with respect to each
+other over the course of time.
+
+The @ref Frame_Epoch Epoch attribute is stored as a Modified Julian Date, but
+when setting its value it may be given in a variety of
+formats. See the "Input Formats" section (below) for details.
+Strictly, the @ref Frame_Epoch Epoch value should be supplied in the TDB timescale,
+but for some purposes (for instance, for converting sky positions
+between different types of equatorial system) the timescale is not
+significant, and UTC may be used.
+
+#### Input Formats
+
+The formats accepted when setting an @ref Frame_Epoch Epoch value are listed
+below. They are all case-insensitive and are generally tolerant
+of extra white space and alternative field delimiters:
+
+- Besselian @ref Frame_Epoch Epoch: Expressed in decimal years, with or without
+decimal places ("B1950" or "B1976.13" for example).
+
+- Julian @ref Frame_Epoch Epoch: Expressed in decimal years, with or without
+decimal places ("J2000" or "J2100.9" for example).
+
+- Year: Decimal years, with or without decimal places ("1996.8"
+for example).  Such values are interpreted as a Besselian epoch
+(see above) if less than 1984.0 and as a Julian epoch otherwise.
+
+- Julian Date: With or without decimal places ("JD 2454321.9" for
+example).
+
+- Modified Julian Date: With or without decimal places
+("MJD 54321.4" for example).
+
+- Gregorian Calendar Date: With the month expressed either as an
+integer or a 3-character abbreviation, and with optional decimal
+places to represent a fraction of a day ("1996-10-2" or
+"1996-Oct-2.6" for example). If no fractional part of a day is
+given, the time refers to the start of the day (zero hours).
+
+- Gregorian Date and Time: Any calendar date (as above) but with
+a fraction of a day expressed as hours, minutes and seconds
+("1996-Oct-2 12:13:56.985" for example). The date and time can be
+separated by a space or by a "T" (as used by ISO8601 format).
+
+#### Output Format
+
+When enquiring @ref Frame_Epoch Epoch values, the format used is the "Year"
+format described under "Input Formats". This is a value in
+decimal years which will be a Besselian epoch if less than
+1984.0 and a Julian epoch otherwise.  By omitting any character
+prefix, this format allows the @ref Frame_Epoch Epoch value to be obtained as
+either a character string or a floating point value.
+
+### Applicability
+
+- @ref Frame
+
+    All @ref Frame "Frames" have this attribute. The basic @ref Frame class provides
+    a default of J2000.0 (Julian) but makes no use of the @ref Frame_Epoch Epoch value.
+    This is because the @ref Frame class does not distinguish between
+    different Cartesian coordinate systems (see the @ref Frame_System "System" attribute).
+
+- @ref CmpFrame
+
+    The default @ref Frame_Epoch Epoch value for a @ref CmpFrame is selected as follows;
+    if the @ref Frame_Epoch Epoch attribute has been set in the first component @ref Frame
+    then the @ref Frame_Epoch Epoch value from the first component @ref Frame is used as
+    the default for the @ref CmpFrame. Otherwise, if the @ref Frame_Epoch Epoch attribute has
+    been set in the second component @ref Frame then the @ref Frame_Epoch Epoch value from the
+    second component @ref Frame is used as the default for the @ref CmpFrame.
+    Otherwise, the default @ref Frame_Epoch Epoch value from the first component
+    @ref Frame is used as the default for the @ref CmpFrame. When the @ref Frame_Epoch Epoch
+    attribute of a @ref CmpFrame is set or cleared, it is also set or
+    cleared in the two component @ref Frame "Frames".
+
+- @ref FrameSet
+
+    The @ref Frame_Epoch Epoch attribute of a @ref FrameSet is the same as that of its current
+    @ref Frame (as specified by the Current attribute).
+
+- @ref SkyFrame
+
+    The coordinates of sources within a @ref SkyFrame can changed with time
+    for various reasons, including: (i) changing aberration of light
+    caused by the observer's velocity (e.g. due to the Earth's motion
+    around the Sun), (ii) changing gravitational deflection by the Sun
+    due to changes in the observer's position with time, (iii) fictitious
+    motion due to rotation of non-inertial coordinate systems (e.g. the
+    old FK4 system), and (iv) proper motion of the source itself (although
+    this last effect is not handled by the @ref SkyFrame class because it
+    affects individual sources rather than the coordinate system as
+    a whole).
+
+    The default @ref Frame_Epoch Epoch value in a @ref SkyFrame is B1950.0 (Besselian) for the
+    old FK4-based coordinate systems (see the @ref Frame_System "System" attribute) and
+    J2000.0 (Julian) for all others.
+
+    Care must be taken to distinguish the @ref Frame_Epoch Epoch value, which relates to
+    motion (or apparent motion) of the source, from the superficially
+    similar Equinox value. The latter is used to qualify a coordinate
+    system which is itself in motion in a (notionally) predictable way
+    as a result of being referred to a slowly moving reference plane
+    (e.g. the equator).
+
+    See the description of the @ref Frame_System "System" attribute for details of which
+    qualifying attributes apply to each celestial coordinate system.
+
+- @ref TimeFrame
+
+    A @ref TimeFrame describes a general time axis and so cannot be completely
+    characterised by a single @ref Frame_Epoch Epoch value. For this reason the @ref TimeFrame
+    class makes no use of the @ref Frame_Epoch Epoch attribute. However, user code can
+    still make use of the attribute if necessary to represent a "typical"
+    time spanned by the @ref TimeFrame. The default @ref Frame_Epoch Epoch value for a @ref TimeFrame
+    will be the TDB equivalent of the current value of the @ref TimeFrame's
+    TimeOrigin attribute. If no value has been set for TimeOrigin,
+    then the default @ref Frame_Epoch Epoch value is J2000.0.
+
+
+@subsection Frame_Format Format(axis)
+
+Format specification for axis values. (string)
+
+This attribute specifies the format to be used when displaying
+coordinate values associated with a particular @ref Frame axis
+(i.e. to convert values from binary to character form). It is
+interpreted by @ref Frame.format and determines the
+formatting which it applies.
+
+If no @ref Frame_Format Format value is set for a @ref Frame axis, a default value is
+supplied instead. This is based on the value of the @ref Frame_Digits Digits, or
+@ref Frame_Digits Digits(axis), attribute and is chosen so that it displays the
+requested number of digits of precision.
+
+### Applicability
+
+- @ref Frame
+
+    The @ref Frame class interprets this attribute as a format
+    specification string to be passed to the C "printf" function
+    (e.g. "%1.7G") in order to format a single coordinate value
+    (supplied as a double precision number).
+
+    When supplying a value for this attribute, beware that the
+    "%" character may be interpreted directly as a format
+    specification by some printf-like functions (option strings
+    in constructors and @ref Object.set but not @ref Frame.setFormat).
+    You may need to double it (i.e. use "%%") to avoid this.
+
+- @ref SkyFrame
+
+    The @ref SkyFrame class re-defines the syntax and default value of
+    the @ref Frame_Format Format string to allow the formatting of sexagesimal
+    values as appropriate for the particular celestial coordinate
+    system being represented. The syntax of @ref SkyFrame @ref Frame_Format Format
+    strings is described (below) in the "@ref SkyFrame Formats"
+    section.
+
+- @ref FrameSet
+
+    The @ref Frame_Format Format attribute of a @ref FrameSet axis is the same as that
+    of its current @ref Frame (as specified by the Current
+    attribute). Note that the syntax of the @ref Frame_Format Format string is also
+    determined by the current @ref Frame.
+
+- @ref TimeFrame
+
+    The @ref TimeFrame class extends the syntax of the @ref Frame_Format Format string to
+    allow the formatting of @ref TimeFrame axis values as Gregorian calendar
+    dates and times. The syntax of @ref TimeFrame @ref Frame_Format Format strings is described
+    (below) in the "@ref TimeFrame Formats" section.
+
+#### SkyFrame Formats
+
+The @ref Frame_Format Format string supplied for a @ref SkyFrame should contain zero or
+more of the following characters. These may occur in any order,
+but the following is recommended for clarity:
+
+- "+": Indicates that a plus sign should be prefixed to positive
+values. By default, no plus sign is used.
+
+- "z": Indicates that leading zeros should be prefixed to the
+value so that the first field is of constant width, as would be
+required in a fixed-width table (leading zeros are always
+prefixed to any fields that follow). By default, no leading
+zeros are added.
+
+- "i": Use the standard ISO field separator (a colon) between
+fields. This is the default behaviour.
+
+- "b": Use a blank to separate fields.
+
+- "l": Use a letter ("h"/"d", "m" or "s" as appropriate) to
+separate fields.
+
+- "g": Use a letter and symbols to separate fields ("h"/"d", "m" or "s",
+etc, as appropriate), but include escape sequences in the formatted
+value so that the @ref Plot class will draw the separators as small
+super-scripts.
+The default escape sequences are optimised for the pgplot graphics
+package, but new escape sequences may be specified using function
+astSetSkyDelim.
+
+- "d": Include a degrees field. Expressing the angle purely in
+degrees is also the default if none of "h", "m", "s" or "t" are
+given.
+
+- "h": Express the angle as a time and include an hours field
+(where 24 hours correspond to 360 degrees). Expressing the angle
+purely in hours is also the default if "t" is given without
+either "m" or "s".
+
+- "m": Include a minutes field. By default this is not included.
+
+- "s": Include a seconds field. By default this is not included.
+This request is ignored if "d" or "h" is given, unless a minutes
+field is also included.
+
+- "t": Express the angle as a time (where 24 hours correspond to
+360 degrees). This option is ignored if either "d" or "h" is
+given and is intended for use where the value is to be expressed
+purely in minutes and/or seconds of time (with no hours
+field). If "t" is given without "d", "h", "m" or "s" being
+present, then it is equivalent to "h".
+
+- ".": Indicates that decimal places are to be given for the
+final field in the formatted string (whichever field this
+is). The "." should be followed immediately by an unsigned
+integer which gives the number of decimal places required, or by an
+asterisk. If an asterisk is supplied, a default number of decimal
+places is used which is based on the value of the @ref Frame_Digits Digits
+attribute.
+
+All of the above format specifiers are case-insensitive. If
+several characters make conflicting requests (e.g. if both "i"
+and "b" appear), then the character occurring last takes
+precedence, except that "d" and "h" always override "t".
+
+If the format string starts with a percentage sign (%), then the
+whole format string is assumed to conform to the syntax defined by
+the @ref Frame class, and the axis values is formated as a decimal
+radians value.
+
+#### Formats
+
+The @ref Frame_Format Format string supplied for a @ref TimeFrame should either use the
+syntax defined by the base @ref Frame class (i.e. a C "printf" format
+string), or the extended "iso" syntax described below (the default
+value is inherited from the @ref Frame class):
+
+- C "printf" syntax: If the @ref Frame_Format Format string is a C "printf" format
+description such as "%1.7G", the @ref TimeFrame axis value will be
+formatted without change as a floating point value using this format.
+The formatted string will thus represent an offset from the zero point
+specified by the @ref TimeFrame's TimeOrigin attribute, measured in
+units given by the @ref TimeFrame's @ref Frame_Unit "Unit" attribute.
+
+- "iso" syntax: This is used to format a @ref TimeFrame axis value as a
+Gregorian date followed by an optional time of day. If the @ref Frame_Format Format
+value commences with the string "iso" then the @ref TimeFrame axis value
+will be converted to an absolute MJD, including the addition of the
+current TimeOrigin value, and then formatted as a Gregorian date
+using the format "yyyy-mm-dd". Optionally, the @ref Frame_Format Format value may
+include an integer precision following the "iso" specification (e.g.
+"iso.2"), in which case the time of day will be appended to the
+formatted date (if no time of day is included, the date field is
+rounded to the nearest day). The integer value in the @ref Frame_Format Format string
+indicates the number of decimal places to use in the seconds field. For
+instance, a @ref Frame_Format Format value of "iso.0" produces a time of day of the form
+"hh:mm:ss", and a @ref Frame_Format Format value of "iso.2" produces a time of day of the
+form "hh:mm:ss.ss". The date and time fields will be separated by a
+space unless 'T' is appended to the end of string, in which case
+the letter T (upper case) will be used as the separator. The value of
+the @ref Frame_Digits Digits attribute is ignored when using this "iso" format.
+
+
+@subsection Frame_InternalUnit InternalUnit(axis)
+
+Physical units for unformated axis values. (string, read only)
+
+This read-only attribute contains a textual representation of the
+physical units used to represent unformatted (i.e. floating point)
+values on a particular axis of a @ref Frame, typically handled internally
+within application code. In most cases, the value of the @ref Frame_InternalUnit InternalUnit
+attribute will be the same as @ref Frame_Unit "Unit" attribute (i.e. formatted and
+unformatted axis values will normally use the same system of units).
+The main exception to this is the @ref SkyFrame class, which represents
+unformatted axis values in radians, regardless of the current
+setting of the @ref Frame_Unit "Unit" attribute.
+
+
+@subsection Frame_Label Label(axis) (string)
+
+Axis label. (string)
+
+This attribute specifies a label to be attached to each axis of
+a @ref Frame when it is represented (e.g.) in graphical output.
+
+If a @ref Frame_Label Label value has not been set for a @ref Frame axis, then a
+suitable default is supplied.
+
+### Applicability
+
+- @ref Frame
+
+    The default supplied by the @ref Frame class is the string "Axis<n>",
+    where `<n>` is 1, 2, etc. for each successive axis.
+
+- @ref SkyFrame
+
+    The @ref SkyFrame class re-defines the default @ref Frame_Label Label value
+    (e.g. to "Right ascension" or "Galactic latitude") as
+    appropriate for the particular celestial coordinate system
+    being represented.
+
+- @ref TimeFrame
+
+    The @ref TimeFrame class re-defines the default @ref Frame_Label Label value as
+    appropriate for the particular time system being represented.
+
+- @ref FrameSet
+
+    The @ref Frame_Label Label attribute of a @ref FrameSet axis is the same as that of
+    its current @ref Frame (as specified by the Current attribute).
+
+### Notes
+
+- Axis labels are intended purely for interpretation by human readers and not by software.
+
+
+@subsection Frame_MatchEnd MatchEnd
+
+Match trailing axes? (bool)
+
+This attribute is a boolean value which controls how a @ref Frame
+behaves when it is used (by @ref Frame.findFrame) as a template to match
+another (target) @ref Frame. It applies only in the case where a
+match occurs between template and target @ref Frame "Frames" with different
+numbers of axes.
+
+If the @ref Frame_MatchEnd @ref Frame_MatchEnd "MatchEnd" value of the template @ref Frame is zero, then the
+axes which occur first in the target @ref Frame will be matched and
+any trailing axes (in either the target or template) will be
+disregarded. If it is `true`, the final axes in each @ref Frame
+will be matched and any un-matched leading axes will be
+disregarded instead.
+
+### Applicability
+
+- @ref Frame
+
+    The default @ref Frame_MatchEnd @ref Frame_MatchEnd "MatchEnd" value for a @ref Frame is zero, so that
+    trailing axes are disregarded.
+
+- @ref FrameSet
+
+    The @ref Frame_MatchEnd @ref Frame_MatchEnd "MatchEnd" attribute of a @ref FrameSet
+    is the same as that of its current @ref Frame (as specified by the Current attribute).
+
+
+@subsection Frame_MaxAxes MaxAxes
+
+@ref Frame_MaxAxes "MaxAxes" specifies the maximum number of axes that the target @ref Frame may
+have when calling @ref Frame.findFrame.
+
+Normally, this value will equal the number of @ref Frame axes, so
+that a template @ref Frame will only match another @ref Frame with the
+same number of axes as itself. By setting a different value,
+however, the matching process may be used to identify @ref Frame "Frames"
+with specified numbers of axes.
+
+### Applicability to Subclasses
+
+- @ref CmpFrame
+
+   The @ref Frame_MaxAxes "MaxAxes" attribute of a @ref CmpFrame defaults to a large number
+   (1000000) which is much larger than any likely number of axes in
+   a @ref Frame. Combined with the @ref Frame_MinAxes "MinAxes" default of zero (for a
+   @ref CmpFrame), this means that the default behaviour for a @ref CmpFrame
+   is to match any target @ref Frame that consists of a subset of the
+   axes in the template @ref CmpFrame. To change this so that a @ref CmpFrame
+   will only match @ref Frame "Frames" that have the same number of axes, you
+   should set the @ref CmpFrame @ref Frame_MaxAxes "MaxAxes"
+   and @ref Frame_MinAxes "MinAxes" attributes to the
+   number of axes in the @ref CmpFrame.
+
+- @ref FrameSet
+
+   The @ref Frame_MaxAxes "MaxAxes" attribute of a @ref FrameSet is the same as that of
+   its current @ref Frame (as specified by the Current attribute).
+
+
+@subsection Frame_MinAxes MinAxes
+
+@ref Frame_MinAxes "MinAxes" specifies the minimum number of axes that the target @ref Frame may
+have in order to match the template.
+
+Normally, this value will equal the number of @ref Frame axes, so
+that a template @ref Frame will only match another @ref Frame with the
+same number of axes as itself. By setting a different value,
+however, the matching process may be used to identify @ref Frame "Frames"
+with specified numbers of axes.
+
+### Applicability to subclasses
+
+
+- @ref CmpFrame
+
+   The @ref Frame_MinAxes "MinAxes" attribute of a @ref CmpFrame defaults to zero.
+   Combined with the MaxAxes default of 1000000 (for a CmpFrame),
+   this means that the default behaviour for a @ref CmpFrame
+   is to match any target @ref Frame that consists of a subset of the
+   axes in the template @ref CmpFrame. To change this so that a @ref CmpFrame
+   will only match @ref Frame "Frames" that have the same number of axes, you
+   should set the @ref CmpFrame @ref Frame_MinAxes "MinAxes" and @ref Frame_MaxAxes "MaxAxes"
+   attributes to the number of axes in the @ref CmpFrame.
+
+- @ref FrameSet
+
+   The @ref Frame_MinAxes "MinAxes" attribute of a @ref FrameSet is the same as that of
+   its current @ref Frame (as specified by the Current attribute).
+
+
+@subsection  Frame_Naxes Naxes
+
+@ref Frame_Naxes "Naxes" is the number of axes in the frame
+(i.e. the number of dimensions of the coordinate space which the Frame describes).
+
+This value is determined when the Frame is created.
+
+### Applicability for subclasses
+
+- @ref FrameSet
+
+    The @ref Frame_Naxes "Naxes" attribute of a @ref FrameSet is the same as that of its
+    @ref FrameSet.getCurrent "current frame".
+
+@ref CmpFrame
+
+    The @ref Frame_Naxes "Naxes" attribute of a @ref CmpFrame is equal to the sum of the
+    @ref Frame_Naxes "Naxes" values of its two component @ref Frame "Frames".
+
+
+@subsection Frame_NormUnit NormUnit(axis)
+
+Normalised physical units for formatted axis values. (string, read only)
+
+The value of this read-only attribute is derived from the current
+value of the @ref Frame_Unit "Unit" attribute. It will represent an equivalent system
+of units to the @ref Frame_Unit "Unit" attribute, but will potentially be simplified.
+For instance, if @ref Frame_Unit "Unit" is set to "s*(m/s)",
+the @ref Frame_NormUnit "NormUnit" value will be "m".
+If no simplification can be performed, the value of the
+@ref Frame_NormUnit "NormUnit" attribute will equal that of the
+@ref Frame_Unit "Unit" attribute.
+
+
+@subsection Frame_ObsAlt ObsAlt
+
+The geodetic altitude of the observer (m). (double)
+
+This attribute specifies the geodetic altitude of the observer, in
+metres, relative to the IAU 1976 reference ellipsoid. The basic @ref Frame
+class makes no use of this attribute, but specialised subclasses of
+@ref Frame may use it. For instance, the @ref SpecFrame, @ref SkyFrame and @ref TimeFrame
+classes use it. The default value is zero.
+
+### Applicability
+
+- @ref Frame
+
+    All @ref Frame "Frames" have this attribute.
+
+- @ref SpecFrame
+
+    Together with the @ref Frame_ObsLon ObsLon, @ref Frame_Epoch Epoch, RefRA and RefDec attributes,
+    it defines the Doppler shift introduced by the observers diurnal
+    motion around the earths axis, which is needed when converting to
+    or from the topocentric standard of rest. The maximum velocity
+    error which can be caused by an incorrect value is 0.5 km/s. The
+    default value for the attribute is zero.
+
+- @ref TimeFrame
+
+    Together with the @ref Frame_ObsLon ObsLon attribute, it is used when converting
+    between certain time scales (TDB, TCB, LMST, LAST)
+
+
+@subsection Frame_ObsLat ObsLat
+
+The geodetic latitude of the observer. (string)
+
+This attribute specifies the geodetic latitude of the observer, in
+degrees, relative to the IAU 1976 reference ellipsoid. The basic @ref Frame
+class makes no use of this attribute, but specialised subclasses of
+@ref Frame may use it. For instance, the @ref SpecFrame, @ref SkyFrame and @ref TimeFrame
+classes use it. The default value is zero.
+
+The value is stored internally in radians, but is converted to and
+from a degrees string for access. Some example input formats are:
+"22:19:23.2", "22 19 23.2", "22:19.387", "22.32311", "N22.32311",
+"-45.6", "S45.6". As indicated, the sign of the latitude can
+optionally be indicated using characters "N" and "S" in place of the
+usual "+" and "-". When converting the stored value to a string, the
+format "[s]dd:mm:ss.ss" is used, when "[s]" is "N" or "S".
+
+### Applicability
+
+- @ref Frame
+
+    All @ref Frame "Frames" have this attribute.
+
+- @ref SpecFrame
+
+    Together with the @ref Frame_ObsLon ObsLon, @ref Frame_Epoch Epoch, RefRA and RefDec attributes,
+    it defines the Doppler shift introduced by the observers diurnal
+    motion around the earths axis, which is needed when converting to
+    or from the topocentric standard of rest. The maximum velocity
+    error which can be caused by an incorrect value is 0.5 km/s. The
+    default value for the attribute is zero.
+
+- @ref TimeFrame
+
+    Together with the @ref Frame_ObsLon ObsLon attribute, it is used when converting
+    between certain time scales (TDB, TCB, LMST, LAST)
+
+
+
+@subsection Frame_ObsLon ObsLon
+
+The geodetic longitude of the observer. (string)
+
+This attribute specifies the geodetic (or equivalently, geocentric)
+longitude of the observer, in degrees, measured positive eastwards.
+See also attribute @ref Frame_ObsLat ObsLat. The basic @ref Frame class makes no use of this
+attribute, but specialised subclasses of @ref Frame may use it. For instance,
+the @ref SpecFrame, @ref SkyFrame and @ref TimeFrame classes use it. The default value
+is zero.
+
+The value is stored internally in radians, but is converted to and
+from a degrees string for access. Some example input formats are:
+"155:19:23.2", "155 19 23.2", "155:19.387", "155.32311", "E155.32311",
+"-204.67689", "W204.67689". As indicated, the sign of the longitude can
+optionally be indicated using characters "E" and "W" in place of the
+usual "+" and "-". When converting the stored value to a string, the
+format "[s]ddd:mm:ss.ss" is used, when "[s]" is "E" or "W" and the
+numerical value is chosen to be less than 180 degrees.
+
+### Applicability
+
+- @ref Frame
+
+    All @ref Frame "Frames" have this attribute.
+
+- @ref SpecFrame
+
+    Together with the @ref Frame_ObsLon ObsLon, @ref Frame_Epoch Epoch, RefRA and RefDec attributes,
+    it defines the Doppler shift introduced by the observers diurnal
+    motion around the earths axis, which is needed when converting to
+    or from the topocentric standard of rest. The maximum velocity
+    error which can be caused by an incorrect value is 0.5 km/s. The
+    default value for the attribute is zero.
+
+- @ref TimeFrame
+
+    Together with the @ref Frame_ObsLon ObsLon attribute, it is used when converting
+    between certain time scales (TDB, TCB, LMST, LAST)
+
+
+@subsection Frame_Permute Permute
+
+Allow axis permutation when used as a template? (bool)
+
+This attribute is a boolean value which controls how a @ref Frame
+behaves when it is used (by @ref Frame.findFrame) as a template to match
+another (target) @ref Frame. It specifies whether the axis order of
+the target @ref Frame may be permuted in order to obtain a match.
+
+If the template's @ref Frame_Permute Permute value is zero, it will match a target
+only if it can do so without changing the order of its
+axes. Otherwise, it will attempt to permute the target's axes as
+necessary.
+
+The default value is 1, so that axis permutation will be attempted.
+
+### Applicability
+
+- @ref Frame
+
+    All @ref Frame "Frames" have this attribute. However, the @ref Frame class
+    effectively ignores this attribute and behaves as if it has
+    the value 1. This is because the axes of a basic @ref Frame are
+    not distinguishable and will always match any other @ref Frame
+    whatever their order.
+
+- @ref SkyFrame
+
+    Unlike a basic @ref Frame, the @ref SkyFrame class makes use of this
+    attribute.
+
+- @ref FrameSet
+
+    The @ref Frame_Permute Permute attribute of a @ref FrameSet is the same as that of
+    its current @ref Frame (as specified by the Current attribute).
+
+
+@subsection Frame_PreserveAxes
+
+Preserve found axes in result? (bool)
+
+This attribute controls how a @ref Frame behaves when it is used (by
+@ref Frame.findFrame) as a template to match another (target) @ref Frame. It
+determines which axes appear (and in what order) in the "result"
+@ref Frame produced.
+
+If PreserveAxes is zero in the template @ref Frame, then the result
+@ref Frame will have the same number (and order) of axes as the
+template. If it is `true`, however, the axes of the target
+@ref Frame will be preserved, so that the result @ref Frame will have the
+same number (and order) of axes as the target.
+
+The default value is zero, so that target axes are not preserved
+and the result @ref Frame resembles the template.
+
+### Applicability
+
+- @ref Frame
+
+    All @ref Frame "Frames" have this attribute.
+
+- @ref FrameSet
+
+    The PreserveAxes attribute of a @ref FrameSet is the same as that
+    of its current @ref Frame (as specified by the Current attribute).
+
+
+
+@subsection Frame_Symbol
+
+Axis symbol. (string)
+
+This attribute specifies a short-form symbol to be used to
+represent coordinate values for a particular axis of a
+@ref Frame. This might be used (e.g.) in algebraic expressions where
+a full description of the axis would be inappropriate. Examples
+include "RA" and "Dec" (for Right Ascension and Declination).
+
+If a Symbol value has not been set for a @ref Frame axis, then a
+suitable default is supplied.
+
+### Applicability
+
+- @ref Frame
+
+    The default Symbol value supplied by the @ref Frame class is the
+    string "<Domain><n>", where `<n>` is 1, 2, etc. for successive
+    axes, and `<Domain>` is the value of the @ref Frame's @ref Frame_Domain Domain
+    attribute (truncated if necessary so that the final string
+    does not exceed 15 characters). If no @ref Frame_Domain Domain value has been
+    set, "x" is used as the `<Domain>` value in constructing this
+    default string.
+
+- @ref SkyFrame
+
+    The @ref SkyFrame class re-defines the default Symbol value
+    (e.g. to "RA" or "Dec") as appropriate for the particular
+    celestial coordinate system being represented.
+
+- @ref TimeFrame
+
+    The @ref TimeFrame class re-defines the default Symbol value as
+    appropriate for the particular time system being represented.
+
+- @ref FrameSet
+
+    The Symbol attribute of a @ref FrameSet axis is the same as that
+    of its current @ref Frame (as specified by the Current attribute).
+
+
+@subsection Frame_System System
+
+Coordinate system used to describe positions within the domain. (string)
+
+In general it is possible for positions within a given physical
+domain to be described using one of several different coordinate
+systems. For instance, the @ref SkyFrame class can use galactic
+coordinates, equatorial coordinates, etc, to describe positions on
+the sky. As another example, the @ref SpecFrame class can use frequency,
+wavelength, velocity, etc, to describe a position within an
+electromagnetic spectrum. The @ref Frame_System "System" attribute identifies the particular
+coordinate system represented by a @ref Frame. Each class of @ref Frame
+defines a set of acceptable values for this attribute, as listed
+below (all are case insensitive). Where more than one alternative
+@ref Frame_System "System" value is shown, the first of will be returned when an
+enquiry is made.
+
+### Applicability
+
+- @ref Frame
+
+   The @ref Frame_System "System" attribute for a basic @ref Frame always equals "Cartesian",
+   and may not be altered.
+
+- @ref CmpFrame
+
+   The @ref Frame_System "System" attribute for a @ref CmpFrame always equals "Compound",
+   and may not be altered. In addition, the @ref CmpFrame class allows
+   the @ref Frame_System "System" attribute to be referenced for a component @ref Frame by
+   including the index of an axis within the required component
+   @ref Frame. For instance, "System(3)" refers to the @ref Frame_System "System" attribute
+   of the component @ref Frame which includes axis 3 of the @ref CmpFrame.
+
+- @ref FrameSet
+
+   The @ref Frame_System "System" attribute of a @ref FrameSet is the same as that of its
+   current @ref Frame (as specified by the Current attribute).
+
+- @ref SkyFrame
+
+   The @ref SkyFrame class supports the following @ref Frame_System "System" values and
+   associated celestial coordinate systems:
+
+   - "AZEL": Horizon coordinates. The longitude axis is azimuth
+   such that geographic north has an azimuth of zero and geographic
+   east has an azimuth of +PI/2 radians. The zenith has elevation
+   +PI/2. When converting to and from other celestial coordinate
+   systems, no corrections are applied for atmospheric refraction
+   or polar motion (however, a correction for diurnal aberattion is
+   applied). Note, unlike most other
+   celestial coordinate systems, this system is right handed. Also,
+   unlike other @ref SkyFrame systems, the AzEl system is sensitive to
+   the timescale in which the @ref Frame_Epoch Epoch value is supplied. This is
+   because of the gross diurnal rotation which this system undergoes,
+   causing a small change in time to translate to a large rotation.
+   When converting to or from an AzEl system, the @ref Frame_Epoch Epoch value for
+   both source and destination Sky@ref Frame "Frames" should be supplied in the
+   TDB timescale. The difference between TDB and TT is between 1
+   and 2 milliseconds, and so a TT value can usually be supplied in
+   place of a TDB value. The TT timescale is related to TAI via
+   TT = TAI + 32.184 seconds.
+
+   - "ECLIPTIC": Ecliptic coordinates (IAU 1980), referred to the
+   ecliptic and mean equinox specified by the qualifying Equinox
+   value.
+
+   - "FK4": The old FK4 (barycentric) equatorial coordinate system,
+   which should be qualified by an Equinox value. The underlying
+   model on which this is based is non-inertial and rotates slowly
+   with time, so for accurate work FK4 coordinate systems should
+   also be qualified by an @ref Frame_Epoch Epoch value.
+
+   - "FK4-NO-E" or "FK4_NO_E": The old FK4 (barycentric) equatorial
+   system but without the "E-terms of aberration" (e.g. some radio
+   catalogues). This coordinate system should also be qualified by
+   both an Equinox and an @ref Frame_Epoch Epoch value.
+
+   - "FK5" or "EQUATORIAL": The modern FK5 (barycentric) equatorial
+   coordinate system. This should be qualified by an Equinox value.
+
+   - "GALACTIC": Galactic coordinates (IAU 1958).
+
+   - "GAPPT", "GEOCENTRIC" or "APPARENT": The geocentric apparent
+   equatorial coordinate system, which gives the apparent positions
+   of sources relative to the true plane of the Earth's equator and
+   the equinox (the coordinate origin) at a time specified by the
+   qualifying @ref Frame_Epoch Epoch value. (Note that no Equinox is needed to
+   qualify this coordinate system because no model "mean equinox"
+   is involved.)  These coordinates give the apparent right
+   ascension and declination of a source for a specified date of
+   observation, and therefore form an approximate basis for
+   pointing a telescope. Note, however, that they are applicable to
+   a fictitious observer at the Earth's centre, and therefore
+   ignore such effects as atmospheric refraction and the (normally
+   much smaller) aberration of light due to the rotational velocity
+   of the Earth's surface.  Geocentric apparent coordinates are
+   derived from the standard FK5 (J2000.0) barycentric coordinates
+   by taking account of the gravitational deflection of light by
+   the Sun (usually small), the aberration of light caused by the
+   motion of the Earth's centre with respect to the barycentre
+   (larger), and the precession and nutation of the Earth's spin
+   axis (normally larger still).
+
+   - "HELIOECLIPTIC": Ecliptic coordinates (IAU 1980), referred to the
+   ecliptic and mean equinox of J2000.0, in which an offset is added to
+   the longitude value which results in the centre of the sun being at
+   zero longitude at the date given by the @ref Frame_Epoch Epoch attribute. Attempts to
+   set a value for the Equinox attribute will be ignored, since this
+   system is always referred to J2000.0.
+
+   - "ICRS": The Internation Celestial Reference System, realised
+   through the Hipparcos catalogue. Whilst not an equatorial system
+   by definition, the ICRS is very close to the FK5 (J2000) system
+   and is usually treated as an equatorial system. The distinction
+   between ICRS and FK5 (J2000) only becomes important when accuracies
+   of 50 milli-arcseconds or better are required. ICRS need not be
+   qualified by an Equinox value.
+
+   - "J2000": An equatorial coordinate system based on the mean
+   dynamical equator and equinox of the J2000 epoch. The dynamical
+   equator and equinox differ slightly from those used by the FK5
+   model, and so a "J2000" @ref SkyFrame will differ slightly from an
+   "FK5(Equinox=J2000)" @ref SkyFrame. The J2000 System need not be
+   qualified by an Equinox value
+
+   - "SUPERGALACTIC": De Vaucouleurs Supergalactic coordinates.
+
+   - "UNKNOWN": Any other general spherical coordinate system. No
+   @ref Mapping can be created between a pair of Sky@ref Frame "Frames" if either of the
+   Sky@ref Frame "Frames" has @ref Frame_System "System" set to "Unknown".
+
+   Currently, the default @ref Frame_System "System" value is "ICRS". However, this
+   default may change in future as new astrometric standards
+   evolve. The intention is to track the most modern appropriate
+   standard. For this reason, you should use the default only if
+   this is what you intend (and can tolerate any associated slight
+   change in future). If you intend to use the ICRS system
+   indefinitely, then you should specify it explicitly.
+
+- @ref SpecFrame
+
+   The @ref SpecFrame class supports the following @ref Frame_System "System" values and
+   associated spectral coordinate systems (the default is "WAVE" -
+   wavelength). They are all defined in FITS-WCS paper III:
+
+   - "FREQ": Frequency (GHz)
+   - "ENER" or "ENERGY": Energy (J)
+   - "WAVN" or "WAVENUM": Wave-number (1/m)
+   - "WAVE" or "WAVELEN": Vacuum wave-length (Angstrom)
+   - "AWAV" or "AIRWAVE": Wave-length in air (Angstrom)
+   - "VRAD" or "VRADIO": Radio velocity (km/s)
+   - "VOPT" or "VOPTICAL": Optical velocity (km/s)
+   - "ZOPT" or "REDSHIFT": Redshift (dimensionless)
+   - "BETA": Beta factor (dimensionless)
+   - "VELO" or "VREL": Apparent radial ("relativistic") velocity (km/s)
+
+   The default value for the @ref Frame_Unit "Unit" attribute for each system is shown
+   in parentheses. Note that the default value for the ActiveUnit flag
+   is `true`
+   for a @ref SpecFrame, meaning that changes to the @ref Frame_Unit "Unit" attribute for
+   a @ref SpecFrame will result in the @ref SpecFrame being re-mapped within
+   its enclosing @ref FrameSet in order to reflect the change in units
+   (see astSetActiveUnit function for further information).
+
+- @ref TimeFrame
+
+   The @ref TimeFrame class supports the following @ref Frame_System "System" values and
+   associated coordinate systems (the default is "MJD"):
+
+   - "MJD": Modified Julian Date (d)
+   - "JD": Julian Date (d)
+   - "JEPOCH": Julian epoch (yr)
+   - "BEPOCH": Besselian (yr)
+
+   The default value for the @ref Frame_Unit "Unit" attribute for each system is shown
+   in parentheses. Strictly, these systems should not allow changes
+   to be made to the units. For instance, the usual definition of
+   "MJD" and "JD" include the statement that the values will be in
+   units of days. However, AST does allow the use of other units
+   with all the above supported systems (except BEPOCH), on the
+   understanding that conversion to the "correct" units involves
+   nothing more than a simple scaling (1 yr = 365.25 d, 1 d = 24 h,
+   1 h = 60 min, 1 min = 60 s). Besselian epoch values are defined
+   in terms of tropical years of 365.2422 days, rather than the
+   usual Julian year of 365.25 days. Therefore, to avoid any
+   confusion, the @ref Frame_Unit "Unit" attribute is automatically cleared to "yr" when
+   a @ref Frame_System "System" value of BEPOCH System is selected, and an error is
+   reported if any attempt is subsequently made to change the @ref Frame_Unit "Unit"
+   attribute.
+
+   Note that the default value for the ActiveUnit flag
+   is `true`
+   for a @ref TimeFrame, meaning that changes to the @ref Frame_Unit "Unit" attribute for
+   a @ref TimeFrame will result in the @ref TimeFrame being re-mapped within
+   its enclosing @ref FrameSet in order to reflect the change in units
+   (see astSetActiveUnit function for further information).
+
+
+   The @ref FluxFrame class supports the following @ref Frame_System "System" values and
+   associated systems for measuring observed value:
+
+   - "FLXDN": Flux per unit frequency (W/m^2/Hz)
+   - "FLXDNW": Flux per unit wavelength (W/m^2/Angstrom)
+   - "SFCBR": Surface brightness in frequency units (W/m^2/Hz/arcmin**2)
+   - "SFCBRW": Surface brightness in wavelength units (W/m^2/Angstrom/arcmin**2)
+
+   The above lists specified the default units for each @ref Frame_System "System". If an
+   explicit value is set for the @ref Frame_Unit "Unit" attribute but no value is set
+   for @ref Frame_System "System", then the default @ref Frame_System "System" value
+   is determined by the @ref Frame_Unit "Unit"
+   string (if the units are not appropriate for describing any of the
+   supported @ref Frame_System "System"s then an error will be reported when an attempt is
+   made to access the @ref Frame_System "System" value). If no value has been specified for
+   either @ref Frame_Unit "Unit" or @ref Frame_System "System", then System=FLXDN and Unit=W/m^2/Hz are
+   used.
+
+
+@subsection Frame_Title Title
+
+Frame title. (string)
+
+This attribute holds a string which is used as a title in (e.g.)
+graphical output to describe the coordinate system which a @ref Frame
+represents. Examples might be "Detector Coordinates" or
+"Galactic Coordinates".
+
+If a @ref Frame_Title "Title" value has not been set for a @ref Frame, then a suitable
+default is supplied, depending on the class of the @ref Frame.
+
+@ref Frame_Title "Title" is intended purely for interpretation by human
+readers and not by software.
+
+### Applicability
+
+@ref Frame
+
+   The default supplied by the @ref Frame class is "<n>-d coordinate
+   system", where `<n>` is the number of @ref Frame axes (Naxes
+   attribute).
+
+@ref CmpFrame
+
+   The @ref CmpFrame class re-defines the default @ref Frame_Title "Title" value to be
+   "<n>-d compound coordinate system", where `<n>` is the number
+   of @ref CmpFrame axes (`Naxes` attribute).
+
+@ref FrameSet
+
+   The @ref Frame_Title "Title" attribute of a @ref FrameSet is the same as that of its
+   current @ref Frame (as specified by the Current attribute).
+
+
+@subsection Frame_Top Top(axis)
+
+The highest axis value to be displayed (for instance, by the astGrid method). (double)
+
+### Applicability
+
+- @ref Frame
+
+   The default supplied by the @ref Frame class is to display all axis
+   values, without any limit.
+
+- @ref SkyFrame
+
+   The @ref SkyFrame class re-defines the default @ref Frame_Top "Top" value to
+   +90 degrees for latitude axes, and 180 degrees for co-latitude axes. The
+   default for longitude axes is to display all axis values.
+
+
+@subsection Frame_Unit Unit(axis)
+
+Physical units for formatted axis values. (string)
+
+This attribute contains a textual representation of the physical
+units used to represent formatted coordinate values on a particular
+axis of a @ref Frame.
+
+The astSetActiveUnit function controls how the @ref Frame_Unit "Unit" values
+are used.
+
+### Applicability
+
+- @ref Frame
+
+   The default supplied by the @ref Frame class is an empty string.
+
+- @ref SkyFrame
+
+   The @ref SkyFrame class re-defines the default @ref Frame_Unit "Unit" value (e.g. to
+   "hh:mm:ss.sss") to describe the character string returned by
+   the astFormat function when formatting coordinate values.
+   the AST_FORMAT function when formatting coordinate values.
+
+- @ref SpecFrame
+
+   The @ref SpecFrame class re-defines the default @ref Frame_Unit "Unit" value so that it
+   is appropriate for the current @ref Frame_System "System" value.
+   See the @ref Frame_System "System"
+   attribute for details. An error will be reported if an attempt
+   is made to use an inappropriate @ref Frame_Unit "Unit".
+
+- @ref TimeFrame
+
+   The @ref TimeFrame class re-defines the default @ref Frame_Unit "Unit" value so that it
+   is appropriate for the current @ref Frame_System "System" value.
+   See the @ref Frame_System "System"
+   attribute for details. An error will be reported if an attempt
+   is made to use an inappropriate @ref Frame_Unit "Unit" (e.g. "km").
+
+- @ref FrameSet
+
+   The @ref Frame_Unit "Unit" attribute of a @ref FrameSet axis is the same as that of
+   its current @ref Frame (as specified by the Current attribute).
+
+### Notes
+
+- This attribute described the units used when an axis value is
+    formatted into a string using @ref Frame.format.
+    In some cases these units may be different to those used to represent
+    floating point axis values within application code (for instance a
+    @ref SkyFrame always uses radians to represent floating point axis values).
+    The InternalUnit attribute described the units used for floating
+    point values.
+*/
+} // namespace ast

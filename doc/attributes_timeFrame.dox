@@ -1,0 +1,171 @@
+namespace ast {
+/**
+@page timeframe_attributes TimeFrame Attributes
+
+@section TimeFrame_Attributes TimeFrame Attributes
+
+@subsection TimeFrame_AlignTimeScale AlignTimeScale
+
+Time scale to use when aligning @ref TimeFrame "TimeFrames". (string)
+
+Valid values are listed in the @ref TimeFrame_TimeScales "Time Scales" section (below).
+
+This attribute controls how a @ref TimeFrame behaves when it is used (by
+@ref Frame.findFrame or @ref Frame.convert) as a template to match another (target)
+@ref TimeFrame. It identifies the time scale in which alignment is
+to occur. See the TimeScale attribute for a desription of the values
+which may be assigned to this attribute. The default @ref TimeFrame_AlignTimeScale "AlignTimeScale"
+value depends on the current value of TimeScale: if TimeScale is
+UT1, GMST, LMST or LAST, the default for @ref TimeFrame_AlignTimeScale "AlignTimeScale" is UT1,
+for all other TimeScales the default is TAI.
+
+When @ref Frame.findFrame or @ref Frame.convert is used on two @ref TimeFrame "TimeFrames" (potentially
+describing different time coordinate systems), it returns a Mapping
+which can be used to transform a position in one @ref TimeFrame into the
+corresponding position in the other. The Mapping is made up of the
+following steps in the indicated order:
+
+- Map values from the system used by the target (MJD, JD, etc) to the
+system specified by the AlignSystem attribute.
+
+- Map these values from the target's time scale to the time scale
+specified by the @ref TimeFrame_AlignTimeScale "AlignTimeScale" attribute.
+
+- Map these values from the time scale specified by the @ref TimeFrame_AlignTimeScale "AlignTimeScale"
+attribute, to the template's time scale.
+
+- Map these values from the system specified by the AlignSystem
+attribute, to the system used by the template.
+
+
+@subsection TimeFrame_LTOffset LTOffset
+
+The offset from UTC to Local Time, in hours. (float)
+
+This specifies the offset from UTC to Local Time, in hours (fractional
+hours can be supplied). It is positive for time zones east of Greenwich.
+AST uses the figure as given, without making any attempt to correct for
+daylight saving. The default value is zero.
+
+
+@subsection TimeFrame_TimeOrigin TimeOrigin
+
+The zero point for @ref TimeFrame axis values. (float)
+
+This specifies the origin from which all time values are measured.
+The default value (zero) results in the @ref TimeFrame describing
+absolute time values in the system given by the System attribute
+(e.g. MJD, Julian epoch, etc). If a @ref TimeFrame is to be used to
+describe elapsed time since some origin, the @ref TimeFrame_TimeOrigin "TimeOrigin" attribute
+should be set to hold the required origin value. The @ref TimeFrame_TimeOrigin "TimeOrigin" value
+stored inside the @ref TimeFrame structure is modified whenever @ref TimeFrame
+attribute values are changed so that it refers to the original moment
+in time.
+
+### Input Formats
+
+The formats accepted when setting a @ref TimeFrame_TimeOrigin "TimeOrigin" value are listed
+below. They are all case-insensitive and are generally tolerant
+of extra white space and alternative field delimiters:
+
+- Besselian Epoch: Expressed in decimal years, with or without
+decimal places ("B1950" or "B1976.13" for example).
+
+- Julian Epoch: Expressed in decimal years, with or without
+decimal places ("J2000" or "J2100.9" for example).
+
+- Units: An unqualified decimal value is interpreted as a value in
+the system specified by the @ref TimeFrame's System attribute, in the
+units given by the @ref TimeFrame's Unit attribute. Alternatively, an
+appropriate unit string can be appended to the end of the floating
+point value ("123.4 d" for example), in which case the supplied value
+is scaled into the units specified by the Unit attribute.
+
+- Julian Date: With or without decimal places ("JD 2454321.9" for
+example).
+
+- Modified Julian Date: With or without decimal places
+("MJD 54321.4" for example).
+
+- Gregorian Calendar Date: With the month expressed either as an
+integer or a 3-character abbreviation, and with optional decimal
+places to represent a fraction of a day ("1996-10-2" or
+"1996-Oct-2.6" for example). If no fractional part of a day is
+given, the time refers to the start of the day (zero hours).
+
+- Gregorian Date and Time: Any calendar date (as above) but with
+a fraction of a day expressed as hours, minutes and seconds
+("1996-Oct-2 12:13:56.985" for example). The date and time can be
+separated by a space or by a "T" (as used by ISO8601 format).
+
+### Output Format
+
+When enquiring @ref TimeFrame_TimeOrigin "TimeOrigin" values, the returned formatted floating
+point value represents a value in the @ref TimeFrame's System, in the unit
+specified by the @ref TimeFrame's Unit attribute.
+
+
+@subsection TimeFrame_TimeScale TimeScale
+
+Time scale. (string)
+
+This attribute identifies the time scale to which the time axis values
+of a @ref TimeFrame refer, and may take any of the values listed in the
+@ref TimeFrame_TimeScales "Time Scales" section (below).
+
+The default TimeScale value depends on the current System value; if
+the current @ref TimeFrame system is "Besselian epoch" the default is
+"TT", otherwise it is "TAI". Note, if the System attribute is set
+so that the @ref TimeFrame represents Besselian Epoch, then an error
+will be reported if an attempt is made to set the TimeScale to
+anything other than TT.
+
+Note, the supported time scales fall into two groups. The first group
+containing  UT1, GMST, LAST and LMST define time in terms of the
+orientation of the earth. The second group (containing all the remaining
+time scales) define time in terms of an atomic process. Since the rate of
+rotation of the earth varies in an unpredictable way, conversion between
+two timescales in different groups relies on a value being supplied for
+the Dut1 attribute (defined by the parent Frame class). This attribute
+specifies the difference between the UT1 and UTC time scales, in seconds,
+and defaults to zero. See the documentation for the Dut1 attribute for
+further details.
+
+### @anchor TimeFrame_TimeScales Time Scales
+
+The TimeFrame class supports the following TimeScale values (all are
+case-insensitive):
+
+- "TAI" - International Atomic Time
+- "UTC" - Coordinated Universal Time
+- "UT1" - Universal Time
+- "GMST" - Greenwich Mean Sidereal Time
+- "LAST" - Local Apparent Sidereal Time
+- "LMST" - Local Mean Sidereal Time
+- "TT" - Terrestrial Time
+- "TDB" - Barycentric Dynamical Time
+- "TCB" - Barycentric Coordinate Time
+- "TCG" - Geocentric Coordinate Time
+- "LT" - Local Time (the offset from UTC is given by attribute LTOffset)
+
+An very informative description of these and other time scales is
+available at http://www.ucolick.org/~sla/leapsecs/timescales.html.
+
+### UTC Warnings
+
+UTC should ideally be expressed using separate hours, minutes and
+seconds fields (or at least in seconds for a given date) if leap seconds
+are to be taken into account. Since the TimeFrame class represents
+each moment in time using a single floating point number (the axis value)
+there will be an ambiguity during a leap second. Thus an error of up to
+1 second can result when using AST to convert a UTC time to another
+time scale if the time occurs within a leap second. Leap seconds
+occur at most twice a year, and are introduced to take account of
+variation in the rotation of the earth. The most recent leap second
+occurred on 1st January 1999. Although in the vast majority of cases
+leap second ambiguities won't matter, there are potential problems in
+on-line data acquisition systems and in critical applications involving
+taking the difference between two times.
+
+*/
+} // namespace ast

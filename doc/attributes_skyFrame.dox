@@ -1,0 +1,365 @@
+namespace ast {
+/**
+@page skyframe_attributes SkyFrame Attributes
+
+@section SkyFrame_Attributes SkyFrame Attributes
+
+@subsection SkyFrame_AlignOffset AlignOffset
+
+Align @ref SkyFrame "SkyFrames" using the offset coordinate system? (bool)
+
+This attribute is a boolean value which controls how a @ref SkyFrame
+behaves when it is used (by @ref Frame.findFrame or @ref Frame.convert)
+as a template to match another (target) @ref SkyFrame.
+It determines the coordinate system in which the two
+@ref SkyFrame "SkyFrames" are aligned if a match occurs.
+
+If the template and target @ref SkyFrame "SkyFrames" both have defined offset coordinate
+systems (i.e. the @ref SkyFrame_SkyRefIs "SkyRefIs" attribute is set to either "Origin" or "
+Pole"), and they both have a non-zero value for @ref SkyFrame_AlignOffset "AlignOffset", then
+alignment occurs within the offset coordinate systems (that is, a
+UnitMap will always be used to align the two @ref SkyFrame "SkyFrames"). If either
+the template or target @ref SkyFrame has zero (the default value) for
+@ref SkyFrame_AlignOffset "AlignOffset", or if either @ref SkyFrame has
+@ref SkyFrame_SkyRefIs "SkyRefIs" set to "Ignored", then
+alignment occurring within the coordinate system specified by the
+AlignSystem attribute.
+
+
+@subsection SkyFrame_AsTime AsTime(axis)
+
+Format celestal coordinates as times? (bool)
+
+This attribute specifies the default style of formatting to be
+used (e.g. by astFormat) for the celestial coordinate values
+described by a @ref SkyFrame. It takes a separate boolean value for
+each @ref SkyFrame axis so that, for instance, the setting
+"AsTime(2)=0" specifies the default formatting style for
+celestial latitude values.
+
+If the @ref SkyFrame_AsTime "AsTime" attribute for a @ref SkyFrame axis is zero, then
+coordinates on that axis will be formatted as angles by default
+(using degrees, minutes and seconds), otherwise they will be
+formatted as times (using hours, minutes and seconds).
+
+The default value of @ref SkyFrame_AsTime "AsTime" is chosen according to the sky
+coordinate system being represented, as determined by the
+@ref SkyFrame's System attribute. This ensures, for example, that
+right ascension values will be formatted as times by default,
+following normal conventions.
+
+### Notes
+
+- The @ref SkyFrame_AsTime "AsTime" attribute operates by changing the default value of
+the corresponding Format(axis) attribute. This, in turn, may
+also affect the value of the Unit(axis) attribute.
+- Only the default style of formatting is affected by the @ref SkyFrame_AsTime "AsTime"
+value. If an explicit Format(axis) value is set, it will
+over-ride any effect from the @ref SkyFrame_AsTime "AsTime" attribute.
+
+
+@subsection SkyFrame_Equinox Equinox
+
+Epoch of the mean equinox. (double)
+
+This attribute is used to qualify those celestial coordinate
+systems described by a @ref SkyFrame which are notionally based on
+the ecliptic (the plane of the Earth's orbit around the Sun)
+and/or the Earth's equator.
+
+Both of these planes are in motion and their positions are
+difficult to specify precisely. In practice, therefore, a model
+ecliptic and/or equator are used instead. These, together with
+the point on the sky that defines the coordinate origin (the
+intersection of the two planes termed the "mean equinox") move
+with time according to some model which removes the more rapid
+fluctuations. The @ref SkyFrame class supports both the FK4 and
+FK5 models.
+
+The position of a fixed source expressed in any of these
+coordinate systems will appear to change with time due to
+movement of the coordinate system itself (rather than motion of
+the source).  Such coordinate systems must therefore be
+qualified by a moment in time (the "epoch of the mean equinox"
+or "equinox" for short) which allows the position of the model
+coordinate system on the sky to be determined. This is the role
+of the @ref SkyFrame_Equinox "Equinox" attribute.
+
+The @ref SkyFrame_Equinox "Equinox" attribute is stored as a Modified Julian Date, but
+when setting or getting its value you may use the same formats
+as for the Epoch attribute (q.v.).
+
+The default @ref SkyFrame_Equinox "Equinox" value is B1950.0 (Besselian) for the old
+FK4-based coordinate systems (see the System attribute) and
+J2000.0 (Julian) for all others.
+
+### Notes
+
+- Care must be taken to distinguish the @ref SkyFrame_Equinox "Equinox" value, which
+relates to the definition of a time-dependent coordinate system
+(based on solar system reference planes which are in motion),
+from the superficially similar Epoch value. The latter is used
+to qualify coordinate systems where the positions of sources
+change with time (or appear to do so) for a variety of other
+reasons, such as aberration of light caused by the observer's
+motion, etc.
+- See the description of the System attribute for details of
+which qualifying attributes apply to each celestial coordinate
+system.
+
+
+@subsection SkyFrame_IsLatAxis IsLatAxis(axis)
+
+Is the specified celestial axis a latitude axis? (bool, read only)
+
+This is a read-only boolean attribute that indicates the nature of
+the specified axis. The attribute has a non-zero value if the
+specified axis is a celestial latitude axis (Declination, Galactic
+latitude, etc), and is zero otherwise.
+
+
+@subsection SkyFrame_IsLonAxis IsLonAxis(axis)
+
+Is the specified celestial axis a longitude axis? (bool, read only)
+
+This is a read-only boolean attribute that indicates the nature of
+the specified axis. The attribute has a non-zero value if the
+specified axis is a celestial longitude axis (Right Ascension, Galactic
+longitude, etc), and is zero otherwise.
+
+
+@subsection SkyFrame_LatAxis LatAxis
+
+Index of the latitude axis. (int, read only)
+
+This read-only attribute gives the index (1 or 2) of the latitude
+axis within the @ref SkyFrame (taking into account any current axis
+permutations).
+
+
+@subsection SkyFrame_LonAxis LonAxis
+
+Index of the longitude axis. (int, read only)
+
+This read-only attribute gives the index (1 or 2) of the longitude
+axis within the @ref SkyFrame (taking into account any current axis
+permutations).
+
+@subsection SkyFrame_NegLon NegLon
+
+Display negative longitude values? (bool)
+
+This attribute is a boolean value which controls how longitude values
+are normalized for display by astNorm.
+
+If the @ref SkyFrame_NegLon "NegLon" attribute is zero, then normalized
+longitude values will be in the range zero to 2.pi. If @ref SkyFrame_NegLon "NegLon" is
+non-zero, then normalized longitude values will be in the range -pi
+to pi.
+
+The default value depends on the current value of the @ref SkyFrame_SkyRefIs "SkyRefIs"
+attribute, If @ref SkyFrame_SkyRefIs "SkyRefIs" has a value of "Origin", then the default for
+@ref SkyFrame_NegLon "NegLon" is one, otherwise the default is zero.
+
+
+@subsection SkyFrame_Projection Projection
+
+Sky projection description. (string)
+
+This attribute provides a place to store a description of the
+type of sky projection used when a @ref SkyFrame is attached to a
+2-dimensional object, such as an image or plotting surface. For
+example, typical values might be "orthographic", "Hammer-Aitoff"
+or "cylindrical equal area".
+
+The @ref SkyFrame_Projection "Projection" value is purely descriptive and does not affect
+the celestial coordinate system represented by the @ref SkyFrame in
+any way. If it is set to a non-blank string, the description
+provided may be used when forming the default value for the
+@ref SkyFrame's Title attribute (so that typically it will appear in
+graphical output, for instance). The default value is an empty
+string.
+
+
+@subsection SkyFrame_SkyRef SkyRef(axis)
+
+Position defining the offset coordinate system. (double)
+
+This attribute allows a @ref SkyFrame to represent offsets, rather than
+absolute axis values, within the coordinate system specified by the
+System attribute. If supplied, @ref SkyFrame_SkyRef "SkyRef" should be set to hold the
+longitude and latitude of a point within the coordinate system
+specified by the System attribute. The coordinate system represented
+by the @ref SkyFrame will then be rotated in order to put the specified
+position at either the pole or the origin of the new coordinate system
+(as indicated by the @ref SkyFrame_SkyRefIs "SkyRefIs" attribute). The orientation of the
+modified coordinate system is then controlled using the @ref SkyFrame_SkyRefP "SkyRefP"
+attribute.
+
+If an integer axis index is included in the attribute name (e.g.
+"SkyRef(1)") then the attribute value should be supplied as a single
+floating point axis value, in radians, when setting a value for the
+attribute, and will be returned in the same form when getting the value
+of the attribute. In this case the integer axis index should be "1"
+or "2" (the values to use for longitude and latitude axes are
+given by the @ref SkyFrame_LonAxis "LonAxis" and @ref SkyFrame_LatAxis "LatAxis" attributes).
+
+If no axis index is included in the attribute name (e.g. "SkyRef") then
+the attribute value should be supplied as a character string
+containing two formatted axis values (an axis 1 value followed by a
+comma, followed by an axis 2 value). The same form
+will be used when getting the value of the attribute.
+
+The default values for @ref SkyFrame_SkyRef "SkyRef" are zero longitude and zero latitude.
+
+### Aligning SkyFrames with Offset Coordinate Systems
+
+The offset coordinate system within a @ref SkyFrame should normally be
+considered as a superficial "re-badging" of the axes of the coordinate
+system specified by the System attribute - it merely provides an
+alternative numerical "label" for each position in the System coordinate
+system. The @ref SkyFrame retains full knowledge of the celestial coordinate
+system on which the offset coordinate system is based (given by the
+System attribute). For instance, the @ref SkyFrame retains knowledge of the
+way that one celestial coordinate system may "drift" with respect to
+another over time. Normally, if you attempt to align two @ref SkyFrame "SkyFrames" (e.g.
+using @ref Frame.convert or @ref Frame.findFrame),
+the effect of any offset coordinate system defined in either @ref SkyFrame
+will be removed, resulting in alignment being performed in the
+celestial coordinate system given by the AlignSystem attribute.
+However, by setting the @ref SkyFrame_AlignOffset "AlignOffset"
+attribute ot a non-zero value, it
+is possible to change this behaviour so that the effect of the offset
+coordinate system is not removed when aligning two @ref SkyFrame "SkyFrames".
+
+### Notes
+
+- If the System attribute of the @ref SkyFrame is changed, any position
+given for @ref SkyFrame_SkyRef "SkyRef" is transformed into the new System.
+- If a value has been assigned to @ref SkyFrame_SkyRef "SkyRef" attribute, then
+the default values for certain attributes are changed as follows:
+the default axis Labels for the @ref SkyFrame are modified by appending
+" offset" to the end, the default axis Symbols for the @ref SkyFrame are
+modified by prepending the character "D" to the start, and the
+default title is modified by replacing the projection information by the
+origin information.
+
+
+@subsection SkyFrame_SkyRefIs SkyRefIs
+
+Selects the nature of the offset coordinate system. (string)
+
+This attribute controls how the values supplied for the @ref SkyFrame_SkyRef "SkyRef" and
+@ref SkyFrame_SkyRefP "SkyRefP" attributes are used. These three attributes together allow
+a @ref SkyFrame to represent offsets relative to some specified origin
+or pole within the coordinate system specified by the System attribute,
+rather than absolute axis values. @ref SkyFrame_SkyRefIs "SkyRefIs" can take one of the
+case-insensitive values "Origin", "Pole" or "Ignored".
+
+If @ref SkyFrame_SkyRefIs "SkyRefIs" is set to "Origin", then the coordinate system
+represented by the @ref SkyFrame is modified to put the origin of longitude
+and latitude at the position specified by the @ref SkyFrame_SkyRef "SkyRef" attribute.
+
+If @ref SkyFrame_SkyRefIs "SkyRefIs" is set to "Pole", then the coordinate system represented
+by the @ref SkyFrame is modified to put the north pole at the position
+specified by the @ref SkyFrame_SkyRef "SkyRef" attribute.
+
+If @ref SkyFrame_SkyRefIs "SkyRefIs" is set to "Ignored" (the default), then any value set for the
+@ref SkyFrame_SkyRef "SkyRef" attribute is ignored, and the @ref SkyFrame represents the coordinate
+system specified by the System attribute directly without any rotation.
+
+
+@subsection SkyFrame_SkyRefP SkyRefP(axis)
+
+Position on primary meridian of offset coordinate system. (double)
+
+This attribute is used to control the orientation of the offset
+coordinate system defined by attributes @ref SkyFrame_SkyRef "SkyRef"
+and @ref SkyFrame_SkyRefIs "SkyRefIs". If used,
+it should be set to hold the longitude and latitude of a point within
+the coordinate system specified by the System attribute. The offset
+coordinate system represented by the @ref SkyFrame will then be rotated in
+order to put the position supplied for @ref SkyFrame_SkyRefP "SkyRefP" on the zero longitude
+meridian. This rotation is about an axis from the centre of the
+celestial sphere to the point specified by the @ref SkyFrame_SkyRef "SkyRef" attribute.
+The default value for @ref SkyFrame_SkyRefP "SkyRefP" is usually the north pole (that is, a
+latitude of +90 degrees in the coordinate system specified by the System
+attribute). The exception to this is if the @ref SkyFrame_SkyRef "SkyRef" attribute is
+itself set to either the north or south pole. In these cases the
+default for @ref SkyFrame_SkyRefP "SkyRefP" is the origin (that is, a (0,0) in the coordinate
+system specified by the System attribute).
+
+If an integer axis index is included in the attribute name (e.g.
+"SkyRefP(1)") then the attribute value should be supplied as a single
+floating point axis value, in radians, when setting a value for the
+attribute, and will be returned in the same form when getting the value
+of the attribute. In this case the integer axis index should be "1"
+or "2" (the values to use for longitude and latitude axes are
+given by the @ref SkyFrame_LonAxis "LonAxis" and @ref SkyFrame_LatAxis "LatAxis" attributes).
+
+If no axis index is included in the attribute name (e.g. "SkyRefP") then
+the attribute value should be supplied as a character string
+containing two formatted axis values (an axis 1 value followed by a
+comma, followed by an axis 2 value). The same form
+will be used when getting the value of the attribute.
+
+### Notes
+
+- If the position given by the @ref SkyFrame_SkyRef "SkyRef" attribute defines the origin
+of the offset coordinate system (that is, if the @ref SkyFrame_SkyRefIs "SkyRefIs" attribute
+is set to "origin"), then there will in general be two orientations
+which will put the supplied @ref SkyFrame_SkyRefP "SkyRefP" position on the zero longitude
+meridian. The orientation which is actually used is the one which
+gives the @ref SkyFrame_SkyRefP "SkyRefP" position a positive latitude in the offset coordinate
+system (the other possible orientation would give the @ref SkyFrame_SkyRefP "SkyRefP" position
+a negative latitude).
+- An error will be reported if an attempt is made to use a
+@ref SkyFrame_SkyRefP "SkyRefP" value which is co-incident with @ref SkyFrame_SkyRef "SkyRef"
+or with the point diametrically opposite to @ref SkyFrame_SkyRef "SkyRef" on the celestial sphere. The
+reporting of this error is deferred until the @ref SkyFrame_SkyRef "SkyRef"
+and @ref SkyFrame_SkyRefP "SkyRefP" attribute values are used within a calculation.
+- If the System attribute of the @ref SkyFrame is changed, any position
+given for @ref SkyFrame_SkyRefP "SkyRefP" is transformed into the new System.
+
+
+@subsection SkyFrame_SkyTol SkyTol
+
+The smallest significant shift in sky coordinates. (double)
+
+This attribute indicates the accuracy of the axis values that will
+be represented by the @ref SkyFrame. If the arc-distance between two
+positions within the @ref SkyFrame is smaller than the value of @ref SkyFrame_SkyTol "SkyTol",
+then the two positions will (for the puposes indicated below) be
+considered to be co-incident.
+
+This value is used only when constructing the Mapping between
+two different @ref SkyFrame "SkyFrames" (for instance, when calling
+@ref Frame.convert or @ref Frame.findFrame).
+If the transformation between the two @ref SkyFrame "SkyFrames" causes positions to
+shift by less than @ref SkyFrame_SkyTol "SkyTol" arc-seconds, then the transformation is
+replaced by a UnitMap.  This could in certain circumatances allow
+major simplifications to be made to the transformation between
+any pixel grids associated with the two @ref SkyFrame "SkyFrames" (for instance, if
+each @ref SkyFrame is part of the WCS FrameSet associated with an image).
+
+A common case is when two @ref SkyFrame "SkyFrames" use the FK5 system, but have
+slightly different Epoch values. If the AlignSystem attribute has
+its default value of "ICRS", then the transformation between the
+two @ref SkyFrame "SkyFrames" will include a very small rotation (FK5 rotates with
+respect to ICRS as a rate of about 0.0005 arc-seconds per year). In
+most circumstances such a small rotation is insignificant. Setting
+@ref SkyFrame_SkyTol "SkyTol" to some suitably small non-zero value will cause this
+rotation to be ignored, allowing much simpler transformations to
+be used.
+
+The test to determine the shift introduced by transforming between
+the two @ref SkyFrame "SkyFrames" is performed by transforming a set of 14 position
+spread evenly over the whole sky. The largest shift produced at any
+of these 14 positions is compared to the value of @ref SkyFrame_SkyTol "SkyTol".
+
+The @ref SkyFrame_SkyTol "SkyTol" value is in units of arc-seconds, and the default value
+is 0.001.
+
+
+*/
+} // namespace ast

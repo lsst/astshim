@@ -1,0 +1,60 @@
+namespace ast {
+/**
+@page sphmap_attributes SphMap Attributes
+
+@section SphMap_Attributes SphMap Attributes
+
+@subsection SphMap_UnitRadius UnitRadius
+
+SphMap input vectors lie on a unit sphere? (bool)
+
+This is a boolean attribute which indicates whether the
+3-dimensional vectors which are supplied as input to a SphMap
+are known to always have unit length, so that they lie on a unit
+sphere centred on the origin.
+
+If this condition is true (indicated by setting UnitRadius
+non-zero), it implies that a CmpMap which is composed of a
+SphMap applied in the forward direction followed by a similar
+SphMap applied in the inverse direction may be simplified
+(e.g. by astSimplify) to become a UnitMap. This is because the
+input and output vectors will both have unit length and will
+therefore have the same coordinate values.
+
+If UnitRadius is zero (the default), then although the output
+vector produced by the CmpMap (above) will still have unit
+length, the input vector may not have. This will, in general,
+change the coordinate values, so it prevents the pair of SphMaps
+being simplified.
+
+### Notes
+
+- This attribute is intended mainly for use when SphMaps are
+involved in a sequence of Mappings which project (e.g.) a
+dataset on to the celestial sphere. By regarding the celestial
+sphere as a unit sphere (and setting UnitRadius to be non-zero)
+it becomes possible to cancel the SphMaps present, along with
+associated sky projections, when two datasets are aligned using
+celestial coordinates. This often considerably improves
+performance.
+
+- Such a situations often arises when interpreting FITS data and
+is handled automatically by the FitsChan class.
+
+- The value of the UnitRadius attribute is used only to control
+the simplification of Mappings and has no effect on the value of
+the coordinates transformed by a SphMap. The lengths of the
+input 3-dimensional Cartesian vectors supplied are always
+ignored, even if UnitRadius is non-zero.
+
+@subsection SphMap_PolarLong PolarLong
+
+The longitude value to assign to either pole (radians). (double)
+
+This attribute holds the longitude value, in radians, to be
+returned when a Cartesian position corresponding to either the north
+or south pole is transformed into spherical coordinates. The
+default value is zero.
+
+*/
+} // namespace ast

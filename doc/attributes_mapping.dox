@@ -1,0 +1,292 @@
+namespace ast {
+/**
+@page mapping_attributes Mapping Attributes
+
+@section Mapping_Attributes Mapping Attributes
+
+@subsection Mapping_Invert Invert
+
+Has this mapping been inverted?
+
+If the attribute value is `false` (the default), the @ref Mapping's behaviour
+is in the usual direction. However, if it is `true` then, its two transformations
+have been inter-changed, so that the @ref Mapping displays the inverse of its native behaviour.
+
+@ref Mapping.getInverse returns the inverse of the mapping (e.g. a copy of the mapping
+with its @ref Mapping_Invert Invert property set)
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref UnitMap
+
+    The value of the Invert attribute has no effect on the behaviour of a UnitMap.
+
+- @ref FrameSet
+
+    Inverting a @ref FrameSet will cause its base and current Frames (and its
+    @ref FrameSet_Base Base and FrameSet_Current Current attributes) to be interchanged.
+    This, in turn, may affect other properties and attributes of the @ref FrameSet
+    (such as @ref Mapping_Nin "Nin", @ref Mapping_Nout "Nout", @ref Frame_Naxes "Naxes",
+    @ref Mapping_TranForward "TranForward", @ref Mapping_TranInverse "TranInverse", etc.).
+    The Invert attribute of a @ref FrameSet is not itself affected by selecting a new
+    base or current Frame.
+
+
+@subsection Mapping_IsLinear IsLinear
+
+Is the is an instance of a class that always represents a linear transformation?
+
+Note, some @ref Mapping classes can represent linear or non-linear transformations
+(the @ref MathMap class for instance). Such classes have a `false` value for
+the @ref Mapping_IsLinear "IsLinear" attribute. Specific instances of such classes
+can be tested for linearity using the astLinearApprox function.
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref CmpMap
+
+    The @ref Mapping_IsLinear "IsLinear" value for a @ref CmpMap is determined by
+    the classes of the encapsulated Mappings. For instance, a @ref CmpMap
+    that combines a @ref ZoomMap and a @ref ShiftMap will have a `true` value for
+    its @ref Mapping_IsLinear "IsLinear" attribute, but a @ref CmpMap that contains
+    a @ref MathMap will have a value of `false` for its @ref Mapping_IsLinear "IsLinear" attribute.
+
+@ref Frame
+
+    The @ref Mapping_IsLinear "IsLinear" value for a @ref Frame is `true`
+    (since a @ref Frame is equivalent to a UnitMap).
+
+@ref FrameSet
+
+    The @ref Mapping_IsLinear "IsLinear" value for a @ref FrameSet is obtained from
+    the @ref Mapping from the base @ref Frame to the current @ref Frame.
+
+
+@subsection Mapping_IsSimple IsSimple
+
+Has the mapping been simplified by the @ref Mapping.simplify method?
+
+If the @ref Mapping_IsSimple "IsSimple" value is `true`, then the Mapping has been simplified
+and so there is nothing to be gained by simplifying it again. Indeed, @ref Mapping.simplify
+will immediately return the Mapping unchanged if @ref Mapping_IsSimple "IsSimple" is `true`.
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref Frame
+
+    All classes of Frame return `false` for the @ref Mapping_IsSimple "IsSimple" attribute.
+    This is because changes can be made to a Frame which affect the @ref Mapping
+    represented by the Frame, and so there can be no guarantee that the @ref Mapping
+    may not need re-simplifying. Most non-Frame Mappings, on the other hand,
+    are immutable and so when they are simplified it is certain that they will remain in a simple state.
+
+
+@subsection Mapping_Nin Nin
+
+The number of coordinate values for an input point for a @ref Mapping
+(i.e. the number of dimensions of the space in which the @ref Mapping's input points reside).
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref CmpMap
+
+    If a @ref CmpMap's component Mappings are joined in series
+     then its @ref Mapping_Nin "Nin" attribute is equal to
+     the @ref Mapping_Nin "Nin" attribute of the first component
+     (or to the @ref Mapping_Nout "Nout" attribute of the second component
+     if the the @ref CmpMap is inverted).
+
+    If a @ref CmpMap's component @ref Mapping "Mappings" are joined in parallel,
+    then its @ref Mapping_Nin "Nin" attribute is given by the sum of
+    the @ref Mapping_Nin "Nin" attributes of each component
+    (or the sum of their @ref Mapping_Nout "Nout" attributes if the
+    @ref CmpMap is inverted).
+
+- @ref Frame
+
+    The @ref Mapping_Nin "Nin" attribute for a Frame is always equal to
+    the number of @ref Frame axes (@ref Frame_Naxes "Naxes" attribute).
+
+- @ref FrameSet
+
+    The @ref Mapping_Nin "Nin" attribute of a @ref FrameSet is equal to the number of axes
+    (@ref Frame_Naxes "Naxes" attribute) of its base Frame
+    (or the current frame if the @ref FrameSet is inverted).
+    The @ref Mapping_Nin "Nin" attribute value may therefore change
+    if a new base Frame or current frame is selected.
+
+
+@subsection Mapping_Nout Nout
+
+The number of coordinate values for an output point for a @ref Mapping
+(i.e. the number of dimensions of the space in which the @ref Mapping's output points reside).
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref CmpMap
+
+    If a @ref CmpMap's component Mappings are joined in series
+     then its @ref Mapping_Nout "Nout" attribute is equal to
+     the @ref Mapping_Nout "Nout" attribute of the last component
+     (or to the @ref Mapping_Nin "Nin" attribute of the first component
+     if the the @ref CmpMap is inverted).
+
+    If a @ref CmpMap's component @ref Mapping "Mappings" are joined in parallel,
+    then its @ref Mapping_Nout "Nout" attribute is given by the sum of
+    the @ref Mapping_Nout "Nout" attributes of each component
+    (or the sum of their @ref Mapping_Nin "Nin" attributes if the
+    @ref CmpMap is inverted).
+
+- @ref Frame
+
+    The @ref Mapping_Nout "Nout" attribute for a Frame is always equal to
+    the number of @ref Frame axes (@ref Frame_Naxes "Naxes" attribute).
+
+- @ref FrameSet
+
+    The @ref Mapping_Nout "Nout" attribute of a @ref FrameSet is equal to the number of axes
+    (@ref Frame_Naxes "Naxes" attribute) of its current Frame
+    (or the base frame if the @ref FrameSet is inverted).
+    The @ref Mapping_Nout "Nout" attribute value may therefore change
+    if a new current frame or base frame is selected.
+
+
+@subsection Mapping_Report Report
+
+Report transformed coordinates to stdout?
+
+If `Report` is `false` (the default), no report is made. However, if it is `true`,
+the coordinates of each point are reported (both before and after transformation)
+by writing them to standard output.
+
+This attribute is provided as an aid to debugging, and to avoid having to report values explicitly
+in simple programs.
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref CmpMap
+
+    When applied to a compound @ref Mapping (@ref CmpMap), only the @ref Mapping_Report "Report" attribute
+    of the @ref CmpMap, and not those of its component @ref Mapping "Mappings", is used.
+    Coordinate information is never reported for the component @ref Mapping "Mappings" individually,
+    only for the complete @ref CmpMap.
+
+- @ref Frame
+
+    When applied to any @ref Frame, the formatting capabilities of the Frame
+    (as provided by the @ref Frame.format) will be used to format the reported coordinates.
+
+- @ref FrameSet
+
+    When applied to any @ref FrameSet, the formatting capabilities of the
+    base and current @ref Frame "Frames"
+    will be used (as above) to individually format the input and output coordinates, as appropriate.
+    The @ref Mapping_Report "Report" attribute of a @ref FrameSet is not itself affected by
+    selecting a new base or current Frame, but the resulting formatting capabilities may be.
+
+### Notes
+
+- Unlike most other attributes, the value of the @ref Mapping_Report "Report" attribute is not transferred
+when a @ref Mapping is copied. Instead, its value is undefined (and therefore defaults to zero) in any copy.
+Similarly, it becomes undefined in any external representation of a @ref Mapping
+produced by @ref Channel.write.
+
+
+@subsection Mapping_TranForward TranForward
+
+Is the forward transformation defined?
+
+This attribute indicates whether a @ref Mapping is able to transform coordinates
+in the "forward" direction (i.e. converting input coordinates into output coordinates).
+
+If this attribute is non-zero, the forward transformation is available. Otherwise, it is not.
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref CmpMap
+
+    The @ref Mapping_TranForward "TranForward" attribute value for a @ref CmpMap is given by
+    the boolean AND of the value for each component @ref Mapping.
+
+- @ref FrameSet
+
+    The @ref Mapping_TranForward "TranForward" attribute of a @ref FrameSet applies to
+    the transformation which converts between the @ref FrameSet's base @ref Frame and its current @ref Frame
+    (as specified by the @ref FrameSet_Base "Base" and @ref FrameSet_Current "Current" attributes).
+
+    This value is given by the boolean AND of the @ref Mapping_TranForward "TranForward" values
+    which apply to each of the individual sub-Mappings required to perform this conversion.
+    The @ref Mapping_TranForward "TranForward" attribute value for a @ref FrameSet may therefore change
+    if a new base or current Frame is selected.
+
+### Notes
+
+- An error will result if a Mapping with a TranForward value of zero is used to transform coordinates
+    in the forward direction.
+
+
+@subsection Mapping_TranInverse TranInverse
+
+Is the inverse transformation defined?
+
+This attribute indicates whether a @ref Mapping is able to transform coordinates
+in the "inverse" direction (i.e. converting input coordinates into output coordinates).
+
+If this attribute is non-zero, the inverse transformation is available. Otherwise, it is not.
+
+### Applicability
+
+- @ref Mapping
+
+    All Mappings have this attribute.
+
+- @ref CmpMap
+
+    The @ref Mapping_TranInverse "TranInverse" attribute value for a @ref CmpMap is given by
+    the boolean AND of the value for each component @ref Mapping.
+
+- @ref FrameSet
+
+    The @ref Mapping_TranInverse "TranInverse" attribute of a @ref FrameSet applies to
+    the transformation which converts between the @ref FrameSet's current @ref Frame and its base @ref Frame
+    (as specified by the @ref FrameSet_Current "Current" and @ref FrameSet_Base "Base" attributes).
+
+    This value is given by the boolean AND of the @ref Mapping_TranInverse "TranInverse" values
+    which apply to each of the individual sub-Mappings required to perform this conversion.
+    The @ref Mapping_TranInverse "TranInverse" attribute value for a @ref FrameSet may therefore change
+    if a new current or base Frame is selected.
+
+### Notes
+
+- An error will result if a Mapping with a TranInverse value of zero is used to transform coordinates
+    in the inverse direction.
+*/
+} // namespace ast

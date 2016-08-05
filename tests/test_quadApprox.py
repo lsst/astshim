@@ -1,0 +1,26 @@
+from __future__ import absolute_import, division, print_function
+import unittest
+
+import numpy as np
+
+import astshim
+from astshim.test import MappingTestCase
+
+
+class TestQuadApprox(MappingTestCase):
+
+    def test_QuadApprox(self):
+        # simple parabola
+        coeff_f = np.array([
+            [0.5, 1, 2, 0],
+            [0.5, 1, 0, 2],
+        ], dtype=float)
+        polymap = astshim.PolyMap(coeff_f, 1)
+        qa = astshim.QuadApprox(polymap, [-1, -1], [1, 1], 3, 3)
+        self.assertAlmostEqual(qa.rms, 0)
+        self.assertEqual(len(qa.fit), 6)
+        self.assertTrue(np.allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5]))
+
+
+if __name__ == "__main__":
+    unittest.main()
