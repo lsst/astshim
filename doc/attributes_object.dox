@@ -1,0 +1,158 @@
+namespace ast {
+/**
+@page object_attributes @ref Object Attributes
+
+@section Object_Attributes @ref Object Attributes
+
+@subsection Object_Class Class
+
+The name of the class to which an @ref Object belongs. (string, read-only)
+
+
+@subsection Object_ID ID
+
+@ref Object identification string that is not copied. (string)
+
+This attribute contains a string which may be used to identify
+the @ref Object to which it is attached. There is no restriction on
+the contents of this string, which is not used internally by the
+AST library, and is simply returned without change when
+required. The default value is an empty string.
+
+An identification string can be valuable when, for example,
+several Objects have been stored in a file (using @ref Channel.write) and
+are later retrieved (using @ref Channel.read). Consistent use of the @ref Object_ID "ID"
+attribute allows the retrieved Objects to be identified without
+depending simply on the order in which they were stored.
+
+This attribute may also be useful during debugging, to
+distinguish similar Objects when using astShow to display them.
+
+### Notes
+
+- Unlike most other attributes, the value of @ref Object_ID "ID" is
+not transferred when an @ref Object is copied. Instead, its value is
+undefined (and therefore defaults to an empty string) in any
+copy. However, it is retained in any external representation of
+an @ref Object produced by @ref Channel.write
+
+
+@subsection Object_Ident Ident
+
+Permanent @ref Object identification string that is copied. (string)
+
+This attribute is like @ref Object_ID "ID", in that it contains a
+string which may be used to identify the @ref Object to which it is
+attached. The only difference between @ref Object_ID "ID"
+and @ref Object_Ident "Ident" is that @ref Object_Ident "Ident"
+is transferred when an @ref Object is copied, but @ref Object_ID "ID" is not.
+
+
+@subsection Object_Nobject Nobject
+
+Number of Objects in class. (int, read only)
+
+This attribute gives the total number of Objects currently in
+existence in the same class as the @ref Object whose attribute value
+is requested. This count does not include Objects which belong
+to derived (more specialised) classes.
+
+This attribute is mainly intended for debugging. It can be used
+to detect whether Objects which should have been deleted have,
+in fact, been deleted.
+
+
+@subsection Object_ObjSize ObjSize
+
+The in-memory size of the @ref Object, in bytes. (int, read-only)
+
+This attribute gives the total number of bytes of memory used by
+the @ref Object. This includes any Objects which are encapsulated within
+the supplied @ref Object.
+
+
+@subsection Object_RefCount RefCount
+
+Count of active @ref Object pointers. (int, read-only)
+
+This attribute gives the number of active pointers associated
+with an @ref Object. It is modified whenever pointers are created or
+annulled. The count
+includes the initial pointer issued when the @ref Object was created.
+
+If the reference count for an @ref Object falls to zero, then the @ref Object will be deleted.
+
+
+@subsection Object_UseDefs UseDefs
+
+Use default values for unspecified attributes? (bool)
+
+This attribute specifies whether default values should be used
+internally for object attributes which have not been assigned a
+value explicitly. If a non-zero value (the default) is supplied for
+@ref Object_UseDefs "UseDefs", then default values will be used for attributes which have
+not explicitly been assigned a value. If zero is supplied for @ref Object_UseDefs "UseDefs",
+then an error will be reported if an attribute for which no explicit
+value has been supplied is needed internally within AST.
+
+Many attributes (including the @ref Object_UseDefs "UseDefs" attribute itself) are unaffected
+by the setting of @ref Object_UseDefs "UseDefs", and default values will always
+be used without error for such attributes. The "Applicability:" section
+below lists the attributes which are affected by the setting of @ref Object_UseDefs "UseDefs".
+
+Note, @ref Object_UseDefs "UseDefs" only affects access to attributes internally within
+AST. The public accessor functions such as @ref Object.getC
+are unaffected by the @ref Object_UseDefs "UseDefs" attribute - default values will always
+be returned if no value has been set. Application code should use
+@ref Object.test if required to determine if a value has been set for an
+attribute.
+
+### Applicability
+
+- @ref Object
+
+   All Objects have this attribute, but ignore its setting except
+   as described below for individual classes.
+
+- @ref FrameSet
+
+   The default value of @ref Object_UseDefs "UseDefs" for a FrameSet is redefined to be
+   the @ref Object_UseDefs "UseDefs" value of its current Frame.
+
+- @ref CmpFrame
+
+   The default value of @ref Object_UseDefs "UseDefs" for a CmpFrame is redefined to be
+   the @ref Object_UseDefs "UseDefs" value of its first component Frame.
+
+- @ref Region
+
+   The default value of @ref Object_UseDefs "UseDefs" for a Region is redefined to be
+   the @ref Object_UseDefs "UseDefs" value of its encapsulated Frame.
+
+- @ref Frame
+
+   If @ref Object_UseDefs "UseDefs" is zero, an error is reported when aligning Frames if the
+   Epoch, ObsLat or ObsLon attribute is required but has not been
+   assigned a value explicitly.
+
+- @ref SkyFrame
+
+   If @ref Object_UseDefs "UseDefs" is zero, an error is reported when aligning SkyFrames
+   if any of the following attributes are required but have not been
+   assigned a value explicitly: Epoch, Equinox.
+
+- @ref SpecFrame
+
+   If @ref Object_UseDefs "UseDefs" is zero, an error is reported when aligning SpecFrames
+   if any of the following attributes are required but have not been
+   assigned a value explicitly: Epoch, RefRA, RefDec, RestFreq,
+   SourceVel, StdOfRest.
+
+- @ref DSBSpecFrame
+
+   If @ref Object_UseDefs "UseDefs" is zero, an error is reported when aligning DSBSpecFrames
+   or when accessing the ImagFreq attribute if any of the following
+   attributes are required but have not been assigned a value explicitly:
+   Epoch, DSBCentre, IF.
+*/
+} // namespace ast

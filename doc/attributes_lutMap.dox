@@ -1,0 +1,34 @@
+namespace ast {
+/**
+@page lutmap_attributes LutMap Attributes
+
+@section LutMap_Attributes LutMap Attributes
+
+@subsection LutMap_LutEpsilon LutEpsilon
+
+The relative error of the values held in the took-up table.
+
+`LutEpsilon` is used when simplifying a @ref LutMap, to determine if the @ref LutMap
+should be considered linear. Setting a larger value makes it more likely
+that a @ref LutMap will be replaced by a WinMap (i.e. a linear Mapping) when simplified.
+
+The default value is the value of the system constant DBL_EPSILON (typically around 1e-16 or 2E-16).
+If the values in the look-up table were derived from single precision data,
+it may be appropriate to set this attribute to a value around 1E-7.
+
+
+@subsection LutMap_LutInterp LutInterp
+
+This attribute indicates the method to be used when finding the output value
+of a @ref LutMap for an input value part way between two table entries.
+If it is set to 0 (the default) then linear interpolation is used.
+Otherwise, nearest neighbour interpolation is used.
+
+Using nearest neighbour interpolation causes `nan` to be returned
+for any point which falls outside the bounds of the table.
+Linear interpolation results in an extrapolated value being returned
+based on the two end entries in the table.
+
+
+*/
+} // namespace ast

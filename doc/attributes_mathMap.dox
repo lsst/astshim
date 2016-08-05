@@ -1,0 +1,84 @@
+namespace ast {
+/**
+@page mathmap_attributes MathMap Attributes
+
+@section MathMap_Attributes @ref MathMap Attributes
+
+@subsection MathMap_Seed Seed
+
+Random number seed
+
+This attribute, which may take any integer value, determines the
+sequence of random numbers produced by the random number functions in
+MathMap expressions. It is set to an unpredictable default value when
+a MathMap is created, so that by default each MathMap uses a different
+set of random numbers.
+
+If required, you may set this Seed attribute to a value of your
+choosing in order to produce repeatable behaviour from the random
+number functions. You may also enquire the Seed value (e.g. if an
+initially unpredictable value has been used) and then use it to
+reproduce the resulting sequence of random numbers, either from the
+same MathMap or from another one.
+
+Clearing the Seed attribute gives it a new unpredictable default
+value.
+
+
+@subsection MathMap_SimpFI SimpFI
+
+Forward-inverse MathMap pairs simplify?
+
+This attribute should be set to a `true` value if applying a
+@ref MathMap's forward transformation, followed immediately by the matching
+inverse transformation will always restore the original set of
+coordinates. It indicates that AST may replace such a sequence of
+operations by an identity Mapping (a UnitMap) if it is encountered
+while simplifying a compound Mapping (e.g. using astSimplify).
+
+By default, the MathMap_SimpFI "SimpFI" attribute is `false`,
+so that AST will not perform this simplification unless you
+have set MathMap_SimpFI "SimpFI" to indicate that it is safe to do so.
+
+### \anchor MathMap_SimpFI_Notes Notes
+
+- For simplification to occur, the two @ref MathMap "MathMaps" must be in series and
+    be identical (with textually identical transformation
+    functions). Functional equivalence is not sufficient.
+
+- The consent of both @ref MathMap "MathMaps" is required before simplification can
+    take place. If either has a MathMap_SimpFI "SimpFI" value of `false`, then simplification
+    will not occur.
+
+- The MathMap_SimpFI "SimpFI" attribute controls simplification only in the case where
+    a @ref MathMap's forward transformation is followed by the matching inverse
+    transformation. It does not apply if an inverse transformation is
+    followed by a forward transformation. This latter case is controlled
+    by the MathMap_SimpIF "SimpIF" attribute.
+
+- The "forward" and "inverse" transformations referred to are those
+    defined when the @ref MathMap is created (corresponding to the "fwd" and
+    "inv" parameters of its constructor function). If the @ref MathMap is
+    inverted, then the role of the MathMap_SimpFI "SimpFI" and MathMap_SimpIF "SimpIF"
+    attributes will be interchanged.
+
+
+@subsection MathMap_SimpIF SimpIF
+
+This attribute should be set to a non-zero value if applying a
+@ref MathMap's inverse transformation, followed immediately by the matching
+forward transformation will always restore the original set of
+coordinates. It indicates that AST may replace such a sequence of
+operations by an identity Mapping (a UnitMap) if it is encountered
+while simplifying a compound Mapping (e.g. using astSimplify).
+
+By default, the MathMap_SimpIF "SimpIF" attribute is zero, so that AST will not perform
+this simplification unless you have set MathMap_SimpIF "SimpIF" to indicate that it is
+safe to do so.
+
+### Notes
+
+see @ref MathMap_SimpFI_Notes
+
+*/
+} // namespace ast

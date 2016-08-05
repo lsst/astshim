@@ -1,0 +1,46 @@
+## -*- python -*-
+from lsst.sconsUtils import scripts
+scripts.BasicSConscript.pybind11([
+    "base",
+    "object",
+    "stream",
+    "channel",
+    "mapping",
+    "frame",
+    "frameSet",
+    "keyMap",
+
+    "mapBox",
+    "mapSplit",
+    "quadApprox",
+
+    "fitsChan",
+    "xmlChan",
+
+    "cmpMap",
+    "lutMap",
+    "mathMap",
+    "matrixMap",
+    "normMap",
+    "parallelMap",
+    "seriesMap",
+    "pcdMap",
+    "permMap",
+    "polyMap",
+    "rateMap",
+    "shiftMap",
+    "slaMap",
+    "sphMap",
+    "timeMap",
+    "tranMap",
+    "unitMap",
+    "unitNormMap",
+    "wcsMap",
+    "winMap",
+    "zoomMap",
+
+    "cmpFrame",
+    "skyFrame",
+    "specFrame",
+    "timeFrame",
+], addUnderscore=False)

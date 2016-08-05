@@ -1,0 +1,969 @@
+namespace ast {
+/**
+@page fitschan_attributes FitsChan Attributes
+
+@section FitsChan_Attributes FitsChan Attributes
+
+@subsection FitsChan_AllWarnings AllWarnings
+
+A space separated list of all the conditions names recognized by the
+@ref FitsChan_Warnings "Warnings" attribute. (string)
+
+The following conditions are currently recognised (all are case-insensitive):
+
+- "BadCel": This condition arises when reading a FrameSet from a
+non-Native encoded FitsChan if an unknown celestial co-ordinate
+system is specified by the `CTYPE` keywords.
+
+- "Bad`CTYPE`": This condition arises when reading a FrameSet from a
+non-Native encoded FitsChan if an illegal algorithm code is specified
+by a `CTYPE` keyword, and the illegal code can be converted to an
+equivalent legal code.
+
+- "BadKeyName": This condition arises if a FITS keyword name is
+encountered that contains an illegal character (i.e. one not allowed
+by the FITS standard).
+
+- "BadKeyValue": This condition arises if the value of a FITS keyword
+cannot be determined from the content of the header card.
+
+- "BadLat": This condition arises when reading a FrameSet from a
+non-Native encoded FitsChan if the latitude of the reference point
+has an absolute value greater than 90 degrees. The actual absolute
+value used is set to exactly 90 degrees in these cases.
+
+- "BadMat": This condition arises if the matrix describing the
+transformation from pixel offsets to intermediate world coordinates
+cannot be inverted. This matrix describes the scaling, rotation, shear,
+etc., applied to the pixel axes, and is specified by keywords such as
+`PCi_j`, `CDi_j`, `CROTA`, etc. For example, the matrix will not be invertable
+if any rows or columns consist entirely of zeros. The FITS-WCS Paper I
+"Representation of World Coordinates in FITS" by Greisen & Calabretta
+requires that this matrix be invertable. Many operations (such as
+grid plotting) will not be possible if the matrix cannot be inverted.
+
+- "BadPV": This condition arises when reading a FrameSet from a
+non-Native encoded FitsChan. It is issued if a `PVi_m` header is found
+that refers to a projection parameter that is not used by the
+projection type specified by `CTYPE`, or the PV values are otherwise
+inappropriate for the projection type.
+
+- "BadVal": This condition arises when reading a FrameSet from a
+non-Native encoded FitsChan if it is not possible to convert the
+value of a FITS keywords to the expected type. For instance, this
+can occur if the FITS header contains a string value for a keyword
+which should have a floating point value, or if the keyword has no
+value at all (i.e. is a comment card).
+
+- "Distortion": This condition arises when reading a FrameSet from a
+non-Native encoded FitsChan if any of the `CTYPE` keywords specify an
+unsupported distortion code using the "4-3-3" format specified in
+FITS-WCS paper IV. Such distortion codes are ignored.
+
+- "No`CTYPE`": This condition arises if a default `CTYPE` value is used
+within astRead, due to no value being present in the supplied FitsChan.
+This condition is only tested for when using non-Native encodings.
+
+- "NoEquinox": This condition arises if a default equinox value is used
+within astRead, due to no value being present in the supplied FitsChan.
+This condition is only tested for when using non-Native encodings.
+
+- "NoRadesys": This condition arises if a default reference frame is
+used for an equatorial co-ordinate system within astRead, due to no
+value being present in the supplied FitsChan. This condition is only
+tested for when using non-Native encodings.
+
+- "NoLonpole": This condition arises if a default value is used for
+the LONPOLE keyword within astRead, due to no value being present
+in the supplied FitsChan. This condition is only tested for when
+using non-Native encodings.
+
+- "NoLatpole": This condition arises if a default value is used for
+the LATPOLE keyword within astRead, due to no value being present
+in the supplied FitsChan. This condition is only tested for when
+using non-Native encodings.
+
+- "NoMjd-obs": This condition arises if a default value is used for
+the date of observation within astRead, due to no value being present
+in the supplied FitsChan. This condition is only tested for when using
+non-Native encodings.
+
+- "Tnx": This condition arises if a FrameSet is read from a FITS
+header containing an IRAF `TNX` projection which includes terms
+not supproted by AST. Such terms are ignored and so the resulting
+FrameSet may be inaccurate.
+
+- "Zpx": This condition arises if a FrameSet is read from a FITS
+header containing an IRAF `ZPX` projection which includes "lngcor"
+or "latcor" correction terms. These terms are not supported by AST
+and are ignored. The resulting FrameSet may therefore be inaccurate.
+
+
+@subsection FitsChan_Card Card
+
+The index of the "current" FITS header card within a @ref FitsChan,
+the first card having an index of 1. (int)
+
+The choice of current card affects the behaviour of functions that
+access the contents of the @ref FitsChan, such as
+@ref FitsChan.delFits, @ref FitsChan.findFits and @ref FitsChan.putFits.
+
+A value assigned to `Card` will position the @ref FitsChan at any
+desired point, so that a particular card within it can be
+accessed. Alternatively, the value of `Card` may be enquired in
+order to determine the current position of a @ref FitsChan.
+
+The default value of `Card` is 1. This means that clearing
+this attribute (using @ref FitsChan.clearCard) effectively "rewinds" the
+@ref FitsChan, so that the first card is accessed next.  If `Card` is
+set to a value which exceeds the total number of cards in the
+@ref FitsChan (as given by its @ref FitsChan_Ncard "Ncard" attribute), it is regarded as
+pointing at the "end-of-file". In this case, the value returned
+in response to an enquiry is always one more than the number of
+cards in the @ref FitsChan.
+
+
+@subsection FitsChan_CardComm CardComm
+
+The comment for the current card of the FitsChan. (string)
+
+A zero-length string is returned if the card has no comment.
+
+
+@subsection FitsChan_CardName CardName
+
+The name of the keyword for the current card of the FitsChan. (string)
+
+
+@subsection FitsChan_CardType CardType
+
+The data type of the keyword value for the current card of the FitsChan
+as an @ref CardType enum.
+
+
+@subsection FitsChan_CarLin CarLin
+
+Ignore spherical rotations on CAR projections? (bool)
+
+`CarLin` is a boolean value which specifies how FITS `CAR`
+(plate carree, or "Cartesian") projections should be treated when
+reading a @ref FrameSet from a foreign encoded FITS header.
+
+If `CarLin` is `false` (the default), it is assumed that the `CAR` projection
+conforms to the conventions described in the FITS world coordinate system (FITS-WCS)
+paper II "Representation of Celestial Coordinates in FITS" by
+M. Calabretta & E.W. Greisen. If `CarLin` is true, then these
+conventions are ignored, and it is assumed that the mapping from pixel
+coordinates to celestial coordinates is a simple linear transformation
+(hence the attribute name `CarLin`). This is appropriate for some older
+FITS data which claims to have a `CAR` projection, but which in fact do
+not conform to the conventions of the FITS-WCS paper.
+
+The FITS-WCS paper specifies that headers which include a `CAR` projection
+represent a linear mapping from pixel coordinates to "native spherical
+coordinates", NOT celestial coordinates. An extra mapping is then
+required from native spherical to celestial. This mapping is a 3D
+rotation and so the overall Mapping from pixel to celestial coordinates
+is NOT linear. See the FITS-WCS papers for further details.
+
+
+@subsection FitsChan_CDMatrix CDMatrix
+
+Use CDi_j keywords to represent pixel scaling, rotation, etc? (bool)
+
+CDMatrix is a boolean value which specifies how the linear
+transformation from pixel coordinates to intermediate world
+coordinates should be represented within a FitsChan when using
+FITS-WCS encoding. This transformation describes the scaling,
+rotation, shear, etc., of the pixel axes.
+
+If the attribute has a non-zero value then the transformation is
+represented by a set of `CDi_j` keywords representing a square matrix
+(where "i" is the index of an intermediate world coordinate axis
+and "j" is the index of a pixel axis). If the attribute has a zero
+value the transformation is represented by a set of `PCi_j` keywords
+(which also represent a square matrix) together with a corresponding
+set of CDELTi keywords representing the axis scalings. See FITS-WCS
+paper II "Representation of Celestial Coordinates in FITS" by
+M. Calabretta & E.W. Greisen, for a complete description of these two schemes.
+
+The default value of the `CDMatrix` attribute is determined by the
+contents of the FitsChan at the time the attribute is accessed. If
+the FitsChan contains any `CDi_j` keywords then the default value is
+non-zero. Otherwise it is zero. Note, reading a FrameSet from a
+FitsChan will in general consume any `CDi_j` keywords present in the
+FitsChan. Thus the default value for `CDMatrix` following a read will
+usually be zero, even if the FitsChan originally contained some
+`CDi_j` keywords. This behaviour is similar to that of the Encoding
+attribute, the default value for which is determined by the contents
+of the FitsChan at the time the attribute is accessed. If you wish
+to retain the original value of the `CDMatrix` attribute (that is,
+the value before reading the FrameSet) then you should enquire the
+default value before doing the read, and then set that value explicitly.
+
+
+@subsection FitsChan_Clean Clean
+
+Remove cards used whilst reading even if an error occurs? (bool)
+
+A succesful read on a @ref FitsChan always results in the removal of
+the cards which were involved in the description of the returned
+Object. However, in the event of an error during the read (for instance
+if the cards in the @ref FitsChan have illegal values, or if some required
+cards are missing) no cards will be removed from the @ref FitsChan if
+the Clean attribute is `false` (the default). If Clean is `true` then
+any cards which were used in the aborted attempt to read an object
+will be removed.
+
+This provides a means of "cleaning" a @ref FitsChan of WCS-related cards
+which works even in the event of the cards not forming a legal WCS
+description.
+
+
+@subsection FitsChan_DefB1950 DefB1950
+
+Use FK4 B1950 as default equatorial coordinates? (bool)
+
+`DefB1950` specifies a default equinox and reference frame to use when reading a @ref FrameSet
+from a @ref FitsChan with a foreign (i.e. non-native) encoding.
+
+It is only used if the FITS header contains RA and DEC axes but contains no information about the
+reference frame or equinox. If this is the case, then values of `FK4` and
+`B1950` are assumed if the `DefB1950` attribute has a non-zero value and
+`ICRS` is assumed if `DefB1950` is zero. The default value for `DefB1950`
+depends on the value of the Encoding attribute: for `FITS-WCS` encoding
+the default is zero, and for all other encodings it is one.
+
+
+@subsection FitsChan_Encoding Encoding
+
+`Encoding` affects the behaviour of the @ref Channel.write
+and @ref Channel.read functions when
+they are used to transfer any AST @ref Object to or from an external
+representation consisting of FITS header cards (i.e. whenever a
+write or read operation is performed using a @ref FitsChan as the I/O Channel).
+
+There are several ways (conventions) by which coordinate system
+information may be represented in the form of FITS headers and
+the Encoding attribute is used to specify which of these should
+be used. The encoding options available are outlined in the
+"Encodings Available" section below, and in more detail in the
+sections which follow.
+
+Encoding systems differ in the range of possible @ref Object "Objects"
+(e.g. classes) they can represent, in the restrictions they
+place on these @ref Object "Objects" (e.g. compatibility with some
+externally-defined coordinate system model) and in the number of
+@ref Object "Objects" that can be stored together in any particular set of
+FITS header cards (e.g. multiple @ref Object "Objects", or only a single
+@ref Object). The choice of encoding also affects the range of
+external applications which can potentially read and interpret
+the FITS header cards produced.
+
+The encoding options available are not necessarily mutually
+exclusive, and it may sometimes be possible to store multiple
+@ref Object "Objects" (or the same @ref Object several times) using different
+encodings within the same set of FITS header cards. This
+possibility increases the likelihood of other applications being
+able to read and interpret the information.
+
+By default, a @ref FitsChan will attempt to determine which encoding
+system is already in use, and will set the default Encoding
+value accordingly (so that subsequent I/O operations adopt the
+same conventions). It does this by looking for certain critical
+FITS keywords which only occur in particular encodings. For
+details of how this works, see the "Choice of Default Encoding"
+section below. If you wish to ensure that a particular encoding
+system is used, independently of any FITS cards already present,
+you should set an explicit Encoding value yourself.
+
+### Encodings Available:
+
+The Encoding attribute can take any of the following (case
+insensitive) string values to select the corresponding encoding
+system:
+
+- `DSS`: Encodes coordinate system information in FITS header
+cards using the convention developed at the Space Telescope
+Science Institute (STScI) for the Digitised Sky Survey (`DSS`)
+astrometric plate calibrations. The main advantages of this
+encoding are that FITS images which use it are widely available
+and it is understood by a number of important and
+well-established astronomy applications. For further details,
+see the section "The `DSS` Encoding" below.
+
+- `FITS-WCS`: Encodes coordinate system information in FITS
+header cards using the conventions described in the FITS
+world coordinate system (`FITS-WCS`) papers by E.W. Greisen,
+M. Calabretta, et al. The main advantages of this encoding are that
+it should be understood by any `FITS-WCS` compliant application and
+is likely to be adopted widely for FITS data in future. For further
+details, see the section "The `FITS-WCS` Encoding" below.
+
+- `FITS-PC`: Encodes coordinate system information in FITS
+header cards using the conventions described in an earlier draft
+of the FITS world coordinate system papers by E.W. Greisen and
+M. Calabretta. This encoding uses a combination of CDELTi and
+PCiiijjj keywords to describe the scale and rotation of the pixel
+axes. This encoding is included to support existing data and
+software which uses these now superceded conventions. In general,
+the `FITS-WCS` encoding (which uses CDi_j or PCi_j keywords to
+describe the scale and rotation) should be used in preference to
+`FITS-PC`.
+
+- `FITS-IRAF`: Encodes coordinate system information in FITS
+header cards using the conventions described in the document
+"World Coordinate Systems Representations Within the FITS
+Format" by R.J. Hanisch and D.G. Wells, 1988.  This encoding is
+currently employed by the IRAF data analysis facility, so its
+use will facilitate data exchange with IRAF. Its main advantages
+are that it is a stable convention which approximates to a
+subset of the propsed `FITS-WCS` encoding (above). This makes it
+suitable as an interim method for storing coordinate system
+information in FITS headers until the `FITS-WCS` encoding becomes
+stable. Since many datasets currently use the `FITS-IRAF`
+encoding, conversion of data from `FITS-IRAF` to the final form of
+`FITS-WCS` is likely to be well supported.
+
+- `FITS-AIPS`: Encodes coordinate system information in FITS
+header cards using the conventions originally introduced by the
+AIPS data analysis facility. This is base on the use of `CDELTi` and
+`CROTAi` keuwords to desribe the scale and rotation of each axis.
+These conventions have been superceded but are still widely used.
+
+- `FITS-AIPS++`: Encodes coordinate system information in FITS
+header cards using the conventions used by the AIPS++ project.
+This is an extension of `FITS-AIPS` which includes some of the
+features of `FITS-IRAF` and `FITS-PC`.
+
+- `FITS-CLASS`: Encodes coordinate system information in FITS
+header cards using the conventions used by the CLASS project.
+CLASS is a software package for reducing single-dish radio and
+sub-mm spectroscopic data. See the section "CLASS FITS format" at
+http://www.iram.fr/IRAMFR/GILDAS/doc/html/class-html/.
+
+- `NATIVE`: Encodes AST @ref Object "Objects" in FITS header cards using a
+convention which is private to the AST library (but adheres to
+the general FITS standard) and which uses FITS keywords that
+will not clash with other encoding systems. The main advantages
+of this are that any class of AST @ref Object may be encoded, and any
+(reasonable) number of @ref Object "Objects" may be stored sequentially in the
+same FITS header. This makes FITS headers an almost loss-less
+communication path for passing AST @ref Object "Objects" between applications
+(although all such applications must, of course, make use of the
+AST library to interpret the information). For further details,
+see the section "The `NATIVE` Encoding" below.
+
+### Choice of Default Encoding:
+
+If the Encoding attribute of a @ref FitsChan is not set, the default
+value it takes is determined by the presence of certain critical
+FITS keywords within the @ref FitsChan. The sequence of decisions
+
+used to arrive at the default value is as follows:
+
+- If the @ref FitsChan contains any keywords beginning with the
+string "BEGAST", then `NATIVE` encoding is used,
+- Otherwise, `FITS-CLASS` is used if the @ref FitsChan contains a `DELTAV`
+keyword and a keyword of the form `VELO-xxx`, where `xxx` indicates one
+of the rest frames used by class (e.g. "VELO-LSR"), or "VLSR".
+- Otherwise, if the @ref FitsChan contains a CTYPE keyword which
+represents a spectral axis using the conventions of the AIPS and
+AIPS++ projects (e.g. "FELO-LSR", etc), then one of `FITS-AIPS` or
+`FITS-AIPS++` encoding is used. `FITS-AIPS++` is used if any of the
+keywords CDi_j, PROJP, LONPOLE or LATPOLE are
+found in the @ref FitsChan. Otherwise `FITS-AIPS` is used.
+- Otherwise, if the @ref FitsChan contains a keyword of the form
+"PCiiijjj", where "i" and "j" are single digits, then
+`FITS-PC` encoding is used,
+- Otherwise, if the @ref FitsChan contains a keyword of the form
+"CDiiijjj", where "i" and "j" are single digits, then
+`FITS-IRAF` encoding is used,
+- Otherwise, if the @ref FitsChan contains a keyword of the form
+"CDi_j", and at least one of RADECSYS, PROJPi, or CjVALi
+where "i" and "j" are single digits, then `FITS-IRAF` encoding is
+used.
+- Otherwise, if the @ref FitsChan contains any keywords of the form
+PROJPi, CjVALi or RADECSYS, where "i" and "j" are single digits,
+then `FITS-PC` encoding is used.
+- Otherwise, if the @ref FitsChan contains a keyword of the form
+CROTAi, where "i" is a single digit, then `FITS-AIPS` encoding is
+used.
+- Otherwise, if the @ref FitsChan contains a keyword of the form
+CRVALi, where "i" is a single digit, then `FITS-WCS` encoding is
+used.
+- Otherwise, if the @ref FitsChan contains the "PLTRAH" keyword, then
+`DSS` encoding is used,
+- Otherwise, if none of these conditions is met (as would be the
+case when using an empty @ref FitsChan), then `NATIVE` encoding is
+used.
+
+Except for the `NATIVE` and `DSS` encodings, all the above checks
+also require that the header contains at least one CTYPE, CRPIX and
+CRVAL keyword (otherwise the checking process continues to the next
+case).
+
+Setting an explicit value for the Encoding attribute always
+over-rides this default behaviour.
+
+Note that when writing information to a @ref FitsChan, the choice of
+encoding will depend greatly on the type of application you
+expect to be reading the information in future. If you do not
+know this, there may sometimes be an advantage in writing the
+information several times, using a different encoding on each
+occasion.
+
+### The `DSS` Encoding:
+
+The `DSS` encoding uses FITS header cards to store a multi-term
+polynomial which relates pixel positions on a digitised
+photographic plate to celestial coordinates (right ascension and
+declination). This encoding may only be used to store a single
+AST @ref Object in any set of FITS header cards, and that @ref Object must
+be a @ref FrameSet which conforms to the STScI/`DSS` coordinate system
+model (this means the Mapping which relates its base and current
+Frames must include either a DssMap or a WcsMap with type
+AST__TAN or AST__TPN).
+
+When reading a `DSS` encoded @ref Object (using @ref Channel.read), the @ref FitsChan
+concerned must initially be positioned at the first card (its
+Card attribute must equal 1) and the result of the read, if
+successful, will always be a pointer to a @ref FrameSet. The base
+Frame of this @ref FrameSet represents `DSS` pixel coordinates, and the
+current Frame represents `DSS` celestial coordinates. Such a read
+is always destructive and causes the FITS header cards required
+for the construction of the @ref FrameSet to be removed from the
+@ref FitsChan, which is then left positioned at the "end-of-file". A
+subsequent read using the same encoding will therefore not
+return another @ref FrameSet, even if the @ref FitsChan is rewound.
+
+When @ref Channel.write is used to store a @ref FrameSet using `DSS` encoding,
+an attempt is first made to simplify the @ref FrameSet to see if it
+conforms to the `DSS` model.  Specifically, the current Frame must
+be a FK5 SkyFrame; the projection must be a tangent plane
+(gnomonic) projection with polynomial corrections conforming to
+`DSS` requirements, and north must be parallel to the second base
+Frame axis.
+
+If the simplification process succeeds, a description of the
+@ref FrameSet is written to the @ref FitsChan using appropriate `DSS` FITS
+header cards. The base Frame of the @ref FrameSet is used to form the
+`DSS` pixel coordinate system and the current Frame gives the `DSS`
+celestial coordinate system.  A successful write operation will
+over-write any existing `DSS` encoded data in the @ref FitsChan, but
+will not affect other (non-`DSS`) header cards. If a destructive
+read of a `DSS` encoded @ref Object has previously occurred, then an
+attempt will be made to store the FITS header cards back in
+their original locations.
+
+If an attempt to simplify a @ref FrameSet to conform to the `DSS` model
+fails (or if the @ref Object supplied is not a @ref FrameSet), then no
+data will be written to the @ref FitsChan and @ref Channel.write will return
+zero. No error will result.
+
+### The `FITS-WCS` Encoding:
+
+The `FITS-WCS` convention uses FITS header cards to describe the
+relationship between pixels in an image (not necessarily
+2-dimensional) and one or more related "world coordinate systems".
+The `FITS-WCS` encoding may only be used to store a single AST @ref Object
+in any set of FITS header cards, and that @ref Object must be a @ref FrameSet
+which conforms to the `FITS-WCS` model (the @ref FrameSet may, however,
+contain multiple Frames which will be result in multiple FITS
+"alternate axis descriptions"). Details of the use made by this
+Encoding of the conventions described in the `FITS-WCS` papers are
+given in the appendix `FITS-WCS` Coverage" of this document. A few
+main points are  described below.
+
+The rotation and scaling of the intermediate world coordinate system
+can be specified using either "CDi_j" keywords, or "PCi_j" together
+with "CDELTi" keywords. When writing a @ref FrameSet to a @ref FitsChan, the
+the value of the CDMatrix attribute of the @ref FitsChan determines
+which system is used.
+
+In addition, this encoding supports the "TAN with polynomial correction
+terms" projection which was included in a draft of the `FITS-WCS` paper,
+but was not present in the final version. A "TAN with polynomial
+correction terms" projection is represented using a WcsMap with type
+AST__TPN (rather than AST__TAN which is used to represent simple
+TAN projections). When reading a FITS header, a CTYPE keyword value
+including a "-TAN" code results in an AST__TPN projection if there are
+any projection parameters (given by the PVi_m keywords) associated with
+the latitude axis, or if there are projection parameters associated
+with the longitude axis for m greater than 4. When writing a
+@ref FrameSet to a FITS header, an AST__TPN projection gives rise to a
+CTYPE value including the normal "-TAN" code, but the projection
+parameters are stored in keywords with names "QVi_m", instead of the
+usual "PVi_m". Since these QV parameters are not part of the
+`FITS-WCS` standard they will be ignored by other non-AST software,
+resulting in the WCS being interpreted as a simple TAN projection
+without any corrections. This should be seen as an interim solution
+until such time as an agreed method for describing projection
+distortions within `FITS-WCS` has been published.
+
+AST extends the range of celestial coordinate systems which may be
+described using this encoding by allowing the inclusion of
+"AZ--" and "EL--" as the coordinate specification within CTYPE
+values. These form a longitude/latitude pair of axes which describe
+azimuth and elevation. The geographic position of the observer
+should be supplied using the OBSGEO-X/Y/Z keywords described in `FITS-WCS`
+paper III. Currently, a simple model is used which includes diurnal
+aberration, but ignores atmospheric refraction, polar motion, etc.
+These may be added in a later release.
+
+If an AST SkyFrame that represents offset rather than absolute
+coordinates (see attribute SkyRefIs) is written to a @ref FitsChan using
+`FITS-WCS` encoding, two alternate axis descriptions will be created.
+One will describe the offset coordinates, and will use "OFLN" and
+"OFLT" as the axis codes in the CTYPE keywords. The other will
+describe absolute coordinates as specified by the System attribute
+of the SkyFrame, using the usual CTYPE codes ("RA--"/"DEC-", etc).
+In addition, the absolute coordinates description will contain
+AST-specific keywords (SREF1/2, SREFP1/2 and SREFIS) that allow the
+header to be read back into AST in order to reconstruct the original
+SkyFrame.
+
+When reading a `FITS-WCS` encoded @ref Object (using @ref Channel.read), the @ref FitsChan
+concerned must initially be positioned at the first card (its
+Card attribute must equal 1) and the result of the read, if
+successful, will always be a pointer to a @ref FrameSet. The base
+Frame of this @ref FrameSet represents `FITS-WCS` pixel coordinates,
+and the current Frame represents the physical coordinate system
+described by the `FITS-WCS` primary axis descriptions. If
+secondary axis descriptions are also present, then the @ref FrameSet
+may contain additional (non-current) Frames which represent
+these.  Such a read is always destructive and causes the FITS
+header cards required for the construction of the @ref FrameSet to be
+removed from the @ref FitsChan, which is then left positioned at the
+"end-of-file". A subsequent read using the same encoding will
+therefore not return another @ref FrameSet, even if the @ref FitsChan is
+rewound.
+
+When @ref Channel.write is used to store a @ref FrameSet using `FITS-WCS`
+encoding, an attempt is first made to simplify the @ref FrameSet to
+see if it conforms to the `FITS-WCS` model. If this simplification
+process succeeds (as it often should, as the model is reasonably
+flexible), a description of the @ref FrameSet is written to the
+@ref FitsChan using appropriate FITS header cards. The base Frame of
+the @ref FrameSet is used to form the `FITS-WCS` pixel coordinate
+system and the current Frame gives the physical coordinate
+system to be described by the `FITS-WCS` primary axis
+descriptions.  Any additional Frames in the @ref FrameSet may be used
+to construct secondary axis descriptions, where appropriate.
+
+A successful write operation will over-write any existing
+`FITS-WCS` encoded data in the @ref FitsChan, but will not affect other
+(non-`FITS-WCS`) header cards. If a destructive read of a `FITS-WCS`
+encoded @ref Object has previously occurred, then an attempt will be
+made to store the FITS header cards back in their original
+locations. Otherwise, the new cards will be inserted following
+any other `FITS-WCS` related header cards present or, failing
+that, in front of the current card (as given by the Card
+attribute).
+
+If an attempt to simplify a @ref FrameSet to conform to the `FITS-WCS`
+model fails (or if the @ref Object supplied is not a @ref FrameSet), then
+no data will be written to the @ref FitsChan and @ref Channel.write will
+return zero. No error will result.
+
+### The `FITS-IRAF` Encoding:
+
+The `FITS-IRAF` encoding can, for most purposes, be considered as
+a subset of the `FITS-WCS` encoding (above), although it differs
+in the details of the FITS keywords used. It is used in exactly
+the same way and has the same restrictions, but with the
+addition of the following:
+
+- The only celestial coordinate systems that may be represented
+    are equatorial, galactic and ecliptic.
+- Sky projections can be represented only if any associated
+    projection parameters are set to their default values.
+- Secondary axis descriptions are not supported, so when writing
+    a @ref FrameSet to a @ref FitsChan, only information from the base and
+    current Frames will be stored.
+
+Note that this encoding is provided mainly as an interim measure to
+provide a more stable alternative to the `FITS-WCS` encoding until the
+FITS standard for encoding WCS information is finalised.  The name
+`FITS-IRAF` indicates the general keyword conventions used and does
+not imply that this encoding will necessarily support all features of
+the WCS scheme used by IRAF software. Nevertheless, an attempt has
+been made to support a few such features where they are known to be
+used by important sources of data.
+
+When writing a @ref FrameSet using the `FITS-IRAF` encoding, axis rotations
+are specified by a matrix of FITS keywords of the form "CDi_j", where
+"i" and "j" are single digits. The alternative form "CDiiijjj", which
+is also in use, is recognised when reading an @ref Object, but is never
+written.
+
+In addition, the experimental IRAF "ZPX" and "TNX" sky projections will
+be accepted when reading, but will never be written (the corresponding
+FITS `ZPN` or "distorted TAN" projection being used instead). However,
+there are restrictions on the use of these experimental projections.
+For `ZPX`, longitude and latitude correction surfaces (appearing as
+"lngcor" or "latcor" terms in the IRAF-specific `WAT` keywords) are
+not supported. For `TNX` projections, only cubic surfaces encoded as
+simple polynomials with "half cross-terms" are supported. If an
+un-usable `TNX` or `ZPX` projection is encountered while reading
+from a @ref FitsChan, a simpler form of `TAN` or `ZPN` projection is used
+which ignores the unsupported features and may therefore be
+inaccurate. If this happens, a warning message is added to the
+contents of the @ref FitsChan as a set of cards using the keyword `ASTWARN`.
+
+You should not normally attempt to mix the foreign FITS encodings within
+the same @ref FitsChan, since there is a risk that keyword clashes may occur.
+
+### The `FITS-PC` Encoding:
+
+The `FITS-PC` encoding can, for most purposes, be considered as
+equivalent to the `FITS-WCS` encoding (above), although it differs
+in the details of the FITS keywords used. It is used in exactly
+the same way and has the same restrictions.
+
+### The `FITS-AIPS` Encoding:
+
+The `FITS-AIPS` encoding can, for most purposes, be considered as
+equivalent to the `FITS-WCS` encoding (above), although it differs
+in the details of the FITS keywords used. It is used in exactly
+the same way and has the same restrictions, but with the
+
+addition of the following:
+
+- The only celestial coordinate systems that may be represented
+are equatorial, galactic and ecliptic,
+- Spectral axes can only be represented if they represent
+frequency, radio velocity or optical velocity, and are linearly
+sampled in frequency. In addition, the standard of rest
+must be `LSRK`, `LSRD`, barycentric or geocentric.
+- Sky projections can be represented only if any associated
+projection parameters are set to their default values.
+- The `AIT`, `SFL` and `MER` projections can only be written if the `CRVAL`
+keywords are zero for both longitude and latitude axes.
+- Secondary axis descriptions are not supported, so when writing
+a @ref FrameSet to a @ref FitsChan, only information from the base and
+current Frames will be stored.
+- If there are more than 2 axes in the base and current Frames, any
+rotation must be restricted to the celestial plane, and must involve
+no shear.
+
+### The `FITS-AIPS++` Encoding:
+
+The `FITS-AIPS++` encoding is based on the `FITS-AIPS` encoding, but
+includes some features of the `FITS-IRAF` and `FITS-PC` encodings.
+Specifically, any celestial projections supported by `FITS-PC` may be
+used, including those which require parameterisation, and the axis
+rotation and scaling may be specified using CDi_j keywords. When
+writing a FITS header, rotation will be specified using `CROTA`/`CDELT`
+keywords if possible, otherwise `CDi_j` keywords will be used instead.
+
+### The `FITS-CLASS` Encoding:
+The `FITS-CLASS` encoding uses the conventions of the CLASS project.
+These are described in the section "Developer Manual"/"CLASS FITS
+Format" contained in the CLASS documentation at:
+http://www.iram.fr/IRAMFR/GILDAS/doc/html/class-html/class.html.
+
+
+This encoding is similar to `FITS-AIPS` with the following restrictions:
+
+- When a @ref SpecFrame is created by reading a `FITS-CLASS` header, the
+attributes describing the observer's position (ObsLat, ObsLon and
+ObsAlt) are left unset because the CLASS encoding does not specify
+these values. Conversions to or from the topocentric standard of rest
+will therefore be inaccurate (typically by up to about 0.5 km/s)
+unless suitable values are assigned to these attributes after the
+@ref FrameSet has been created.
+- When writing a @ref FrameSet to a `FITS-CLASS` header, the current Frame
+in the @ref FrameSet must have at least 3 WCS axes, of which one must be
+a linear spectral axis. The spectral axis in the created header will
+always describe frequency. If the spectral axis in the supplied
+@ref FrameSet refers to some other system (e.g. radio velocity, etc),
+then it will be converted to frequency.
+- There must be a pair of celestial axes - either (RA,Dec) or
+(GLON,GLAT). RA and Dec must be either FK4/B1950 or FK5/J2000.
+- A limited range of projection codes (`TAN`, `ARC`, `STG`, `AIT`, `SFL`, `SIN`)
+can be used. For `AIT` and `SFL`, the reference point must be at the
+origin of longitude and latitude. For `SIN`, the associated projection
+parameters must both be zero.
+- No rotation of the celestial axes is allowed, unless the spatial
+axes are degenerate (i.e. cover only a single pixel).
+- The frequency axis in the created header will always describe
+frequency in the source rest frame. If the supplied @ref FrameSet uses
+some other standard of rest then suitable conversion will be applied.
+- The source velocity must be defined. In other words, the @ref SpecFrame
+attributes `SourceVel` and `SourceVRF` must have been assigned values.
+- The frequency axis in a `FITS-CLASS` header does not represent
+absolute frequency, but instead represents offsets from the rest
+frequency in the standard of rest of the source.
+
+When writing a @ref FrameSet out using `FITS-CLASS` encoding, the current
+Frame may be temporarily modified if this will allow the header
+to be produced. If this is done, the associated pixel->WCS Mapping
+will also be modified to take account of the changes to the Frame.
+The modifications performed include re-ordering axes (WCS axes, not
+pixel axes), changing spectral coordinate system and standard of
+rest, changing the celestial coordinate system and reference equinox,
+and changing axis units.
+
+### The `NATIVE` Encoding:
+
+The `NATIVE` encoding may be used to store a description of any
+class of AST @ref Object in the form of FITS header cards, and (for
+most practical purposes) any number of these @ref Object descriptions
+may be stored within a single set of FITS cards. If multiple
+@ref Object descriptions are stored, they are written and read
+sequentially. The `NATIVE` encoding makes use of unique FITS
+keywords which are designed not to clash with keywords that have
+already been used for other purposes (if a potential clash is
+detected, an alternative keyword is constructed to avoid the
+clash).
+
+When reading a `NATIVE` encoded object from a @ref FitsChan (using
+@ref Channel.read), FITS header cards are read, starting at the current
+card (as determined by the Card attribute), until the start of
+the next @ref Object description is found. This description is then
+read and converted into an AST @ref Object, for which a pointer is
+returned. Such a read is always destructive and causes all the
+FITS header cards involved in the @ref Object description to be
+removed from the @ref FitsChan, which is left positioned at the
+following card.
+
+The @ref Object returned may be of any class, depending on the
+description that was read, and other AST routines may be used to
+validate it (for example, by examining its Class or ID attribute).
+If further `NATIVE` encoded @ref Object descriptions
+exist in the @ref FitsChan, subsequent calls to @ref Channel.read will return
+the @ref Object "Objects" they describe in sequence (and destroy their
+descriptions) until no more remain between the current card and
+the "end-of-file".
+
+When @ref Channel.write is used to write an @ref Object using `NATIVE` encoding,
+a description of the @ref Object is inserted immediately before the
+current card (as determined by the Card attribute).  Multiple
+@ref Object descriptions may be written in this way and are stored
+separately (and sequentially if the Card attribute is not
+modified between the writes). A write operation using the `NATIVE`
+encoding does not over-write previously written @ref Object
+descriptions. Note, however, that subsequent behaviour is
+undefined if an @ref Object description is written inside a
+previously-written description, so this should be avoided.
+
+When an @ref Object is written to a @ref FitsChan using `NATIVE` encoding,
+@ref Channel.write should (barring errors) always transfer data and
+return a value of 1.
+
+
+@subsection FitsChan_FitsAxisOrder FitsAxisOrder
+
+The order for the WCS axes in any new FITS-WCS headers
+created using @ref Channel.write. (string)
+
+The value of the `FitsAxisOrder` attribute can be either "<auto>"
+(the default value), "<copy>" or a space-separated list of axis
+symbols:
+
+- "<auto>": causes the WCS axis order to be chosen automatically so that
+the i'th WCS axis in the new FITS header is the WCS axis which is
+more nearly parallel to the i'th pixel axis.
+
+- "<copy>": causes the WCS axis order to be set so that the i'th WCS
+axis in the new FITS header is the i'th WCS axis in the current
+Frame of the FrameSet being written out to the header.
+
+- "Sym1 Sym2...": the space-separated list is seached in turn for
+the Symbol attribute of each axis in the current Frame of the
+FrameSet. The order in which these Symbols occur within the
+space-separated list defines the order of the WCS axes in the
+new FITS header. An error is reported if Symbol for a current
+Frame axis is not present in the supplied list. However, no error
+is reported if the list contains extra words that do not correspond
+to the Symbol of any current Frame axis.
+
+
+@subsection FitsChan_FitsDigits FitsDigits
+
+Digits of precision for floating-point FITS values. (int)
+
+`FitsDigits` gives the number of significant decimal digits to
+use when formatting floating point values for inclusion in the
+FITS header cards within a @ref FitsChan.
+
+By default, a positive value is used which results in no loss of
+information, assuming that the value's precision is double.
+Usually, this causes no problems.
+
+However, to adhere strictly to the recommendations of the FITS
+standard, the width of the formatted value (including sign,
+decimal point and exponent) ought not to be more than 20
+characters. If you are concerned about this, you should set
+FitsDigits to a negative value, such as -15. In this case, the
+absolute value (+15) indicates the maximum number of significant
+digits to use, but the actual number used may be fewer than this
+to ensure that the FITS recommendations are satisfied. When
+using this approach, the resulting number of significant digits
+may depend on the value being formatted and on the presence of
+any sign, decimal point or exponent.
+
+The value of this attribute is effective when FITS header cards
+are output, either using @ref FitsChan.findFits
+or by the action of the @ref FitsChan's sink function
+when it is finally deleted.
+
+
+@subsection FitsChan_Iwc Iwc
+
+Add a Frame describing Intermediate World Coords? (bool)
+
+`Iwcs` is used when a FrameSet is read from a FitsChan with a foreign FITS encoding
+(e.g. `FITS-WCS`) using @ref Channel.read.
+
+If `Iwcs` is true then the returned FrameSet will include
+Frames representing "intermediate world coordinates" (IWC). These
+Frames will have Domain name "IWC" for primary axis descriptions, and
+"IWCa" for secondary axis descriptions, where "a" is replaced by
+the single alternate axis description character, as used in the
+FITS-WCS header. The default value for "Iwc" is `false`.
+
+FITS-WCS paper 1 defines IWC as a Cartesian coordinate system with one
+axis for each WCS axis, and is the coordinate system produced by the
+rotation matrix (represented by FITS keyword `PCi_j`, `CDi_j`, etc).
+For instance, for a 2-D `FITS-WCS` header describing projected
+celestial longitude and latitude, the intermediate world
+coordinates represent offsets in degrees from the reference point
+within the plane of projection.
+
+
+@subsection FitsChan_Ncard Ncard
+
+The total number of FITS header cards stored in a @ref FitsChan. (int)
+
+`Ncard` is updated as cards are added or deleted.
+
+
+@subsection FitsChan_Nkey Nkey
+
+The total number of unique FITS keywords stored in a @ref FitsChan. (int)
+
+`Nkey` is updated as cards are added or deleted.
+If no keyword occurrs more than once in the @ref FitsChan,
+the @ref FitsChan_Ncard "Ncard" and @ref FitsChan_Nkey "Nkey" attributes will be equal.
+If any keyword occurrs more than once, the @ref FitsChan_Nkey "Nkey" attribute value
+will be smaller than the @ref FitsChan_Ncard "Ncard" attribute value.
+
+
+@subsection FitsChan_TabOK TabOK
+
+Should the FITS "-TAB" algorithm be recognised? (bool)
+
+`TabOK` is an integer value which indicates if the `-TAB`
+algorithm, defined in FITS-WCS paper III, should be supported by
+the FitsChan. The default value is zero. A zero or negative value
+results in no support for `-TAB` axes (i.e. axes that have `-TAB`
+in their CTYPE keyword value). In this case, the
+@ref Channel.write
+method will return zero if the write operation would required the
+use of the `-TAB` algorithm, and the
+@ref Channel.read method will fail
+if any axis in the supplied header uses the `-TAB` algorithm.
+
+If `TabOK` is set to a non-zero positive integer, these methods will
+recognise and convert axes described by the `-TAB` algorithm, as
+follows:
+
+The @ref Channel.write
+method will generate headers that use the ``-TAB`` algorithm (if
+possible) if no other known FITS-WCS algorithm can be used to
+describe the supplied FrameSet. This will result in a table of
+coordinate values and index vectors being stored in the FitsChan.
+After the write operation, the calling application should check to
+see if such a table has been stored in the FitsChan. If so, the
+table should be retrived from the FitsChan using the
+astGetTables
+method, and the data (and headers) within it copied into a new
+FITS binary table extension. See
+astGetTables
+for more information. The FitsChan uses a FitsTable object to store
+the table data and headers. This FitsTable will contain the required
+columns and headers as described by FITS-WCS paper III - the
+coordinates array will be in a column named "COORDS", and the index
+vector(s) will be in columns named `INDEX<i>` (where `<i>` is the index
+of the corresponding FITS WCS  axis). Note, index vectors are only
+created if required. The `EXTNAME` value will be set to the value of the
+`AST__TABEXTNAME` constant (currently "WCS-TAB"). The `EXTVER` header
+will be set to the positive integer value assigned to the `TabOK`
+attribute. No value will be stored for the `EXTLEVEL` header, and should
+therefore be considered to default to 1.
+
+The @ref Channel.read
+method will generate a FrameSet from headers that use the `-TAB`
+algorithm so long as the necessary FITS binary tables are made
+available. There are two ways to do this: firstly, if the application
+knows which FITS binary tables will be needed, then it can create a
+Fitstable describing each such table and store it in the FitsChan
+(using method
+astPutTables or astPutTable) before invoking the @ref Channel.read method.
+Secondly, if the application does not know which FITS binary tables
+will be needed by @ref Channel.read,
+then it can register a call-back function with the FitsChan using
+method astTableSource.
+This call-back function will be called from within @ref Channel.read
+if and when a `-TAB` header is encountered. When called, its arguments
+will give the name, version and level of the FITS extension containing
+a required table. The call-back function should read this table from
+an external FITS file, and create a corresponding FitsTable which
+it should then return to
+@ref Channel.read. Note, currently @ref Channel.read
+can only handle `-TAB` headers that describe 1-dimensional (i.e.
+separable) axes.
+
+
+@subsection FitsChan_PolyTan PolyTan
+
+Use `PVi_m` keywords to define distorted TAN projection? (bool)
+
+`PolyTan` specifies how FITS "TAN"
+projections should be treated when reading a FrameSet from a foreign
+encoded FITS header. If zero, the projection is assumed to conform
+to the published FITS-WCS standard. If positive, the convention
+for a distorted TAN projection included in an early draft version
+of FITS-WCS paper II are assumed. In this convention the
+coefficients of a polynomial distortion to be applied to
+intermediate world coordinates are specified by the `PVi_m` keywords.
+This convention was removed from the paper before publication and so
+does not form part of the standard. Indeed, it is incompatible with
+the published standard because it re-defines the meaning of the
+first five `PVi_m` keywords on the longitude axis, which are reserved
+by the published standard for other purposes. However, headers that
+use this convention are still to be found, for instance the SCAMP
+utility (http://www.astromatic.net/software/scamp) creates them.
+
+The default value for the `PolyTan` attribute is `-1`. A negative
+values causes the used convention to depend on the contents
+of the FitsChan. If the FitsChan contains any `PVi_m` keywords for
+the latitude axis, or if it contains `PVi_m` keywords for the
+longitude axis with "m" greater than 4, then the distorted TAN
+convention is used. Otherwise, the standard convention is used.
+
+
+@subsection FitsChan_Warnings Warnings
+
+Controls the issuing of warnings about selected conditions when an @ref Object or keyword
+is read from or written to a @ref FitsChan. (string)
+
+The value supplied for the `Warnings` attribute should
+consist of a space separated list of condition names (see the
+AllWarnings attribute for a list of the currently defined names).
+Each name indicates a condition which should be reported. The default
+value for Warnings is the string
+"BadKeyName BadKeyValue Tnx Zpx BadCel BadMat BadPV BadCTYPE".
+
+The text of any warning will be stored within the @ref FitsChan in the
+form of one or more new header cards with keyword `ASTWARN`. If
+required, applications can check the @ref FitsChan for `ASTWARN` cards
+(using @ref FitsChan.findFits) after the call to @ref Channel.read or @ref Channel.write has been
+performed, and report the text of any such cards to the user. `ASTWARN`
+cards will be propagated to any output header unless they are
+deleted from the @ref FitsChan using @ref FitsChan.delFits.
+
+*/
+} // namespace ast

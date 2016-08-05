@@ -1,0 +1,139 @@
+namespace ast {
+/**
+\mainpage astshim
+
+A C++ and Python shim around a subset of
+<a href="http://starlink.eao.hawaii.edu/starlink/AST">Starlink AST</a> 
+a library for handling world coordinate systems in astronomy.
+
+For detailed documentation of AST see http://starlink.eao.hawaii.edu/devdocs/sun211.htx/sun211.html.
+
+The focus of astshim is on support for spatial mappings for use by LSST. Thus few of AST's functions
+that support time, spectra and tables have yet been wrapped. The python wrapping is done using pybind11.
+
+## Differences between this and Starlink AST
+
+- Most functions in AST are classes or methods in this shim.
+- `Mapping::tranForward` and `Mapping::tranInverse` methods transform single points or lists of points.
+    These replace AST's `astTran<X>` functions and no `invert` flag is supported.
+    There are three versions of each method:
+    - Accept a std::vector<double> and return a new std::vector<double>.
+        This is the simplest version to use if you wish to transorm a single point.
+    - Accept a 2-dimensional ndarray and return a newly allocated 2-dimensional ndarray.
+    - Accept a 2-dimensional ndarray and fill a pre-allocated 2-dimensional ndarray.
+- Lists of points are stored in memory such that adjacent axes adjacent are adjacent in memory,
+    both for vectors and 2-dimensional ndarrays.
+    For example if nAxes = 2 then the data is in this order: x0, y0, x1, y1, x2, y2...
+    Note that memory order is transposed from the memory order AST uses.
+- @ref Mapping "Mappings" may not be inverted in place.
+    Instead call @ref Mapping.getInverse to get an inverse mapping,
+    and @ref Mapping.isInverted to find out if a mapping is inverted.
+- Compound mappings and frames have a few minor changes:
+    - New classes @ref SeriesMap and @ref ParallelMap are subclasses of @ref CmpMap
+        and any compound mapping will always be an instance of one or the other of these subclasses.
+        Thus `Object.getClass` returns "SeriesMap" or "ParallelMap" for all compound maps.
+    - Added @ref Mapping.of as a convenient way to make a @ref SeriesMap
+        and @ref Mapping.over as a convient way to make a @ref ParallelMap.
+    - Added @ref Frame.over as a convenient way to make a @ref CmpFrame.
+    - Instead of wrapping `astDecompose`:
+        - Call @ref CmpMap.operator[] to retrieve a mapping from a compound mapping.
+        - Call @ref CmpMap.getSeries to find out if a compound mapping is in series.
+        - Call @ref CmpFrame.operator[] to retrieve a @ref Frame from a @ref CmpFrame
+- Exceptions are raised on errors, leaving AST in a normal (non-error) state:
+    - Where practical, the wrapper checks arguments and throws `std::invalid_argument`
+        before calling AST code.
+    - After calling AST code the wrapper checks AST's error state and if invalid,
+        the wrapper resets the AST status code and throws `std::runtime_error`.
+        At present the exception contain an error number, rather than useful text,
+        and useful text is printed to stderr. I hope to fix that at some point.
+- The AST functions `set`, `set<X>` and `get<X>` are hidden;
+    instead each class has explicit accessors for its attributes, such as @ref Object.getID.
+    @ref Mapping "Mappings" are mostly immutable, so they have getters,
+    but no setters beyond a few generic setters from @ref Object.
+    @ref SlaMap and @ref TimeMap both violate immutability by having `add` methods;
+    if this is a problem we can replace the `add` methods with constructor arguments.
+    @ref Frame "Frames" are mutable, so all frame-specific attributes have setters as well as getters.
+- @ref Channel "Channels" are constructed with a @ref Stream; subclasses are available for files and strings,
+    and it is easy (in C++, but not Python) to construct a @ref Stream to use standard in and/or out.
+- astshim manages memory using standard smart pointers. Thus the following
+    AST functions are not wrapped: `astAnnul`, `astBegin`, `astClone`, `astDelete`,
+    `astEnd`, and `astExport`.
+- Methods that output floating point data have `AST__BAD` replaced with `nan`.
+
+### Smaller differences (not a complete list):
+
+- Methods such as @ref Object.set do not support printf formatting and extra arguments.
+- @ref Object.show prints its output to a provided output stream or returns a string,
+    rather than printing to stdout.
+- @ref FrameSet.addAxes and @ref FrameSet.addFrame implement AST's
+    `astAddFrame(AST__ALLFRAMES, map, frame)` function, because it did two very different things.
+- @ref FitsChan does not offer methods for getting or setting complex integers
+    (`astGetFitsCI` and `astSetFitsCI`) because that data type is not supported by standard C++.
+- @ref KeyMap has several differences:
+    - Methods `get<X>` and `put<X>` work with both scalars and vectors
+        (implementing `astMapGet0<X>`, `astMapGet1<X>`, `astMapPut0<X>` and `astMapPut1<X>`).
+    - Methods `append` and `replace` are used to alter values in existing entries
+        (implementing `astMapPutElem...<X>`).
+
+## Missing Functionality
+
+Many portions of AST have not yet been wrapped. Here are some highlights:
+
+- Rebinning and resampling (`astRebin<X>`, `astRebinSeq<X>` and `astResample<X>`
+- @anchor DSBSpecFrame `astDBSPecFrame`
+- @anchor FluxFrame `astFluxFrame`
+- @anchor Region `astRegion`, `astRemoveRegions` and other region support
+- @anchor Plot `astPlot` and other plotting support
+- @anchor SpecFluxFrame `astSpecFluxFrame`
+- @anchor StcsChan `astStcsChan`
+- @anchor Table `astTable` and other table support
+- @anchor astIsA "astIsA<Class>". I don't think we need these (one can always use rtti or
+    call @ref Object.getClass) but if they are needed then it probably makes sense
+    to wrap these as `isInstance(Object const & obj)` static methods on all classes.
+- @anchor astTune and astTuneC.
+
+The Python interface could present a more dict-like view of KeyMap and FitsChan, as pyast does.
+*/
+
+## To build
+
+- Install a minimal LSST stack that includes `utils`, `sconsUtils`, `ndarray` and `doxygen`.
+- Install [starlink-ast](https://github.com/lsst/starlink_ast) as any LSST package.
+- Install this package in the same way as any LSST package.
+
+To build only the documentation:
+- Install doxygen
+- Execute this command: `doxygen doc/doxygen.conf`
+- See file `doc/html/index.html`
+
+## Examples
+
+See the unit tests in `tests` and the example(s) in `examples`
+
+## Plans
+
+- Add more unit tests.
+- Improve error reporting so exceptions have useful text and no text is printed to stderr.
+- Add doc strings to python wrapped objects.
+
+Longer term desires:
+- Add support for building with cmake.
+
+## License
+
+This product includes software developed by the LSST Project (http://www.lsst.org/).
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+See <https://www.lsstcorp.org/LegalNotices/> for the LSST License Statement
+and the GNU General Public License.
+*/
+} // namespace ast

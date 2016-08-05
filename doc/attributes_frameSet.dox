@@ -1,0 +1,153 @@
+namespace ast {
+/**
+@page frameset_attributes FrameSet Attributes
+
+@section FrameSet_Attributes FrameSet Attributes
+
+@subsection FrameSet_AllVariants AllVariants
+
+A list of the variant @ref Mapping "Mappings" associated with the current @ref Frame. (string, read only)
+
+This attribute gives a space separated list of the names of all the
+variant @ref Mapping "Mappings" associated with the current @ref Frame (see attribute
+@ref FrameSet_Variant "Variant"). If the current @ref Frame has no variant @ref Mapping "Mappings", then the
+list will hold a single entry equal to the @ref Frame_Domain "Domain" name of the
+current @ref Frame.
+
+
+@subsection FrameSet_Base Base
+
+Index of base @ref Frame, starting from 1. (int)
+
+This attribute gives the index of the @ref Frame which is to be
+regarded as the "base" @ref Frame within a @ref FrameSet. The default is
+the first @ref Frame added to the @ref FrameSet when it is created (this
+@ref Frame always has an index of 1).
+
+When setting a new value for this attribute, a string may be
+supplied instead of an integer index. In this case a search
+is made within the @ref FrameSet for a @ref Frame that has its @ref Frame_Domain "Domain"
+attribute value equal to the supplied string (the comparison is
+case-insensitive). If found, the @ref Frame is made the base @ref Frame.
+Otherwise an error is reported.
+
+### Notes
+
+- The @ref Mapping.getInverse "Inverse" of a @ref FrameSet
+has the values of its @ref FrameSet_Base "Base" and @ref FrameSet_Current "Current" attributes interchanged.
+
+
+@subsection FrameSet_Current Current
+
+Index of current @ref Frame, starting from 1. (int)
+
+This attribute gives the index of the @ref Frame which is to be
+regarded as the "current" @ref Frame within a @ref FrameSet. The default
+is the most recent @ref Frame added to the @ref FrameSet (this @ref Frame
+always has an index equal to the @ref FrameSet's Nframe attribute).
+
+When setting a new value for this attribute, a string may be
+supplied instead of an integer index. In this case a search
+is made within the @ref FrameSet for a @ref Frame that has its @ref Frame_Domain "Domain"
+attribute value equal to the supplied string (the comparison is
+case-insensitive). If found, the @ref Frame is made the current @ref Frame.
+Otherwise an error is reported.
+
+### Notes
+- The @ref Mapping.getInverse "Inverse" of a @ref FrameSet
+has the values of its @ref FrameSet_Base "Base" and @ref FrameSet_Current "Current" attributes interchanged.
+
+
+@subsection FrameSet_Nframe Nframe
+
+Number of @ref Frame "Frames" in a @ref FrameSet. (int, read only)
+
+This attribute gives the number of @ref Frame "Frames" in a @ref FrameSet. This
+value will change as @ref Frame "Frames" are added or removed, but will
+always be at least one.
+
+
+@subsection FrameSet_Variant Variant
+
+Indicates which variant of the current @ref Frame is to be used. (string)
+
+This attribute can be used to change the @ref Mapping that connects the
+current @ref Frame to the other @ref Frame "Frames" in the @ref FrameSet. By default, each
+@ref Frame in a @ref FrameSet is connected to the other @ref Frame "Frames" by a single
+@ref Mapping that can only be changed by using @ref FrameSet.remapFrame.
+However, it is also possible to associate multiple @ref Mapping "Mappings"
+with a @ref Frame, each @ref Mapping having an identifying name. If this is
+done, the @ref FrameSet_Variant "Variant" attribute can be set to indicate the name of
+the @ref Mapping that is to be used with the current @ref Frame.
+
+A possible (if unlikely) use-case is to create a @ref FrameSet that can
+be used to describe the WCS of an image formed by co-adding images
+of two different parts of the sky. In such an image, each pixel contains
+flux from two points on the sky.and so the WCS for the image should
+ideally contain one pixel @ref Frame and two SkyFrames - one describing
+each of the two co-added images. There is nothing to prevent a
+@ref FrameSet containing two explicit SkyFrames, but the problem then arises
+of how to distinguish between them. The two primary characteristics of
+a @ref Frame that distinguishes it from other @ref Frame "Frames" are its class and its
+@ref Frame_Domain "Domain" attribute value. The class of a @ref Frame cannot be changed, but we
+could in principle use two different @ref Frame_Domain "Domain" values to distinguish the
+two SkyFrames. However, in practice it is not uncommon for application
+software to assume that SkyFrames will have the default @ref Frame_Domain "Domain" value
+of "SKY". That is, instead of searching for @ref Frame "Frames" that have a class
+of "SkyFrame", such software searches for @ref Frame "Frames" that have a @ref Frame_Domain "Domain"
+of "SKY". To alleviate this problem, it is possible to add a single
+SkyFrame to the @ref FrameSet, but specifying two alternate @ref Mapping "Mappings" to
+use with the SkyFrame. Setting the @ref FrameSet_Variant "Variant" attribute to the name
+of one or the other of these alternate @ref Mapping "Mappings" will cause the
+SkyFrame to be remapped within the @ref FrameSet so that it uses the
+specified @ref Mapping. The same facility can be used with any class of
+@ref Frame, not just SkyFrames.
+
+To use this facility, the @ref Frame should first be added to the
+@ref FrameSet in the usual manner using @ref FrameSet.addFrame.
+By default, the @ref Mapping supplied to @ref FrameSet.addFrame
+is assigned a name equal to the @ref Frame_Domain "Domain" name of the @ref Frame.
+To assign a different name to it, call @ref FrameSet.renameVariant.
+The @ref FrameSet.addVariant method should then be called repeatedly
+to add each required extra @ref Mapping to the current @ref Frame,
+supplying a unique name for each one.
+
+Each @ref Frame in a @ref FrameSet can have its own set of variant @ref Mapping "Mappings".
+To control the @ref Mapping "Mappings" in use with a specific @ref Frame, you need first
+to make it the current @ref Frame in the @ref FrameSet.
+
+The @ref FrameSet.mirrorVariants function
+allows the effects of variant @ref Mapping "Mappings" associated with a nominated
+@ref Frame to be propagated to other @ref Frame "Frames" in the @ref FrameSet.
+
+Once this has been done, setting a new value for the @ref FrameSet_Variant "Variant"
+attribute of a @ref FrameSet will cause the current @ref Frame in the
+@ref FrameSet to be remapped to use the specified variant @ref Mapping. An
+error will be reported if the current @ref Frame has no variant @ref Mapping
+with the supplied name.
+
+Getting the value of the @ref FrameSet_Variant "Variant" attribute will return the name
+of the variant @ref Mapping currently in use with the current @ref Frame. If
+the @ref Frame has no variant @ref Mapping "Mappings", the value will default to the
+@ref Frame_Domain "Domain" name of the current @ref Frame.
+
+Clearing the @ref FrameSet_Variant "Variant" attribute will have the effect of removing
+all variant @ref Mapping "Mappings" (except for the currently selected @ref Mapping) from
+the current @ref Frame.
+
+Testing the @ref FrameSet_Variant "Variant" attribute will return
+a non-zero value if the current @ref Frame contains any variant @ref Mapping "Mappings",
+and zero otherwise.
+
+A complete list of the names associated with all the available
+variant @ref Mapping "Mappings" in the current @ref Frame can be obtained from the
+@ref FrameSet_AllVariants "AllVariants" attribute.
+
+If a @ref Frame with variant @ref Mapping "Mappings" is remapped using
+@ref FrameSet.remapFrame, the currently selected variant @ref Mapping is used by
+@ref FrameSet.remapFrame
+and the other variant @ref Mapping "Mappings" are removed from the @ref Frame.
+
+
+*/
+} // namespace ast

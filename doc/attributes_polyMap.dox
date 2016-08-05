@@ -1,0 +1,50 @@
+namespace ast {
+/**
+@page polymap_attributes PolyMap Attributes
+
+@section PolyMap_Attributes PolyMap Attributes
+
+@subsection PolyMap_IterInverse IterInverse
+
+Provide an iterative inverse transformation? (bool)
+
+This attribute indicates whether the inverse transformation of
+the PolyMap should be implemented via an iterative Newton-Raphson
+approximation that uses the forward transformation to transform
+candidate input positions until an output position is found which
+is close to the required output position. By default, an iterative
+inverse is provided if, and only if, no inverse polynomial was supplied
+when the PolyMap was constructed.
+
+The @ref PolyMap_NiterInverse "NiterInverse" and @ref PolyMap_TolInverse "TolInverse"
+attributes provide parameters that control the behaviour of the inverse approcimation method.
+
+
+@subsection PolyMap_NiterInverse NiterInverse
+
+Maximum number of iterations for the iterative inverse transformation. (int)
+
+This attribute controls the iterative inverse transformation
+used if the @ref PolyMap_IterInverse "IterInverse" attribute is non-zero.
+
+Its value gives the maximum number of iterations of the
+Newton-Raphson algorithm to be used for each transformed position.
+The default value is 4. See also attribute @ref PolyMap_TolInverse "TolInverse".
+
+
+@subsection PolyMap_TolInverse TolInverse
+
+Target relative error for the iterative inverse transformation. (double)
+
+This attribute controls the iterative inverse transformation
+used if the @ref PolyMap_IterInverse "IterInverse" attribute is non-zero.
+
+Its value gives the target relative error in teh axis values of
+each transformed position. Further iterations will be performed
+until the target relative error is reached, or the maximum number
+of iterations given by attribute @ref PolyMap_NiterInverse "NiterInverse" is reached.
+
+The default value is 1.0E-6.
+
+*/
+} // namespace ast
