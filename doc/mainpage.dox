@@ -40,6 +40,13 @@ that support time, spectra and tables have yet been wrapped.
         the wrapper resets the AST status code and throws `std::runtime_error`.
         At present the exception contain an error number, rather than useful text,
         and useful text is printed to stderr. I hope to fix that at some point.
+- The AST functions `set`, `set<X>` and `get<X>` are hidden;
+    instead each class has explicit accessors for its attributes, such as @ref Object.getID.
+    @ref Mapping "Mappings" are intended to be (roughly) immutable, so they have getters,
+    but no setters (beyond the few few generic setters from @ref Object).
+    @ref SlaMap and @ref TimeMap both violate immutability by having `add` methods;
+    if this is a problem we can replace the `add` methods with constructor arguments.
+    @ref Frame "Frames" are mutable, so all frame-specific attributes have setters as well as getters.
 - @ref Channel "Channels" are constructed with a @ref Stream; subclasses are available for files and strings,
     and it is easy (in C++, but not yet Python) to construct a @ref Stream to use standard in and/or out.
 - astshim manages memory using standard smart pointers. Thus the following

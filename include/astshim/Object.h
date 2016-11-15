@@ -128,6 +128,134 @@ public:
     bool getUseDefs() const { return getB("UseDefs"); }
 
     /**
+    Lock this object for exclusive use by the calling thread.
+
+    The thread-safe public interface to AST is designed so that an
+    error is reported if any thread attempts to use an @ref Object that it
+    has not previously locked for its own exclusive use using this
+    function. When an @ref Object is created, it is initially locked by the
+    thread that creates it, so newly created objects do not need to be
+    explicitly locked. However, if an @ref Object pointer is passed to
+    another thread, the original thread must first unlock it (using
+    astUnlock) and the new thread must then lock it (using astLock)
+    before the new thread can use the @ref Object.
+
+    @param[in] wait  If the @ref Object is curently locked by another thread then this
+       function will either report an error or block. If a non-zero value
+       is supplied for "wait", the calling thread waits until the object
+       is available for it to use. Otherwise, an error is reported and
+       the function returns immediately without locking the @ref Object.
+
+    ### Notes
+
+    - The Locked object will belong to the current AST context.
+    - This function returns without action if the @ref Object is already
+    locked by the calling thread.
+    - If simultaneous use of the same object is required by two or more
+    threads, @ref Object.copy should be used to to produce a deep copy of
+    the @ref Object for each thread. Each copy should then be unlocked by
+    the parent thread (i.e. the thread that created the copy), and then
+    locked by the child thread (i.e. the thread that wants to use the
+    copy).
+    - This function returns without action if the AST library has
+    been built without POSIX thread support (i.e. the "-with-pthreads"
+    option was not specified when running the "configure" script).
+    */
+    void lock(bool wait) {
+        astLock(getRawPtr(), static_cast<int>(wait));
+        assertOK();
+    }
+
+    /**
+    Does this contain the same AST object as another?
+
+    This is a test of identity, not of equality.
+    */
+    bool same(Object & other) const { return astSame(getRawPtr(), other.getRawPtr()); }
+
+    /// Set @ref Object_ID "ID": object identification string that is not copied.
+    void setID(std::string const & id) { setC("ID", id); }
+
+    /// Set @ref Object_Ident "Ident": object identification string that is copied.
+    void setIdent(std::string const & ident) { setC("Ident", ident); }
+
+    /// Set @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
+    void setUseDefs(bool usedefs) { setB("UseDefs", usedefs); }
+
+    /**
+    Print a textual description the object to an ostream.
+
+    It is provided primarily as an aid to debugging
+    */
+    void show(std::ostream & os) const;
+
+    /**
+    Return a textual description the object as a string.
+
+    It is provided primarily as an aid to debugging
+    */
+    std::string show() const;
+
+    /**
+    Has this attribute been explicitly set (and not subsequently cleared)?
+
+    @warning Unlike the underlying astTest function, throws an exception if an error results
+
+    ### Notes
+
+    - Attribute names are not case sensitive and may be surrounded by white space.
+    - As you might expect, the returned value for a read-only attribute is always `false`.
+
+    @throw std::runtime_error if an error results.
+    */
+    bool test(std::string const & attrib) {
+        bool res = astTest(getRawPtr(), attrib.c_str());
+        assertOK();
+        return res;
+    }
+
+    /**
+    Unlock this object previously locked using @ref lock, so that other
+    threads can use this object. See @ref lock for further details.
+
+    @param[in] report  If true, an error will be reported if the supplied @ref Object,
+       or any @ref Object contained within the supplied @ref Object, is not
+       currently locked by the running thread. If false, such @ref Object "Objects"
+       will be left unchanged, and no error will be reported.
+
+    ### Notes
+
+    - This function attempts to execute even if AST's global error
+    status is set, but no further error report will be made if it
+    subsequently fails under these circumstances.
+    - All unlocked @ref Object "Objects" are excluded from AST context handling until
+    they are re-locked using astLock.
+    - This function returns without action if the @ref Object is not currently
+    locked by any thread. If it is locked by the running thread, it is
+    unlocked. If it is locked by another thread, an error will be reported
+    if "error" is non-zero.
+    - This function returns without action if the AST library has
+    been built without POSIX thread support (i.e. the "-with-pthreads"
+    option was not specified when running the "configure" script).
+    */
+    void unlock(bool report=false) {
+        astUnlock(getRawPtr(), static_cast<int>(report));
+        assertOK();
+    }
+
+    AstObject * getRawPtr() const { return &*_objPtr; };
+
+protected:
+    /// Make a deep copy
+    template<typename T, typename AstT>
+    std::shared_ptr<T> _copy() const {
+        auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
+        auto retptr = std::shared_ptr<T>(new T(rawptr));
+        assertOK();
+        return retptr;
+    }
+
+    /**
     Get the value of an attribute as a bool
 
     If possible, the attribute value is converted to the type you request.
@@ -204,60 +332,6 @@ public:
         assertOK();
         return val;
     }        
-
-    /**
-    Lock this object for exclusive use by the calling thread.
-
-    The thread-safe public interface to AST is designed so that an
-    error is reported if any thread attempts to use an @ref Object that it
-    has not previously locked for its own exclusive use using this
-    function. When an @ref Object is created, it is initially locked by the
-    thread that creates it, so newly created objects do not need to be
-    explicitly locked. However, if an @ref Object pointer is passed to
-    another thread, the original thread must first unlock it (using
-    astUnlock) and the new thread must then lock it (using astLock)
-    before the new thread can use the @ref Object.
-
-    @param[in] wait  If the @ref Object is curently locked by another thread then this
-       function will either report an error or block. If a non-zero value
-       is supplied for "wait", the calling thread waits until the object
-       is available for it to use. Otherwise, an error is reported and
-       the function returns immediately without locking the @ref Object.
-
-    ### Notes
-
-    - The Locked object will belong to the current AST context.
-    - This function returns without action if the @ref Object is already
-    locked by the calling thread.
-    - If simultaneous use of the same object is required by two or more
-    threads, @ref Object.copy should be used to to produce a deep copy of
-    the @ref Object for each thread. Each copy should then be unlocked by
-    the parent thread (i.e. the thread that created the copy), and then
-    locked by the child thread (i.e. the thread that wants to use the
-    copy).
-    - This function returns without action if the AST library has
-    been built without POSIX thread support (i.e. the "-with-pthreads"
-    option was not specified when running the "configure" script).
-    */
-    void lock(bool wait) {
-        astLock(getRawPtr(), static_cast<int>(wait));
-    }
-
-    /**
-    Does this contain the same AST object as another?
-
-    This is a test of identity, not of equality.
-    */
-    bool same(Object & other) const { return astSame(getRawPtr(), other.getRawPtr()); }
-
-    /// Set @ref Object_ID "ID": object identification string that is not copied.
-    void setID(std::string const & id) { setC("ID", id); }
-
-    /// Set @ref Object_Ident "Ident": object identification string that is copied.
-    void setIdent(std::string const & ident) { setC("Ident", ident); }
-
-    /// Set @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
-    void setUseDefs(bool usedefs) { setB("UseDefs", usedefs); }
 
     /**
     Assign a set of attribute values, over-riding any previous values.
@@ -352,78 +426,6 @@ public:
     void setL(std::string const & attrib, long int value) {
         astSetL(getRawPtr(), attrib.c_str(), value);
         assertOK();
-    }
-
-    /**
-    Print a textual description the object to an ostream.
-
-    It is provided primarily as an aid to debugging
-    */
-    void show(std::ostream & os) const;
-
-    /**
-    Return a textual description the object as a string.
-
-    It is provided primarily as an aid to debugging
-    */
-    std::string show() const;
-
-    /**
-    Has this attribute been explicitly set (and not subsequently cleared)?
-
-    @warning Unlike the underlying astTest function, throws an exception if an error results
-
-    ### Notes
-
-    - Attribute names are not case sensitive and may be surrounded by white space.
-    - As you might expect, the returned value for a read-only attribute is always `false`.
-
-    @throw std::runtime_error if an error results.
-    */
-    bool test(std::string const & attrib) {
-        bool res = astTest(getRawPtr(), attrib.c_str());
-        assertOK();
-        return res;
-    }
-
-    /**
-    Unlock this object previously locked using @ref lock, so that other
-    threads can use this object. See @ref lock for further details.
-
-    @param[in] report  If true, an error will be reported if the supplied @ref Object,
-       or any @ref Object contained within the supplied @ref Object, is not
-       currently locked by the running thread. If false, such @ref Object "Objects"
-       will be left unchanged, and no error will be reported.
-
-    ### Notes
-
-    - This function attempts to execute even if AST's global error
-    status is set, but no further error report will be made if it
-    subsequently fails under these circumstances.
-    - All unlocked @ref Object "Objects" are excluded from AST context handling until
-    they are re-locked using astLock.
-    - This function returns without action if the @ref Object is not currently
-    locked by any thread. If it is locked by the running thread, it is
-    unlocked. If it is locked by another thread, an error will be reported
-    if "error" is non-zero.
-    - This function returns without action if the AST library has
-    been built without POSIX thread support (i.e. the "-with-pthreads"
-    option was not specified when running the "configure" script).
-    */
-    void unlock(bool report=false) {
-        astUnlock(getRawPtr(), static_cast<int>(report));
-    }
-
-    AstObject * getRawPtr() const { return &*_objPtr; };
-
-protected:
-    /// Make a deep copy
-    template<typename T, typename AstT>
-    std::shared_ptr<T> _copy() const {
-        auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
-        auto retptr = std::shared_ptr<T>(new T(rawptr));
-        assertOK();
-        return retptr;
     }
 
 private:
