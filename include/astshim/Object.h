@@ -243,6 +243,12 @@ public:
         assertOK();
     }
 
+    /**
+    Get the raw AST pointer.
+
+    Intended for internal use only, but cannot be made protected
+    without endless "friend class" declarations.
+    */
     AstObject * getRawPtr() const { return &*_objPtr; };
 
 protected:
