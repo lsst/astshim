@@ -172,7 +172,7 @@ public:
     the effects of atmospheric refraction are not.
     */
     void add(std::string const & cvt, std::vector<double> const & args=std::vector<double>()) {
-        astSlaAdd(getRawPtr(), cvt.c_str(), args.data());
+        astSlaAdd(getRawPtr(), cvt.c_str(), args.size(), args.data());
         assertOK();
     }
 
