@@ -13,7 +13,7 @@ class TestUnitNormMap(MappingTestCase):
         """Test basics of UnitNormMap including tran
         """
         for nin in (1, 2, 3):
-            center = np.array([-1, 1, 2][0:nin])
+            center = np.array([-1, 1, 2][0:nin], dtype=float)
             unitnormmap = astshim.UnitNormMap(center)
             self.assertEqual(unitnormmap.getClass(), "UnitNormMap")
             self.assertEqual(unitnormmap.getNin(), nin)
