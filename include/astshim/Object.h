@@ -47,38 +47,37 @@ Object provides the following attributes:
 - @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
 */
 class Object {
+    typedef void (*Deleter)(AstObject *);
 public:
-    typedef std::shared_ptr<AstObject> ObjectPtr;
+    typedef std::unique_ptr<AstObject,Deleter> ObjectPtr;
     typedef std::vector<double> PointD;
     typedef std::vector<int> PointI;
 
     /**
     Construct an @ref Object from a string, using astFromString
     */
-    explicit Object(std::string str) {
-        AstObject * object = reinterpret_cast<AstObject *>(astFromString(str.c_str()));
-        assertOK();
-        _objPtr = ObjectPtr(object, detail::annulAstObject);
+    static std::unique_ptr<Object> fromString(std::string const & str) {
+        return fromAstObject(reinterpret_cast<AstObject *>(astFromString(str.c_str())));
     }
 
     /**
     Construct an @ref Object from a pointer to a raw AstObject
+
+    Ownership of the passed object is transferred to the returned Object.
     */
-    explicit Object(AstObject * object) :
-        _objPtr()
-    {
-        assertOK();
-        if (!object) {
-            throw std::runtime_error("Null pointer");
-        }
-        _objPtr = ObjectPtr(object, detail::annulAstObject);
+    static std::unique_ptr<Object> fromAstObject(AstObject * object) {
+        // This is the public entry point to the registry creates a unique_ptr<Object>
+        // that actually holds a pointer to the correct most-derived astshim type for
+        // the given AstObject*.  I think essentially everything else (e.g. Channel::read)
+        // can delegate to this function, as fromString does.
+        throw std::logic_error("NOT IMPLEMENTED YET");
     }
 
     virtual ~Object() {}
 
-    Object(Object const &) = default;
+    Object(Object const &) = delete;
     Object(Object &&) = default;
-    Object & operator=(Object const &) = default;
+    Object & operator=(Object const &) = delete;
     Object & operator=(Object &&) = default;
 
     /**
@@ -95,7 +94,7 @@ public:
     }
 
     /// Return a deep copy of this object.
-    std::shared_ptr<Object> copy() const { return _copy<Object, AstObject>(); }
+    std::unique_ptr<Object> copy() const { return _copyPolymorphic(); }
 
     /**
     Does this object have an attribute with the specified name?
@@ -171,7 +170,7 @@ public:
 
     This is a test of identity, not of equality.
     */
-    bool same(Object & other) const { return astSame(getRawPtr(), other.getRawPtr()); }
+    bool same(Object const & other) const { return astSame(getRawPtr(), other.getRawPtr()); }
 
     /// Set @ref Object_ID "ID": object identification string that is not copied.
     void setID(std::string const & id) { setC("ID", id); }
@@ -252,12 +251,27 @@ public:
     AstObject * getRawPtr() const { return &*_objPtr; };
 
 protected:
-    /// Make a deep copy
-    template<typename T, typename AstT>
-    std::shared_ptr<T> _copy() const {
-        auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
-        auto retptr = std::shared_ptr<T>(new T(rawptr));
+
+    // Construct from AstObject; for use by derived classes only.
+    explicit Object(AstObject * obj) {
         assertOK();
+        _objPtr = ObjectPtr(obj, &detail::annulAstObject);
+    }
+
+    // This is pure virtual because I *think* AstObject is effectively pure virtual.
+    // If that's not the case (i.e. it's possible in C AST to make an AstObject that
+    // isn't actually a derived class), it should have a default implementation.
+    // Note that all derived classes will have to return the same type to match the
+    // signature; the public copy() method will then static cast *back* to the (known)
+    // derived type.
+    virtual std::unique_ptr<Object> _copyPolymorphic() const = 0;
+
+    // Implementation of deep copy: should be called to implement _copyPolymorphic
+    // by all derived classes.
+    template<typename T, typename AstT>
+    std::unique_ptr<T> _copyImpl() const {
+        auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
+        auto retptr = std::unique_ptr<T>(new T(rawptr));
         return retptr;
     }
 

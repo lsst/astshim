@@ -119,6 +119,7 @@ if the Frame has only one axis:
 */
 class Frame : public Mapping {
 public:
+
     /**
     Construct a Frame
 
@@ -126,37 +127,21 @@ public:
                     of the coordinate space which the Frame describes).
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit Frame(int naxes, std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str())))
-    {}
-
-    /**
-    Construct a Frame from a pointer to a raw AstFrame.
-
-    This method is public so subclasses can call it.
-
-    @throw std::invalid_argument if `rawPtr` is not an AstFrame
-    */
-    explicit Frame(AstFrame * rawPtr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawPtr))
-    {
-        if (!astIsAFrame(getRawPtr())) {
-            std::ostringstream os;
-            os << "This is a " << getClass() << ", which is not a Frame";
-            throw std::invalid_argument(os.str());
-        }
+    static std::unique_ptr<Frame> fromAttributes(int naxes, std::string const & options="") {
+        // Have to delegate to fromAstFrame because (I think) we could be
+        // constructing a derived class of AstFrame.  If that's not the
+        // case, this factory function can go back to being a constructor.
+        std::unique_ptr<Object> result = Object::fromAstObject(astFrame(naxes, options.c_str()));
+        // We should be able to assume here that the pointer we got back is really a Frame,
+        // so we cast it for the user.
+        return detail::static_pointer_cast<Frame>(result);
     }
-
-    /// Cast an object to a Frame if possible, else throw std::invalid_argument
-    explicit Frame(Object & obj) : Frame(
-        detail::shallowCopy<AstFrame>(obj.getRawPtr()))
-    {}
 
     virtual ~Frame() {}
 
-    Frame(Frame const &) = default;
+    Frame(Frame const &) = delete;
     Frame(Frame &&) = default;
-    Frame & operator=(Frame const &) = default;
+    Frame & operator=(Frame const &) = delete;
     Frame & operator=(Frame &&) = default;
 
     /**
@@ -440,7 +425,7 @@ public:
     FrameSet convert(Frame const & to, std::string const & domainlist="");
 
     /// Return a deep copy of this object.
-    std::shared_ptr<Frame> copy() const { return _copy<Frame, AstFrame>(); }
+    std::unique_ptr<Frame> copy() const { return detail::static_pointer_cast<Frame>(_copyPolymorphic()); }
 
     /**
     Find the distance between two points whose Frame coordinates are given.
@@ -1526,6 +1511,29 @@ public:
         int nread = astUnformat(getRawPtr(), axis, str.c_str(), &value);
         assertOK();
         return NReadValue(nread, detail::safeDouble(value));
+    }
+
+protected:
+
+    // Should only be called by derived-class constructors or the registry
+    // behind Object::fromAstObject (which needs to be friended somehow).
+    explicit Frame(AstFrame * rawPtr) :
+        Mapping(reinterpret_cast<AstMapping *>(rawPtr))
+    {
+        // I think this can now basically be an assert, but it depends on the paths to get here;
+        // if they all go through the registry or something else we can control, it ought to be
+        // impossible to get here and not have an AstFrame under the hood.
+        if (!astIsAFrame(getRawPtr())) {
+            std::ostringstream os;
+            os << "This is a " << getClass() << ", which is not a Frame";
+            throw std::invalid_argument(os.str());
+        }
+    }
+
+    // Protected implementation of deep-copy, virtual to ensure that we
+    // get a Frame* even when called through an Object*.
+    virtual std::unique_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<Frame, AstFrame>();
     }
 
 private:

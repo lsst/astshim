@@ -31,6 +31,18 @@ namespace detail {
 
 static const int FITSLEN=80;
 
+// Like static_pointer_cast function for shared_ptr, but for unique_ptrs with
+// no deleter (and they transfer ownership).  Wouldn't be well-defined in
+// general if they did have a deleter, but the ones we care about here don't.
+// Note that dynamic_cast version is problematic: if the cast fails, you
+// can't not transfer ownership.  Happily I don't think we need it (and I
+// imagine a user who would would construct a shared_ptr from the unique_ptr
+// and cast that).
+template <typename T, typename U>
+inline std::unique_ptr<T> static_pointer_cast(std::unique_ptr<U,D> v) {
+    return std::unique_ptr<T>(v.release());
+}
+
 /// a wrapper around astAnnul; intended as a custom deleter for std::shared_ptr
 inline void annulAstObject(AstObject * object) {
     if (object != nullptr) {
