@@ -68,17 +68,7 @@ std::shared_ptr<Object> Object::fromAstObject(AstObject * rawObj) {
     if (name_caster == ClassCasterMap.end()) {
         throw std::runtime_error("Class " + className + " not supported");
     }
-    auto ret = name_caster->second(rawObj);
-    if (className == "CmpMap") {
-        // cast to SeriesMap or ParallelMap as appropriate
-        auto cmpMapPtr = std::static_pointer_cast<CmpMap>(ret);
-        if (cmpMapPtr->getSeries()) {
-            return std::static_pointer_cast<SeriesMap>(ret);
-        } else {
-            return std::static_pointer_cast<ParallelMap>(ret);
-        }
-    }
-    return ret;
+    return name_caster->second(rawObj);
 }
 
 void Object::show(std::ostream & os) const {
