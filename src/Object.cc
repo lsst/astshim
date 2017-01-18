@@ -50,33 +50,18 @@ extern "C" void sinkToOstream(const char *text) {
     (*osptr) << text << std::endl;
 }
 
-/**
-Functor to cast a raw AST pointer to a shared pointer to an astshim object of the specified type
-
-@tparam ShimT  Output astshim class
-@tparam AstT  Output AST class
-*/
-template <typename ShimT, typename AstT>
-std::shared_ptr<Object> castAstObject(AstObject * obj) {
-    return std::make_shared<ShimT>(reinterpret_cast<AstT *>(obj));
-}
-
-/**
-Map of class name: casting functor
-*/
-static std::unordered_map<std::string,
-                          std::function<std::shared_ptr<Object>(AstObject *)>> ClassCasterMap = {
-    {"Channel", castAstObject<Channel, AstChannel>},
-    {"CmpMap", castAstObject<CmpMap, AstCmpMap>},
-    {"Mapping", castAstObject<Mapping, AstMapping>},
-    {"ParallelMap", castAstObject<CmpMap, AstCmpMap>},
-    {"SeriesMap", castAstObject<CmpMap, AstCmpMap>},
-    {"ZoomMap", castAstObject<ZoomMap, AstZoomMap>},
-};
-
 } // anonymous namespace
 
 std::shared_ptr<Object> Object::fromAstObject(AstObject * rawObj) {
+    static std::unordered_map<std::string,
+                          std::function<std::shared_ptr<Object>(AstObject *)>> ClassCasterMap = {
+        {"Channel", makeShim<Channel, AstChannel>},
+        {"CmpMap", makeShim<CmpMap, AstCmpMap>},
+        {"Mapping", makeShim<Mapping, AstMapping>},
+        {"ParallelMap", makeShim<CmpMap, AstCmpMap>},
+        {"SeriesMap", makeShim<CmpMap, AstCmpMap>},
+        {"ZoomMap", makeShim<ZoomMap, AstZoomMap>},
+    };
     assertOK();
     std::string const className(astGetC(rawObj, "Class"));
     auto name_caster = ClassCasterMap.find(className);

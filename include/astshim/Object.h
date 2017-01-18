@@ -248,6 +248,18 @@ public:
     AstObject * getRawPtr() const { return &*_objPtr; };
 
 protected:
+
+    /**
+    Functor to make an astshim instance from a raw AST pointer of the corresponding type.
+
+    @tparam ShimT  Output astshim class
+    @tparam AstT  Output AST class
+    */
+    template <typename ShimT, typename AstT>
+    static std::shared_ptr<ShimT> makeShim(AstObject * p) {
+        return std::shared_ptr<ShimT>(new ShimT(reinterpret_cast<AstT*>(p)));
+    }
+
     /**
     Construct an @ref Object from a pointer to a raw AstObject
     */
