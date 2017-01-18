@@ -59,9 +59,6 @@ class Mapping : public Object {
 friend class Object;
 public:
 
-    /// Cast an object to a Mapping if possible, else throw std::runtime_error
-    explicit Mapping(Object & obj) : Mapping(detail::shallowCopy<AstMapping>(obj.getRawPtr())) {}
-
     virtual ~Mapping() {}
 
     Mapping(Mapping const &) = delete;

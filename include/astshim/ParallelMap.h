@@ -66,9 +66,6 @@ public:
         CmpMap(map1, map2, false, options)
     {}
 
-    /// Cast an object to a ParallelMap if possible, else throw std::runtime_error
-    explicit ParallelMap(Object & obj) : ParallelMap(detail::shallowCopy<AstCmpMap>(obj.getRawPtr())) {}
-
     virtual ~ParallelMap() {}
 
     ParallelMap(ParallelMap const &) = delete;

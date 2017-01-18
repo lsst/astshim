@@ -62,9 +62,6 @@ public:
             astZoomMap(ncoord, zoom, options.c_str())))
     {}
 
-    /// Cast an object to a ZoomMap if possible, else throw std::runtime_error
-    explicit ZoomMap(Object & obj) : ZoomMap(detail::shallowCopy<AstZoomMap>(obj.getRawPtr())) {}
-
     virtual ~ZoomMap() {}
 
     ZoomMap(ZoomMap const &) = delete;

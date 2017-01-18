@@ -66,9 +66,6 @@ public:
         CmpMap(map1, map2, true, options)
     {}
 
-    /// Cast an object to a SeriesMap if possible, else throw std::runtime_error
-    explicit SeriesMap(Object & obj) : SeriesMap(detail::shallowCopy<AstCmpMap>(obj.getRawPtr())) {}
-
     virtual ~SeriesMap() {}
 
     SeriesMap(SeriesMap const &) = delete;

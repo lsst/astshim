@@ -73,9 +73,6 @@ public:
             astCmpMap(map1.getRawPtr(), map2.getRawPtr(), series, options.c_str())))
     {}
 
-    /// Cast an object to a CmpMap if possible, else throw std::runtime_error
-    explicit CmpMap(Object & obj) : CmpMap(detail::shallowCopy<AstCmpMap>(obj.getRawPtr())) {}
-
     virtual ~CmpMap() {}
 
     CmpMap(CmpMap const &) = delete;
