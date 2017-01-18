@@ -117,7 +117,7 @@ public:
     std::shared_ptr<Mapping> getInverse() const {
         auto rawCopy = reinterpret_cast<AstMapping *>(astCopy(getRawPtr()));
         astInvert(rawCopy);
-        return std::make_shared<Mapping>(rawCopy);
+        return std::static_pointer_cast<Mapping>(fromAstObject(reinterpret_cast<AstObject*>(rawCopy)));
     }
 
     /**
