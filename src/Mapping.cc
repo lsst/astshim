@@ -47,8 +47,8 @@ void Mapping::_tran(
 ) const {
     int const nFromAxes = doForward ? getNin()  : getNout();
     int const nToAxes   = doForward ? getNout() : getNin();
-    detail::assertEqual(from.getSize<1>(), "from.size[1]", nFromAxes, "from coords");
-    detail::assertEqual(to.getSize<1>(), "to.size[1]", nToAxes, "to coords");
+    detail::assertEqual(from.getSize<1>(), "from.size[1]", static_cast<std::size_t>(nFromAxes), "from coords");
+    detail::assertEqual(to.getSize<1>(), "to.size[1]", static_cast<std::size_t>(nToAxes), "to coords");
     detail::assertEqual(from.getSize<0>(), "from.size[1]", to.getSize<0>(), "to.size[1]");
     int const nPts = from.getSize<0>();
     // astTranN uses fortran ordering x0, x1, x2, ..., y0, y1, y2, ..., ... so transpose in and out
@@ -71,9 +71,9 @@ void Mapping::_tranGrid(
 ) const {
     int const nFromAxes = doForward ? getNin()  : getNout();
     int const nToAxes   = doForward ? getNout() : getNin();
-    detail::assertEqual(lbnd.size(), "lbnd.size", nFromAxes, "from coords");
-    detail::assertEqual(ubnd.size(), "ubnd.size", nFromAxes, "from coords");
-    detail::assertEqual(to.getSize<1>(), "to.size[0]", nToAxes, "to coords");
+    detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nFromAxes), "from coords");
+    detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nFromAxes), "from coords");
+    detail::assertEqual(to.getSize<1>(), "to.size[0]", static_cast<std::size_t>(nToAxes), "to coords");
     int const nPts = to.getSize<0>();
     Array2D toT = ndarray::allocate(ndarray::makeVector(nToAxes, nPts));
     astTranGrid(getRawPtr(), nFromAxes, lbnd.data(), ubnd.data(),

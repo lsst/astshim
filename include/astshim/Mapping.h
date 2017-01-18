@@ -151,8 +151,8 @@ public:
     ) const {
         int const nIn = getNin();
         int const nOut = getNout();
-        detail::assertEqual(lbnd.size(), "lbnd.size", nIn, "nIn");
-        detail::assertEqual(ubnd.size(), "ubnd.size", nIn, "nIn");
+        detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nIn), "nIn");
+        detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nIn), "nIn");
         Array2D fit = ndarray::allocate(ndarray::makeVector(1 + nIn, nOut));
         int isOK = astLinearApprox(getRawPtr(), lbnd.data(), ubnd.data(), tol, fit.getData());
         if (!isOK) {
@@ -208,7 +208,7 @@ public:
         int ax1,
         int ax2
     ) const {
-        detail::assertEqual(at.size(), "at.size", getNin(), "nIn");
+        detail::assertEqual(at.size(), "at.size", static_cast<std::size_t>(getNin()), "nIn");
         double result = astRate(getRawPtr(), const_cast<double *>(at.data()), ax1, ax2);
         assertOK();
         return result;
