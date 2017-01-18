@@ -90,6 +90,11 @@ public:
     Channel & operator=(Channel const &) = delete;
     Channel & operator=(Channel &&) = default;
 
+    /// Return a deep copy of this object.
+    std::shared_ptr<Channel> copy() const {
+        return std::static_pointer_cast<Channel>(_copyPolymorphic());
+    }
+
     /// Get @ref Channel_Comment "Comment": include textual comments in output?
     bool getComment() const { return getB("Comment"); }
 

@@ -77,6 +77,9 @@ public:
     */
     static std::shared_ptr<Object> fromAstObject(AstObject * object);
 
+    /// Return a deep copy of this object.
+    std::shared_ptr<Object> copy() const { return std::static_pointer_cast<Object>(_copyPolymorphic()); }
+
     /**
     Clear the values of a specified set of attributes for an Object.
 

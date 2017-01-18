@@ -83,6 +83,9 @@ public:
     CmpMap & operator=(CmpMap const &) = delete;
     CmpMap & operator=(CmpMap &&) = default;
 
+    /// Return a deep copy of this object.
+    std::shared_ptr<CmpMap> copy() const { return std::static_pointer_cast<CmpMap>(_copyPolymorphic()); }
+
     /**
     Return a deep copy of one of the two component mappings.
 

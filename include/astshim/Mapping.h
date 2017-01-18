@@ -86,7 +86,7 @@ public:
     Mapping & operator=(Mapping &&) = default;
 
     /// Return a deep copy of this object.
-    // std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(_copyPolymorphic()); }
+    std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(_copyPolymorphic()); }
 
     /**
     Get @ref Mapping_Nin "Nin": the number of input axes
