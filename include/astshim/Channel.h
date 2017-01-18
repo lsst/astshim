@@ -71,18 +71,6 @@ public:
     */
     explicit Channel(Stream & stream, std::string const & options="");
 
-    /**
-    Construct a channel from an AST channel pointer and a @ref Stream
-
-    This is the constructor most subclasses use for their high-level constructor.
-    */
-    explicit Channel(AstChannel * chan, Stream & stream);
-
-    /**
-    Construct a channel from an AST channel pointer that has its own stream
-    */
-    explicit Channel(AstChannel * chan);
-
     virtual ~Channel();
 
     Channel(Channel const &) = delete;
@@ -150,6 +138,19 @@ public:
     int write(Object const & obj);
 
 protected:
+
+    /**
+    Construct a channel from an AST channel pointer and a @ref Stream
+
+    This is the constructor most subclasses use for their high-level constructor.
+    */
+    explicit Channel(AstChannel * chan, Stream & stream);
+
+    /**
+    Construct a channel from an AST channel pointer that has its own stream
+    */
+    explicit Channel(AstChannel * chan);
+
     virtual std::shared_ptr<Object> _copyPolymorphic() const {
         return _copyImpl<Channel, AstChannel>();
     }    

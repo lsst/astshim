@@ -58,22 +58,6 @@ Mapping also has the following attributes:
 class Mapping : public Object {
 friend class Object;
 public:
-    /**
-    Construct a mapping from a pointer to a raw AST subclass of AstMapping
-
-    This constructor is intended for use by subclasses (but cannot be made protected
-    without listing the subclasses as friend classes).
-    */
-    explicit Mapping(AstMapping * mapping) :
-        Object(reinterpret_cast<AstObject *>(mapping))
-    {
-        assertOK();
-        if (!astIsAMapping(getRawPtr())) {
-            std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a Mapping";
-            throw std::invalid_argument(os.str());
-        }
-    }
 
     /// Cast an object to a Mapping if possible, else throw std::runtime_error
     explicit Mapping(Object & obj) : Mapping(detail::shallowCopy<AstMapping>(obj.getRawPtr())) {}
@@ -373,6 +357,24 @@ public:
     }
 
 protected:
+
+    /**
+    Construct a mapping from a pointer to a raw AST subclass of AstMapping
+
+    This constructor is intended for use by subclasses (but cannot be made protected
+    without listing the subclasses as friend classes).
+    */
+    explicit Mapping(AstMapping * mapping) :
+        Object(reinterpret_cast<AstObject *>(mapping))
+    {
+        assertOK();
+        if (!astIsAMapping(getRawPtr())) {
+            std::ostringstream os;
+            os << "this is a " << getClass() << ", which is not a Mapping";
+            throw std::invalid_argument(os.str());
+        }
+    }
+
     // Protected implementation of deep-copy.
     virtual std::shared_ptr<Object> _copyPolymorphic() const {
         return std::static_pointer_cast<Mapping>(_copyImpl<Mapping, AstMapping>());
