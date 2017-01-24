@@ -122,18 +122,17 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(_makeRawPolyMap(coeff_f, nout, options)))
     {}
 
-    /// Cast an object to a PolyMap if possible, else throw std::runtime_error
-    explicit PolyMap(Object & obj) : PolyMap(detail::shallowCopy<AstPolyMap>(obj.getRawPtr())) {}
-
     virtual ~PolyMap() {}
 
-    PolyMap(PolyMap const &) = default;
+    PolyMap(PolyMap const &) = delete;
     PolyMap(PolyMap &&) = default;
-    PolyMap & operator=(PolyMap const &) = default;
+    PolyMap & operator=(PolyMap const &) = delete;
     PolyMap & operator=(PolyMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PolyMap> copy() const { return _copy<PolyMap, AstPolyMap>(); }
+    std::shared_ptr<PolyMap> copy() const {
+        return std::static_pointer_cast<PolyMap>(_copyPolymorphic());
+    }
 
     /// Get @ref PolyMap_IterInverse "IterInverse": provide an iterative inverse transformation?
     bool getIterInverse() const { return getB("IterInverse"); }
@@ -240,12 +239,16 @@ public:
             throw std::invalid_argument(os.str());
         }
 
-        void * map = astPolyTran(this->getRawPtr(), static_cast<int>(forward), acc, maxacc, maxorder,
-                                       lbnd.data(), ubnd.data());
+        void *map = astPolyTran(this->getRawPtr(), static_cast<int>(forward), acc, maxacc, maxorder,
+                                lbnd.data(), ubnd.data());
         return PolyMap(reinterpret_cast<AstPolyMap *>(map));
     }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<PolyMap, AstPolyMap>();
+    }    
+
     /// Construct a PolyMap from an raw AST pointer
     PolyMap(AstPolyMap * map) :
         Mapping(reinterpret_cast<AstMapping *>(map))
@@ -257,6 +260,7 @@ private:
         }
     }
 
+private:
     /// Make a raw AstPolyMap with forward and inverse transforms.
     AstPolyMap * _makeRawPolyMap(
         ndarray::Array<double, 2, 2>  const & coeff_f,

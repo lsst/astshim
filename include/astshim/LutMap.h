@@ -80,18 +80,17 @@ public:
         ))
     {}
 
-    /// Cast an object to a LutMap if possible, else throw std::runtime_error
-    explicit LutMap(Object & obj) : LutMap(detail::shallowCopy<AstLutMap>(obj.getRawPtr())) {}
-
     virtual ~LutMap() {}
 
-    LutMap(LutMap const &) = default;
+    LutMap(LutMap const &) = delete;
     LutMap(LutMap &&) = default;
-    LutMap & operator=(LutMap const &) = default;
+    LutMap & operator=(LutMap const &) = delete;
     LutMap & operator=(LutMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<LutMap> copy() const { return _copy<LutMap, AstLutMap>(); }
+    std::shared_ptr<LutMap> copy() const {
+        return std::static_pointer_cast<LutMap>(_copyPolymorphic());
+    }
 
     /**
     Get attribute @ref LutMap_LutEpsilon "LutEpsilon": the relative error of the values in the table.
@@ -103,7 +102,11 @@ public:
     */
     int getLutInterp() const { return getI("LutInterp"); }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<LutMap, AstLutMap>();
+    }    
+
     /// Construct an LutMap from a raw AST pointer    
     explicit LutMap(AstLutMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

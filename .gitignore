@@ -14,6 +14,8 @@ doc/*.inc
 doc/doxygen.conf
 doc/xml
 examples/basics
+examples/readwcs
+examples/refcount
 lib/libastshim.*
 tests/.tests
 version.py

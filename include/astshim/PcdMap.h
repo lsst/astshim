@@ -28,7 +28,7 @@
 #include <vector>
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Mapping.h"
 
 namespace ast {
@@ -87,9 +87,6 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(_makeRawPcdMap(disco, pcdcen, options)))
     {}
 
-    /// Cast an object to a PcdMap if possible, else throw std::runtime_error
-    explicit PcdMap(Object & obj) : PcdMap(detail::shallowCopy<AstPcdMap>(obj.getRawPtr())) {}
-
     virtual ~PcdMap() {}
 
     PcdMap(PcdMap const &) = default;
@@ -98,7 +95,9 @@ public:
     PcdMap & operator=(PcdMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PcdMap> copy() const { return _copy<PcdMap, AstPcdMap>(); }
+    std::shared_ptr<PcdMap> copy() const {
+        return std::static_pointer_cast<PcdMap>(_copyPolymorphic());
+    }
 
     /// Get @ref PcdMap_Disco "Disco": pincushion/barrel distortion coefficient
     double getDisco() const { return getD("Disco"); };
@@ -115,7 +114,11 @@ public:
         return ctr;
     }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<PcdMap, AstPcdMap>();
+    }    
+
     /// Construct a PcdMap from a raw AST pointer
     explicit PcdMap(AstPcdMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))
@@ -127,6 +130,7 @@ private:
         }
     }
 
+private:
     AstPcdMap * _makeRawPcdMap(double disco, std::vector<double> const & pcdcen, std::string const & options="") {
         if (pcdcen.size() != 2) {
             std::ostringstream os;

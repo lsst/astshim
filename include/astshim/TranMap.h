@@ -47,7 +47,8 @@ second Mapping supplied when the TranMap was constructed.
 @ref TranMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
 class TranMap: public Mapping {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a @ref TranMap
@@ -58,31 +59,36 @@ public:
     */
     explicit TranMap(Mapping const & map1, Mapping const & map2, std::string const & options="") :
         Mapping(reinterpret_cast<AstMapping *>(
-            astTranMap(map1.getRawPtr(), map2.getRawPtr(), options.c_str())))
+            astTranMap(astClone(map1.getRawPtr()), astClone(map2.getRawPtr()), options.c_str())))
     {}
-
-    /// Cast an object to a TranMap if possible, else throw std::runtime_error
-    explicit TranMap(Object & obj) : TranMap(detail::shallowCopy<AstTranMap>(obj.getRawPtr())) {}
 
     virtual ~TranMap() {}
 
-    TranMap(TranMap const &) = default;
+    TranMap(TranMap const &) = delete;
     TranMap(TranMap &&) = default;
-    TranMap & operator=(TranMap const &) = default;
+    TranMap & operator=(TranMap const &) = delete;
     TranMap & operator=(TranMap &&) = default;
 
     /**
-    Return a deep copy of one of the two component mappings.
+    Return a shallow copy of one of the two component mappings.
 
     @param[in] i  Index: 0 for the forward mapping, 1 for the inverse.
     @throw std::invalid_argument if `i` is not 0 or 1.
     */
-    std::shared_ptr<Mapping> operator[](int i) const;
+    std::shared_ptr<Mapping> operator[](int i) const {
+        return _decompose<Mapping>(i, false);
+    };
 
     /// Return a deep copy of this object.
-    std::shared_ptr<TranMap> copy() const { return _copy<TranMap, AstTranMap>(); }
+    std::shared_ptr<TranMap> copy() const {
+        return std::static_pointer_cast<TranMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<TranMap, AstTranMap>();
+    }    
+
     /// Construct a TranMap from a raw AST pointer
     explicit TranMap(AstTranMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

@@ -104,20 +104,23 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(makeRawMap(inperm, outperm, constant, options)))
     {}
 
-    /// Cast an object to a PermMap if possible, else throw std::runtime_error
-    explicit PermMap(Object & obj) : PermMap(detail::shallowCopy<AstPermMap>(obj.getRawPtr())) {}
-
     virtual ~PermMap() {}
 
-    PermMap(PermMap const &) = default;
+    PermMap(PermMap const &) = delete;
     PermMap(PermMap &&) = default;
-    PermMap & operator=(PermMap const &) = default;
+    PermMap & operator=(PermMap const &) = delete;
     PermMap & operator=(PermMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PermMap> copy() const { return _copy<PermMap, AstPermMap>(); }
+    std::shared_ptr<PermMap> copy() const {
+        return std::static_pointer_cast<PermMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<PermMap, AstPermMap>();
+    }    
+
     /// Construct a PermMap from a raw AST pointer   
     explicit PermMap(AstPermMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))
@@ -129,6 +132,7 @@ private:
         }
     }
 
+private:
     AstPermMap * makeRawMap(std::vector<int> const & inperm, 
                             std::vector<int> const & outperm,
                             std::vector<double> const & constant={},

@@ -59,15 +59,21 @@ public:
 
     virtual ~UnitMap() {}
 
-    UnitMap(UnitMap const &) = default;
+    UnitMap(UnitMap const &) = delete;
     UnitMap(UnitMap &&) = default;
-    UnitMap & operator=(UnitMap const &) = default;
+    UnitMap & operator=(UnitMap const &) = delete;
     UnitMap & operator=(UnitMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<UnitMap> copy() const { return _copy<UnitMap, AstUnitMap>(); }
+    std::shared_ptr<UnitMap> copy() const {
+        return std::static_pointer_cast<UnitMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<UnitMap, AstUnitMap>();
+    }    
+
     /// Construct a UnitMap from a raw AST pointer
     explicit UnitMap(AstUnitMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

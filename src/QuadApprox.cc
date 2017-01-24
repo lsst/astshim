@@ -22,8 +22,7 @@
 
 #include <vector>
 
-#include "astshim/detail.h"
-
+#include "astshim/detail/utils.h"
 #include "astshim/Mapping.h"
 #include "astshim/QuadApprox.h"
 

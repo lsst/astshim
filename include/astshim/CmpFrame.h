@@ -58,7 +58,8 @@ case the request to access the attribute will be forwarded to the
 primary Frame defining the specified axis.
 */
 class CmpFrame : public Frame {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a CmpFrame
@@ -72,31 +73,36 @@ public:
     */
     explicit CmpFrame(Frame const & frame1, Frame const & frame2, std::string const & options="") :
         Frame(reinterpret_cast<AstFrame *>(
-            astCmpFrame(frame1.getRawPtr(), frame2.getRawPtr(), options.c_str())))
+            astCmpFrame(astCopy(frame1.getRawPtr()), astCopy(frame2.getRawPtr()), options.c_str())))
     {}
-
-    /// Cast an object to a CmpFrame if possible, else throw std::runtime_error
-    explicit CmpFrame(Object & obj) : CmpFrame(detail::shallowCopy<AstCmpFrame>(obj.getRawPtr())) {}
 
     virtual ~CmpFrame() {}
 
-    CmpFrame(CmpFrame const &) = default;
+    CmpFrame(CmpFrame const &) = delete;
     CmpFrame(CmpFrame &&) = default;
-    CmpFrame & operator=(CmpFrame const &) = default;
+    CmpFrame & operator=(CmpFrame const &) = delete;
     CmpFrame & operator=(CmpFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<CmpFrame> copy() const { return _copy<CmpFrame, AstCmpFrame>(); }
+    std::shared_ptr<CmpFrame> copy() const {
+        return std::static_pointer_cast<CmpFrame>(_copyPolymorphic());
+    }
 
     /**
-    Return a deep copy of one of the two component frames.
+    Return a shallow copy of one of the two component frames.
 
     @param[in] i  Index: 0 for the first frame, 1 for the second.
     @throw std::invalid_argument if `i` is not 0 or 1.
     */
-    std::shared_ptr<Frame> operator[](int i) const;
+    std::shared_ptr<Frame> operator[](int i) const {
+        return _decompose<Frame>(i, false);
+    }
 
 protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<CmpFrame, AstCmpFrame>();
+    }    
+
     /// Construct a CmpFrame from a raw AST pointer
     /// (protected instead of private so that SeriesMap and ParallelMap can call it)
     explicit CmpFrame(AstCmpFrame * rawptr) :

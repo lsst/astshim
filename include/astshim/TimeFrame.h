@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
 
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Frame.h"
 
 namespace ast {
@@ -94,13 +94,15 @@ public:
 
     virtual ~TimeFrame() {}
 
-    TimeFrame(TimeFrame const &) = default;
+    TimeFrame(TimeFrame const &) = delete;
     TimeFrame(TimeFrame &&) = default;
-    TimeFrame & operator=(TimeFrame const &) = default;
+    TimeFrame & operator=(TimeFrame const &) = delete;
     TimeFrame & operator=(TimeFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<TimeFrame> copy() const { return _copy<TimeFrame, AstTimeFrame>(); }
+    std::shared_ptr<TimeFrame> copy() const {
+        return std::static_pointer_cast<TimeFrame>(_copyPolymorphic());
+    }
 
     /**
     Get the current system time
@@ -146,7 +148,11 @@ public:
     /// Set @ref TimeFrame_TimeScale "TimeScale": the timescale used by the TimeFrame.
     void setTimeScale(std::string const & scale) { return setC("TimeScale", scale); }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<TimeFrame, AstTimeFrame>();
+    }    
+
     /// Construct a TimeFrame from a raw AST pointer
     explicit TimeFrame(AstTimeFrame * rawptr) :
         Frame(reinterpret_cast<AstFrame *>(rawptr))

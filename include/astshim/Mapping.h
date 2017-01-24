@@ -59,6 +59,22 @@ class Mapping : public Object {
 friend class Object;
 public:
 
+    /**
+    Construct a mapping from a pointer to a raw AST subclass of AstMapping
+
+    This constructor is intended for use by subclasses.
+    */
+    explicit Mapping(AstMapping * mapping) :
+        Object(reinterpret_cast<AstObject *>(mapping))
+    {
+        assertOK();
+        if (!astIsAMapping(getRawPtr())) {
+            std::ostringstream os;
+            os << "this is a " << getClass() << ", which is not a Mapping";
+            throw std::invalid_argument(os.str());
+        }
+    }
+
     virtual ~Mapping() {}
 
     Mapping(Mapping const &) = delete;
@@ -114,11 +130,7 @@ public:
     bool getTranInverse() const { return getB("TranInverse"); }
 
     /// Get an inverse mapping
-    std::shared_ptr<Mapping> getInverse() const {
-        auto rawCopy = reinterpret_cast<AstMapping *>(astCopy(getRawPtr()));
-        astInvert(rawCopy);
-        return std::static_pointer_cast<Mapping>(fromAstObject(reinterpret_cast<AstObject*>(rawCopy)));
-    }
+    std::shared_ptr<Mapping> getInverse() const;
 
     /**
     Compute a linear approximation to the forward transformation.
@@ -148,20 +160,7 @@ public:
         PointD const & lbnd,
         PointD const & ubnd,
         double tol
-    ) const {
-        int const nIn = getNin();
-        int const nOut = getNout();
-        detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nIn), "nIn");
-        detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nIn), "nIn");
-        Array2D fit = ndarray::allocate(ndarray::makeVector(1 + nIn, nOut));
-        int isOK = astLinearApprox(getRawPtr(), lbnd.data(), ubnd.data(), tol, fit.getData());
-        if (!isOK) {
-            throw std::runtime_error("Mapping not sufficiently linear");
-        }
-        assertOK();
-        return fit;
-    }
-
+    ) const;
 
     /**
     Return a series compound mapping this(first(input)).
@@ -232,10 +231,10 @@ public:
     or have been formed by merging other Mappings. It is of potential benefit, for example,
     in reducing execution time if applied before using a Mapping to transform a large number of coordinates.
     */
-    std::shared_ptr<Object> simplify() const {
-        AstObject * simpPtr = reinterpret_cast<AstObject *>(astSimplify(getRawPtr()));
-        assertOK();
-        return Object::fromAstObject(simpPtr);
+    std::shared_ptr<Mapping> simplify() const {
+        AstObject * rawSimpMap = reinterpret_cast<AstObject *>(astSimplify(getRawPtr()));
+        assertOK(rawSimpMap);
+        return Object::fromAstObject<Mapping>(rawSimpMap, false);
     }
 
     /**
@@ -355,27 +354,26 @@ public:
 
 protected:
 
-    /**
-    Construct a mapping from a pointer to a raw AST subclass of AstMapping
-
-    This constructor is intended for use by subclasses (but cannot be made protected
-    without listing the subclasses as friend classes).
-    */
-    explicit Mapping(AstMapping * mapping) :
-        Object(reinterpret_cast<AstObject *>(mapping))
-    {
-        assertOK();
-        if (!astIsAMapping(getRawPtr())) {
-            std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a Mapping";
-            throw std::invalid_argument(os.str());
-        }
-    }
-
     // Protected implementation of deep-copy.
     virtual std::shared_ptr<Object> _copyPolymorphic() const {
         return std::static_pointer_cast<Mapping>(_copyImpl<Mapping, AstMapping>());
     }
+
+    /**
+    Return a copy of one of the two component mappings.
+
+    This is intended to be exposed by classes that need it (e.g. @ref CmpMap, @ref CmpFrame and @ref TranMap)
+    as `operator[]`.
+
+    @tparam Class  astshim class of returned object, typically Mapping or Frame.
+    @param[in] i  Index: 0 for the first mapping, 1 for the second
+    @param[in] copy  If true make a deep copy, else a shallow copy
+
+    @throw std::invalid_argument if `i` is not 0 or 1.
+    @throw std::runtime_error if this mapping is not a compound mapping.
+    */
+    template<typename Class>
+    std::shared_ptr<Class> _decompose(int i, bool copy) const;
 
 private:
     void _tran(

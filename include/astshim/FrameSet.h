@@ -114,17 +114,17 @@ public:
         FrameSet(astFrameSet(frame.getRawPtr(), options.c_str()))
     {}
 
-    /// Cast an object to a FrameSet if possible, else throw std::invalid_argument
-    explicit FrameSet(Object & obj) : FrameSet(
-        detail::shallowCopy<AstFrameSet>(obj.getRawPtr()))
-    {}
-
     ~FrameSet() {}
 
-    FrameSet(FrameSet const &) = default;
+    FrameSet(FrameSet const &) = delete;
     FrameSet(FrameSet &&) = default;
-    FrameSet & operator=(FrameSet const &) = default;
+    FrameSet & operator=(FrameSet const &) = delete;
     FrameSet & operator=(FrameSet &&) = default;
+
+    /// Return a deep copy of this object.
+    std::shared_ptr<FrameSet> copy() const {
+        return std::static_pointer_cast<FrameSet>(_copyPolymorphic());
+    }
 
     /**
     Append the axes from a specified @ref Frame to every existing @ref Frame in this FrameSet.
@@ -153,7 +153,7 @@ public:
     @param[in] iframe  The index of the Frame within the FrameSet which describes the coordinate system
         upon which the new one is to be based.  This value should lie in the range from
         1 to the number of frames already in this FrameSet (as given by @ref getNframe).
-        A value of `FrameSet.BASE` or `FrameSet.CURRENT` may be given to specify the base @ref Frame
+        A value of `FrameSet::BASE` or `FrameSet::CURRENT` may be given to specify the base @ref Frame
         or the current @ref Frame respectively.
         A value of `AST__ALLFRAMES` is not permitted; call `addAllFrames` instead.
     @param[in] map  A @ref Mapping which describes how to convert coordinates from the old coordinate
@@ -219,9 +219,6 @@ public:
         assertOK();
     }
 
-    /// Return a deep copy of this object.
-    std::shared_ptr<FrameSet> copy() const { return _copy<FrameSet, AstFrameSet>(); }
-
     /**
     Get @ref FrameSet_AllVariants "AllVariants": a list of all variant mappings
     stored with the current @ref Frame
@@ -239,20 +236,20 @@ public:
     int getCurrent() const { return getI("Current"); }
 
     /**
-    Obtain a pointer to a specified @ref Frame
+    Obtain a deep copy of a specified @ref Frame
 
     @param[in] iframe  The index of the required @ref Frame within this @ref FrameSet. This value should lie in
         the range 1 to the number of frames already in this @ref FrameSet (as given by @ref getNframe).
-        A value of `FrameSet.BASE` or `FrameSet.CURRENT` may be given to specify the base @ref Frame
+        A value of `FrameSet::BASE` or `FrameSet::CURRENT` may be given to specify the base @ref Frame
         or the current @ref Frame, respectively.
     */
-    Frame getFrame(int iframe) const {
-        AstFrame * frame = reinterpret_cast<AstFrame *>(astGetFrame(getRawPtr(), iframe));
-        assertOK();
-        if (frame == nullptr) {
+    std::shared_ptr<Frame> getFrame(int iframe) const {
+        auto * rawFrame = reinterpret_cast<AstObject *>(astGetFrame(getRawPtr(), iframe));
+        assertOK(rawFrame);
+        if (!rawFrame) {
             throw std::runtime_error("getFrame failed (returned a null frame)");
         }
-        return Frame(frame);
+        return Object::fromAstObject<Frame>(rawFrame, false);
     }
 
     /**
@@ -280,13 +277,13 @@ public:
         If necessary, the `TranForward` and `TranInverse` attributes of the returned @ref Mapping
         should be inspected to determine if the required transformation is available.    
     */
-    Mapping getMapping(int ind1=BASE, int ind2=CURRENT) const {
-        AstMapping * map = reinterpret_cast<AstMapping *>(astGetMapping(getRawPtr(), ind1, ind2));
-        assertOK();
-        if (map == nullptr) {
+    std::shared_ptr<Mapping> getMapping(int ind1=BASE, int ind2=CURRENT) const {
+        AstObject * rawMap = reinterpret_cast<AstObject *>(astGetMapping(getRawPtr(), ind1, ind2));
+        assertOK(rawMap);
+        if (!rawMap) {
             throw std::runtime_error("getMapping failed (returned a null mapping)");
         }
-        return Mapping(map);
+        return Object::fromAstObject<Mapping>(rawMap, true);
     }
 
     /**
@@ -330,7 +327,7 @@ public:
        in the @ref FrameSet (as given by @ref getNframe).
        If `AST__NOFRAME` is supplied (or the current @ref Frame is specified),
        then any mirroring established by a previous call to this function is disabled.
-       A value of `FrameSet.BASE may be given to specify the base frame.
+       A value of `FrameSet::BASE may be given to specify the base frame.
 
     ### Notes:
     - Mirrors can be chained. That is, if @ref Frame B is set to be a mirror
@@ -364,7 +361,7 @@ public:
     @param[in] iframe  The index within the @ref FrameSet of the @ref Frame to be modified.
         This value should lie in the range
         1 to the number of frames already in this @ref FrameSet (as given by @ref getNframe).
-        A value of `FrameSet.BASE or `FrameSet.CURRENT` may be given
+        A value of `FrameSet::BASE or `FrameSet::CURRENT` may be given
         to specify the base @ref Frame or the current @ref Frame respectively.
     @param[in] map  A @ref Mapping whose forward transformation converts coordinate values from
         the original coordinate system described by the @ref Frame to the new one, and whose
@@ -397,7 +394,7 @@ public:
     @param[in] iframe  The index of the required @ref Frame Frame within this @ref FrameSet.
         This value should lie in the range 1 to the number of @ref Frame "Frames"
         in this @ref FrameSet (as given by @ref getNframe).
-        A value of `FrameSet.BASE or `FrameSet.CURRENT` may be given
+        A value of `FrameSet::BASE or `FrameSet::CURRENT` may be given
         to specify the base @ref Frame or the current @ref Frame, respectively.
 
     ### Notes
@@ -452,6 +449,10 @@ public:
     void setCurrent(int ind) { setI("Current", ind); }
 
 protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<FrameSet, AstFrameSet>();
+    }    
+
     /**
     Construct a FrameSet from a raw AST pointer
 

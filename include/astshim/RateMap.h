@@ -71,20 +71,23 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(astRateMap(map.getRawPtr(), ax1, ax2, options.c_str())))
     {}
 
-    /// Cast an object to a RateMap if possible, else throw std::runtime_error
-    explicit RateMap(Object & obj) : RateMap(detail::shallowCopy<AstRateMap>(obj.getRawPtr())) {}
-
     virtual ~RateMap() {}
 
-    RateMap(RateMap const &) = default;
+    RateMap(RateMap const &) = delete;
     RateMap(RateMap &&) = default;
-    RateMap & operator=(RateMap const &) = default;
+    RateMap & operator=(RateMap const &) = delete;
     RateMap & operator=(RateMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<RateMap> copy() const { return _copy<RateMap, AstRateMap>(); }
+    std::shared_ptr<RateMap> copy() const {
+        return std::static_pointer_cast<RateMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<RateMap, AstRateMap>();
+    }    
+
     /// Construct a RateMap from a raw AST pointer
     explicit RateMap(AstRateMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

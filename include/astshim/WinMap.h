@@ -66,20 +66,23 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(_makeRawWinMap(ina, inb, outa, outb, options)))
     {}
 
-    /// Cast an object to a WinMap if possible, else throw std::runtime_error
-    explicit WinMap(Object & obj) : WinMap(detail::shallowCopy<AstWinMap>(obj.getRawPtr())) {}
-
     virtual ~WinMap() {}
 
-    WinMap(WinMap const &) = default;
+    WinMap(WinMap const &) = delete;
     WinMap(WinMap &&) = default;
-    WinMap & operator=(WinMap const &) = default;
+    WinMap & operator=(WinMap const &) = delete;
     WinMap & operator=(WinMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<WinMap> copy() const { return _copy<WinMap, AstWinMap>(); }
+    std::shared_ptr<WinMap> copy() const {
+        return std::static_pointer_cast<WinMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<WinMap, AstWinMap>();
+    }    
+
     /// Construct a WinMap from a raw AST pointer
     explicit WinMap(AstWinMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))
@@ -91,6 +94,7 @@ private:
         }
     }
 
+private:
     AstWinMap * _makeRawWinMap(
         std::vector<double> const & ina,
         std::vector<double> const & inb,

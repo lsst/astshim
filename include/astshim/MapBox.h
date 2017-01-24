@@ -27,7 +27,7 @@
 #include "ndarray.h"
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 
 namespace ast {
 class Mapping;

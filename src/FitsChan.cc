@@ -23,7 +23,7 @@
 #include <complex>
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Object.h"
 #include "astshim/Stream.h"
 #include "astshim/FitsChan.h"

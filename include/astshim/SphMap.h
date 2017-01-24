@@ -63,18 +63,17 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(astSphMap(options.c_str())))
     {}
 
-    /// Cast an object to a SphMap if possible, else throw std::runtime_error
-    explicit SphMap(Object & obj) : SphMap(detail::shallowCopy<AstSphMap>(obj.getRawPtr())) {}
-
     virtual ~SphMap() {}
 
-    SphMap(SphMap const &) = default;
+    SphMap(SphMap const &) = delete;
     SphMap(SphMap &&) = default;
-    SphMap & operator=(SphMap const &) = default;
+    SphMap & operator=(SphMap const &) = delete;
     SphMap & operator=(SphMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SphMap> copy() const { return _copy<SphMap, AstSphMap>(); }
+    std::shared_ptr<SlaMap> copy() const {
+        return std::static_pointer_cast<SlaMap>(_copyPolymorphic());
+    }
 
     /// Get @ref SphMap_UnitRadius "UnitRadius": input vectors lie on a unit sphere?
     bool getUnitRadius() const { return getB("UnitRadius"); }
@@ -82,7 +81,11 @@ public:
     /// Get @ref SphMap_PolarLong "PolarLong": the longitude value to assign to either pole (radians).
     double getPolarLong() const { return getD("PolarLong"); }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<SlaMap, AstSlaMap>();
+    }    
+
     /// Construct a SphMap from a raw AST pointer
     explicit SphMap(AstSphMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

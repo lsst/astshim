@@ -124,18 +124,17 @@ public:
         Frame(reinterpret_cast<AstFrame *>(astSkyFrame(options.c_str())))
     {}
 
-    /// Cast an object to a SkyFrame if possible, else throw std::runtime_error
-    explicit SkyFrame(Object & obj) : SkyFrame(detail::shallowCopy<AstSkyFrame>(obj.getRawPtr())) {}
-
     virtual ~SkyFrame() {}
 
-    SkyFrame(SkyFrame const &) = default;
+    SkyFrame(SkyFrame const &) = delete;
     SkyFrame(SkyFrame &&) = default;
-    SkyFrame & operator=(SkyFrame const &) = default;
+    SkyFrame & operator=(SkyFrame const &) = delete;
     SkyFrame & operator=(SkyFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SkyFrame> copy() const { return _copy<SkyFrame, AstSkyFrame>(); }
+    std::shared_ptr<SkyFrame> copy() const {
+        return std::static_pointer_cast<SkyFrame>(_copyPolymorphic());
+    }
 
     /// Get @ref SkyFrame_AlignOffset "AlignOffset": align SkyFrames using the offset coordinate system?
     bool getAlignOffset() const { return getB("AlignOffset"); }
@@ -208,12 +207,14 @@ public:
     */
     Mapping skyOffsetMap() {
         void * map = astSkyOffsetMap(getRawPtr());
-        Mapping ret(reinterpret_cast<AstMapping *>(map));
-        assertOK();
-        return ret;
+        return Mapping(reinterpret_cast<AstMapping *>(map));
     }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<SkyFrame, AstSkyFrame>();
+    }    
+
     /// Construct a SkyFrame from a raw AST pointer
     explicit SkyFrame(AstSkyFrame * rawptr) :
         Frame(reinterpret_cast<AstFrame *>(rawptr))

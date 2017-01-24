@@ -61,9 +61,6 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(astNormMap(frame.getRawPtr(), options.c_str())))
     {}
 
-    /// Cast an object to a NormMap if possible, else throw std::runtime_error
-    explicit NormMap(Object & obj) : NormMap(detail::shallowCopy<AstNormMap>(obj.getRawPtr())) {}
-
     virtual ~NormMap() {}
 
     NormMap(NormMap const &) = default;
@@ -72,9 +69,15 @@ public:
     NormMap & operator=(NormMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<NormMap> copy() const { return _copy<NormMap, AstNormMap>(); }
+    std::shared_ptr<NormMap> copy() const {
+        return std::static_pointer_cast<NormMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<NormMap, AstNormMap>();
+    }    
+
     /// Construct a NormMap from a raw AST pointer
     explicit NormMap(AstNormMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

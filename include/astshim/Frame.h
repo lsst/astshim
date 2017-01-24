@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_FRAME_H
@@ -25,46 +25,52 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
-#include "astshim/base.h"
-#include "astshim/detail.h"
-#include "astshim/Object.h"
 #include "astshim/Mapping.h"
+#include "astshim/Object.h"
+#include "astshim/base.h"
+#include "astshim/detail/utils.h"
 
 namespace ast {
 
 class CmpFrame;
+class Frame;
 
 /**
 A class representing a direction and a point
 */
 class DirectionPoint {
-public:
-    DirectionPoint(double direction, Object::PointD const & point) :
-        direction(direction), point(point)
-    {};
+   public:
+    DirectionPoint(double direction, Object::PointD const &point) : direction(direction), point(point){};
     double direction;
     Object::PointD point;
 };
 
 class NReadValue {
-public:
-    NReadValue(int nread, double value) :
-        nread(nread), value(value)
-    {};
+   public:
+    NReadValue(int nread, double value) : nread(nread), value(value){};
     int nread;
     double value;
 };
 
 class ResolvedPoint {
-public:
+   public:
     explicit ResolvedPoint(int naxes) : point(naxes), d1(), d2() {}
     std::vector<double> point;
     double d1;
     double d2;
 };
 
-class FrameMapping;
+class FrameMapping {
+   public:
+    FrameMapping(std::shared_ptr<Frame> frame, std::shared_ptr<Mapping> mapping) :
+     frame(frame), mapping(mapping) {}
+    std::shared_ptr<Frame> frame;
+    std::shared_ptr<Mapping> mapping;
+};
+
+
 class FrameSet;
 
 /**
@@ -86,7 +92,7 @@ Frames may also contain knowledge of how to transform to and from related coordi
 ### Attributes
 
 In addition to those provided by @ref Mapping and @ref Object,
-Frame provides the following attributes, where `axis` is 
+Frame provides the following attributes, where `axis` is
 an axis number, starting from 1 and `(axis)` may be omitted
 if the Frame has only one axis:
 - @ref Frame_ActiveUnit "ActiveUnit": pay attention to units when one @ref Frame
@@ -118,7 +124,9 @@ if the Frame has only one axis:
 - @ref Frame_Unit "Unit(axis)": Physical units for formatted axis values
 */
 class Frame : public Mapping {
-public:
+    friend class Object;
+
+   public:
     /**
     Construct a Frame
 
@@ -126,9 +134,8 @@ public:
                     of the coordinate space which the Frame describes).
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit Frame(int naxes, std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str())))
-    {}
+    explicit Frame(int naxes, std::string const &options = "")
+        : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str()))) {}
 
     /**
     Construct a Frame from a pointer to a raw AstFrame.
@@ -136,10 +143,10 @@ public:
     This method is public so subclasses can call it.
 
     @throw std::invalid_argument if `rawPtr` is not an AstFrame
+
+    TODO make protected and use friend class
     */
-    explicit Frame(AstFrame * rawPtr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawPtr))
-    {
+    explicit Frame(AstFrame *rawPtr) : Mapping(reinterpret_cast<AstMapping *>(rawPtr)) {
         if (!astIsAFrame(getRawPtr())) {
             std::ostringstream os;
             os << "This is a " << getClass() << ", which is not a Frame";
@@ -147,17 +154,15 @@ public:
         }
     }
 
-    /// Cast an object to a Frame if possible, else throw std::invalid_argument
-    explicit Frame(Object & obj) : Frame(
-        detail::shallowCopy<AstFrame>(obj.getRawPtr()))
-    {}
-
     virtual ~Frame() {}
 
-    Frame(Frame const &) = default;
+    Frame(Frame const &) = delete;
     Frame(Frame &&) = default;
-    Frame & operator=(Frame const &) = default;
-    Frame & operator=(Frame &&) = default;
+    Frame &operator=(Frame const &) = delete;
+    Frame &operator=(Frame &&) = default;
+
+    /// Return a deep copy of this object.
+    std::shared_ptr<Frame> copy() const { return std::static_pointer_cast<Frame>(_copyPolymorphic()); }
 
     /**
     Find the angle at point B between the line joining points A and B, and the line joining points C and B.
@@ -176,7 +181,7 @@ public:
 
     @throw std::invalid_argument if `a`, `b` or `c` have the wrong length
     */
-    double angle(PointD const & a, PointD const & b, PointD const & c) const {
+    double angle(PointD const &a, PointD const &b, PointD const &c) const {
         assertPointLength(a, "a");
         assertPointLength(b, "b");
         assertPointLength(c, "c");
@@ -204,7 +209,7 @@ public:
     - The geodesic curve used by this function is the path of shortest distance between two points,
         as defined by the `distance` method.
     */
-    double axAngle(PointD const & a, PointD const & b, int axis) const {
+    double axAngle(PointD const &a, PointD const &b, int axis) const {
         assertPointLength(a, "a");
         assertPointLength(b, "b");
         return detail::safeDouble(astAxAngle(getRawPtr(), a.data(), b.data(), axis));
@@ -437,10 +442,7 @@ public:
         in the inverses of the @ref FrameSet "FrameSets" (using @ref Mapping.getInverse "getInverse")
         so as to interchange their base and current frames.
     */
-    FrameSet convert(Frame const & to, std::string const & domainlist="");
-
-    /// Return a deep copy of this object.
-    std::shared_ptr<Frame> copy() const { return _copy<Frame, AstFrame>(); }
+    FrameSet convert(Frame const &to, std::string const &domainlist = "");
 
     /**
     Find the distance between two points whose Frame coordinates are given.
@@ -455,7 +457,7 @@ public:
 
     @return The distance between the two points.
     */
-    double distance(PointD const & point1, PointD const & point2) const {
+    double distance(PointD const &point1, PointD const &point2) const {
         assertPointLength(point1, "point1");
         assertPointLength(point2, "point2");
         return detail::safeDouble(astDistance(getRawPtr(), point1.data(), point2.data()));
@@ -540,7 +542,7 @@ public:
     - If a match is found and the domain of the resulting Frame also matches the current "domainlist" field,
         it is accepted. Otherwise, the next "domainlist" field is considered and the process repeated.
 
-    If called on a @ref FrameSet and a suitable coordinate system is found, 
+    If called on a @ref FrameSet and a suitable coordinate system is found,
     then the @ref FrameSet's Current attribute will be modified to indicate which Frame was used to
     obtain attribute values which were not specified by the template.  This Frame
     will, in some sense, represent the "closest" non-virtual coordinate system to
@@ -770,7 +772,7 @@ public:
     using a "domainlist" string which does not include the template's domain
     (or a blank field). If you do so, no coordinate system will be found.
     */
-    FrameSet findFrame(Frame & tmplt, std::string const & domainlist="");
+    FrameSet findFrame(Frame &tmplt, std::string const &domainlist = "");
 
     /**
     Return a string containing the formatted (character) version of a coordinate value for a Frame axis.
@@ -784,7 +786,7 @@ public:
     @param[in] value   The coordinate value to be formatted.
     */
     std::string format(int axis, double value) const {
-        char const * rawstr = astFormat(getRawPtr(), axis, value);
+        char const *rawstr = astFormat(getRawPtr(), axis, value);
         assertOK();
         return std::string(rawstr);
     }
@@ -808,9 +810,7 @@ public:
     /**
     Get @ref Frame_Bottom "Bottom" for one axis: the lowest axis value to display
     */
-    double getBottom(int axis) const {
-        return getD(detail::formatAxisAttr("Bottom", axis));
-    }
+    double getBottom(int axis) const { return getD(detail::formatAxisAttr("Bottom", axis)); }
 
     /**
     Get @ref Frame_Digits "Digits" for one axis: the lowest axis value to display
@@ -820,9 +820,7 @@ public:
     /**
     Get @ref Frame_Direction "Direction" for one axis: display axis in conventional direction?
     */
-    bool getDirection(int axis) const {
-        return getB(detail::formatAxisAttr("Direction", axis));
-    }
+    bool getDirection(int axis) const { return getB(detail::formatAxisAttr("Direction", axis)); }
 
     /**
     Get @ref Frame_Domain "Domain": coordinate system domain
@@ -842,24 +840,18 @@ public:
     /**
     Get @ref Frame_Format "Format" for one axis: format specification for axis values.
     */
-    std::string getFormat(int axis) const {
-        return getC(detail::formatAxisAttr("Format", axis));
-    }
+    std::string getFormat(int axis) const { return getC(detail::formatAxisAttr("Format", axis)); }
 
     /**
     Get @ref Frame_InternalUnit "InternalUnit(axis)" read-only attribute for one axis:
     physical units for unformated axis values.
     */
-    std::string getInternalUnit(int axis) const {
-        return getC(detail::formatAxisAttr("InternalUnit", axis));
-    }
+    std::string getInternalUnit(int axis) const { return getC(detail::formatAxisAttr("InternalUnit", axis)); }
 
     /**
     Get @ref Frame_Label "Label(axis)" for one axis: axis label.
     */
-    std::string getLabel(int axis) const {
-        return getC(detail::formatAxisAttr("Label", axis));
-    }
+    std::string getLabel(int axis) const { return getC(detail::formatAxisAttr("Label", axis)); }
 
     /**
     Get @ref Frame_MatchEnd "MatchEnd": match trailing axes?
@@ -886,11 +878,9 @@ public:
 
     /**
     Get @ref Frame_NormUnit "NormUnit(axis)" read-only attribute for one frame:
-    normalised physical units for formatted axis values    
+    normalised physical units for formatted axis values
     */
-    std::string getNormUnit(int axis) const {
-        return getC(detail::formatAxisAttr("NormUnit", axis));
-    }
+    std::string getNormUnit(int axis) const { return getC(detail::formatAxisAttr("NormUnit", axis)); }
 
     /**
     Get @ref Frame_ObsAlt "ObsAlt": Geodetic altitude of observer (m).
@@ -920,9 +910,7 @@ public:
     /**
     Get @ref Frame_Symbol "Symbol(axis)" for one axis: axis symbol.
     */
-    std::string getSymbol(int axis) const {
-        return getC(detail::formatAxisAttr("Symbol", axis));
-    }
+    std::string getSymbol(int axis) const { return getC(detail::formatAxisAttr("Symbol", axis)); }
 
     /**
     Get @ref Frame_System "System": coordinate system used to describe
@@ -938,16 +926,12 @@ public:
     /**
     Get @ref Frame_Top "Top": the highest axis value to display
     */
-    double getTop(int axis) const {
-        return getD(detail::formatAxisAttr("Top", axis));
-    }
+    double getTop(int axis) const { return getD(detail::formatAxisAttr("Top", axis)); }
 
     /**
     Get @ref Frame_Unit "Unit(axis)" for one axis: physical units for formatted axis values.
     */
-    std::string getUnit(int axis) const {
-        return getC(detail::formatAxisAttr("Unit", axis));
-    }
+    std::string getUnit(int axis) const { return getC(detail::formatAxisAttr("Unit", axis)); }
 
     /**
     Find the point of intersection between two geodesic curves.
@@ -980,11 +964,8 @@ public:
     - The geodesic curve used by this method is the path of
     shortest distance between two points, as defined by @ref distance
     */
-    std::vector<double> intersect(std::vector<double> const & a1,
-                                   std::vector<double> const & a2,
-                                   std::vector<double> const & b1,
-                                   std::vector<double> const & b2
-                                   ) const;
+    std::vector<double> intersect(std::vector<double> const &a1, std::vector<double> const &a2,
+                                  std::vector<double> const &b1, std::vector<double> const &b2) const;
 
     /**
     Look for corresponding axes between this frame and another.
@@ -1002,7 +983,7 @@ public:
         using `findFrame` or `convert`. Thus, "corresponding axes" are not necessarily identical.
         For instance, `SkyFrame` axes will match even if they describe different celestial coordinate systems.
     */
-    std::vector<int> matchAxes(Frame const & other) const {
+    std::vector<int> matchAxes(Frame const &other) const {
         std::vector<int> ret(other.getNin());
         astMatchAxes(getRawPtr(), other.getRawPtr(), ret.data());
         assertOK();
@@ -1034,7 +1015,7 @@ public:
     @param[in] first  The first frame in the compound frame (axes 1 - first.getNaxes())
     @return a new CmpFrame
     */
-    CmpFrame over(Frame const & first) const;
+    CmpFrame over(Frame const &first) const;
 
     /**
     Normalise a set of Frame coordinate values which might be unsuitable for display
@@ -1082,7 +1063,7 @@ public:
     ### Notes:
     - The geodesic curve used by this function is the path of shortest distance between two points,
         as defined by the `distance` function.
-    
+
     @throw std::invalid_argument if:
     - point1 or point2 is the wrong length
     */
@@ -1109,7 +1090,7 @@ public:
         to the direction of the required position, as seen from the starting position.
         Positive rotation is in the sense of rotation from the positive direction of axis 2
         to the positive direction of axis 1.
-    @param[in] offset   The required offset from the first point along the geodesic curve. 
+    @param[in] offset   The required offset from the first point along the geodesic curve.
         If this is positive, it will be in the direction of the given angle.  If it is negative, it
         will be in the opposite direction.
 
@@ -1128,7 +1109,7 @@ public:
     - The geodesic curve used by this function is the path of shortest distance between two points,
         as defined by the astDistance function
     */
-    DirectionPoint offset2(PointD const & point1, double angle, double offset) const {
+    DirectionPoint offset2(PointD const &point1, double angle, double offset) const {
         detail::assertEqual(getNin(), "naxes", 2, " cannot call offset2");
         assertPointLength(point1, "point1");
         PointD point2(getNin());
@@ -1137,7 +1118,6 @@ public:
         detail::astBadToNan(point2);
         return DirectionPoint(detail::safeDouble(offsetAngle), point2);
     }
-
 
     /**
     Permute the order in which a Frame's axes occur
@@ -1171,7 +1151,7 @@ public:
         transformation will convert coordinates from the original Frame into the new one,
         and vice versa.
     */
-    FrameMapping pickAxes(std::vector<int> const & axes) const;
+    FrameMapping pickAxes(std::vector<int> const &axes) const;
 
     /**
     Resolve a vector into two orthogonal components
@@ -1204,22 +1184,19 @@ public:
         if any of the input coordinates are invalid, or if the required
         output values are undefined.
     */
-    ResolvedPoint resolve(std::vector<double> const & point1,
-                          std::vector<double> const & point2,
-                          std::vector<double> const & point3) const;
+    ResolvedPoint resolve(std::vector<double> const &point1, std::vector<double> const &point2,
+                          std::vector<double> const &point3) const;
 
     /**
     Set @ref Frame_AlignSystem "AlignSystem": the coordinate system used
     by @ref convert and @ref findFrame to align Frames
     */
-    void setAlignSystem(std::string const & system) { setC("AlignSystem", system); }
+    void setAlignSystem(std::string const &system) { setC("AlignSystem", system); }
 
     /**
     Set @ref Frame_Bottom "Bottom": the lowest axis value to display
     */
-    void setBottom(int axis, double bottom) {
-        setD(detail::formatAxisAttr("Bottom", axis), bottom);
-    }
+    void setBottom(int axis, double bottom) { setD(detail::formatAxisAttr("Bottom", axis), bottom); }
 
     /**
     Set @ref Frame_Digits "Digits" for all axes: number of digits of precision.
@@ -1229,9 +1206,7 @@ public:
     /**
     Set @ref Frame_Digits "Digits" for one axis: number of digits of precision.
     */
-    void setDigits(int digits, int axis) {
-        setD(detail::formatAxisAttr("Digits", axis), digits);
-    }
+    void setDigits(int digits, int axis) { setD(detail::formatAxisAttr("Digits", axis), digits); }
 
     /**
     Set @ref Frame_Direction "Direction" for one axis: display axis in conventional direction?
@@ -1243,7 +1218,7 @@ public:
     /**
     Set @ref Frame_Domain "Domain": coordinate system domain
     */
-     void setDomain(std::string const & domain) { setC("Domain", domain); }
+    void setDomain(std::string const &domain) { setC("Domain", domain); }
 
     /**
     Set @ref Frame_Dut1 "Dut1": difference between the UT1 and UTC timescale (sec)
@@ -1258,21 +1233,19 @@ public:
     /**
     Set @ref Frame_Epoch "Epoch": Epoch of observation as a string
     */
-    void setEpoch(std::string const & epoch) { setC("Epoch", epoch); }
+    void setEpoch(std::string const &epoch) { setC("Epoch", epoch); }
 
     /**
     Set @ref Frame_Format "Format" for one axis: format specification for axis values.
     */
-    void setFormat(int axis, std::string const & format) {
+    void setFormat(int axis, std::string const &format) {
         setC(detail::formatAxisAttr("Format", axis), format);
     }
 
     /**
     Set @ref Frame_Label "Label(axis)" for one axis: axis label.
     */
-    void setLabel(int axis, std::string const & label) {
-        setC(detail::formatAxisAttr("Label", axis), label);
-    }
+    void setLabel(int axis, std::string const &label) { setC(detail::formatAxisAttr("Label", axis), label); }
 
     /**
     Set @ref Frame_MatchEnd "MatchEnd": match trailing axes?
@@ -1282,13 +1255,13 @@ public:
     /**
     Get @ref Frame_MaxAxes "MaxAxes": the maximum number of axes
     a frame found by @ref findFrame may have.
-    */    
+    */
     void setMaxAxes(int maxAxes) { setI("MaxAxes", maxAxes); }
 
     /**
     Get @ref Frame_MinAxes "MinAxes": the minimum number of axes
     a frame found by @ref findFrame may have.
-    */    
+    */
     void setMinAxes(int minAxes) { setI("MinAxes", minAxes); }
 
     /**
@@ -1299,12 +1272,12 @@ public:
     /**
     Set @ref Frame_ObsLat "ObsLat": frame title.
     */
-    void getObsLat(std::string const & lat) { setC("ObsLat", lat); }
+    void setObsLat(std::string const &lat) { setC("ObsLat", lat); }
 
     /**
     Set @ref Frame_ObsLon "ObsLon": Geodetic longitude of observer.
     */
-    void getObsLon(std::string const & lon) { setC("ObsLon", lon); }
+    void setObsLon(std::string const &lon) { setC("ObsLon", lon); }
 
     /**
     Set @ref Frame_ActiveUnit "ActiveUnit": pay attention to units when one @ref Frame
@@ -1328,7 +1301,7 @@ public:
     /**
     Set @ref Frame_Symbol "Symbol(axis)" for one axis: axis symbol.
     */
-    void setSymbol(int axis, std::string const & symbol) {
+    void setSymbol(int axis, std::string const &symbol) {
         setC(detail::formatAxisAttr("Symbol", axis), symbol);
     }
 
@@ -1336,26 +1309,22 @@ public:
     Set @ref Frame_System "System": coordinate system used to describe
     positions within the domain.
     */
-    void setSystem(std::string const & system) { setC("System", system); }
+    void setSystem(std::string const &system) { setC("System", system); }
 
     /**
     Set @ref Frame_Title "Title": frame title.
     */
-    void setTitle(std::string const & title) { setC("Title", title); }
+    void setTitle(std::string const &title) { setC("Title", title); }
 
     /**
     Set @ref Frame_Top "Top" for one axis: the highest axis value to display
     */
-    void setTop(int axis, double top) {
-        setD(detail::formatAxisAttr("Top", axis), top);
-    }
+    void setTop(int axis, double top) { setD(detail::formatAxisAttr("Top", axis), top); }
 
     /**
     Set @ref Frame_Unit "Unit(axis)" for one axis: physical units for formatted axis values.
     */
-    void setUnit(int axis, std::string const & unit) {
-        setC(detail::formatAxisAttr("Unit", axis), unit);
-    }
+    void setUnit(int axis, std::string const &unit) { setC(detail::formatAxisAttr("Unit", axis), unit); }
 
     /**
     Read a formatted coordinate value (given as a character string) for a Frame axis and return
@@ -1521,44 +1490,32 @@ public:
     generate the value AST__BAD, without error. The test for this
     string is case-insensitive and permits embedded white space.
     */
-    NReadValue unformat(int axis, std::string const & str) const {
+    NReadValue unformat(int axis, std::string const &str) const {
         double value;
         int nread = astUnformat(getRawPtr(), axis, str.c_str(), &value);
         assertOK();
         return NReadValue(nread, detail::safeDouble(value));
     }
 
-private:
+   protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const { return _copyImpl<Frame, AstFrame>(); }
+
+   private:
     /**
     Assert that a point has the correct length
 
     @param[in] p  The point to check
     @param[in] name  Name of point to use in an error message if the point has the wrong length
     */
-    template<typename T>
-    void assertPointLength(T const & p, char const * name) const {
+    template <typename T>
+    void assertPointLength(T const &p, char const *name) const {
         if (p.size() != getNin()) {
             std::ostringstream os;
             os << "point " << name << " has " << p.size() << " axes, but " << getNin() << " required";
             throw std::invalid_argument(os.str());
         }
     }
-
 };
-
-
-/**
-A class representing a Frame and a Mapping
-*/
-class FrameMapping {
-public:
-    FrameMapping(Frame const frame, Mapping const & mapping) :
-        frame(frame), mapping(mapping)
-    {}
-    Frame const frame;
-    Mapping const mapping;
-};
-
 
 }  // namespace ast
 

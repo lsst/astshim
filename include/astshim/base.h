@@ -44,15 +44,20 @@ typedef ndarray::Array<double, 2, 2> Array2D;
 /**
 Throw std::runtime_error if AST's state is bad
 
-@param[in] clearStatus  if true, clear AST's status before throwing an exception
+@param  rawPtr1  An AST object to free if status is bad
+@param  rawPtr2  An AST object to free if status is bad
 */
-inline void assertOK(bool clearStatus=true) {
+inline void assertOK(AstObject * rawPtr1=nullptr, AstObject * rawPtr2=nullptr) {
     if (!astOK) {
+        if (rawPtr1) {
+            astAnnul(rawPtr1);
+        }
+        if (rawPtr2) {
+            astAnnul(rawPtr2);
+        }
         std::ostringstream os;
         os << "failed with AST status = " << astStatus;
-        if (clearStatus) {
-            astClearStatus;
-        }
+        astClearStatus;
         throw std::runtime_error(os.str());
     }
 }

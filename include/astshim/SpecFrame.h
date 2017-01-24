@@ -26,7 +26,7 @@
 #include <vector>
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Frame.h"
 
 namespace ast {
@@ -116,18 +116,17 @@ public:
         Frame(reinterpret_cast<AstFrame *>(astSpecFrame(options.c_str())))
     {}
 
-    /// Cast an object to a SpecFrame if possible, else throw std::runtime_error
-    explicit SpecFrame(Object & obj) : SpecFrame(detail::shallowCopy<AstSpecFrame>(obj.getRawPtr())) {}
-
     virtual ~SpecFrame() {}
 
-    SpecFrame(SpecFrame const &) = default;
+    SpecFrame(SpecFrame const &) = delete;
     SpecFrame(SpecFrame &&) = default;
-    SpecFrame & operator=(SpecFrame const &) = default;
+    SpecFrame & operator=(SpecFrame const &) = delete;
     SpecFrame & operator=(SpecFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SpecFrame> copy() const { return _copy<SpecFrame, AstSpecFrame>(); }
+    std::shared_ptr<SpecFrame> copy() const {
+        return std::static_pointer_cast<SpecFrame>(_copyPolymorphic());
+    }
 
     /**
     Get @ref SpecFrame_AlignSpecOffset "AlignSpecOffset":
@@ -269,7 +268,11 @@ public:
     /// Set @ref SpecFrame_StdOfRest "StdOfRest": @ref SpecFrame_StandardsOfRest "standard of rest".
     void setStdOfRest(std::string const & stdOfRest) { setC("StdOfRest", stdOfRest); }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<SpecFrame, AstSpecFrame>();
+    }    
+
     /// Construct a SpecFrame from a raw AST pointer
     explicit SpecFrame(AstSpecFrame * rawptr) :
         Frame(reinterpret_cast<AstFrame *>(rawptr))

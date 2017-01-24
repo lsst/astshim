@@ -65,20 +65,23 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(astUnitNormMap(centre.size(), centre.data(), options.c_str())))
     {}
 
-    /// Cast an object to a UnitNormMap if possible, else throw std::runtime_error
-    explicit UnitNormMap(Object & obj) : UnitNormMap(detail::shallowCopy<AstUnitNormMap>(obj.getRawPtr())) {}
-
     virtual ~UnitNormMap() {}
 
-    UnitNormMap(UnitNormMap const &) = default;
+    UnitNormMap(UnitNormMap const &) = delete;
     UnitNormMap(UnitNormMap &&) = default;
-    UnitNormMap & operator=(UnitNormMap const &) = default;
+    UnitNormMap & operator=(UnitNormMap const &) = delete;
     UnitNormMap & operator=(UnitNormMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<UnitNormMap> copy() const { return _copy<UnitNormMap, AstUnitNormMap>(); }
+    std::shared_ptr<UnitNormMap> copy() const {
+        return std::static_pointer_cast<UnitNormMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<UnitNormMap, AstUnitNormMap>();
+    }    
+
     /// Construct a UnitNormMap from a raw AST pointer
     explicit UnitNormMap(AstUnitNormMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

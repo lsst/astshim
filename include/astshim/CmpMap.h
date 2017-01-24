@@ -27,6 +27,7 @@
 #include <stdexcept>
 
 #include "astshim/base.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Mapping.h"
 
 namespace ast {
@@ -53,7 +54,8 @@ way.
 @ref CmpMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
 class CmpMap : public Mapping {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a @ref CmpMap
@@ -70,7 +72,7 @@ public:
     */
     explicit CmpMap(Mapping const & map1, Mapping const & map2, bool series, std::string const & options="") :
         Mapping(reinterpret_cast<AstMapping *>(
-            astCmpMap(map1.getRawPtr(), map2.getRawPtr(), series, options.c_str())))
+            astCmpMap(astClone(map1.getRawPtr()), astClone(map2.getRawPtr()), series, options.c_str())))
     {}
 
     virtual ~CmpMap() {}
@@ -81,24 +83,22 @@ public:
     CmpMap & operator=(CmpMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<CmpMap> copy() const { return std::static_pointer_cast<CmpMap>(_copyPolymorphic()); }
+    std::shared_ptr<CmpMap> copy() const {
+        return std::static_pointer_cast<CmpMap>(_copyPolymorphic());
+    }
 
     /**
-    Return a deep copy of one of the two component mappings.
+    Return a shallow copy of one of the two component mappings.
 
     @param[in] i  Index: 0 for the first mapping, 1 for the second.
     @throw std::invalid_argument if `i` is not 0 or 1.
     */
-    std::shared_ptr<Mapping> operator[](int i) const;
+    std::shared_ptr<Mapping> operator[](int i) const {
+        return _decompose<Mapping>(i, false);
+    };
 
     /// Return True if the map is in series
-    bool getSeries() {
-        AstMapping * rawptrmap1;
-        AstMapping * rawptrmap2;
-        int series, invert1, invert2;
-        astDecompose(getRawPtr(), &rawptrmap1, &rawptrmap2, &series, &invert1, &invert2);
-        return static_cast<bool>(series);
-    }
+    bool getSeries() { return detail::isSeries(reinterpret_cast<AstCmpMap *>(getRawPtr())); }
 
 protected:
     /// Construct a @ref CmpMap from a raw AST pointer

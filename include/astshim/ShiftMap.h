@@ -48,20 +48,23 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(astShiftMap(shift.size(), shift.data(), options.c_str())))
     {}
 
-    /// Cast an object to a ShiftMap if possible, else throw std::runtime_error
-    explicit ShiftMap(Object & obj) : ShiftMap(detail::shallowCopy<AstShiftMap>(obj.getRawPtr())) {}
-
     virtual ~ShiftMap() {}
 
-    ShiftMap(ShiftMap const &) = default;
+    ShiftMap(ShiftMap const &) = delete;
     ShiftMap(ShiftMap &&) = default;
-    ShiftMap & operator=(ShiftMap const &) = default;
+    ShiftMap & operator=(ShiftMap const &) = delete;
     ShiftMap & operator=(ShiftMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<ShiftMap> copy() const { return _copy<ShiftMap, AstShiftMap>(); }
+    std::shared_ptr<ShiftMap> copy() const {
+        return std::static_pointer_cast<ShiftMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<ShiftMap, AstShiftMap>();
+    }    
+
     /// Construct a ShiftMap from a raw AST pointer
     explicit ShiftMap(AstShiftMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

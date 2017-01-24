@@ -61,7 +61,7 @@ namespace ast {
         if (!rawRet) {
             throw std::runtime_error("Could not read an AST object from this channel");
         }
-        return fromAstObject(rawRet);
+        return Object::basicFromAstObject(rawRet);
     }
 
     int Channel::write(Object const & obj) {

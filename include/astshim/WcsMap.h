@@ -26,7 +26,7 @@
 #include <sstream>
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Mapping.h"
 
 namespace ast {
@@ -209,18 +209,17 @@ public:
             astWcsMap(ncoord, static_cast<int>(type), lonax, latax, options.c_str())))
     {}
 
-    /// Cast an object to a WcsMap if possible, else throw std::runtime_error
-    explicit WcsMap(Object & obj) : WcsMap(detail::shallowCopy<AstWcsMap>(obj.getRawPtr())) {}
-
     virtual ~WcsMap() {}
 
-    WcsMap(WcsMap const &) = default;
+    WcsMap(WcsMap const &) = delete;
     WcsMap(WcsMap &&) = default;
-    WcsMap & operator=(WcsMap const &) = default;
+    WcsMap & operator=(WcsMap const &) = delete;
     WcsMap & operator=(WcsMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<WcsMap> copy() const { return _copy<WcsMap, AstWcsMap>(); }
+    std::shared_ptr<WcsMap> copy() const {
+        return std::static_pointer_cast<WcsMap>(_copyPolymorphic());
+    }
 
     /// get @ref WcsMap_NatLat "NatLat": native latitude of the reference point of a FITS-WCS projection.
     double getNatLat() const { return getD("NatLat"); }
@@ -253,7 +252,11 @@ public:
     /// Get @ref WcsMap_WcsType "WcsType": FITS-WCS projection type.
     WcsType getWcsType() const { return static_cast<WcsType>(getI("WcsType")); }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<WcsMap, AstWcsMap>();
+    }    
+
     /// Construct a WcsMap from a raw AST pointer
     explicit WcsMap(AstWcsMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

@@ -61,15 +61,7 @@ inline void astBadToNan(std::vector<double> & p) {
 /**
 Replace `AST__BAD` with a quiet NaN in a vector
 */
-inline void astBadToNan(ast::Array2D & arr) {
-    for (auto i = arr.begin(); i != arr.end(); ++i) {
-        for (auto j = i->begin(); j != i->end(); ++j) {
-            if (*j == AST__BAD) {
-                *j = std::numeric_limits<double>::quiet_NaN();
-            }
-        }
-    }
-}
+void astBadToNan(ast::Array2D & arr);
 
 /**
 Format an axis-specific attribute by appending the axis index
@@ -85,6 +77,26 @@ inline std::string formatAxisAttr(std::string const & name, int axis) {
 }
 
 /**
+Return true if the compound map is in seris
+*/
+bool isSeries(AstCmpMap * cmpMap);
+
+/**
+Get the AST class name, changing CmpMap to SeriesMap or ParallelMap as appropriate.
+
+@param[in] rawObj  Raw AST object pointer
+*/
+std::string getClassName(AstObject * rawObj);
+
+/**
+Return a double value after checking status and replacing `AST__BAD` with `nan`
+*/
+inline double safeDouble(double val) {
+    assertOK();
+    return val != AST__BAD ? val : std::numeric_limits<double>::quiet_NaN();
+}
+
+/**
 Make a shallow copy of a raw AST pointer without checking
 
 Intended for use in cast constructors, e.g.:
@@ -96,14 +108,6 @@ in each Object (thus avoiding the need to call astClone).
 template<typename AstT>
 AstT * shallowCopy(AstObject * rawPtr) {
     return reinterpret_cast<AstT *>(astClone(rawPtr));
-}
-
-/**
-Return a double value after checking status and replacing `AST__BAD` with `nan`
-*/
-inline double safeDouble(double val) {
-    assertOK();
-    return val != AST__BAD ? val : std::numeric_limits<double>::quiet_NaN();
 }
 
 }}  // namespace ast::detail

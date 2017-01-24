@@ -21,11 +21,13 @@
  */
 #include <cmath>
 #include <limits>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 
 #include "astshim/base.h"
 #include "astshim/detail/utils.h"
+#include "astshim/Frame.h"
 #include "astshim/Mapping.h"
 #include "astshim/ParallelMap.h"
 #include "astshim/SeriesMap.h"
@@ -38,6 +40,65 @@ SeriesMap Mapping::of(Mapping const & first) const {
 
 ParallelMap Mapping::over(Mapping const & first) const {
     return ParallelMap(first, *this);
+}
+
+std::shared_ptr<Mapping> Mapping::getInverse() const {
+    auto rawCopy = reinterpret_cast<AstMapping *>(astCopy(getRawPtr()));
+    astInvert(rawCopy);
+    assertOK();
+    // use false because the pointer has already been copied
+    return Object::fromAstObject<Mapping>(reinterpret_cast<AstObject *>(rawCopy), false);
+}
+
+Array2D Mapping::linearApprox(
+    PointD const & lbnd,
+    PointD const & ubnd,
+    double tol
+) const {
+    int const nIn = getNin();
+    int const nOut = getNout();
+    detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nIn), "nIn");
+    detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nIn), "nIn");
+    Array2D fit = ndarray::allocate(ndarray::makeVector(1 + nIn, nOut));
+    int isOK = astLinearApprox(getRawPtr(), lbnd.data(), ubnd.data(), tol, fit.getData());
+    if (!isOK) {
+        throw std::runtime_error("Mapping not sufficiently linear");
+    }
+    assertOK();
+    return fit;
+}
+
+template<typename Class>
+std::shared_ptr<Class> Mapping::_decompose(int i, bool copy) const {
+    if ((i < 0) || (i > 1)) {
+        std::ostringstream os;
+        os << "i =" << i << "; must be 0 or 1";
+        throw std::invalid_argument(os.str());
+    }
+    // Report pre-existing problems now so our later test for "not a compound object" is accurate
+    assertOK();
+
+    AstMapping * rawMap1;
+    AstMapping * rawMap2;
+    int series, invert1, invert2;
+    astDecompose(getRawPtr(), &rawMap1, &rawMap2, &series, &invert1, &invert2);
+    if (!rawMap2) {
+        // free rawMap1 (rawMap2 is null, so no need to free it)
+        astAnnul(reinterpret_cast<AstObject *>(rawMap1));
+        std::ostringstream os;
+        os << "This " << getClass() << " is not a compound object";
+        throw std::runtime_error(os.str());
+    }
+    // Return one object and free the other
+    AstMapping * retRawMap;
+    if (i == 0) {
+        retRawMap = rawMap1;
+        astAnnul(reinterpret_cast<AstObject *>(rawMap2));
+    } else {
+        retRawMap = rawMap2;
+        astAnnul(reinterpret_cast<AstObject *>(rawMap1));
+    }        
+    return Object::fromAstObject<Class>(reinterpret_cast<AstObject *>(retRawMap), copy);
 }
 
 void Mapping::_tran(
@@ -82,5 +143,9 @@ void Mapping::_tranGrid(
     to.transpose() = toT;
     detail::astBadToNan(to);
 }
+
+// Explicit instantiations
+template std::shared_ptr<Frame> Mapping::_decompose(int i, bool) const;
+template std::shared_ptr<Mapping> Mapping::_decompose(int i, bool) const;
 
 }  // namespace ast

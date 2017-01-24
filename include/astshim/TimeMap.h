@@ -56,15 +56,17 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(astTimeMap(0, options.c_str())))
     {}
 
-    /// Cast an object to a TimeMap if possible, else throw std::runtime_error
-    explicit TimeMap(Object & obj) : TimeMap(detail::shallowCopy<AstTimeMap>(obj.getRawPtr())) {}
-
     virtual ~TimeMap() {}
 
-    TimeMap(TimeMap const &) = default;
+    TimeMap(TimeMap const &) = delete;
     TimeMap(TimeMap &&) = default;
-    TimeMap & operator=(TimeMap const &) = default;
+    TimeMap & operator=(TimeMap const &) = delete;
     TimeMap & operator=(TimeMap &&) = default;
+
+    /// Return a deep copy of this object.
+    std::shared_ptr<TimeMap> copy() const {
+        return std::static_pointer_cast<TimeMap>(_copyPolymorphic());
+    }
 
     /**
     Add one of the standard time coordinate system conversions listed below.
@@ -182,10 +184,11 @@ public:
         assertOK();
     }
 
-    /// Return a deep copy of this object.
-    std::shared_ptr<TimeMap> copy() const { return _copy<TimeMap, AstTimeMap>(); }
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<TimeMap, AstTimeMap>();
+    }    
 
-private:
     /// Construct a TimeMap from a raw AST pointer
     explicit TimeMap(AstTimeMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

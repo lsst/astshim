@@ -77,20 +77,23 @@ public:
             astMatrixMap(diag.size(), diag.size(), 1, diag.data(), options.c_str())))
     {}
 
-    /// Cast an object to a MatrixMap if possible, else throw std::runtime_error
-    explicit MatrixMap(Object & obj) : MatrixMap(detail::shallowCopy<AstMatrixMap>(obj.getRawPtr())) {}
-
     virtual ~MatrixMap() {}
 
-    MatrixMap(MatrixMap const &) = default;
+    MatrixMap(MatrixMap const &) = delete;
     MatrixMap(MatrixMap &&) = default;
-    MatrixMap & operator=(MatrixMap const &) = default;
+    MatrixMap & operator=(MatrixMap const &) = delete;
     MatrixMap & operator=(MatrixMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<MatrixMap> copy() const { return _copy<MatrixMap, AstMatrixMap>(); }
+    std::shared_ptr<MatrixMap> copy() const {
+        return std::static_pointer_cast<MatrixMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<MatrixMap, AstMatrixMap>();
+    }    
+
     /// Construct a MatrixMap from a raw AST pointer
     explicit MatrixMap(AstMatrixMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

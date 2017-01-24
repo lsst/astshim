@@ -64,9 +64,9 @@ public:
 
     virtual ~XmlChan() {}
 
-    XmlChan(XmlChan const &) = default;
+    XmlChan(XmlChan const &) = delete;
     XmlChan(XmlChan &&) = default;
-    XmlChan & operator=(XmlChan const &) = default;
+    XmlChan & operator=(XmlChan const &) = delete;
     XmlChan & operator=(XmlChan &&) = default;
 
     /// Get @ref XmlChan_XmlFormat "XmlFormat" System for formatting Objects as XML.

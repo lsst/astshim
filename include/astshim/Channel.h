@@ -80,7 +80,8 @@ public:
 
     /// Return a deep copy of this object.
     std::shared_ptr<Channel> copy() const {
-        return std::static_pointer_cast<Channel>(_copyPolymorphic());
+        throw std::logic_error(
+            "Channel cannot be deep copied because its contained stream cannot be deep copied");
     }
 
     /// Get @ref Channel_Comment "Comment": include textual comments in output?
@@ -138,6 +139,9 @@ public:
     int write(Object const & obj);
 
 protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return std::shared_ptr<Object>();
+    }    
 
     /**
     Construct a channel from an AST channel pointer and a @ref Stream
@@ -150,10 +154,6 @@ protected:
     Construct a channel from an AST channel pointer that has its own stream
     */
     explicit Channel(AstChannel * chan);
-
-    virtual std::shared_ptr<Object> _copyPolymorphic() const {
-        return _copyImpl<Channel, AstChannel>();
-    }    
 
     Stream _stream;
 };

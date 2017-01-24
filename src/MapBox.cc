@@ -25,8 +25,7 @@
 #include "ndarray.h"
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
-
+#include "astshim/detail/utils.h"
 #include "astshim/MapBox.h"
 #include "astshim/Mapping.h"
 

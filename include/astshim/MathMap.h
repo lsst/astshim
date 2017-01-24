@@ -372,9 +372,6 @@ public:
                        rev.size(), getCStrVec(rev).data(), options.c_str())))
     {}
 
-    /// Cast an object to a MathMap if possible, else throw std::runtime_error
-    explicit MathMap(Object & obj) : MathMap(detail::shallowCopy<AstMathMap>(obj.getRawPtr())) {}
-
     virtual ~MathMap() {}
 
     MathMap(MathMap const &) = default;
@@ -383,7 +380,9 @@ public:
     MathMap & operator=(MathMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<MathMap> copy() const { return _copy<MathMap, AstMathMap>(); }
+    std::shared_ptr<MathMap> copy() const {
+        return std::static_pointer_cast<MathMap>(_copyPolymorphic());
+    }
 
     /**
     Get @ref MathMap_Seed "Seed": random number seed
@@ -400,7 +399,11 @@ public:
     */
     bool getSimpIF() const { return getB("SimpIF"); }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<MathMap, AstMathMap>();
+    }    
+
     /// Construct a MathMap from a raw AST pointer
     explicit MathMap(AstMathMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))
@@ -412,6 +415,7 @@ private:
         }
     }
 
+private:
     /// Convert a vector<string> to a vector<char const *>
     std::vector<char const *> getCStrVec(std::vector<std::string> const & strVec) {
         std::vector<char const *> cstrVec;

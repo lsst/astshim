@@ -68,14 +68,11 @@ public:
         assertOK();
     }
 
-    /// Cast an object to a SlaMap if possible, else throw std::runtime_error
-    explicit SlaMap(Object & obj) : SlaMap(detail::shallowCopy<AstSlaMap>(obj.getRawPtr())) {}
-
     virtual ~SlaMap() {}
 
-    SlaMap(SlaMap const &) = default;
+    SlaMap(SlaMap const &) = delete;
     SlaMap(SlaMap &&) = default;
-    SlaMap & operator=(SlaMap const &) = default;
+    SlaMap & operator=(SlaMap const &) = delete;
     SlaMap & operator=(SlaMap &&) = default;
 
     /**
@@ -177,9 +174,15 @@ public:
     }
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SlaMap> copy() const { return _copy<SlaMap, AstSlaMap>(); }
+    std::shared_ptr<SlaMap> copy() const {
+        return std::static_pointer_cast<SlaMap>(_copyPolymorphic());
+    }
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<SlaMap, AstSlaMap>();
+    }    
+
     /// Construct a SlaMap from a raw AST pointer
     explicit SlaMap(AstSlaMap * rawptr) :
         Mapping(reinterpret_cast<AstMapping *>(rawptr))

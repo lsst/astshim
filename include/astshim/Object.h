@@ -52,8 +52,10 @@ private:
 
 public:
     using ObjectPtr = std::unique_ptr<AstObject, Deleter>;
-    using PointD = std::vector<double>;
-    using PointI = std::vector<int>;
+    typedef std::vector<double> PointD;
+    typedef std::vector<int> PointI;
+    // using PointD = std::vector<double>;
+    // using PointI = std::vector<int>;
 
     virtual ~Object() {}
 
@@ -66,16 +68,34 @@ public:
     Construct an @ref Object from a string, using astFromString
     */
     static std::shared_ptr<Object> fromString(std::string const & str) {
-        return fromAstObject(reinterpret_cast<AstObject *>(astFromString(str.c_str())));
+        auto * rawPtr = reinterpret_cast<AstObject *>(astFromString(str.c_str()));
+        return Object::basicFromAstObject(rawPtr);
     }
 
 
     /**
-    Given a bare AST pointer return a pointer to an astshim::Object of the correct type
+    Given a bare AST object pointer return a shared pointer to an astshim::Object of the correct type
 
-    Ownership of the passed object is transferred to the returned Object.
+    The returned object takes ownership of the pointer. This is almost always what you want,
+    for instance astDecompose returns shallow copies of the internal pointers.
+
+    @param[in] rawObj  A bare AST object pointer
     */
-    static std::shared_ptr<Object> fromAstObject(AstObject * object);
+    static std::shared_ptr<Object> basicFromAstObject(AstObject *rawObj);
+
+    /**
+    Given a bare AST object pointer return a shared pointer to an astshim::Object of the correct type
+
+    The returned object takes ownership of the pointer. This is almost always what you want,
+    for instance astDecompose returns shallow copies of the internal pointers.
+
+    @tparam Class  The class of the returned shared pointer. (The actual class will be
+                   the correct class of rawPtr.)
+    @param[in] rawObj  A bare AST object pointer
+    @param[in] copy  If True then make a deep copy of the pointer (and free the original)
+    */
+    template <typename Class>
+    static std::shared_ptr<Class> fromAstObject(AstObject *rawObj, bool copy);
 
     /// Return a deep copy of this object.
     std::shared_ptr<Object> copy() const { return std::static_pointer_cast<Object>(_copyPolymorphic()); }
@@ -102,8 +122,13 @@ public:
         return ret;
     }
 
-    /// Get @ref Object_Class "Class": the name of the class (e.g. ZoomMap)
-    std::string getClass() const { return getC("Class"); }
+    /**
+    Get @ref Object_Class "Class": the name of the class (e.g. ZoomMap)
+
+    Note: if AST returns "CmpMap" then the name will be changed
+    to "SeriesMap" or "ParallelMap", as appropriate.
+    */
+    std::string getClass() const { return detail::getClassName(getRawPtr()); }
 
     /// Get @ref Object_ID "ID": object identification string that is not copied.
     std::string getID() const { return getC("ID"); }
@@ -250,17 +275,6 @@ public:
 protected:
 
     /**
-    Functor to make an astshim instance from a raw AST pointer of the corresponding type.
-
-    @tparam ShimT  Output astshim class
-    @tparam AstT  Output AST class
-    */
-    template <typename ShimT, typename AstT>
-    static std::shared_ptr<ShimT> makeShim(AstObject * p) {
-        return std::shared_ptr<ShimT>(new ShimT(reinterpret_cast<AstT*>(p)));
-    }
-
-    /**
     Construct an @ref Object from a pointer to a raw AstObject
     */
     explicit Object(AstObject * object) :
@@ -270,6 +284,17 @@ protected:
         if (!object) {
             throw std::runtime_error("Null pointer");
         }
+    }
+
+    /**
+    Functor to make an astshim instance from a raw AST pointer of the corresponding type.
+
+    @tparam ShimT  Output astshim class
+    @tparam AstT  Output AST class
+    */
+    template <typename ShimT, typename AstT>
+    static std::shared_ptr<ShimT> makeShim(AstObject * p) {
+        return std::shared_ptr<ShimT>(new ShimT(reinterpret_cast<AstT*>(p)));
     }
 
     /**
