@@ -27,7 +27,7 @@
 #include "ndarray.h"
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Object.h"
 
 namespace ast {
@@ -56,6 +56,7 @@ Mapping also has the following attributes:
 - @ref Mapping_TranInverse "TranInverse": Is the inverse transformation defined?
 */
 class Mapping : public Object {
+friend class Object;
 public:
     /**
     Construct a mapping from a pointer to a raw AST subclass of AstMapping
@@ -79,13 +80,13 @@ public:
 
     virtual ~Mapping() {}
 
-    Mapping(Mapping const &) = default;
+    Mapping(Mapping const &) = delete;
     Mapping(Mapping &&) = default;
-    Mapping & operator=(Mapping const &) = default;
+    Mapping & operator=(Mapping const &) = delete;
     Mapping & operator=(Mapping &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<Mapping> copy() const { return _copy<Mapping, AstMapping>(); }
+    // std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(_copyPolymorphic()); }
 
     /**
     Get @ref Mapping_Nin "Nin": the number of input axes
@@ -238,7 +239,7 @@ public:
     void setReport(bool report) { setB("Report", report); }
 
     /**
-    Simplify the mapping (which may be a compound Mapping such as a CmpMap)
+    Return a simplied version of the mapping (which may be a compound Mapping such as a CmpMap)
 
     Simplfy eliminates redundant computational steps and merge separate steps which can be performed
     more efficiently in a single operation. As a simple example, a Mapping which multiplied coordinates by 5,
@@ -250,11 +251,10 @@ public:
     or have been formed by merging other Mappings. It is of potential benefit, for example,
     in reducing execution time if applied before using a Mapping to transform a large number of coordinates.
     */
-    Mapping simplify() const {
-        void * simpPtr = astSimplify(getRawPtr());
-        Mapping simp(reinterpret_cast<AstMapping *>(simpPtr));
+    std::shared_ptr<Object> simplify() const {
+        AstObject * simpPtr = reinterpret_cast<AstObject *>(astSimplify(getRawPtr()));
         assertOK();
-        return simp;
+        return Object::fromAstObject(simpPtr);
     }
 
     /**
@@ -370,6 +370,12 @@ public:
         Array2D & to
     ) const {
         _tranGrid(lbnd, ubnd, tol, maxpix, false, to);
+    }
+
+protected:
+    // Protected implementation of deep-copy.
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return std::static_pointer_cast<Mapping>(_copyImpl<Mapping, AstMapping>());
     }
 
 private:

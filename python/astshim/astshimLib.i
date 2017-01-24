@@ -13,7 +13,6 @@ A C++ shim around a subset of AST
 #include <memory>
 #include <string>
 #include "astshim.h"
-#include "astshim/makeBadMatrixMap.h"
 %}
 
 %include "lsst/p_lsstSwig.i"  // for initializeNumPy; defined in LSST package "utils"
@@ -50,41 +49,11 @@ A C++ shim around a subset of AST
 %shared_ptr(ast::Stream);
 %shared_ptr(ast::Mapping)
 %shared_ptr(ast::Channel)
-%shared_ptr(ast::Frame)
-%shared_ptr(ast::FrameSet)
-
-// channels
-%shared_ptr(ast::FitsChan)
-%shared_ptr(ast::XmlChan)
-
-// frames
-%shared_ptr(ast::CmpFrame)
-%shared_ptr(ast::SkyFrame)
-%shared_ptr(ast::SpecFrame)
-%shared_ptr(ast::TimeFrame)
 
 // mappings
 %shared_ptr(ast::CmpMap)
-%shared_ptr(ast::LutMap)
-%shared_ptr(ast::MathMap)
-%shared_ptr(ast::makeBadMatrixMap)
-%shared_ptr(ast::MatrixMap)
-%shared_ptr(ast::NormMap)
 %shared_ptr(ast::ParallelMap)
-%shared_ptr(ast::PcdMap)
-%shared_ptr(ast::PermMap)
-%shared_ptr(ast::PolyMap)
-%shared_ptr(ast::RateMap)
 %shared_ptr(ast::SeriesMap)
-%shared_ptr(ast::ShiftMap)
-%shared_ptr(ast::SlaMap)
-%shared_ptr(ast::SphMap)
-%shared_ptr(ast::TimeMap)
-%shared_ptr(ast::TranMap)
-%shared_ptr(ast::UnitMap)
-%shared_ptr(ast::UnitNormMap)
-%shared_ptr(ast::WcsMap)
-%shared_ptr(ast::WinMap)
 %shared_ptr(ast::ZoomMap)
 
 %shared_ptr(ast::FileStream);
@@ -94,52 +63,11 @@ A C++ shim around a subset of AST
 %include "astshim/Object.h"
 %include "astshim/Stream.h"
 %include "astshim/Channel.h"
-%include "astshim/MapBox.h"
-%include "astshim/MapSplit.h"
-%include "astshim/QuadApprox.h"
 %include "astshim/Mapping.h"
-%include "astshim/Frame.h"
-%include "astshim/FrameSet.h"
 
-// channels
-%include "astshim/FitsChan.h"
-%include "astshim/XmlChan.h"
-
-// templates needed for FitsChan's FoundValue
-%template(FoundValueBool) ast::FoundValue<bool>;
-%template(FoundValueComplex) ast::FoundValue<std::complex<double>>;
-%template(FoundValueDouble) ast::FoundValue<double>;
-%template(FoundValueInt) ast::FoundValue<int>;
-%template(FoundValueString) ast::FoundValue<std::string>;
-
-// frames
-%include "astshim/CmpFrame.h"
-%include "astshim/SkyFrame.h"
-%include "astshim/SpecFrame.h"
-%include "astshim/TimeFrame.h"
-
-// mappings
 %include "astshim/CmpMap.h"
-%include "astshim/LutMap.h"
-%include "astshim/MathMap.h"
-%include "astshim/makeBadMatrixMap.h"
-%include "astshim/MatrixMap.h"
-%include "astshim/NormMap.h"
-%include "astshim/PcdMap.h"
 %include "astshim/ParallelMap.h"
-%include "astshim/PermMap.h"
-%include "astshim/PolyMap.h"
-%include "astshim/RateMap.h"
 %include "astshim/SeriesMap.h"
-%include "astshim/ShiftMap.h"
-%include "astshim/SlaMap.h"
-%include "astshim/SphMap.h"
-%include "astshim/TimeMap.h"
-%include "astshim/TranMap.h"
-%include "astshim/UnitMap.h"
-%include "astshim/UnitNormMap.h"
-%include "astshim/WcsMap.h"
-%include "astshim/WinMap.h"
 %include "astshim/ZoomMap.h"
 
 %define %addRepr(CLS...)
@@ -157,36 +85,10 @@ A C++ shim around a subset of AST
 // %addRepr(Stream)  // needs special treatment
 %addRepr(Channel)
 %addRepr(Mapping)
-%addRepr(Frame)
-%addRepr(FrameSet)
 
-// frames
-%addRepr(CmpFrame)
-%addRepr(SkyFrame)
-%addRepr(SpecFrame)
-%addRepr(TimeFrame)
-
-// mappings
 %addRepr(CmpMap)
-%addRepr(LutMap)
-%addRepr(MathMap)
-%addRepr(MatrixMap)
-%addRepr(NormMap)
 %addRepr(ParallelMap)
-%addRepr(PcdMap)
-%addRepr(PermMap)
-%addRepr(PolyMap)
-%addRepr(RateMap)
 %addRepr(SeriesMap)
-%addRepr(ShiftMap)
-%addRepr(SlaMap)
-%addRepr(SphMap)
-%addRepr(TimeMap)
-%addRepr(TranMap)
-%addRepr(UnitMap)
-%addRepr(UnitNormMap)
-%addRepr(WcsMap)
-%addRepr(WinMap)
 %addRepr(ZoomMap)
 
 

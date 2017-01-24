@@ -25,7 +25,7 @@
 #include <stdexcept>
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 #include "astshim/Mapping.h"
 #include "astshim/ParallelMap.h"
 #include "astshim/SeriesMap.h"

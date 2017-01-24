@@ -71,15 +71,21 @@ public:
 
     virtual ~SeriesMap() {}
 
-    SeriesMap(SeriesMap const &) = default;
+    SeriesMap(SeriesMap const &) = delete;
     SeriesMap(SeriesMap &&) = default;
-    SeriesMap & operator=(SeriesMap const &) = default;
+    SeriesMap & operator=(SeriesMap const &) = delete;
     SeriesMap & operator=(SeriesMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SeriesMap> copy() const { return _copy<SeriesMap, AstCmpMap>(); }
+    std::shared_ptr<SeriesMap> copy() const {
+        return std::static_pointer_cast<SeriesMap>(_copyPolymorphic());
+    }        
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<SeriesMap, AstCmpMap>();
+    }    
+
     /// Construct a SeriesMap from a raw AST pointer
     /// @ todo: test rawptr to make sure it is in series
     explicit SeriesMap(AstCmpMap * rawptr) :

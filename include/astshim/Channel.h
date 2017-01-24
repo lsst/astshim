@@ -30,14 +30,14 @@
 
 namespace ast {
 
-class FrameSet;
-
 /**
 Channel provides input/output of AST objects.
 
 Writing an @ref Object to a @ref Channel will generate a textual
 representation of that @ref Object, and reading from a @ref Channel will
 create a new @ref Object from its textual representation.
+
+Note that a channel cannot be deep-copied because the contained stream cannot be deep-copied
 
 ### Missing Methods
 
@@ -57,6 +57,7 @@ create a new @ref Object from its textual representation.
 - @ref Channel_Strict "Strict": Generate errors instead of warnings?
 */
 class Channel : public Object {
+friend class Object;
 public:
     /**
     Construct a channel that uses a provided @ref Stream
@@ -84,20 +85,10 @@ public:
 
     virtual ~Channel();
 
-    Channel(Channel const &) = default;
+    Channel(Channel const &) = delete;
     Channel(Channel &&) = default;
-    Channel & operator=(Channel const &) = default;
+    Channel & operator=(Channel const &) = delete;
     Channel & operator=(Channel &&) = default;
-
-    /**
-    A channel cannot be deep-copied because the contained stream cannot be deep-copied
-
-    @throw std::logic_error
-    */
-    std::shared_ptr<Channel> copy() const {
-        throw std::logic_error(
-            "Channel cannot be deep copied because its contained stream cannot be deep copied");
-    }
 
     /// Get @ref Channel_Comment "Comment": include textual comments in output?
     bool getComment() const { return getB("Comment"); }
@@ -118,7 +109,7 @@ public:
     bool getStrict() const { return getB("Strict"); }
 
     /// Read an object from a channel.
-    Object read();
+    std::shared_ptr<Object> read();
 
     /// Set @ref Channel_Comment "Comment": include textual comments in output?
     void setComment(bool skip) { setB("Comment", skip); }
@@ -154,6 +145,10 @@ public:
     int write(Object const & obj);
 
 protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<Channel, AstChannel>();
+    }    
+
     Stream _stream;
 };
 

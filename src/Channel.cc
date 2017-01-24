@@ -21,7 +21,6 @@
  */
 
 #include "astshim/base.h"
-#include "astshim/FrameSet.h"
 #include "astshim/Object.h"
 #include "astshim/Stream.h"
 #include "astshim/Channel.h"
@@ -57,12 +56,12 @@ namespace ast {
         }
     }
 
-    Object Channel::read() {
-        AstObject * rawret = reinterpret_cast<AstObject *>(astRead(getRawPtr()));
-        if (!rawret) {
+    std::shared_ptr<Object> Channel::read() {
+        AstObject * rawRet = reinterpret_cast<AstObject *>(astRead(getRawPtr()));
+        if (!rawRet) {
             throw std::runtime_error("Could not read an AST object from this channel");
         }
-        return Object(rawret);
+        return fromAstObject(rawRet);
     }
 
     int Channel::write(Object const & obj) {

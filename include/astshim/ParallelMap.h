@@ -71,15 +71,21 @@ public:
 
     virtual ~ParallelMap() {}
 
-    ParallelMap(ParallelMap const &) = default;
+    ParallelMap(ParallelMap const &) = delete;
     ParallelMap(ParallelMap &&) = default;
-    ParallelMap & operator=(ParallelMap const &) = default;
+    ParallelMap & operator=(ParallelMap const &) = delete;
     ParallelMap & operator=(ParallelMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<ParallelMap> copy() const { return _copy<ParallelMap, AstCmpMap>(); }
+    std::shared_ptr<ParallelMap> copy() const {
+        return std::static_pointer_cast<ParallelMap>(_copyPolymorphic());
+    }        
 
-private:
+protected:
+    virtual std::shared_ptr<Object> _copyPolymorphic() const {
+        return _copyImpl<ParallelMap, AstCmpMap>();
+    }    
+
     /// Construct a ParallelMap from a raw AST pointer
     /// @todo add a test that the CmpMap is parallel
     explicit ParallelMap(AstCmpMap * rawptr) :

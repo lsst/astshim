@@ -78,9 +78,9 @@ public:
 
     virtual ~CmpMap() {}
 
-    CmpMap(CmpMap const &) = default;
+    CmpMap(CmpMap const &) = delete;
     CmpMap(CmpMap &&) = default;
-    CmpMap & operator=(CmpMap const &) = default;
+    CmpMap & operator=(CmpMap const &) = delete;
     CmpMap & operator=(CmpMap &&) = default;
 
     /**
@@ -90,9 +90,6 @@ public:
     @throw std::invalid_argument if `i` is not 0 or 1.
     */
     std::shared_ptr<Mapping> operator[](int i) const;
-
-    /// Return a deep copy of this object.
-    std::shared_ptr<CmpMap> copy() const { return _copy<CmpMap, AstCmpMap>(); }
 
     /// Return True if the map is in series
     bool getSeries() {

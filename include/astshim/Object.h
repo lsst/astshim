@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "astshim/base.h"
-#include "astshim/detail.h"
+#include "astshim/detail/utils.h"
 
 namespace ast {
 
@@ -47,39 +47,35 @@ Object provides the following attributes:
 - @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
 */
 class Object {
+private:
+    using Deleter = void (*)(AstObject *);
+
 public:
-    typedef std::shared_ptr<AstObject> ObjectPtr;
-    typedef std::vector<double> PointD;
-    typedef std::vector<int> PointI;
+    using ObjectPtr = std::unique_ptr<AstObject, Deleter>;
+    using PointD = std::vector<double>;
+    using PointI = std::vector<int>;
+
+    virtual ~Object() {}
+
+    Object(Object const &) = delete;
+    Object(Object &&) = default;
+    Object & operator=(Object const &) = delete;
+    Object & operator=(Object &&) = default;
 
     /**
     Construct an @ref Object from a string, using astFromString
     */
-    explicit Object(std::string str) {
-        AstObject * object = reinterpret_cast<AstObject *>(astFromString(str.c_str()));
-        assertOK();
-        _objPtr = ObjectPtr(object, detail::annulAstObject);
+    static std::shared_ptr<Object> fromString(std::string const & str) {
+        return fromAstObject(reinterpret_cast<AstObject *>(astFromString(str.c_str())));
     }
+
 
     /**
-    Construct an @ref Object from a pointer to a raw AstObject
+    Given a bare AST pointer return a pointer to an astshim::Object of the correct type
+
+    Ownership of the passed object is transferred to the returned Object.
     */
-    explicit Object(AstObject * object) :
-        _objPtr()
-    {
-        assertOK();
-        if (!object) {
-            throw std::runtime_error("Null pointer");
-        }
-        _objPtr = ObjectPtr(object, detail::annulAstObject);
-    }
-
-    virtual ~Object() {}
-
-    Object(Object const &) = default;
-    Object(Object &&) = default;
-    Object & operator=(Object const &) = default;
-    Object & operator=(Object &&) = default;
+    static std::shared_ptr<Object> fromAstObject(AstObject * object);
 
     /**
     Clear the values of a specified set of attributes for an Object.
@@ -93,9 +89,6 @@ public:
         astClear(getRawPtr(), attrib.c_str());
         assertOK();
     }
-
-    /// Return a deep copy of this object.
-    std::shared_ptr<Object> copy() const { return _copy<Object, AstObject>(); }
 
     /**
     Does this object have an attribute with the specified name?
@@ -171,7 +164,7 @@ public:
 
     This is a test of identity, not of equality.
     */
-    bool same(Object & other) const { return astSame(getRawPtr(), other.getRawPtr()); }
+    bool same(Object const & other) const { return astSame(getRawPtr(), other.getRawPtr()); }
 
     /// Set @ref Object_ID "ID": object identification string that is not copied.
     void setID(std::string const & id) { setC("ID", id); }
@@ -252,14 +245,32 @@ public:
     AstObject * getRawPtr() const { return &*_objPtr; };
 
 protected:
-    /// Make a deep copy
+    /**
+    Construct an @ref Object from a pointer to a raw AstObject
+    */
+    explicit Object(AstObject * object) :
+        _objPtr(object, &detail::annulAstObject)
+    {
+        assertOK();
+        if (!object) {
+            throw std::runtime_error("Null pointer");
+        }
+    }
+
+    /**
+    Implementation of deep copy
+
+    Should be called to implement _copyPolymorphic by all derived classes.
+    */
     template<typename T, typename AstT>
-    std::shared_ptr<T> _copy() const {
+    std::shared_ptr<T> _copyImpl() const {
         auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
         auto retptr = std::shared_ptr<T>(new T(rawptr));
         assertOK();
         return retptr;
     }
+
+    virtual std::shared_ptr<Object> _copyPolymorphic() const = 0;
 
     /**
     Get the value of an attribute as a bool
