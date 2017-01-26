@@ -136,7 +136,7 @@ public:
     void setStrict(bool strict) { setB("Strict", strict); }
 
     /// Write an object to a channel.
-    int write(Object const & obj);
+    int write(Object const & object);
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const {

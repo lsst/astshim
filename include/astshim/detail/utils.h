@@ -96,20 +96,6 @@ inline double safeDouble(double val) {
     return val != AST__BAD ? val : std::numeric_limits<double>::quiet_NaN();
 }
 
-/**
-Make a shallow copy of a raw AST pointer without checking
-
-Intended for use in cast constructors, e.g.:
-    explicit FrameSet(Object const & obj) : FrameSet(detail::shallowCopy<AstFrameSet>(obj.getRawPtr())) {}
-
-There is probably a cleaner way to do this by using the shared_ptr contained
-in each Object (thus avoiding the need to call astClone).
-*/
-template<typename AstT>
-AstT * shallowCopy(AstObject * rawPtr) {
-    return reinterpret_cast<AstT *>(astClone(rawPtr));
-}
-
 }}  // namespace ast::detail
 
 #endif

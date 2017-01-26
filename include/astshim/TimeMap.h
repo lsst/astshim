@@ -179,7 +179,7 @@ public:
     - `LTOFF`: The offset between Local Time and UTC (in hours, positive
     for time zones east of Greenwich).
     */
-    void add(std::string const & cvt, std::vector<double> const & args=std::vector<double>()) {
+    void add(std::string const & cvt, std::vector<double> const & args) {
         astTimeAdd(getRawPtr(), cvt.c_str(), args.size(), args.data());
         assertOK();
     }

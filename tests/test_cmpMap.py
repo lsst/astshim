@@ -21,11 +21,12 @@ class TestCmpMap(MappingTestCase):
 
     def test_SeriesMap(self):
         sermap = astshim.SeriesMap(self.shiftmap, self.zoommap)
+        self.assertEqual(self.shiftmap.getRefCount(), 2)  # adding to a SeriesMap increases by 1
+        self.assertEqual(self.zoommap.getRefCount(), 2)  # adding to a SeriesMap increases by 1
         self.assertEqual(sermap.getNin(), self.nin)
         self.assertEqual(sermap.getNout(), self.nin)
         self.assertTrue(sermap.getSeries())
 
-        self.checkCast(sermap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkBasicSimplify(sermap)
         self.checkCopy(sermap)
         self.checkPersistence(sermap)
@@ -49,6 +50,8 @@ class TestCmpMap(MappingTestCase):
 
     def test_ParallelMap(self):
         parmap = astshim.ParallelMap(self.shiftmap, self.zoommap)
+        self.assertEqual(self.shiftmap.getRefCount(), 2)  # adding to a ParallelMap increases by 1
+        self.assertEqual(self.zoommap.getRefCount(), 2)  # adding to a ParallelMap increases by 1
         self.assertEqual(parmap.getNin(), self.nin*2)
         self.assertEqual(parmap.getNout(), self.nin*2)
         self.assertFalse(parmap.getSeries())

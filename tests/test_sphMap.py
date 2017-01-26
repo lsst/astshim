@@ -18,7 +18,6 @@ class TestSphMap(MappingTestCase):
         self.assertEqual(sphmap.getPolarLong(), 0)
         self.assertFalse(sphmap.getUnitRadius())
 
-        self.checkCast(sphmap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(sphmap)
         self.checkPersistence(sphmap)
 

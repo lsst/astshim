@@ -16,7 +16,6 @@ class TestUnitMap(MappingTestCase):
         self.assertEqual(unitmap.getNout(), 3)
 
         self.checkBasicSimplify(unitmap)
-        self.checkCast(unitmap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(unitmap)
         self.checkPersistence(unitmap)
 

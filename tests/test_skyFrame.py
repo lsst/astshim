@@ -43,7 +43,6 @@ class TestSkyFrame(MappingTestCase):
         self.assertEqual(frame.getSymbol(2), "Dec")
         self.assertEqual(frame.getUnit(2), "ddd:mm:ss")
 
-        self.checkCast(frame, goodType=astshim.Frame, badType=astshim.TimeFrame)
         self.checkCopy(frame)
         self.checkPersistence(frame)
 

@@ -73,7 +73,7 @@ public:
     */
     explicit CmpFrame(Frame const & frame1, Frame const & frame2, std::string const & options="") :
         Frame(reinterpret_cast<AstFrame *>(
-            astCmpFrame(astCopy(frame1.getRawPtr()), astCopy(frame2.getRawPtr()), options.c_str())))
+            astCmpFrame(frame1.getRawPtr(), frame2.getRawPtr(), options.c_str())))
     {}
 
     virtual ~CmpFrame() {}

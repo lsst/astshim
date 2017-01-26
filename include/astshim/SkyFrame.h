@@ -23,6 +23,7 @@
 #define ASTSHIM_SKYFRAME_H
 
 #include <memory>
+#include <vector>
 
 #include "astshim/Frame.h"
 
@@ -205,9 +206,9 @@ public:
     specified by the `SkyRef`, `SkyRefP` and `SkyRefIs` attributes of the sky frame.
     A @ref UnitMap is returned if the sky frame does not define an offset coordinate system.
     */
-    Mapping skyOffsetMap() {
-        void * map = astSkyOffsetMap(getRawPtr());
-        return Mapping(reinterpret_cast<AstMapping *>(map));
+    std::shared_ptr<Mapping> skyOffsetMap() {
+        auto * rawMap = reinterpret_cast<AstObject *>(astSkyOffsetMap(getRawPtr()));
+        return Object::fromAstObject<Mapping>(rawMap, false);
     }
 
 protected:

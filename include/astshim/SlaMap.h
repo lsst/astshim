@@ -75,6 +75,11 @@ public:
     SlaMap & operator=(SlaMap const &) = delete;
     SlaMap & operator=(SlaMap &&) = default;
 
+    /// Return a deep copy of this object.
+    std::shared_ptr<SlaMap> copy() const {
+        return std::static_pointer_cast<SlaMap>(_copyPolymorphic());
+    }
+
     /**
     Add one of the standard celestial coordinate system conversions provided by the SLALIB
     Positional Astronomy Library (Starlink User Note SUN/67) to an existing SlaMap.
@@ -171,11 +176,6 @@ public:
     void add(std::string const & cvt, std::vector<double> const & args=std::vector<double>()) {
         astSlaAdd(getRawPtr(), cvt.c_str(), args.size(), args.data());
         assertOK();
-    }
-
-    /// Return a deep copy of this object.
-    std::shared_ptr<SlaMap> copy() const {
-        return std::static_pointer_cast<SlaMap>(_copyPolymorphic());
     }
 
 protected:

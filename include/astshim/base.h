@@ -39,7 +39,9 @@ public:
     notfound_error(std::string const & msg) : std::runtime_error(msg) {};
 };
 
-typedef ndarray::Array<double, 2, 2> Array2D;
+using Array2D = ndarray::Array<double, 2, 2>;
+using PointI = std::vector<int>;
+using PointD = std::vector<double>;
 
 /**
 Throw std::runtime_error if AST's state is bad

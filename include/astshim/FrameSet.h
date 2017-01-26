@@ -100,8 +100,8 @@ class FrameSet : public Frame {
 friend class Frame;  // so Frame can call the protected raw ptr constructor
 friend class Object;
 public:
-    static int const BASE = AST__BASE;  /// index of base frame
-    static int const CURRENT = AST__CURRENT;  /// index of current frame
+    static int const BASE;  ///< index of base frame
+    static int const CURRENT;  ///< index of current frame
     /**
     Construct a FrameSet from a Frame
 

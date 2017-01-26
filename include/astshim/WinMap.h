@@ -25,6 +25,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 #include "astshim/base.h"
 #include "astshim/Mapping.h"

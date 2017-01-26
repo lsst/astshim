@@ -23,6 +23,7 @@
 #define ASTSHIM_SHIFTMAP_H
 
 #include <algorithm>
+#include <vector>
 
 #include "astshim/base.h"
 #include "astshim/Mapping.h"

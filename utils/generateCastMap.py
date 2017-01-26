@@ -19,7 +19,6 @@ ExtraIncludes = [  # without the ".h" suffix
 SkipNames = set([
     # Code does not wrap AST classes
     "base",
-    "makeBadMatrixMap",
     "MapBox",
     "MapSplit",
     "QuadApprox",

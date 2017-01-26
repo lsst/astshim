@@ -14,7 +14,7 @@ class TestWcsMap(MappingTestCase):
         # Test the Aitoff projection because it is locally flat at 0,0
         # unlike the tangent-plane projection which maps (0, pi/2) -> 0,0
         # and is not very well behaved at nearby points (as expected at a pole).
-        wcsmap = astshim.WcsMap(2, astshim.WcsType_AIT, 1, 2)
+        wcsmap = astshim.WcsMap(2, astshim.WcsType.AIT, 1, 2)
         self.assertIsInstance(wcsmap, astshim.WcsMap)
         self.assertIsInstance(wcsmap, astshim.Mapping)
         self.assertEqual(wcsmap.getNin(), 2)
@@ -31,10 +31,9 @@ class TestWcsMap(MappingTestCase):
         self.assertEqual(wcsmap.getPVMax(2), 0)
         self.assertEqual(wcsmap.getWcsAxis(1), 1)
         self.assertEqual(wcsmap.getWcsAxis(2), 2)
-        self.assertEqual(wcsmap.getWcsType(), astshim.WcsType_AIT)
+        self.assertEqual(wcsmap.getWcsType(), astshim.WcsType.AIT)
 
         self.checkBasicSimplify(wcsmap)
-        self.checkCast(wcsmap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(wcsmap)
         self.checkPersistence(wcsmap)
 

@@ -248,7 +248,7 @@ public:
     void setRestFreq(double freq) { setD("RestFreq", freq); }
 
     /// Set @ref SpecFrame_RestFreq "RestFreq": rest frequency in user-specified units.
-    void setRestFreq(std::string freq) { setC("RestFreq", freq); }
+    void setRestFreq(std::string const & freq) { setC("RestFreq", freq); }
 
     /// Set @ref SpecFrame_SourceSys "SourceSys": source velocity spectral system.
     void setSourceSys(std::string const & system) { setC("SourceSys", system); }

@@ -89,9 +89,6 @@ public:
         Frame(reinterpret_cast<AstFrame *>(astTimeFrame(options.c_str())))
     {}
 
-    /// Cast an object to a TimeFrame if possible, else throw std::runtime_error
-    explicit TimeFrame(Object & obj) : TimeFrame(detail::shallowCopy<AstTimeFrame>(obj.getRawPtr())) {}
-
     virtual ~TimeFrame() {}
 
     TimeFrame(TimeFrame const &) = delete;

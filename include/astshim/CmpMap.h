@@ -72,7 +72,7 @@ public:
     */
     explicit CmpMap(Mapping const & map1, Mapping const & map2, bool series, std::string const & options="") :
         Mapping(reinterpret_cast<AstMapping *>(
-            astCmpMap(astClone(map1.getRawPtr()), astClone(map2.getRawPtr()), series, options.c_str())))
+            astCmpMap(map1.getRawPtr(), map2.getRawPtr(), series, options.c_str())))
     {}
 
     virtual ~CmpMap() {}

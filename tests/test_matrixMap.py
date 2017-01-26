@@ -70,38 +70,5 @@ class TestMatrixMap(MappingTestCase):
         ], dtype=float)
         self.assertTrue(np.allclose(pout, despout))
 
-    def test_makeBadMatrixMap(self):
-        """Show a mysterious memory error yet to be diagnosed
-
-        This variant of test_MatrixMapMatrix shows a memory issue
-        that only appears with the factory function of MatrixMap
-        (now renamed to makeBadMatrixMap).
-
-        On my Mac the line pin = np.array... fails with:
-
-            Traceback (most recent call last):
-              File "tests/test_matrixMap.py", line 95, in test_MakeBadMatrixMap
-                ], dtype=float)
-            RuntimeError: in sequence element 0
-        """
-        matrix = np.array([
-            [0.0, 1.0],
-            [2.0, 3.0],
-            [-1.0, -2.0]
-        ], dtype=float)
-        mm = astshim.makeBadMatrixMap(matrix)
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
-        ], dtype=float)
-        pout = mm.tran(pin)
-        despout = np.array([
-            [0.0, 2.0, -1.0],
-            [1.0, 7.0, -4.0],
-            [2.0, 12.0, -7.0],
-        ], dtype=float)
-        self.assertTrue(np.allclose(pout, despout))
-
 if __name__ == "__main__":
     unittest.main()

@@ -71,8 +71,8 @@ public:
     SphMap & operator=(SphMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SlaMap> copy() const {
-        return std::static_pointer_cast<SlaMap>(_copyPolymorphic());
+    std::shared_ptr<SphMap> copy() const {
+        return std::static_pointer_cast<SphMap>(_copyPolymorphic());
     }
 
     /// Get @ref SphMap_UnitRadius "UnitRadius": input vectors lie on a unit sphere?
@@ -83,7 +83,7 @@ public:
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const {
-        return _copyImpl<SlaMap, AstSlaMap>();
+        return _copyImpl<SphMap, AstSphMap>();
     }    
 
     /// Construct a SphMap from a raw AST pointer

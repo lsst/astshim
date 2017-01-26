@@ -16,7 +16,6 @@ class TestWcsMap(MappingTestCase):
         self.assertEqual(winmap.getNout(), 2)
 
         self.checkBasicSimplify(winmap)
-        self.checkCast(winmap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(winmap)
         self.checkPersistence(winmap)
 

@@ -59,7 +59,7 @@ public:
     */
     explicit TranMap(Mapping const & map1, Mapping const & map2, std::string const & options="") :
         Mapping(reinterpret_cast<AstMapping *>(
-            astTranMap(astClone(map1.getRawPtr()), astClone(map2.getRawPtr()), options.c_str())))
+            astTranMap(map1.getRawPtr(), map2.getRawPtr(), options.c_str())))
     {}
 
     virtual ~TranMap() {}

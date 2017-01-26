@@ -374,9 +374,9 @@ public:
 
     virtual ~MathMap() {}
 
-    MathMap(MathMap const &) = default;
+    MathMap(MathMap const &) = delete;
     MathMap(MathMap &&) = default;
-    MathMap & operator=(MathMap const &) = default;
+    MathMap & operator=(MathMap const &) = delete;
     MathMap & operator=(MathMap &&) = default;
 
     /// Return a deep copy of this object.

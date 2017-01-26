@@ -42,9 +42,9 @@ A class representing a direction and a point
 */
 class DirectionPoint {
    public:
-    DirectionPoint(double direction, Object::PointD const &point) : direction(direction), point(point){};
+    DirectionPoint(double direction, PointD const &point) : direction(direction), point(point){};
     double direction;
-    Object::PointD point;
+    PointD point;
 };
 
 class NReadValue {
@@ -442,7 +442,7 @@ class Frame : public Mapping {
         in the inverses of the @ref FrameSet "FrameSets" (using @ref Mapping.getInverse "getInverse")
         so as to interchange their base and current frames.
     */
-    FrameSet convert(Frame const &to, std::string const &domainlist = "");
+    FrameSet convert(Frame const &to, std::string const &domainlist="");
 
     /**
     Find the distance between two points whose Frame coordinates are given.

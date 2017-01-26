@@ -21,7 +21,6 @@ class TestUnitNormMap(MappingTestCase):
             self.assertFalse(unitnormmap.getIsLinear())
 
             self.checkBasicSimplify(unitnormmap)
-            self.checkCast(unitnormmap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
             self.checkCopy(unitnormmap)
             self.checkPersistence(unitnormmap)
 
@@ -83,10 +82,10 @@ class TestUnitNormMap(MappingTestCase):
             (unm1, unm2inv, "WinMap"),  # ShiftMap gets simplified to WinMap
             (shiftmap, unm1, "UnitNormMap"),
             (winmap_unitscale, unm1, "UnitNormMap"),
-            (winmap_notunitscale, unm1, "CmpMap"),
+            (winmap_notunitscale, unm1, "SeriesMap"),
             (unm1inv, shiftmap, "UnitNormMap"),
             (unm1inv, winmap_unitscale, "UnitNormMap"),
-            (unm1inv, winmap_notunitscale, "CmpMap"),
+            (unm1inv, winmap_notunitscale, "SeriesMap"),
         ):
             cmpmap = map2.of(map1)
             self.assertEqual(map1.getNin(), cmpmap.getNin())

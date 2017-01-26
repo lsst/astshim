@@ -17,6 +17,9 @@ class TestFrameSet(MappingTestCase):
         frameset.addFrame(1, astshim.UnitMap(2), newframe)
         self.assertEqual(frameset.getNframe(), 2)
 
+        # make sure BASE is available on the class and instance
+        self.assertEqual(astshim.FrameSet.BASE, frameset.BASE)
+
         baseframe = frameset.getFrame(frameset.BASE)
         self.assertEqual(baseframe.getIdent(), "base")
         self.assertEqual(frameset.getBase(), 1)
@@ -30,7 +33,6 @@ class TestFrameSet(MappingTestCase):
         frameset.removeFrame(1)
         self.assertEqual(frameset.getNframe(), 1)
 
-        self.checkCast(frameset, goodType=astshim.Mapping, badType=astshim.CmpFrame)
         self.checkCopy(frameset)
         self.checkPersistence(frameset)
 

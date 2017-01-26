@@ -35,7 +35,6 @@ class TestSpecFrame(MappingTestCase):
         self.assertEqual(frame.getSymbol(1), "WAVE")
         self.assertEqual(frame.getUnit(1), "Angstrom")
 
-        self.checkCast(frame, goodType=astshim.Mapping, badType=astshim.SkyFrame)
         self.checkCopy(frame)
         self.checkPersistence(frame)
 

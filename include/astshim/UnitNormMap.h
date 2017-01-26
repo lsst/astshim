@@ -23,6 +23,7 @@
 #define ASTSHIM_UNITNORMMAP_H
 
 #include <memory>
+#include <vector>
 
 #include "astshim/base.h"
 #include "astshim/Mapping.h"

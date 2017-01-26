@@ -54,9 +54,6 @@ public:
         Mapping(reinterpret_cast<AstMapping *>(astUnitMap(ncoord, options.c_str())))
     {}
 
-    /// Cast an object to a UnitMap if possible, else throw std::runtime_error
-    explicit UnitMap(Object & obj) : UnitMap(detail::shallowCopy<AstUnitMap>(obj.getRawPtr())) {}
-
     virtual ~UnitMap() {}
 
     UnitMap(UnitMap const &) = delete;

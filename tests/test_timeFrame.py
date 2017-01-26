@@ -40,7 +40,6 @@ class TestTimeFrame(MappingTestCase):
         self.assertEqual(frame.getTimeOrigin(), 0.0)
         self.assertEqual(frame.getTimeScale(), "TAI")
 
-        self.checkCast(frame, goodType=astshim.Mapping, badType=astshim.SpecFrame)
         self.checkCopy(frame)
         self.checkPersistence(frame)
 

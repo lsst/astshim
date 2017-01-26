@@ -19,7 +19,7 @@ class TestMapping(MappingTestCase):
         self.zoommap = astshim.ZoomMap(self.nin, self.zoom)
 
     def test_MappingAttributes(self):
-        self.assertEquals(self.zoommap.getClass(), "ZoomMap")
+        self.assertEqual(self.zoommap.getClass(), "ZoomMap")
         self.assertFalse(self.zoommap.isInverted())
         self.assertTrue(self.zoommap.getIsLinear())
         self.assertFalse(self.zoommap.getIsSimple())
@@ -32,7 +32,7 @@ class TestMapping(MappingTestCase):
     def test_MappingInvert(self):
         invmap = self.zoommap.getInverse()
 
-        self.assertEquals(invmap.getClass(), "ZoomMap")
+        self.assertEqual(invmap.getClass(), "ZoomMap")
         self.assertTrue(invmap.isInverted())
         self.assertTrue(invmap.getIsLinear())
         self.assertFalse(invmap.getIsSimple())
@@ -131,7 +131,7 @@ class TestMapping(MappingTestCase):
     def test_MappingSimplify(self):
         simpmap = self.zoommap.simplify()
 
-        self.assertEquals(simpmap.getClass(), "ZoomMap")
+        self.assertEqual(simpmap.getClass(), "ZoomMap")
         self.assertFalse(simpmap.isInverted())
         self.assertTrue(simpmap.getIsSimple())
         self.assertEqual(simpmap.getNin(), self.nin)

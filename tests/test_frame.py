@@ -38,7 +38,6 @@ class TestFrame(MappingTestCase):
             self.assertEqual(frame.getSymbol(axis), "x{}".format(axis))
             self.assertEqual(frame.getUnit(axis), "")
 
-        self.checkCast(frame, goodType=astshim.Mapping, badType=astshim.CmpMap)
         self.checkCopy(frame)
         self.checkPersistence(frame)
 

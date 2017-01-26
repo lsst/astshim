@@ -64,8 +64,8 @@ namespace ast {
         return Object::basicFromAstObject(rawRet);
     }
 
-    int Channel::write(Object const & obj) {
-        int ret = astWrite(getRawPtr(), obj.getRawPtr());
+    int Channel::write(Object const & object) {
+        int ret = astWrite(getRawPtr(), object.getRawPtr());
         assertOK();
         return ret;
     }

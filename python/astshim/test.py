@@ -10,26 +10,6 @@ class ObjectTestCase(unittest.TestCase):
     """Base class for unit tests of objects
     """
 
-    def checkCast(self, obj, goodType=(), badType=None):
-        """Check casting to various types, including type(obj)
-
-        @param[in] obj  The astshim object to test.
-        @param[in] goodType  Type to test in addition to type(obj) (which is always tested)
-        @param[in] badType  A bad type to test, or None of none wanted.
-        """
-        goodTypes = [type(obj)]
-        if goodType is not None:
-            goodTypes.append(goodType)
-        for goodType in goodTypes:
-            try:
-                goodType(obj)
-            except Exception:
-                self.fail("{} could not be cast to {}".format(obj.getClass(), goodType.__name__))
-
-        if badType is not None:
-            with self.assertRaises(Exception):
-                badType(obj)
-
     def checkCopy(self, obj):
         nobj = obj.getNobject()
         nref = obj.getRefCount()

@@ -63,9 +63,9 @@ public:
 
     virtual ~NormMap() {}
 
-    NormMap(NormMap const &) = default;
+    NormMap(NormMap const &) = delete;
     NormMap(NormMap &&) = default;
-    NormMap & operator=(NormMap const &) = default;
+    NormMap & operator=(NormMap const &) = delete;
     NormMap & operator=(NormMap &&) = default;
 
     /// Return a deep copy of this object.

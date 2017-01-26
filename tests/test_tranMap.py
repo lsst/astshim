@@ -11,13 +11,17 @@ class TestTranMap(MappingTestCase):
 
     def test_TranMapNotSymmetric(self):
         zoomfac = 0.5
-        tranmap = astshim.TranMap(astshim.UnitMap(2), astshim.ZoomMap(2, zoomfac))
+        unitMap = astshim.UnitMap(2)
+        zoomMap = astshim.ZoomMap(2, zoomfac)
+        tranmap = astshim.TranMap(unitMap, zoomMap)
+        self.assertEqual(unitMap.getRefCount(), 2)  # adding to a TranMap increases by 1
+        self.assertEqual(zoomMap.getRefCount(), 2)  # adding to a TranMap increases by 1
+
         self.assertIsInstance(tranmap, astshim.TranMap)
         self.assertIsInstance(tranmap, astshim.Mapping)
         self.assertEqual(tranmap.getNin(), 2)
         self.assertEqual(tranmap.getNout(), 2)
 
-        self.checkCast(tranmap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(tranmap)
         self.checkPersistence(tranmap)
 
@@ -44,7 +48,6 @@ class TestTranMap(MappingTestCase):
         self.assertEqual(tranmap.getNin(), 2)
         self.assertEqual(tranmap.getNout(), 2)
 
-        self.checkCast(tranmap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(tranmap)
         self.checkPersistence(tranmap)
 

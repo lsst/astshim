@@ -21,7 +21,6 @@ class TestZoomMap(MappingTestCase):
                 self.assertTrue(zoommap.getIsLinear())
 
                 self.checkBasicSimplify(zoommap)
-                self.checkCast(zoommap, goodType=astshim.Mapping, badType=astshim.LutMap)
                 self.checkCopy(zoommap)
                 self.checkPersistence(zoommap)
 

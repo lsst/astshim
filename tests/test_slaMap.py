@@ -18,7 +18,6 @@ class TestSlaMap(MappingTestCase):
         self.assertEqual(slamap.getNout(), 2)
 
         self.checkBasicSimplify(slamap)
-        self.checkCast(slamap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(slamap)
         self.checkPersistence(slamap)
 

@@ -16,7 +16,7 @@ void astBadToNan(ast::Array2D & arr) {
 std::string getClassName(AstObject * rawObj) {
     std::string name = astGetC(rawObj, "Class");
     assertOK();
-    if (name != "CmpName") {
+    if (name != "CmpMap") {
         return name;
     }
     bool series = isSeries(reinterpret_cast<AstCmpMap *>(rawObj));

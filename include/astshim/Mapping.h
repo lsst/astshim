@@ -23,6 +23,7 @@
 #define ASTSHIM_MAPPING_H
 
 #include <memory>
+#include <vector>
 
 #include "ndarray.h"
 
@@ -64,8 +65,8 @@ public:
 
     This constructor is intended for use by subclasses.
     */
-    explicit Mapping(AstMapping * mapping) :
-        Object(reinterpret_cast<AstObject *>(mapping))
+    explicit Mapping(AstMapping * rawMap) :
+        Object(reinterpret_cast<AstObject *>(rawMap))
     {
         assertOK();
         if (!astIsAMapping(getRawPtr())) {
@@ -325,7 +326,7 @@ public:
                 If too small a value is given, it will have the effect of inhibiting linear approximation
                 altogether (equivalent to setting " tol" to zero).  Although this may degrade
                 performance, accurate results will still be obtained.
-    @param[in] to  Computed points, with dimensions (nPts, nOut)
+    @param[in] to  Computed points, with dimensions (nPts, nOut), where nPts the desired number of points
     */
     void tranGridForward(
         PointI const & lbnd,
@@ -335,6 +336,24 @@ public:
         Array2D & to
     ) const {
         _tranGrid(lbnd, ubnd, tol, maxpix, true, to);
+    }
+
+    /**
+    Transform a grid of points in the inverse direction, returning the results as a new Array2D
+
+    See the overload of tranGridForward that outputs the data as the last argument
+    for more information
+    */
+    Array2D tranGridForward(
+        PointI const & lbnd,
+        PointI const & ubnd,
+        double tol,
+        int maxpix,
+        int nPts
+    ) const {
+        Array2D to = ndarray::allocate(nPts, getNout());
+        _tranGrid(lbnd, ubnd, tol, maxpix, true, to);
+        return to;
     }
 
     /**
@@ -350,6 +369,23 @@ public:
         Array2D & to
     ) const {
         _tranGrid(lbnd, ubnd, tol, maxpix, false, to);
+    }
+
+    /**
+    Transform a grid of points in the inverse direction
+
+    See tranGridForward for the arguments, swapping nIn and nOut
+    */
+    Array2D tranGridInverse(
+        PointI const & lbnd,
+        PointI const & ubnd,
+        double tol,
+        int maxpix,
+        int nPts
+    ) const {
+        Array2D to = ndarray::allocate(nPts, getNin());
+        _tranGrid(lbnd, ubnd, tol, maxpix, false, to);
+        return to;
     }
 
 protected:

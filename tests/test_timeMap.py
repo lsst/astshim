@@ -19,7 +19,6 @@ class TestTimeMap(MappingTestCase):
         self.assertEqual(timemap.getNin(), 1)
         self.assertEqual(timemap.getNout(), 1)
 
-        self.checkCast(timemap, goodType=astshim.Mapping, badType=astshim.ZoomMap)
         self.checkCopy(timemap)
         self.checkPersistence(timemap)
         self.checkBasicSimplify(timemap)

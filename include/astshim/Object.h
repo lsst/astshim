@@ -24,7 +24,6 @@
 
 #include <ostream>
 #include <memory>
-#include <vector>
 
 #include "astshim/base.h"
 #include "astshim/detail/utils.h"
@@ -52,10 +51,6 @@ private:
 
 public:
     using ObjectPtr = std::unique_ptr<AstObject, Deleter>;
-    typedef std::vector<double> PointD;
-    typedef std::vector<int> PointI;
-    // using PointD = std::vector<double>;
-    // using PointI = std::vector<int>;
 
     virtual ~Object() {}
 
