@@ -1,4 +1,3 @@
-setupRequired(utils)
 setupRequired(sconsUtils)
 setupRequired(ndarray)
 setupRequired(numpy)
