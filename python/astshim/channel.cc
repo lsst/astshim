@@ -19,6 +19,8 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
+#include <memory>
+
 #include <pybind11/pybind11.h>
 //#include <pybind11/stl.h>
 
@@ -36,7 +38,7 @@ PYBIND11_PLUGIN(channel) {
 
     py::module mod("channel", "Python wrapper for Channel");
 
-    py::class_<Channel, Object> cls(mod, "Channel");
+    py::class_<Channel, std::shared_ptr<Channel>, Object> cls(mod, "Channel");
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a="");
 

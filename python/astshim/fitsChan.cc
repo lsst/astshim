@@ -20,6 +20,7 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <complex>
+#include <memory>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/complex.h>
@@ -79,7 +80,7 @@ PYBIND11_PLUGIN(fitsChan) {
     wrapFoundValue<bool>(mod, "L");
 
     // Wrap FitsChan
-    py::class_<FitsChan, Channel> cls(mod, "FitsChan");
+    py::class_<FitsChan, std::shared_ptr<FitsChan>, Channel> cls(mod, "FitsChan");
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a="");
 

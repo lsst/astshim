@@ -20,6 +20,7 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <iostream>
+#include <memory>
 
 #include <pybind11/pybind11.h>
 
@@ -34,7 +35,7 @@ PYBIND11_PLUGIN(stream) {
     py::module mod("stream", "Python wrapper for Stream.h");
 
     // Stream
-    py::class_<Stream> clsStream(mod, "Stream");
+    py::class_<Stream, std::shared_ptr<Stream>> clsStream(mod, "Stream");
 
     clsStream.def(py::init<std::istream *, std::ostream *>(), "istream"_a, "ostream"_a);
     clsStream.def(py::init<>());
@@ -45,14 +46,14 @@ PYBIND11_PLUGIN(stream) {
     clsStream.def("getIsFits", &Stream::getIsFits);
 
     // FileStream
-    py::class_<FileStream, Stream> clsFileStream(mod, "FileStream");
+    py::class_<FileStream, std::shared_ptr<FileStream>, Stream> clsFileStream(mod, "FileStream");
 
     clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a=false);
 
     clsFileStream.def("getPath", &FileStream::getPath);
 
     // StringStream
-    py::class_<StringStream, Stream> clsStringStream(mod, "StringStream");
+    py::class_<StringStream, std::shared_ptr<StringStream>, Stream> clsStringStream(mod, "StringStream");
 
     clsStringStream.def(py::init<std::string const &>(), "data"_a="");
 

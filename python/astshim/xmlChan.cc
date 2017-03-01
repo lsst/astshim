@@ -19,6 +19,8 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
+#include <memory>
+
 #include <pybind11/pybind11.h>
 
 #include "astshim/Channel.h"
@@ -34,7 +36,7 @@ PYBIND11_PLUGIN(xmlChan) {
 
     py::module mod("xmlChan", "Python wrapper for XmlChan");
 
-    py::class_<XmlChan, Channel> cls(mod, "XmlChan");
+    py::class_<XmlChan, std::shared_ptr<XmlChan>, Channel> cls(mod, "XmlChan");
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a="");
 
