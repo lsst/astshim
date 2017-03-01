@@ -5,7 +5,7 @@ import unittest
 import astshim
 from astshim.test import ObjectTestCase
 
-DataDir = os.path.join(os.path.dirname(__file__), "data")
+DataDir = os.path.join(os.path.dirname(__file__))
 
 
 class TestObject(ObjectTestCase):
