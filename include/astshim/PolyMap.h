@@ -55,8 +55,8 @@ public:
     @param[in] coeff_f  A `(2 + nin) x ncoeff_f` matrix of coefficients.
             Each row of `2 + nin` elements describe a single coefficient of the forward transformation.
             Within each such row, the first element is the coefficient value; the next element is
-            the integer index of the @ref PolyMap output which uses the coefficient within its defining polynomial
-            (the first output has index 1); the remaining elements of
+            the integer index of the @ref PolyMap output which uses the coefficient within its defining
+            polynomial (the first output has index 1); the remaining elements of
             the row give the integer powers to use with each input coordinate value (powers
             must not be negative, and floating point values are rounded to the nearest integer).
 

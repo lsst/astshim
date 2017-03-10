@@ -50,8 +50,9 @@ PYBIND11_PLUGIN(specFrame) {
     cls.def("getAlignStdOfRest", &SpecFrame::getAlignStdOfRest);
     cls.def("getRefDec", &SpecFrame::getRefDec);
     cls.def("getRefRA", &SpecFrame::getRefRA);
-    cls.def("getRefPos", (std::vector<double> (SpecFrame::*)(SkyFrame const &) const) &SpecFrame::getRefPos, "frame"_a);
-    cls.def("getRefPos", (std::vector<double> (SpecFrame::*)() const) &SpecFrame::getRefPos);
+    cls.def("getRefPos", (std::vector<double>(SpecFrame::*)(SkyFrame const &) const) & SpecFrame::getRefPos,
+            "frame"_a);
+    cls.def("getRefPos", (std::vector<double>(SpecFrame::*)() const) & SpecFrame::getRefPos);
     cls.def("getRestFreq", &SpecFrame::getRestFreq);
     cls.def("getSourceSys", &SpecFrame::getSourceSys);
     cls.def("getSourceVel", &SpecFrame::getSourceVel);

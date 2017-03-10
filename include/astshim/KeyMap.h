@@ -111,7 +111,8 @@ public:
     See also hasKey, which does not check if the value is defined
     */
     bool defined(std::string const &key) const {
-        bool ret = static_cast<bool>(astMapDefined(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str()));
+        bool ret = static_cast<bool>(
+                astMapDefined(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str()));
         assertOK();
         return ret;
     }
@@ -135,7 +136,8 @@ public:
     See also defined, which also checks that the value is defined
     */
     bool hasKey(std::string const &key) const {
-        bool ret = static_cast<bool>(astMapHasKey(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str()));
+        bool ret = static_cast<bool>(
+                astMapHasKey(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str()));
         assertOK();
         return ret;
     }
@@ -170,7 +172,8 @@ public:
         std::vector<double> retVec(size);
         if (size > 0) {
             int nret;  // should equal size after the call
-            astMapGet1D(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret, retVec.data());
+            astMapGet1D(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret,
+                        retVec.data());
         }
         assertOK();
         return retVec;
@@ -192,7 +195,8 @@ public:
         std::vector<float> retVec(size);
         if (size > 0) {
             int nret;  // should equal size after the call
-            astMapGet1F(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret, retVec.data());
+            astMapGet1F(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret,
+                        retVec.data());
         }
         assertOK();
         return retVec;
@@ -214,7 +218,8 @@ public:
         std::vector<int> retVec(size);
         if (size > 0) {
             int nret;  // should equal size after the call
-            astMapGet1I(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret, retVec.data());
+            astMapGet1I(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret,
+                        retVec.data());
         }
         assertOK();
         return retVec;
@@ -236,7 +241,8 @@ public:
         std::vector<short int> retVec(size);
         if (size > 0) {
             int nret;  // should equal size after the call
-            astMapGet1S(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret, retVec.data());
+            astMapGet1S(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret,
+                        retVec.data());
         }
         assertOK();
         return retVec;
@@ -258,7 +264,8 @@ public:
         std::vector<char unsigned> retVec(size);
         if (size > 0) {
             int nret;  // should equal size after the call
-            astMapGet1B(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret, retVec.data());
+            astMapGet1B(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), size, &nret,
+                        retVec.data());
         }
         assertOK();
         return retVec;
@@ -268,7 +275,8 @@ public:
     std::string getC(std::string const &key, int ind) const {
         int const maxChar = 1 + astMapLenC(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str());
         char charArr[maxChar];
-        if (!astMapGetElemC(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), maxChar, ind, charArr)) {
+        if (!astMapGetElemC(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), maxChar, ind,
+                            charArr)) {
             throwKeyNotFound(key);
         }
         assertOK();

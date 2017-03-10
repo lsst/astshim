@@ -67,16 +67,23 @@ PYBIND11_PLUGIN(mapping) {
     cls.def("rate", &Mapping::rate, "at"_a, "ax1"_a, "ax2"_a);
     cls.def("setReport", &Mapping::setReport, "report"_a);
     cls.def("simplify", &Mapping::simplify);
-    // wrap the overloads of tranForward, tranInverse, tranGridForward and tranGridInverse that return a new result
-    cls.def("tranForward", (Array2D(Mapping::*)(ConstArray2D const &) const) & Mapping::tranForward, "from"_a);
-    cls.def("tranForward", (std::vector<double>(Mapping::*)(std::vector<double> const &) const) & Mapping::tranForward, "from"_a);
-    cls.def("tranInverse", (Array2D(Mapping::*)(ConstArray2D const &) const) & Mapping::tranInverse, "from"_a);
-    cls.def("tranInverse", (std::vector<double>(Mapping::*)(std::vector<double> const &) const) & Mapping::tranInverse, "from"_a);
+    // wrap the overloads of tranForward, tranInverse, tranGridForward and tranGridInverse that return a new
+    // result
+    cls.def("tranForward", (Array2D(Mapping::*)(ConstArray2D const &) const) & Mapping::tranForward,
+            "from"_a);
+    cls.def("tranForward",
+            (std::vector<double>(Mapping::*)(std::vector<double> const &) const) & Mapping::tranForward,
+            "from"_a);
+    cls.def("tranInverse", (Array2D(Mapping::*)(ConstArray2D const &) const) & Mapping::tranInverse,
+            "from"_a);
+    cls.def("tranInverse",
+            (std::vector<double>(Mapping::*)(std::vector<double> const &) const) & Mapping::tranInverse,
+            "from"_a);
     cls.def("tranGridForward", (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
-                                   Mapping::tranGridForward,
+                                       Mapping::tranGridForward,
             "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
     cls.def("tranGridInverse", (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
-                                   Mapping::tranGridInverse,
+                                       Mapping::tranGridInverse,
             "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
 
     return mod.ptr();

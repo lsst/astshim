@@ -686,8 +686,8 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+            inserted before the current card and the current card is left unchanged. In either
             case, if the current card on entry points to the "end-of-file", the new card
             is appended to the end of the list.
 
@@ -717,8 +717,8 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+            inserted before the current card and the current card is left unchanged. In either
             case, if the current card on entry points to the "end-of-file", the new card
             is appended to the end of the list.
 
@@ -747,8 +747,8 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+            inserted before the current card and the current card is left unchanged. In either
             case, if the current card on entry points to the "end-of-file", the new card
             is appended to the end of the list.
 
@@ -777,8 +777,8 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+            inserted before the current card and the current card is left unchanged. In either
             case, if the current card on entry points to the "end-of-file", the new card
             is appended to the end of the list.
 
@@ -807,8 +807,8 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+            inserted before the current card and the current card is left unchanged. In either
             case, if the current card on entry points to the "end-of-file", the new card
             is appended to the end of the list.
 
@@ -837,8 +837,8 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+            inserted before the current card and the current card is left unchanged. In either
             case, if the current card on entry points to the "end-of-file", the new card
             is appended to the end of the list.
 
@@ -874,8 +874,8 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+            inserted before the current card and the current card is left unchanged. In either
             case, if the current card on entry points to the "end-of-file", the new card
             is appended to the end of the list.
 
