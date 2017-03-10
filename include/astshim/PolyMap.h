@@ -225,7 +225,7 @@ public:
         std::vector<double> const & lbnd,
         std::vector<double> const & ubnd
     ) const {
-        int desSize = forward ? getNin() : getNout();
+        auto const desSize = static_cast<unsigned int>(forward ? getNin() : getNout());
         if (lbnd.size() != desSize) {
             std::ostringstream os;
             os << "lbnd.size() = " << lbnd.size() << " != " << desSize

@@ -103,7 +103,7 @@ private:
         std::vector<double> const & outb,
         std::string const & options=""
      ) {
-        int const ncoord = ina.size();
+        auto const ncoord = ina.size();
         if (inb.size() != ncoord) {
             std::ostringstream os;
             os << "inb.size() = " << inb.size() << " != " << ncoord << " = ina.size()";
@@ -119,7 +119,8 @@ private:
             os << "outb.size() = " << outb.size() << " != " << ncoord << " = ina.size()";
             throw std::invalid_argument(os.str());
         }
-        return astWinMap(ncoord, ina.data(), inb.data(), outa.data(), outb.data(), options.c_str());
+        return astWinMap(static_cast<int>(ncoord), ina.data(), inb.data(), outa.data(), outb.data(),
+                         options.c_str());
     }
 };
 
