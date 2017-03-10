@@ -587,7 +587,7 @@ protected:
     }
 
 private:
-    void _assertVectorNotEmpty(std::string const &key, int size) {
+    void _assertVectorNotEmpty(std::string const &key, int size) const {
         if (size == 0) {
             std::ostringstream os;
             os << "vector supplied for key \"" << key << "\" has zero elements";
@@ -596,7 +596,7 @@ private:
     }
 
     // replace silently fails if index out of range, so check it here
-    void _assertReplaceIndexInRange(std::string const &key, int i) {
+    void _assertReplaceIndexInRange(std::string const &key, int i) const {
         int const len = length(key);
         if ((i < 0) || (i >= len)) {
             std::ostringstream os;
@@ -606,7 +606,7 @@ private:
     }
 
     // retrieve the index required to append a value to a key, and make sure the key exists
-    int _getAppendIndex(std::string const &key) {
+    int _getAppendIndex(std::string const &key) const {
         int const i = length(key);
         if (i == 0) {
             std::ostringstream os;
