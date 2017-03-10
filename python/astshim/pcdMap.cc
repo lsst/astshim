@@ -32,13 +32,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(pcdMap) {
-    py::module::import("astshim.mapping");
-
-    py::module::import("astshim.mapping");
-
     py::module mod("pcdMap", "Python wrapper for PcdMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<PcdMap, std::shared_ptr<PcdMap>, Mapping> cls(mod, "PcdMap");
 
@@ -53,4 +52,5 @@ PYBIND11_PLUGIN(pcdMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

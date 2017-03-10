@@ -31,11 +31,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(normMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("normMap", "Python wrapper for NormMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<NormMap, std::shared_ptr<NormMap>, Mapping> cls(mod, "NormMap");
 
@@ -46,4 +47,5 @@ PYBIND11_PLUGIN(normMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

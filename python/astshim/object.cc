@@ -28,11 +28,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(object) {
-    py::module::import("astshim.base");
-
     py::module mod("object", "Python wrapper for Object");
+
+    py::module::import("astshim.base");
 
     py::class_<Object, std::shared_ptr<Object>> cls(mod, "Object");
 
@@ -65,4 +66,5 @@ PYBIND11_PLUGIN(object) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

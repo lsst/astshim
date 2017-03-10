@@ -30,6 +30,7 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(stream) {
     py::module mod("stream", "Python wrapper for Stream.h");
@@ -64,4 +65,5 @@ PYBIND11_PLUGIN(stream) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

@@ -29,11 +29,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(cmpMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("cmpMap", "Python wrapper for CmpMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<CmpMap, std::shared_ptr<CmpMap>, Mapping> cls(mod, "CmpMap");
 
@@ -49,4 +50,5 @@ PYBIND11_PLUGIN(cmpMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

@@ -32,11 +32,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(channel) {
-    py::module::import("astshim.object");
-
     py::module mod("channel", "Python wrapper for Channel");
+
+    py::module::import("astshim.object");
 
     py::class_<Channel, std::shared_ptr<Channel>, Object> cls(mod, "Channel");
 
@@ -62,4 +63,5 @@ PYBIND11_PLUGIN(channel) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

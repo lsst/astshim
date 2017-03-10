@@ -31,7 +31,6 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-
 namespace {
 
 void wrapDirectionPoint(py::module & mod) {
@@ -71,12 +70,10 @@ void wrapFrameMapping(py::module & mod) {
     cls.def_readwrite("mapping", &FrameMapping::mapping);
 }
 
-}  // <anonymous>
-
 PYBIND11_PLUGIN(frame) {
-    py::module::import("astshim.mapping");
-
     py::module mod("frame", "Python wrapper for Frame");
+
+    py::module::import("astshim.mapping");
 
     wrapDirectionPoint(mod);
     wrapNReadValue(mod);
@@ -161,4 +158,5 @@ PYBIND11_PLUGIN(frame) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

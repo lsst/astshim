@@ -32,11 +32,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(unitNormMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("unitNormMap", "Python wrapper for UnitNormMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<UnitNormMap, std::shared_ptr<UnitNormMap>, Mapping> cls(mod, "UnitNormMap");
 
@@ -47,4 +48,5 @@ PYBIND11_PLUGIN(unitNormMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

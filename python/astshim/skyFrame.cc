@@ -33,11 +33,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(skyFrame) {
-    py::module::import("astshim.frame");
-
     py::module mod("skyFrame", "Python wrapper for SkyFrame");
+
+    py::module::import("astshim.frame");
 
     py::class_<SkyFrame, std::shared_ptr<SkyFrame>, Frame> cls(mod, "SkyFrame");
 
@@ -76,4 +77,5 @@ PYBIND11_PLUGIN(skyFrame) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

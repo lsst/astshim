@@ -31,6 +31,7 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(mapSplit) {
     py::module mod("mapSplit", "Python wrapper for MapSplit");
@@ -46,4 +47,5 @@ PYBIND11_PLUGIN(mapSplit) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

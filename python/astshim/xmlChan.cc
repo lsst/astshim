@@ -30,11 +30,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(xmlChan) {
-    py::module::import("astshim.channel");
-
     py::module mod("xmlChan", "Python wrapper for XmlChan");
+
+    py::module::import("astshim.channel");
 
     py::class_<XmlChan, std::shared_ptr<XmlChan>, Channel> cls(mod, "XmlChan");
 
@@ -50,4 +51,5 @@ PYBIND11_PLUGIN(xmlChan) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

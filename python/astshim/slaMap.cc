@@ -32,11 +32,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(slaMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("slaMap", "Python wrapper for SlaMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<SlaMap, std::shared_ptr<SlaMap>, Mapping> cls(mod, "SlaMap");
 
@@ -48,4 +49,5 @@ PYBIND11_PLUGIN(slaMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

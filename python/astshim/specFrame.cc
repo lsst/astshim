@@ -34,11 +34,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(specFrame) {
-    py::module::import("astshim.frame");
-
     py::module mod("specFrame", "Python wrapper for SpecFrame");
+
+    py::module::import("astshim.frame");
 
     py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame> cls(mod, "SpecFrame");
 
@@ -79,4 +80,5 @@ PYBIND11_PLUGIN(specFrame) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

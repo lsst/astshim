@@ -34,14 +34,14 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(mapping) {
+    py::module mod("mapping", "Python wrapper for Mapping");
+
     py::module::import("astshim.object");
     py::module::import("astshim.mapBox");
     py::module::import("astshim.mapSplit");
-    py::module::import("astshim.quadApprox");
-
-    py::module mod("mapping", "Python wrapper for Mapping");
 
     // Need to import numpy for ndarray and eigen conversions
     if (_import_array() < 0) {
@@ -89,4 +89,5 @@ PYBIND11_PLUGIN(mapping) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast
