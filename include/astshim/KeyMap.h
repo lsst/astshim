@@ -393,7 +393,7 @@ public:
     }
 
     /// Add a vector of strings
-    void putC(std::string const &key, std::vector<std::string const> const &vec,
+    void putC(std::string const &key, std::vector<std::string> const &vec,
               std::string const &comment = "") {
         _assertVectorNotEmpty(key, vec.size());
         // to simplify memory management, create the key with the first element and append the rest

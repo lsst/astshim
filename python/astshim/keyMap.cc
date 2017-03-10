@@ -75,7 +75,7 @@ PYBIND11_PLUGIN(keyMap) {
     cls.def("putB", (void (KeyMap::*)(std::string const &, char unsigned, std::string const &)) &KeyMap::putB, "key"_a, "value"_a, "comment"_a="");
     cls.def("putB", (void (KeyMap::*)(std::string const &, std::vector<char unsigned> const &, std::string const &)) &KeyMap::putB, "key"_a, "vec"_a, "comment"_a="");
     cls.def("putC", (void (KeyMap::*)(std::string const &, std::string const &, std::string const &)) &KeyMap::putC, "key"_a, "value"_a, "comment"_a="");
-    cls.def("putC", (void (KeyMap::*)(std::string const &, std::vector<std::string const> const &, std::string const &)) &KeyMap::putC, "key"_a, "vec"_a, "comment"_a="");
+    cls.def("putC", (void (KeyMap::*)(std::string const &, std::vector<std::string> const &, std::string const &)) &KeyMap::putC, "key"_a, "vec"_a, "comment"_a="");
     cls.def("putA", (void (KeyMap::*)(std::string const &, Object const &, std::string const &)) &KeyMap::putA, "key"_a, "value"_a, "comment"_a="");
     cls.def("putA", (void (KeyMap::*)(std::string const &, std::vector<std::shared_ptr<Object const>> const &, std::string const &)) &KeyMap::putA, "key"_a, "vec"_a, "comment"_a="");
 
