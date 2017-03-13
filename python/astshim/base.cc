@@ -27,6 +27,7 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(base) {
     py::module mod("base", "Python wrapper for base.h");
@@ -53,4 +54,5 @@ PYBIND11_PLUGIN(base) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

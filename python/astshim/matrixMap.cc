@@ -31,11 +31,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(matrixMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("matrixMap", "Python wrapper for MatrixMap");
+
+    py::module::import("astshim.mapping");
 
     // Need to import numpy for ndarray and eigen conversions
     if (_import_array() < 0) {
@@ -45,12 +46,14 @@ PYBIND11_PLUGIN(matrixMap) {
 
     py::class_<MatrixMap, std::shared_ptr<MatrixMap>, Mapping> cls(mod, "MatrixMap");
 
-    cls.def(py::init<ndarray::Array<double, 2, 2> const &, std::string const &>(), "matrix"_a, "options"_a="");
-    cls.def(py::init<std::vector<double> const &, std::string const &>(), "diag"_a, "options"_a="");
+    cls.def(py::init<ndarray::Array<double, 2, 2> const &, std::string const &>(), "matrix"_a,
+            "options"_a = "");
+    cls.def(py::init<std::vector<double> const &, std::string const &>(), "diag"_a, "options"_a = "");
 
     cls.def("copy", &MatrixMap::copy);
 
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

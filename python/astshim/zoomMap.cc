@@ -30,11 +30,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(zoomMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("zoomMap", "Python wrapper for ZoomMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<ZoomMap, std::shared_ptr<ZoomMap>, Mapping> cls(mod, "ZoomMap");
 
@@ -46,4 +47,5 @@ PYBIND11_PLUGIN(zoomMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

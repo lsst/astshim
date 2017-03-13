@@ -28,11 +28,12 @@ using namespace pybind11::literals;
 #include "astshim/FrameSet.h"
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(frameSet) {
-    py::module::import("astshim.frame");
-
     py::module mod("frameSet", "Python wrapper for FrameSet");
+
+    py::module::import("astshim.frame");
 
     py::class_<FrameSet, std::shared_ptr<FrameSet>, Frame> cls(mod, "FrameSet");
 
@@ -65,4 +66,5 @@ PYBIND11_PLUGIN(frameSet) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

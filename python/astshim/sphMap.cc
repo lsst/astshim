@@ -30,11 +30,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(sphMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("sphMap", "Python wrapper for SphMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<SphMap, std::shared_ptr<SphMap>, Mapping> cls(mod, "SphMap");
 
@@ -47,4 +48,5 @@ PYBIND11_PLUGIN(sphMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

@@ -32,7 +32,6 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-
 namespace {
 
 template <typename T>
@@ -45,12 +44,10 @@ void wrapFoundValue(py::module &mod, std::string const & suffix) {
     cls.def_readwrite("value", &FoundValue<T>::value);
 }
 
-}  // <anonymous>
-
 PYBIND11_PLUGIN(fitsChan) {
-    py::module::import("astshim.channel");
-
     py::module mod("fitsChan", "Python wrapper for FitsChan");
+
+    py::module::import("astshim.channel");
 
     py::enum_<FitsKeyState>(mod, "FitsKeyState")
         .value("ABSENT", FitsKeyState::ABSENT)
@@ -143,4 +140,5 @@ PYBIND11_PLUGIN(fitsChan) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

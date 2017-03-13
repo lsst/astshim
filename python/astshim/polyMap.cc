@@ -34,11 +34,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(polyMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("polyMap", "Python wrapper for PolyMap");
+
+    py::module::import("astshim.mapping");
 
     // Need to import numpy for ndarray and eigen conversions
     if (_import_array() < 0) {
@@ -63,4 +64,5 @@ PYBIND11_PLUGIN(polyMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

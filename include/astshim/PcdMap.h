@@ -131,7 +131,8 @@ protected:
     }
 
 private:
-    AstPcdMap * _makeRawPcdMap(double disco, std::vector<double> const & pcdcen, std::string const & options="") {
+    AstPcdMap *_makeRawPcdMap(double disco, std::vector<double> const &pcdcen,
+                              std::string const &options = "") {
         if (pcdcen.size() != 2) {
             std::ostringstream os;
             os << "pcdcen.size() = " << pcdcen.size() << "; must be 2";

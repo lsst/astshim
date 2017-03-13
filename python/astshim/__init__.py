@@ -31,7 +31,6 @@ from .mapping import *
 from .frame import *
 from .frameSet import *
 from .keyMap import *
-from .keyMapContinued import *
 # misc
 from .mapBox import *
 from .mapSplit import *

@@ -31,11 +31,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(seriesMap) {
-    py::module::import("astshim.cmpMap");
-
     py::module mod("seriesMap", "Python wrapper for SeriesMap");
+
+    py::module::import("astshim.cmpMap");
 
     py::class_<SeriesMap, std::shared_ptr<SeriesMap>, CmpMap> cls(mod, "SeriesMap");
 
@@ -47,4 +48,5 @@ PYBIND11_PLUGIN(seriesMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

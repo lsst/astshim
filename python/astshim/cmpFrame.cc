@@ -31,11 +31,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(cmpFrame) {
-    py::module::import("astshim.frame");
-
     py::module mod("cmpFrame", "Python wrapper for CmpFrame");
+
+    py::module::import("astshim.frame");
 
     py::class_<CmpFrame, std::shared_ptr<CmpFrame>, Frame> cls(mod, "CmpFrame");
 
@@ -50,4 +51,5 @@ PYBIND11_PLUGIN(cmpFrame) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

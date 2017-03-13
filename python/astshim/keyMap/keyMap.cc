@@ -32,6 +32,7 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(keyMap) {
     py::module mod("keyMap", "Python wrapper for KeyMap");
@@ -146,4 +147,5 @@ PYBIND11_PLUGIN(keyMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

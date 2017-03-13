@@ -32,11 +32,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(winMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("winMap", "Python wrapper for WinMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<WinMap, std::shared_ptr<WinMap>, Mapping> cls(mod, "WinMap");
 
@@ -49,4 +50,5 @@ PYBIND11_PLUGIN(winMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

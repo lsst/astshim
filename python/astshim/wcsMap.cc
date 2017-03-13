@@ -30,11 +30,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(wcsMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("wcsMap", "Python wrapper for WcsMap");
+
+    py::module::import("astshim.mapping");
 
     py::enum_<WcsType>(mod, "WcsType")
         .value("AZP", WcsType::AZP)
@@ -87,4 +88,5 @@ PYBIND11_PLUGIN(wcsMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

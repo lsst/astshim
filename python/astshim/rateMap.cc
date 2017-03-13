@@ -30,11 +30,12 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(rateMap) {
-    py::module::import("astshim.mapping");
-
     py::module mod("rateMap", "Python wrapper for RateMap");
+
+    py::module::import("astshim.mapping");
 
     py::class_<RateMap, std::shared_ptr<RateMap>, Mapping> cls(mod, "RateMap");
 
@@ -46,4 +47,5 @@ PYBIND11_PLUGIN(rateMap) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

@@ -31,6 +31,7 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
+namespace {
 
 PYBIND11_PLUGIN(mapBox) {
     py::module mod("mapBox", "Python wrapper for MapBox");
@@ -58,4 +59,5 @@ PYBIND11_PLUGIN(mapBox) {
     return mod.ptr();
 }
 
+}  // <anonymous>
 }  // ast

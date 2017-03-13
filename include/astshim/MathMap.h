@@ -163,7 +163,8 @@ public:
 
     Unless indicated otherwise, if any argument of a function or operator has the value AST__BAD
     (indicating missing data), then the result of that function or operation is also AST__BAD,
-    so that such values are propagated automatically through all operations performed by MathMap transformations.
+    so that such values are propagated automatically through all operations performed by MathMap
+    transformations.
     The special value AST__BAD can be represented in expressions by the symbolic constant `<bad>`.
     A `<bad>` result (i.e. equal to AST__BAD) is also produced in response to any numerical error
     (such as division by zero or numerical overflow), or if an invalid argument value is provided to
@@ -196,8 +197,8 @@ public:
     - `x1 || x2`: Boolean OR between `x1` and `x2`, returning 1 if either `x1` or `x2` are non-zero,
          and 0 otherwise. This operator implements tri-state logic. (The synonym " .or." is also provided
          for compatibility with Fortran.)
-    - `x1 ^^ x2`: Boolean exclusive OR (XOR) between `x1` and `x2`, returning 1 if exactly one of `x1` and `x2`
-         is non-zero, and 0 otherwise. Tri-state logic is not used with this operator.
+    - `x1 ^^ x2`: Boolean exclusive OR (XOR) between `x1` and `x2`, returning 1 if exactly one of `x1` and
+         `x2` is non-zero, and 0 otherwise. Tri-state logic is not used with this operator.
          (The synonyms " .neqv." and " .xor." are also provided for compatibility with Fortran,
          although the second of these is not standard.)
     - `x1 .eqv. x2`: This is provided only for compatibility with Fortran and tests whether the boolean states
@@ -208,22 +209,26 @@ public:
 
     ### Relational Operators:
 
-    Relational operators return the boolean result (0 or 1) of comparing the values of two floating point values
-    for equality or inequality. The value AST__BAD may also be returned if either argument is `<bad>`.
+    Relational operators return the boolean result (0 or 1) of comparing the values of two floating point
+    values for equality or inequality. The value AST__BAD may also be returned if either argument is `<bad>`.
 
     The following relational operators are available:
     - `x1 == x2`: Tests whether `x1` equals `x1`. (The synonym " .eq." is also provided
          for compatibility with Fortran.)
-    - `x1 != x2`: Tests whether `x1` is unequal to `x2`. (The synonym " .ne." is also provided for compatibility with Fortran.)
-    - `x1 > x2`: Tests whether `x1` is greater than `x2`. (The synonym " .gt." is also provided for compatibility with Fortran.)
-    - `x1 >= x2`: Tests whether `x1` is greater than or equal to `x2`. (The synonym " .ge." is also provided for compatibility with Fortran.)
-    - `x1 < x2`: Tests whether `x1` is less than `x2`. (The synonym " .lt." is also provided
-         for compatibility with Fortran.)
-    - `x1 <= x2`: Tests whether `x1` is less than or equal to `x2`. (The synonym " .le." is also provided
-         for compatibility with Fortran.)
+    - `x1 != x2`: Tests whether `x1` is unequal to `x2`.
+        (The synonym " .ne." is also provided for compatibility with Fortran.)
+    - `x1 > x2`: Tests whether `x1` is greater than `x2`.
+        (The synonym " .gt." is also provided for compatibility with Fortran.)
+    - `x1 >= x2`: Tests whether `x1` is greater than or equal to `x2`.
+        (The synonym " .ge." is also provided for compatibility with Fortran.)
+    - `x1 < x2`: Tests whether `x1` is less than `x2`.
+        (The synonym " .lt." is also provided for compatibility with Fortran.)
+    - `x1 <= x2`: Tests whether `x1` is less than or equal to `x2`.
+        (The synonym " .le." is also provided for compatibility with Fortran.)
 
     Note that relational operators cannot usefully be used to compare values with the `<bad>` value
-    (representing missing data), because the result is always `<bad>`. The isbad() function should be used instead.
+    (representing missing data), because the result is always `<bad>`. The isbad() function should be used
+    instead.
 
     ### Bitwise Operators:
 
@@ -323,13 +328,15 @@ public:
     - `<dig>`: Number of decimal digits of precision available in a floating point (double) value.
     - `<e>`: Base of natural logarithms.
     - `<epsilon>`: Smallest positive number such that `1.0+<epsilon>` is distinguishable from unity.
-    - `<mant_dig>`: The number of base `<radix>` digits stored in the mantissa of a floating point (double) value.
+    - `<mant_dig>`: The number of base `<radix>` digits stored in the mantissa of a floating point (double)
+        value.
     - `<max>`: Maximum representable floating point (double) value.
     - `<max_10_exp>`: Maximum integer such that 10 raised to that power can be represented
              as a floating point (double) value.
     - `<max_exp>`: Maximum integer such that `<radix>` raised to that power minus 1 can be represented
          as a floating point (double) value.
-    - `<min>`: Smallest positive number which can be represented as a normalised floating point (double) value.
+    - `<min>`: Smallest positive number which can be represented as a normalised floating point (double)
+        value.
     - `<min_10_exp>`: Minimum negative integer such that 10 raised to that power can be represented as
          a normalised floating point (double) value.
     - `<min_exp>`: Minimum negative integer such that `<radix>` raised to that power minus 1
