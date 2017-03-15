@@ -58,8 +58,8 @@ PYBIND11_PLUGIN(mapping) {
     cls.def("isInverted", &Mapping::isInverted);
     cls.def("getIsLinear", &Mapping::getIsLinear);
     cls.def("getReport", &Mapping::getReport);
-    cls.def("getTranForward", &Mapping::getTranForward);
-    cls.def("getTranInverse", &Mapping::getTranInverse);
+    cls.def("hasTranForward", &Mapping::hasTranForward);
+    cls.def("hasTranInverse", &Mapping::hasTranInverse);
     cls.def("getInverse", &Mapping::getInverse);
     cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
     cls.def("of", &Mapping::of, "first"_a);

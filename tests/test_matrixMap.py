@@ -16,8 +16,8 @@ class TestMatrixMap(MappingTestCase):
         self.assertEqual(mm.getClass(), "MatrixMap")
         self.assertEqual(mm.getNin(), 2)
         self.assertEqual(mm.getNout(), 2)
-        self.assertTrue(mm.getTranForward())
-        self.assertTrue(mm.getTranInverse())
+        self.assertTrue(mm.hasTranForward())
+        self.assertTrue(mm.hasTranInverse())
 
         self.checkBasicSimplify(mm)
         self.checkCopy(mm)
@@ -54,8 +54,8 @@ class TestMatrixMap(MappingTestCase):
         mm = astshim.MatrixMap(matrix)
         self.assertEqual(mm.getNin(), 2)
         self.assertEqual(mm.getNout(), 3)
-        self.assertTrue(mm.getTranForward())
-        self.assertFalse(mm.getTranInverse())
+        self.assertTrue(mm.hasTranForward())
+        self.assertFalse(mm.hasTranInverse())
 
         pin = np.array([
             [1.0, 0.0],

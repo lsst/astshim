@@ -110,7 +110,7 @@ public:
     but is named `hasTranForward` instead of `getTranForward` for clarity,
     since it does not return a transform.
     */
-    bool getTranForward() const { return getB("TranForward"); }
+    bool hasTranForward() const { return getB("TranForward"); }
 
     /**
     Is the inverse transform available?
@@ -119,7 +119,7 @@ public:
     but is named `hasTranInverse` instead of `getTranInverse` for clarity,
     since it does not return a transform.
     */
-    bool getTranInverse() const { return getB("TranInverse"); }
+    bool hasTranInverse() const { return getB("TranInverse"); }
 
     /**
     Get an inverse mapping
@@ -127,7 +127,7 @@ public:
     An inverse mapping is a deep copy of a mapping whose @ref Mapping_Invert "Invert" attribute
     has been toggled, as indicated by @ref isInverted. This swaps the meaning of "input" and "output",
     and of "forward" and "inverse". Thus it swaps the behavior of @ref tranForward and @refTranInverse,
-    @ref getNin and @ref getNout, @ref getTranForward and @ref getTranInverse and so on.
+    @ref getNin and @ref getNout, @ref hasTranForward and @ref hasTranInverse and so on.
 
     Note that the inverse mapping contains exactly the same model coefficients as the original,
     but they are used by @tranInverse instead of @tranForward. Thus for example if a @ref ZoomMap
