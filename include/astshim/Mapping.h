@@ -89,8 +89,7 @@ public:
     Is this an inverted mapping?
 
     Note: this gets the @ref Mapping_Invert "Invert" attribute.
-    This method is not called `getInvert` because that is too similar to @ref getInverse
-    and because astshim attempts to discourage use of the attribute.
+    This method is not called `getInvert` because that is too similar to @ref getInverse.
     */
     bool isInverted() const { return getB("Invert"); }
 
@@ -105,16 +104,36 @@ public:
     bool getReport() const { return getB("Report"); }
 
     /**
-    Get @ref Mapping_TranForward "TranForward": is the forward transform defined?
+    Is the forward transform available?
+
+    @note This gets the @ref Mapping_TranForward "TranForward" attribute,
+    but is named `hasTranForward` instead of `getTranForward` for clarity,
+    since it does not return a transform.
     */
     bool getTranForward() const { return getB("TranForward"); }
 
     /**
-    Get @ref Mapping_TranInverse "TranInverse": is the inverse transform defined?
+    Is the inverse transform available?
+
+    @note This gets the @ref Mapping_TranInverse "TranInverse" attribute,
+    but is named `hasTranInverse` instead of `getTranInverse` for clarity,
+    since it does not return a transform.
     */
     bool getTranInverse() const { return getB("TranInverse"); }
 
-    /// Get an inverse mapping
+    /**
+    Get an inverse mapping
+
+    An inverse mapping is a deep copy of a mapping whose @ref Mapping_Invert "Invert" attribute
+    has been toggled, as indicated by @ref isInverted. This swaps the meaning of "input" and "output",
+    and of "forward" and "inverse". Thus it swaps the behavior of @ref tranForward and @refTranInverse,
+    @ref getNin and @ref getNout, @ref getTranForward and @ref getTranInverse and so on.
+
+    Note that the inverse mapping contains exactly the same model coefficients as the original,
+    but they are used by @tranInverse instead of @tranForward. Thus for example if a @ref ZoomMap
+    has a zoom factor of 4.0 then its inverse also reports a zoom factor of 4.0 (despite behaving
+    like an uninverted @ref ZoomMap with zoom factor of 0.25).
+    */
     std::shared_ptr<Mapping> getInverse() const;
 
     /**
