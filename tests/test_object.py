@@ -1,6 +1,8 @@
 from __future__ import absolute_import, division, print_function
 import unittest
 
+import numpy as np
+
 import astshim
 from astshim.test import ObjectTestCase
 
@@ -78,6 +80,36 @@ class TestObject(ObjectTestCase):
         del cp
         self.assertEqual(obj.getNobject(), initialNumObj)
         self.assertEqual(obj.getRefCount(), 1)
+
+    def test_error_handling(self):
+        """Test handling of AST errors
+        """
+        # To introduce an AST error construct a PolyMap with no inverse mapping
+        # and then try to transform in the inverse direction.
+        coeff_f = np.array([
+            [1.2, 1, 2, 0],
+            [-0.5, 1, 1, 1],
+            [1.0, 2, 0, 1],
+        ])
+        pm = astshim.PolyMap(coeff_f, 2, "IterInverse=0")
+        pin = np.array([
+            [1.0, 0.0],
+            [2.0, 1.0],
+            [3.0, 2.0],
+        ])
+
+        # make sure the error string contains "Error"
+        try:
+            pm.tranInverse(pin)
+        except RuntimeError as e:
+            self.assertEqual(e.args[0].count("Error"), 1)
+            print(e)
+
+        # cause another error and make sure the first error message was purged
+        try:
+            pm.tranInverse(pin)
+        except RuntimeError as e:
+            self.assertEqual(e.args[0].count("Error"), 1)
 
     def test_id(self):
         """Test that ID is *not* transferred to copies"""

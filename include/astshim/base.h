@@ -22,9 +22,9 @@
 #ifndef ASTSHIM_BASE_H
 #define ASTSHIM_BASE_H
 
-#include <limits>
-#include <sstream>
+#include <string>
 #include <stdexcept>
+#include <vector>
 
 #include "ndarray.h"
 
@@ -77,22 +77,11 @@ Throw std::runtime_error if AST's state is bad
 
 @param  rawPtr1  An AST object to free if status is bad
 @param  rawPtr2  An AST object to free if status is bad
-*/
-inline void assertOK(AstObject * rawPtr1=nullptr, AstObject * rawPtr2=nullptr) {
-    if (!astOK) {
-        if (rawPtr1) {
-            astAnnul(rawPtr1);
-        }
-        if (rawPtr2) {
-            astAnnul(rawPtr2);
-        }
-        std::ostringstream os;
-        os << "failed with AST status = " << astStatus;
-        astClearStatus;
-        throw std::runtime_error(os.str());
-    }
-}
 
+@note on the first call an error handler is registered
+that saves error messages to a buffer.
+*/
+void assertOK(AstObject * rawPtr1=nullptr, AstObject * rawPtr2=nullptr);
 
 /**
 Control whether graphical escape sequences are included in strings.
