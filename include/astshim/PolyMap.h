@@ -112,7 +112,9 @@ public:
             Each final output coordinate value is the sum of the terms described
             by the `ncoeff_f` columns in the supplied array.
     @param[in] nout  Number of output coordinates.
-    @param[in] options  Comma-separated list of attribute assignments.
+    @param[in] options  Comma-separated list of attribute assignments. Useful attributes include:
+        @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NiterInverse "NiterInverse" and
+        @ref PolyMap_TolIterInverse "TolIterInverse"
     */
     explicit PolyMap(
         ndarray::Array<double, 2, 2> const & coeff_f,
@@ -134,7 +136,7 @@ public:
         return std::static_pointer_cast<PolyMap>(_copyPolymorphic());
     }
 
-    /// Get @ref PolyMap_IterInverse "IterInverse": provide an iterative inverse transformation?
+    /// Get @ref PolyMap_IterInverse "IterInverse": does this provide an iterative inverse transformation?
     bool getIterInverse() const { return getB("IterInverse"); }
 
     /// Get @ref PolyMap_NiterInverse "NiterInverse": maximum number of iterations for iterative inverse.
@@ -261,7 +263,7 @@ protected:
     }
 
 private:
-    /// Make a raw AstPolyMap with forward and inverse transforms.
+    /// Make a raw AstPolyMap with specified forward and inverse transforms.
     AstPolyMap * _makeRawPolyMap(
         ndarray::Array<double, 2, 2>  const & coeff_f,
         ndarray::Array<double, 2, 2>  const & coeff_i,
@@ -289,7 +291,7 @@ private:
                           ncoeff_i, coeff_i.getData(), options.c_str());
     }
 
-    /// Make a raw AstPolyMap with only a forward transform.
+    /// Make a raw AstPolyMap with a specified forward transform and an iterative inverse.
     AstPolyMap * _makeRawPolyMap(
         ndarray::Array<double, 2, 2>  const & coeff_f,
         int nout,

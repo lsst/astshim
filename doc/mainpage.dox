@@ -9,7 +9,7 @@ a library for handling world coordinate systems in astronomy.
 For detailed documentation of AST see http://starlink.eao.hawaii.edu/devdocs/sun211.htx/sun211.html.
 
 The focus of astshim is on support for spatial mappings for use by LSST. Thus few of AST's functions
-that support time, spectra and tables have yet been wrapped. The python wrapping is done using pybind11.
+that support time, spectra and tables have yet been wrapped. The python wrapper uses pybind11.
 
 ## Differences between this and Starlink AST
 
@@ -45,7 +45,7 @@ that support time, spectra and tables have yet been wrapped. The python wrapping
     - After calling AST code the wrapper checks AST's error state and if invalid,
         the wrapper resets the AST status code and throws `std::runtime_error`.
         At present the exception contain an error number, rather than useful text,
-        and useful text is printed to stderr. I hope to fix that at some point.
+        and useful text is printed to stderr. Work is in progress to fix this.
 - The AST functions `set`, `set<X>` and `get<X>` are hidden;
     instead each class has explicit accessors for its attributes, such as @ref Object.getID.
     @ref Mapping "Mappings" are mostly immutable, so they have getters,
@@ -55,20 +55,20 @@ that support time, spectra and tables have yet been wrapped. The python wrapping
     @ref Frame "Frames" are mutable, so all frame-specific attributes have setters as well as getters.
 - @ref Channel "Channels" are constructed with a @ref Stream; subclasses are available for files and strings,
     and it is easy (in C++, but not Python) to construct a @ref Stream to use standard in and/or out.
-- astshim manages memory using standard smart pointers. Thus the following
-    AST functions are not wrapped: `astAnnul`, `astBegin`, `astClone`, `astDelete`,
-    `astEnd`, and `astExport`.
+- astshim manages memory using C++ smart pointers. Thus the following AST functions are not wrapped:
+    `astAnnul`, `astBegin`, `astClone`, `astDelete`, `astEnd`, and `astExport`.
 - Methods that output floating point data have `AST__BAD` replaced with `nan`.
 
 ### Smaller differences (not a complete list):
 
-- Methods such as @ref Object.set do not support printf formatting and extra arguments.
+- Methods such as @ref Object.set and the attributes argument of constructors do not support
+    printf formatting and extra arguments (and this may cause warnings in some compilers).
 - @ref Object.show prints its output to a provided output stream or returns a string,
     rather than printing to stdout.
-- @ref FrameSet.addAxes and @ref FrameSet.addFrame implement AST's
-    `astAddFrame(AST__ALLFRAMES, map, frame)` function, because it did two very different things.
+- @ref FrameSet.addAxes and @ref FrameSet.addFrame implement AST's `astAddFrame(AST__ALLFRAMES, map, frame)`
+    function, because the AST function does two very different things.
 - @ref FitsChan does not offer methods for getting or setting complex integers
-    (`astGetFitsCI` and `astSetFitsCI`) because that data type is not supported by standard C++.
+    (`astGetFitsCI` and `astSetFitsCI`), because that data type is not supported by standard C++.
 - @ref KeyMap has several differences:
     - Methods `get<X>` and `put<X>` work with both scalars and vectors
         (implementing `astMapGet0<X>`, `astMapGet1<X>`, `astMapPut0<X>` and `astMapPut1<X>`).
@@ -97,7 +97,8 @@ The Python interface could present a more dict-like view of KeyMap and FitsChan,
 
 ## To build
 
-- Install a minimal LSST stack that includes `utils`, `sconsUtils`, `ndarray` and `doxygen`.
+- Install a minimal [LSST DM stack](https://pipelines.lsst.io/install/index.html)
+  that includes `sconsUtils`, `pybind11`, `ndarray` and `doxygen`.
 - Install [starlink-ast](https://github.com/lsst/starlink_ast) as any LSST package.
 - Install this package in the same way as any LSST package.
 
@@ -108,16 +109,16 @@ To build only the documentation:
 
 ## Examples
 
-See the unit tests in `tests` and the example(s) in `examples`
+See the unit tests in `tests` and the examples in `examples`
 
 ## Plans
 
-- Add more unit tests.
 - Improve error reporting so exceptions have useful text and no text is printed to stderr.
-- Add doc strings to python wrapped objects.
 
 Longer term desires:
+- Support AST regions
 - Add support for building with cmake.
+- Add doc strings to python wrapped objects.
 
 ## License
 

@@ -45,7 +45,7 @@ ParallelMap Mapping::over(Mapping const & first) const {
 std::shared_ptr<Mapping> Mapping::getInverse() const {
     auto rawCopy = reinterpret_cast<AstMapping *>(astCopy(getRawPtr()));
     astInvert(rawCopy);
-    assertOK();
+    assertOK(reinterpret_cast<AstObject *>(rawCopy));
     // use false because the pointer has already been copied
     return Object::fromAstObject<Mapping>(reinterpret_cast<AstObject *>(rawCopy), false);
 }

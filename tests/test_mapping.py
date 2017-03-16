@@ -26,8 +26,8 @@ class TestMapping(MappingTestCase):
         self.assertEqual(self.zoommap.getNin(), self.nin)
         self.assertEqual(self.zoommap.getNout(), self.nin)
         self.assertFalse(self.zoommap.getReport())
-        self.assertTrue(self.zoommap.getTranForward())
-        self.assertTrue(self.zoommap.getTranInverse())
+        self.assertTrue(self.zoommap.hasTranForward())
+        self.assertTrue(self.zoommap.hasTranInverse())
 
     def test_MappingInvert(self):
         invmap = self.zoommap.getInverse()
@@ -36,8 +36,8 @@ class TestMapping(MappingTestCase):
         self.assertTrue(invmap.isInverted())
         self.assertTrue(invmap.getIsLinear())
         self.assertFalse(invmap.getIsSimple())
-        self.assertTrue(invmap.getTranForward())
-        self.assertTrue(invmap.getTranInverse())
+        self.assertTrue(invmap.hasTranForward())
+        self.assertTrue(invmap.hasTranInverse())
 
         frompos = np.array([
             [1, 3],
@@ -138,8 +138,8 @@ class TestMapping(MappingTestCase):
         self.assertTrue(simpmap.getIsSimple())
         self.assertEqual(simpmap.getNin(), self.nin)
         self.assertEqual(simpmap.getNout(), self.nin)
-        self.assertTrue(simpmap.getTranForward())
-        self.assertTrue(simpmap.getTranInverse())
+        self.assertTrue(simpmap.hasTranForward())
+        self.assertTrue(simpmap.hasTranInverse())
 
     def test_MapSplit(self):
         """Test MapSplit for a simple case"""
