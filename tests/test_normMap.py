@@ -34,7 +34,7 @@ class TestNormMap(MappingTestCase):
 
     def testNormMapMap(self):
         """Check that NormMap(Mapping) is an error"""
-        with self.assertRaises(Exception):
+        with self.assertRaises(TypeError):
             astshim.NormMap(astshim.UnitMap(1))
 
     def test_NormMapSkyFrame(self):

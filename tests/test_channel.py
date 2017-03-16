@@ -24,7 +24,7 @@ class TestChannel(MappingTestCase):
         nobj = outchan.write(zoommap)
         self.assertEqual(nobj, 1)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuntimeError):
             obj = outchan.read()
 
         instream = astshim.FileStream(path1, False)

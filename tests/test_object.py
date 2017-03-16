@@ -26,23 +26,6 @@ class TestObject(ObjectTestCase):
         self.assertEqual(obj.getIdent(), "")
         self.assertEqual(obj.getUseDefs(), True)
 
-    def test_unknown_attributes(self):
-        """Test accessing unknown attributes"""
-        obj = astshim.ZoomMap(2, 1.3)
-
-        self.assertFalse(obj.hasAttribute("NonExistentAttribute"))
-
-        with self.assertRaises(Exception):
-            obj.getC("NonExistentAttribute")
-        with self.assertRaises(Exception):
-            obj.getF("NonExistentAttribute")
-        with self.assertRaises(Exception):
-            obj.getD("NonExistentAttribute")
-        with self.assertRaises(Exception):
-            obj.getI("NonExistentAttribute")
-        with self.assertRaises(Exception):
-            obj.getL("NonExistentAttribute")
-
     def test_clear_and_test(self):
         """Test Object.clear and Object.test"""
         obj = astshim.ZoomMap(2, 1.3)
