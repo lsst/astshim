@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -34,7 +35,7 @@ class TestMatrixMap(MappingTestCase):
             [-2.0, 2.0],
             [-3.0, 4.0],
         ], dtype=float)
-        self.assertTrue(np.allclose(pout, despout))
+        assert_allclose(pout, despout)
 
         self.checkRoundTrip(mm, pin)
 
@@ -68,7 +69,8 @@ class TestMatrixMap(MappingTestCase):
             [1.0, 7.0, -4.0],
             [2.0, 12.0, -7.0],
         ], dtype=float)
-        self.assertTrue(np.allclose(pout, despout))
+        assert_allclose(pout, despout)
+
 
 if __name__ == "__main__":
     unittest.main()

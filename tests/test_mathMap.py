@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -35,8 +36,8 @@ class TestMathMap(MappingTestCase):
         theta = pout[:, 1]
         desR = np.sqrt(x * x + y * y)
         desTheta = np.arctan2(y, x)
-        self.assertTrue(np.allclose(r, desR))
-        self.assertTrue(np.allclose(theta, desTheta))
+        assert_allclose(r, desR)
+        assert_allclose(theta, desTheta)
 
         self.checkRoundTrip(mathmap, pin)
 

@@ -4,6 +4,7 @@ import sys
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -29,7 +30,7 @@ class TestNormMap(MappingTestCase):
             [30000.0, -20000.0],
         ], dtype=float)
         pout = normmap.tranForward(pin)
-        self.assertTrue(np.allclose(pout, pin))
+        assert_allclose(pout, pin)
 
     def testNormMapMap(self):
         """Check that NormMap(Mapping) is an error"""
@@ -80,7 +81,7 @@ class TestNormMap(MappingTestCase):
             [pi, pi / 2 - eps],
         ])
         pout = normmap.tranForward(pin)
-        self.assertTrue(np.allclose(pout, despout))
+        assert_allclose(pout, despout)
 
 
 if __name__ == "__main__":

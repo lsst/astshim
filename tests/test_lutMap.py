@@ -3,6 +3,7 @@ import sys
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -34,7 +35,7 @@ class TestLutMap(MappingTestCase):
         desoutdata.shape = (len(desoutdata), 1)
 
         outarr = lutmap.tranForward(indata)
-        self.assertTrue(np.allclose(outarr, desoutdata))
+        assert_allclose(outarr, desoutdata)
         self.checkRoundTrip(lutmap, indata)
 
         self.assertEqual(lutmap.getLutInterp(), 0)

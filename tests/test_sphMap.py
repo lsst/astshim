@@ -3,6 +3,7 @@ import math
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -41,7 +42,7 @@ class TestSphMap(MappingTestCase):
             [math.pi / 4, math.atan(1 / math.sqrt(2))],
         ], dtype=float)
         outdata = sphmap.tranForward(indata)
-        self.assertTrue(np.allclose(outdata, predoutdata))
+        assert_allclose(outdata, predoutdata)
 
         self.checkRoundTrip(sphmap, indata)
 

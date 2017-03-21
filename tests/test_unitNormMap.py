@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -39,10 +40,10 @@ class TestUnitNormMap(MappingTestCase):
 
             relfrompos = frompos - center
             prednorm = np.linalg.norm(relfrompos, axis=1)
-            self.assertTrue(np.allclose(norm, prednorm))
+            assert_allclose(norm, prednorm)
 
             predrelfrompos = (topos[:, 0:nin].T * norm).T
-            self.assertTrue(np.allclose(relfrompos, predrelfrompos))
+            assert_allclose(relfrompos, predrelfrompos)
 
         # UnitNormMap must have at least one input
         with self.assertRaises(Exception):
@@ -95,8 +96,8 @@ class TestUnitNormMap(MappingTestCase):
             self.assertEqual(cmpmap.getNin(), cmpmap_simp.getNin())
             self.assertEqual(cmpmap.getNout(), cmpmap_simp.getNout())
             testptview = np.array(testpoints[:, 0:cmpmap.getNin()])
-            self.assertTrue(np.allclose(cmpmap.tranForward(
-                testptview), cmpmap_simp.tranForward(testptview)))
+            assert_allclose(cmpmap.tranForward(
+                testptview), cmpmap_simp.tranForward(testptview))
 
 
 if __name__ == "__main__":

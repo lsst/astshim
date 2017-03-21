@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -35,9 +36,9 @@ class TestTranMap(MappingTestCase):
             [1, 0],
         ], dtype=float)
         topos = tranmap.tranForward(frompos)
-        self.assertTrue(np.allclose(topos, frompos))
+        assert_allclose(topos, frompos)
         rtpos = tranmap.tranInverse(topos)
-        self.assertTrue(np.allclose(frompos, rtpos * zoomfac))
+        assert_allclose(frompos, rtpos * zoomfac)
 
         with self.assertRaises(AssertionError):
             self.checkRoundTrip(tranmap, frompos)
@@ -62,7 +63,7 @@ class TestTranMap(MappingTestCase):
             [1, 0],
         ], dtype=float)
         topos = tranmap.tranForward(frompos)
-        self.assertTrue(np.allclose(topos, frompos * zoomfac))
+        assert_allclose(topos, frompos * zoomfac)
 
         self.checkRoundTrip(tranmap, frompos)
 

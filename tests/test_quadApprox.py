@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -19,7 +20,7 @@ class TestQuadApprox(MappingTestCase):
         qa = astshim.QuadApprox(polymap, [-1, -1], [1, 1], 3, 3)
         self.assertAlmostEqual(qa.rms, 0)
         self.assertEqual(len(qa.fit), 6)
-        self.assertTrue(np.allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5]))
+        assert_allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5])
 
 
 if __name__ == "__main__":

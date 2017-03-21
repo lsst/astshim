@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -26,7 +27,7 @@ class TestWcsMap(MappingTestCase):
         ], dtype=float)
         predoutdata = indata * 2 + 1
         outdata = winmap.tranForward(indata)
-        self.assertTrue(np.allclose(outdata, predoutdata))
+        assert_allclose(outdata, predoutdata)
 
         self.checkRoundTrip(winmap, indata)
 

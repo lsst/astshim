@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -66,8 +67,8 @@ class TestMapping(MappingTestCase):
         ubndin = np.maximum(inbnd_a, inbnd_b)
         predlbndOut = lbndin * zoom + shift
         predubndOut = ubndin * zoom + shift
-        self.assertTrue(np.allclose(mapbox.lbndOut, predlbndOut))
-        self.assertTrue(np.allclose(mapbox.ubndOut, predubndOut))
+        assert_allclose(mapbox.lbndOut, predlbndOut)
+        assert_allclose(mapbox.ubndOut, predubndOut)
 
         # note that mapbox.xl and xu is only partially predictable
         # because any X from the input gives the same Y
@@ -77,8 +78,8 @@ class TestMapping(MappingTestCase):
 
         # confirm that order of inbnd_a, inbnd_b doesn't matter
         mapbox2 = astshim.MapBox(winmap, inbnd_b, inbnd_a)
-        self.assertTrue(np.allclose(mapbox2.lbndOut, mapbox.lbndOut))
-        self.assertTrue(np.allclose(mapbox2.ubndOut, mapbox.ubndOut))
+        assert_allclose(mapbox2.lbndOut, mapbox.lbndOut)
+        assert_allclose(mapbox2.ubndOut, mapbox.ubndOut)
 
         # the xl and xu need only agree on the diagonal, as above
         for i in range(2):
@@ -93,7 +94,7 @@ class TestMapping(MappingTestCase):
             [1.3, 0.0],
             [0.0, 1.3]
         ], dtype=float)
-        self.assertTrue(np.allclose(coeffs, descoeffs))
+        assert_allclose(coeffs, descoeffs)
 
     def test_QuadApprox(self):
         # simple parabola
@@ -105,7 +106,7 @@ class TestMapping(MappingTestCase):
         qa = astshim.QuadApprox(polymap, [-1, -1], [1, 1], 3, 3)
         self.assertAlmostEqual(qa.rms, 0)
         self.assertEqual(len(qa.fit), 6)
-        self.assertTrue(np.allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5]))
+        assert_allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5])
 
     def test_MappingRate(self):
         """Exercise Mapping.rate for a trivial case"""
@@ -149,6 +150,7 @@ class TestMapping(MappingTestCase):
             self.assertEqual(split.splitMap.getNin(), 1)
             self.assertEqual(split.splitMap.getNout(), 1)
             self.assertEqual(split.origOut[0], i + 1)
+
 
 if __name__ == "__main__":
     unittest.main()

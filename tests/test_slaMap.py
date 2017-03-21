@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -29,7 +30,7 @@ class TestSlaMap(MappingTestCase):
         pout = slamap.tranForward(pin)
         predpout = pin
         predpout[:, 0] = last - pin[:, 0]
-        self.assertTrue(np.allclose(pout, predpout))
+        assert_allclose(pout, predpout)
 
         self.checkRoundTrip(slamap, pin)
 

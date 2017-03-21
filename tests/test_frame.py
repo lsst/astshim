@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function
 import math
 import unittest
 
-import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -157,7 +157,7 @@ class TestFrame(MappingTestCase):
         ]
         self.assertAlmostEqual(res.d1, d1pred)
         self.assertAlmostEqual(res.d2, d2pred)
-        self.assertTrue(np.allclose(res.point, predpoint))
+        assert_allclose(res.point, predpoint)
 
     def test_FrameUnformat(self):
         frame = astshim.Frame(2)
