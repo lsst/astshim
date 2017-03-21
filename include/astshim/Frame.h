@@ -1099,6 +1099,10 @@ public:
     @param[in] perm  A list of axes in their new order, using the current axis numbering.
         Axis numbers start at 1 for the first axis. Only genuine permutations of the axis order
         are permitted, so each axis must be referenced exactly once.
+
+    When used on a @ref FrameSet, the axes of the current frame are permuted and all connecting
+    mappings are updated accordingly, so that current behavior is preserved (except for the new
+    axis order for output data).
     */
     void permAxes(std::vector<int> perm) {
         detail::assertEqual(perm.size(), "perm.size()", getNaxes(), "naxes");
