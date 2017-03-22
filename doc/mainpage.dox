@@ -44,8 +44,6 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
         before calling AST code.
     - After calling AST code the wrapper checks AST's error state and if invalid,
         the wrapper resets the AST status code and throws `std::runtime_error`.
-        At present the exception contain an error number, rather than useful text,
-        and useful text is printed to stderr. Work is in progress to fix this.
 - The AST functions `set`, `set<X>` and `get<X>` are hidden;
     instead each class has explicit accessors for its attributes, such as @ref Object.getID.
     @ref Mapping "Mappings" are mostly immutable, so they have getters,
@@ -110,15 +108,6 @@ To build only the documentation:
 ## Examples
 
 See the unit tests in `tests` and the examples in `examples`
-
-## Plans
-
-- Improve error reporting so exceptions have useful text and no text is printed to stderr.
-
-Longer term desires:
-- Support AST regions
-- Add support for building with cmake.
-- Add doc strings to python wrapped objects.
 
 ## License
 
