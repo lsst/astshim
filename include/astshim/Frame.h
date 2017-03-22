@@ -1101,7 +1101,7 @@ public:
         are permitted, so each axis must be referenced exactly once.
     */
     void permAxes(std::vector<int> perm) {
-        detail::assertEqual(perm.size(), "perm.size()", getNin(), "naxes");
+        detail::assertEqual(perm.size(), "perm.size()", getNaxes(), "naxes");
         astPermAxes(getRawPtr(), perm.data());
         assertOK();
     }
