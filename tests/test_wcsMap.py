@@ -3,6 +3,7 @@ import math
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -51,7 +52,7 @@ class TestWcsMap(MappingTestCase):
             [0, 0.95885108],  # by observation, not computation
         ])
         outdata = wcsmap.tranForward(indata)
-        self.assertTrue(np.allclose(outdata, predoutdata))
+        assert_allclose(outdata, predoutdata)
 
         self.checkRoundTrip(wcsmap, indata)
 

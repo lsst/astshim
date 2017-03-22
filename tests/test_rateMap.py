@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -25,7 +26,7 @@ class TestRateMap(MappingTestCase):
             [-43.5, 1309.31],
         ])
         outdata = ratemap.tranForward(indata)
-        self.assertTrue(np.allclose(outdata, zoomfac))
+        assert_allclose(outdata, zoomfac)
 
     def test_RateMap2(self):
         zoomfac = 23.323
@@ -36,7 +37,7 @@ class TestRateMap(MappingTestCase):
             [-43.5, 1309.31],
         ])
         outdata = ratemap.tranForward(indata)
-        self.assertTrue(np.allclose(outdata, 0))
+        assert_allclose(outdata, 0)
 
 
 if __name__ == "__main__":

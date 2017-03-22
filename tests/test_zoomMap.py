@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -35,7 +36,7 @@ class TestZoomMap(MappingTestCase):
                 self.checkRoundTrip(zoommap, frompos)
 
                 topos = zoommap.tranForward(frompos)
-                self.assertTrue(np.allclose(frompos * zoom, topos))
+                assert_allclose(frompos * zoom, topos)
 
 
 if __name__ == "__main__":

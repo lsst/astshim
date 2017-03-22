@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -21,7 +22,7 @@ class TestPcdMap(MappingTestCase):
         self.assertEqual(pcdmap.getDisco(), coeff)
         self.assertAlmostEqual(pcdmap.getPcdCen(1), ctr[0])
         self.assertAlmostEqual(pcdmap.getPcdCen(2), ctr[1])
-        self.assertTrue(np.allclose(pcdmap.getPcdCen(), ctr))
+        assert_allclose(pcdmap.getPcdCen(), ctr)
 
         self.checkBasicSimplify(pcdmap)
         self.checkCopy(pcdmap)
@@ -29,7 +30,7 @@ class TestPcdMap(MappingTestCase):
 
         # the center maps to itself
         ctrpt = np.array([ctr], dtype=float)
-        self.assertTrue(np.allclose(pcdmap.tranForward(ctrpt), ctrpt))
+        assert_allclose(pcdmap.tranForward(ctrpt), ctrpt)
         return
 
         indata = np.array([
@@ -53,7 +54,7 @@ class TestPcdMap(MappingTestCase):
         predoutrelctr[:, 0] = predoutrad * np.cos(inrelctrdir)
         predoutrelctr[:, 1] = predoutrad * np.sin(inrelctrdir)
         predout = predoutrelctr + ctr
-        self.assertTrue(np.allclose(outdata, predout))
+        assert_allclose(outdata, predout)
 
     def test_PcdMapBadConstruction(self):
         with self.assertRaises(Exception):

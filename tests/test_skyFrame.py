@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function
 import math
 import unittest
 
-import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -121,10 +121,10 @@ class TestSkyFrame(MappingTestCase):
     def test_SkyFrameSkyRef(self):
         frame = astshim.SkyFrame()
 
-        self.assertTrue(np.allclose(frame.getSkyRef(), [0, 0]))
+        assert_allclose(frame.getSkyRef(), [0, 0])
         newSkyRef = [-4.5, 1.23]
         frame.setSkyRef(newSkyRef)
-        self.assertTrue(np.allclose(frame.getSkyRef(), newSkyRef))
+        assert_allclose(frame.getSkyRef(), newSkyRef)
 
     def test_SkyFrameSkyRefIs(self):
         frame = astshim.SkyFrame()
@@ -138,10 +138,10 @@ class TestSkyFrame(MappingTestCase):
         frame = astshim.SkyFrame()
 
         defSkyRefP = [0.0, math.pi/2]
-        self.assertTrue(np.allclose(frame.getSkyRefP(), defSkyRefP))
+        assert_allclose(frame.getSkyRefP(), defSkyRefP)
         newSkyRefP = [0.1234, 0.5643]
         frame.setSkyRefP(newSkyRefP)
-        self.assertTrue(np.allclose(frame.getSkyRefP(), newSkyRefP))
+        assert_allclose(frame.getSkyRefP(), newSkyRefP)
 
     def test_SkyFrameSkyTol(self):
         frame = astshim.SkyFrame()

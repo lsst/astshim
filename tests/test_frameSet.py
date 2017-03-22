@@ -78,26 +78,64 @@ class TestFrameSet(MappingTestCase):
         baseFrameDeep.setIdent("modifiedBase")
         self.assertEqual(frameSet.getFrame(astshim.FrameSet.BASE).getIdent(), "base")
 
-    def test_FrameSetPermutation(self):
-        """Make sure permuting frame axes also affects the mapping
+    def test_FrameSetPermutationSkyFrame(self):
+        """Test permuting FrameSet axes using a SkyFrame
 
-        If one permutes the axes of the current frame of a frame set
+        Permuting the axes of the current frame of a frame set
         *in situ* (by calling `permAxes` on the frame set itself)
-        then mappings connected to that frame are also permuted
+        should update the connected mappings.
         """
+        # test with arbitrary values that will not be wrapped by SkyFrame
+        x = 0.257
+        y = 0.832
         frame1 = astshim.Frame(2)
         unitMap = astshim.UnitMap(2)
         frame2 = astshim.SkyFrame()
         frameSet = astshim.FrameSet(frame1, unitMap, frame2)
-        self.assertAlmostEqual(frameSet.tranForward([0, 1]), [0, 1])
+        self.assertAlmostEqual(frameSet.tranForward([x, y]), [x, y])
+        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y])
 
         # permuting the axes of the current frame also permutes the mapping
         frameSet.permAxes([2, 1])
-        self.assertAlmostEqual(frameSet.tranForward([0, 1]), [1, 0])
+        self.assertAlmostEqual(frameSet.tranForward([x, y]), [y, x])
+        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [y, x])
 
         # permuting again puts things back
         frameSet.permAxes([2, 1])
-        self.assertAlmostEqual(frameSet.tranForward([0, 1]), [0, 1])
+        self.assertAlmostEqual(frameSet.tranForward([x, y]), [x, y])
+        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y])
+
+    def test_FrameSetPermutationUnequal(self):
+        """Test that permuting FrameSet axes with nIn != nOut
+
+        Permuting the axes of the current frame of a frame set
+        *in situ* (by calling `permAxes` on the frame set itself)
+        should update the connected mappings.
+
+        Make nIn != nOut in order to test DM-9899
+        FrameSet.permAxes would fail if nIn != nOut
+        """
+        # Initial mapping: 3 inputs, 2 outputs: 1-1, 2-2, 3=z
+        # Test using arbitrary values for x,y,z
+        x = 75.1
+        y = -53.2
+        z = 0.123
+        frame1 = astshim.Frame(3)
+        permMap = astshim.PermMap([1, 2, -1], [1, 2], [z])
+        frame2 = astshim.Frame(2)
+        frameSet = astshim.FrameSet(frame1, permMap, frame2)
+        self.assertAlmostEqual(frameSet.tranForward([x, y, z]), [x, y])
+        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y, z])
+
+        # permuting the axes of the current frame also permutes the mapping
+        frameSet.permAxes([2, 1])
+        self.assertAlmostEqual(frameSet.tranForward([x, y, z]), [y, x])
+        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [y, x, z])
+
+        # permuting again puts things back
+        frameSet.permAxes([2, 1])
+        self.assertAlmostEqual(frameSet.tranForward([x, y, z]), [x, y])
+        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y, z])
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -28,7 +29,7 @@ class TestTimeMap(MappingTestCase):
             [1],
         ], dtype=float)
         outdata = timemap.tranForward(indata)
-        self.assertTrue(np.allclose(outdata, indata))
+        assert_allclose(outdata, indata)
 
         self.checkRoundTrip(timemap, indata)
 
@@ -42,7 +43,7 @@ class TestTimeMap(MappingTestCase):
         ], dtype=float)
         outdata = timemap.tranForward(indata)
         predoutdata = indata - dut1 / SecPerDay
-        self.assertTrue(np.allclose(outdata, predoutdata, atol=1e-15, rtol=0))
+        assert_allclose(outdata, predoutdata, atol=1e-15, rtol=0)
 
         self.checkRoundTrip(timemap, indata)
 

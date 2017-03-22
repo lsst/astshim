@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -25,7 +26,7 @@ class TestShiftMap(MappingTestCase):
             [-43.5, 1309.31, 0.005],
         ])
         outdata = shiftmap.tranForward(indata)
-        self.assertTrue(np.allclose(outdata, indata + offset))
+        assert_allclose(outdata, indata + offset)
         self.checkRoundTrip(shiftmap, indata)
 
 

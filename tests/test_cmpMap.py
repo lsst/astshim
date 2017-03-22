@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import MappingTestCase
@@ -42,13 +43,13 @@ class TestCmpMap(MappingTestCase):
         ], dtype=float)
         predtopos = (frompos + self.shift) * self.zoom
         topos = sermap.tranForward(frompos)
-        self.assertTrue(np.allclose(topos, predtopos))
+        assert_allclose(topos, predtopos)
 
         self.checkRoundTrip(sermap, frompos)
 
         cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, True)
         cmtopos = cmpmap.tranForward(frompos)
-        self.assertTrue(np.allclose(cmtopos, predtopos))
+        assert_allclose(cmtopos, predtopos)
 
     def test_ParallelMap(self):
         parmap = astshim.ParallelMap(self.shiftmap, self.zoommap)
@@ -73,13 +74,14 @@ class TestCmpMap(MappingTestCase):
         predtopos[:, 0:2] += self.shift
         predtopos[:, 2:4] *= self.zoom
         topos = parmap.tranForward(frompos)
-        self.assertTrue(np.allclose(topos, predtopos))
+        assert_allclose(topos, predtopos)
 
         self.checkRoundTrip(parmap, frompos)
 
         cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, False)
         cmtopos = cmpmap.tranForward(frompos)
-        self.assertTrue(np.allclose(cmtopos, predtopos))
+        assert_allclose(cmtopos, predtopos)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,7 @@
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 from .channel import Channel
 from .xmlChan import XmlChan
@@ -65,31 +66,31 @@ class MappingTestCase(ObjectTestCase):
         poslist is a list of input position for a forward transform;
             a numpy array with shape [nin, num points]
             or collection that can be cast to same
-        rtol is the relative tolerance for np.allclose
-        atol is the absolute tolerance for np.allclose
+        rtol is the relative tolerance for numpy.testing.assert_allclose
+        atol is the absolute tolerance for numpy.testing.assert_allclose
         """
         poslist = np.array(poslist, dtype=float)
         # forward with tranForward, inverse with tranInverse
         to_poslist = amap.tranForward(poslist)
         rt_poslist = amap.tranInverse(to_poslist)
-        self.assertTrue(np.allclose(poslist, rt_poslist))
+        assert_allclose(poslist, rt_poslist, rtol=rtol, atol=atol)
 
         # forward with tranForward, inverse with getInverse().tranForward
         amapinv = amap.getInverse()
         rt2_poslist = amapinv.tranForward(to_poslist)
-        self.assertTrue(np.allclose(poslist, rt2_poslist))
+        assert_allclose(poslist, rt2_poslist, rtol=rtol, atol=atol)
 
         # forward and inverse with a compound map of amap.getInverse().of(amap)
         acmp = amapinv.of(amap)
-        self.assertTrue(np.allclose(poslist, acmp.tranForward(poslist)))
+        assert_allclose(poslist, acmp.tranForward(poslist), rtol=rtol, atol=atol)
 
         # test vector versions of forward and inverse
         posvec = list(poslist.flat)
         to_posvec = amap.tranForward(posvec)
-        self.assertTrue(np.allclose(to_posvec, list(to_poslist.flat)))
+        assert_allclose(to_posvec, list(to_poslist.flat), rtol=rtol, atol=atol)
 
         rt_posvec = amap.tranInverse(to_posvec)
-        self.assertTrue(np.allclose(posvec, rt_posvec))
+        assert_allclose(posvec, rt_posvec, rtol=rtol, atol=atol)
 
     def checkBasicSimplify(self, amap):
         """Check basic simplfication for a reversible mapping

@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function
 import unittest
 
-import numpy as np
+from numpy.testing import assert_allclose
 
 import astshim
 from astshim.test import ObjectTestCase
@@ -60,9 +60,9 @@ class TestKeyMap(ObjectTestCase):
         self.assertEqual(keyMap.getS("skey", 0), -3)
         self.assertEqual(keyMap.getB("bkey"), [2])
         self.assertEqual(keyMap.getB("bkey", 0), 2)
-        self.assertTrue(np.allclose(keyMap.getD("dkey"), [3.14]))
+        assert_allclose(keyMap.getD("dkey"), [3.14])
         self.assertAlmostEqual(keyMap.getD("dkey", 0), 3.14)
-        self.assertTrue(np.allclose(keyMap.getF("fkey"), [2.78]))
+        assert_allclose(keyMap.getF("fkey"), [2.78])
         self.assertAlmostEqual(keyMap.getF("fkey", 0), 2.78)
         self.assertEqual(keyMap.getC("ckey"), ["strvalue"])
         self.assertEqual(keyMap.getC("ckey", 0), "strvalue")
@@ -158,8 +158,8 @@ class TestKeyMap(ObjectTestCase):
         self.assertEqual(keyMap.getB("bkey"), [0, 2, 4, 8])
         self.assertEqual(keyMap.getB("bkey", 0), 0)
         self.assertEqual(keyMap.getB("bkey", 3), 8)
-        self.assertTrue(np.allclose(keyMap.getD("dkey"), [3.14, 0.005, 9.123e5]))
-        self.assertTrue(np.allclose(keyMap.getF("fkey"), [2.78, 999.9]))
+        assert_allclose(keyMap.getD("dkey"), [3.14, 0.005, 9.123e5])
+        assert_allclose(keyMap.getF("fkey"), [2.78, 999.9])
         self.assertEqual(keyMap.getC("ckey"), ["val0", "val1", "a longer value"])
         self.assertEqual([obj.show() for obj in keyMap.getA("akey")], [zoomMap.show(), shiftMap.show()])
 
@@ -210,18 +210,19 @@ class TestKeyMap(ObjectTestCase):
         self.assertEqual(keyMap.getB("bkey"), [36, 11, 0, 77, 2])
 
         keyMap.replace("dkey", 1, 33.3)
-        self.assertTrue(np.allclose(keyMap.getD("dkey"), [3.14, 33.3, 9.123e5]))
+        assert_allclose(keyMap.getD("dkey"), [3.14, 33.3, 9.123e5])
         keyMap.replace("dkey", 2, 152)
-        self.assertTrue(np.allclose(keyMap.getD("dkey"), [3.14, 33.3, 152]))
+        assert_allclose(keyMap.getD("dkey"), [3.14, 33.3, 152])
         keyMap.replace("dkey", 0, 0.01)
-        self.assertTrue(np.allclose(keyMap.getD("dkey"), [0.01, 33.3, 152]))
+        assert_allclose(keyMap.getD("dkey"), [0.01, 33.3, 152])
 
         keyMap.replace("fkey", 1, 3.012)
-        self.assertTrue(np.allclose(keyMap.getF("fkey"), [2.78, 3.012]))
+        assert_allclose(keyMap.getF("fkey"), [2.78, 3.012])
         keyMap.replace("fkey", 0, -32.1)
-        self.assertTrue(np.allclose(keyMap.getF("fkey"), [-32.1, 3.012]))
+        assert_allclose(keyMap.getF("fkey"), [-32.1, 3.012])
         keyMap.append("fkey", 98.6)
-        self.assertTrue(np.allclose(keyMap.getF("fkey"), [-32.1, 3.012, 98.6]))
+        assert_allclose(keyMap.getF("fkey"), [-32.1, 3.012, 98.6])
+
 
 if __name__ == "__main__":
     unittest.main()
