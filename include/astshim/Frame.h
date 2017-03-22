@@ -1105,7 +1105,7 @@ public:
     axis order for output data).
     */
     void permAxes(std::vector<int> perm) {
-        detail::assertEqual(perm.size(), "perm.size()", getNaxes(), "naxes");
+        detail::assertEqual(static_cast<int>(perm.size()), "perm.size()", getNaxes(), "naxes");
         astPermAxes(getRawPtr(), perm.data());
         assertOK();
     }
@@ -1504,7 +1504,7 @@ private:
     */
     template <typename T>
     void assertPointLength(T const &p, char const *name) const {
-        if (p.size() != getNin()) {
+        if (static_cast<int>(p.size()) != getNin()) {
             std::ostringstream os;
             os << "point " << name << " has " << p.size() << " axes, but " << getNin() << " required";
             throw std::invalid_argument(os.str());
