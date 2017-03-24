@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 import math
 import unittest
 
+import numpy as np
 from numpy.testing import assert_allclose
 
 import astshim
@@ -81,9 +82,44 @@ class TestFrame(MappingTestCase):
         nframe = astshim.Frame(2)
         fset = frame.convert(nframe)
         self.assertEqual(fset.getClass(), "FrameSet")
+
+        # the conversion FrameSet should contain two frames
+        # connected by a unit mapping with 2 axes
         self.assertEqual(fset.getNframe(), 2)
-        fset2 = fset.findFrame(nframe)
-        self.assertEqual(fset2.getClass(), "FrameSet")
+        self.assertEqual(fset.getNin(), 2)
+        self.assertEqual(fset.getNout(), 2)
+        indata = np.array([
+            [1.1, 2.2],
+            [-43.5, 1309.31],
+        ])
+        outdata = fset.tranForward(indata)
+        assert_allclose(outdata, indata)
+        self.checkRoundTrip(fset, indata)
+
+        with self.assertRaises(RuntimeError):
+            frame.convert(astshim.Frame(3))
+
+    def test_FrameFindFrame(self):
+        frame = astshim.Frame(2)
+        nframe = astshim.Frame(2)
+        fset = frame.findFrame(nframe)
+        self.assertEqual(fset.getClass(), "FrameSet")
+        self.assertEqual(fset.getNframe(), 2)
+
+        # the found FrameSet should contain two frames
+        # connected by a unit mapping with 2 axes
+        self.assertEqual(fset.getNin(), 2)
+        self.assertEqual(fset.getNout(), 2)
+        indata = np.array([
+            [1.1, 2.2],
+            [-43.5, 1309.31],
+        ])
+        outdata = fset.tranForward(indata)
+        assert_allclose(outdata, indata)
+        self.checkRoundTrip(fset, indata)
+
+        with self.assertRaises(RuntimeError):
+            frame.findFrame(astshim.Frame(3))
 
     def test_FrameDistance(self):
         frame = astshim.Frame(2)
