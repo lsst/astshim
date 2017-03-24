@@ -132,7 +132,7 @@ public:
     @param[in] nout  Number of output coordinates.
     @param[in] options  Comma-separated list of attribute assignments. Useful attributes include:
         @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NiterInverse "NiterInverse" and
-        @ref PolyMap_TolIterInverse "TolIterInverse"
+        @ref PolyMap_TolInverse "TolInverse"
     */
     explicit PolyMap(
         ndarray::Array<double, 2, 2> const & coeff_f,
