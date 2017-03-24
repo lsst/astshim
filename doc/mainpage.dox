@@ -72,6 +72,8 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
         (implementing `astMapGet0<X>`, `astMapGet1<X>`, `astMapPut0<X>` and `astMapPut1<X>`).
     - Methods `append` and `replace` are used to alter values in existing entries
         (implementing `astMapPutElem...<X>`).
+- @ref PolyMap has two separate constructors, one that takes foward and inverse coefficients,
+    one that takes only forward coefficients. Neither provides an iterative inverse by default.
 
 ## Missing Functionality
 

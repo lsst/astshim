@@ -52,6 +52,9 @@ public:
     /**
     Construct a @ref PolyMap with specified forward and inverse transforms.
 
+    The two sets of coefficients are independent of each other: the inverse transform
+    need not undo the forward transform.
+
     @param[in] coeff_f  A `(2 + nin) x ncoeff_f` matrix of coefficients.
             Each row of `2 + nin` elements describe a single coefficient of the forward transformation.
             Within each such row, the first element is the coefficient value; the next element is
@@ -71,23 +74,38 @@ public:
 
             Each final output coordinate value is the sum of the terms described
             by the `ncoeff_f` columns in the supplied array.
+
+            If coeff_f is empty then no forward transformation is provided.
     @param[in] coeff_i  A (2 + nout) x ncoeff_i` matrix of coefficients.
             Each row of `2 + nout` adjacent elements describe a single coefficient of
             the inverse transformation, using the same schame as `coeff_f`,
             except that "inputs" and "outputs" are transposed.
+
+            If coeff_i is empty then no inverse transformation is provided,
+            unless you specify suitable options to request an iterative inverse
+            (see the other constructor for details).
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit PolyMap(
         ndarray::Array<double, 2, 2> const & coeff_f,
         ndarray::Array<double, 2, 2> const & coeff_i,
-        std::string const & options=""
+        std::string const & options="IterInverse=0"
     ) :
         Mapping(reinterpret_cast<AstMapping *>(_makeRawPolyMap(coeff_f, coeff_i, options)))
     {}
 
     /**
     Construct a @ref PolyMap with only the forward transform specified.
-    The inverse may be determined by an iterative approximation.
+
+    If the polynomial is invertible and you want an inverse you have two choices: either
+    specify suitable options to request an iterative inverse, or call polyTran to fit
+    an inverse. Both have advantages:
+    - The iterative inverse should provide valid values even if multiple choices exist,
+        and nan if no valid choice exists, whereas polyTran will raise an exception
+        if a single-valued inverse cannot be found over the specified range.
+    - The iterative inverse has no range restriction, whereas polyTran produces an inverse
+        that is valid over a specified range.
+    - The polyTran inverse is more efficient to compute.
 
     @param[in] coeff_f  A `(2 + nin) x ncoeff_f` matrix of coefficients.
             Each row of `2 + nin` elements describe a single coefficient of the forward transformation.
@@ -119,7 +137,7 @@ public:
     explicit PolyMap(
         ndarray::Array<double, 2, 2> const & coeff_f,
         int nout,
-        std::string const & options=""
+        std::string const & options="IterInverse=0"
     ) :
         Mapping(reinterpret_cast<AstMapping *>(_makeRawPolyMap(coeff_f, nout, options)))
     {}
@@ -243,6 +261,12 @@ public:
 
         void *map = astPolyTran(this->getRawPtr(), static_cast<int>(forward), acc, maxacc, maxorder,
                                 lbnd.data(), ubnd.data());
+        // Failure should result in a null pointer, so calling assertOK is unlikely to do anything,
+        // but better to be sure and than risk missing an uncaught error.
+        assertOK(reinterpret_cast<AstObject *>(map));  
+        if (!map) {
+            throw std::runtime_error("Could not compute an inverse mapping");
+        }
         return PolyMap(reinterpret_cast<AstPolyMap *>(map));
     }
 
