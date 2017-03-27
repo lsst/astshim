@@ -26,8 +26,8 @@ class TestMatrixMap(MappingTestCase):
         self.assertEqual(pm.getNout(), 2)
         self.assertEqual(pm.getNiterInverse(), 4)
         self.assertAlmostEqual(pm.getTolInverse(), 1.0E-6)
-        self.assertTrue(pm.hasTranForward())
-        self.assertTrue(pm.hasTranInverse())
+        self.assertTrue(pm.hasForward())
+        self.assertTrue(pm.hasInverse())
 
         # checkBasicSimplify segfaults!
         self.checkBasicSimplify(pm)
@@ -64,8 +64,8 @@ class TestMatrixMap(MappingTestCase):
         self.assertEqual(pm.getNout(), 2)
         self.assertEqual(pm.getNiterInverse(), 6)
         self.assertAlmostEqual(pm.getTolInverse(), 1.2E-7)
-        self.assertTrue(pm.hasTranForward())
-        self.assertTrue(pm.hasTranInverse())
+        self.assertTrue(pm.hasForward())
+        self.assertTrue(pm.hasInverse())
 
         pin = np.array([
             [1.0, 0.0],
@@ -95,8 +95,8 @@ class TestMatrixMap(MappingTestCase):
         self.assertIsInstance(pm, astshim.PolyMap)
         self.assertEqual(pm.getNin(), 2)
         self.assertEqual(pm.getNout(), 2)
-        self.assertTrue(pm.hasTranForward())
-        self.assertFalse(pm.hasTranInverse())
+        self.assertTrue(pm.hasForward())
+        self.assertFalse(pm.hasInverse())
 
         pin = np.array([
             [1.0, 0.0],
@@ -108,8 +108,8 @@ class TestMatrixMap(MappingTestCase):
             pm.tranInverse(pin)
 
         pminv = pm.getInverse()
-        self.assertFalse(pminv.hasTranForward())
-        self.assertTrue(pminv.hasTranInverse())
+        self.assertFalse(pminv.hasForward())
+        self.assertTrue(pminv.hasInverse())
         self.assertTrue(pminv.isInverted())
 
         pout2 = pminv.tranInverse(pin)
