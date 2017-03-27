@@ -107,19 +107,19 @@ public:
     Is the forward transform available?
 
     @note This gets the @ref Mapping_TranForward "TranForward" attribute,
-    but is named `hasTranForward` instead of `getTranForward` for clarity,
+    but is named `hasForward` instead of `getTranForward` for clarity,
     since it does not return a transform.
     */
-    bool hasTranForward() const { return getB("TranForward"); }
+    bool hasForward() const { return getB("TranForward"); }
 
     /**
     Is the inverse transform available?
 
     @note This gets the @ref Mapping_TranInverse "TranInverse" attribute,
-    but is named `hasTranInverse` instead of `getTranInverse` for clarity,
+    but is named `hasInverse` instead of `getTranInverse` for clarity,
     since it does not return a transform.
     */
-    bool hasTranInverse() const { return getB("TranInverse"); }
+    bool hasInverse() const { return getB("TranInverse"); }
 
     /**
     Get an inverse mapping
