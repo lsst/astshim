@@ -138,7 +138,7 @@ The name of the keyword for the current card of the FitsChan. (string)
 @subsection FitsChan_CardType CardType
 
 The data type of the keyword value for the current card of the FitsChan
-as an @ref CardType enum.
+as a @ref CardType enum.
 
 
 @subsection FitsChan_CarLin CarLin
