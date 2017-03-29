@@ -79,8 +79,8 @@ public:
     FoundValue() :
         found(false), value()
     {}
-    bool found;
-    T value;
+    bool found;  ///< Was the value found?
+    T value;   ///< The found value; ignore if `found` is false
 };
 
 /**

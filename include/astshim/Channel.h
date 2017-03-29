@@ -171,7 +171,7 @@ protected:
     */
     explicit Channel(AstChannel * chan);
 
-    Stream _stream;
+    Stream _stream;  ///< stream read and/or written read by the channel
 };
 
 }  // namespace ast

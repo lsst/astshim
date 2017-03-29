@@ -34,8 +34,14 @@ extern "C" {
 
 namespace ast {
 
+/**
+Exception thrown when a search is unsuccessful.
+
+Thrown by Frame.convert and Frame.findFrame
+*/
 class notfound_error: public std::runtime_error {
 public:
+    /// Construct a notfound_error with a specified error message
     notfound_error(std::string const & msg) : std::runtime_error(msg) {};
 };
 

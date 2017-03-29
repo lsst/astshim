@@ -14,6 +14,8 @@ class ObjectTestCase(unittest.TestCase):
     """
 
     def checkCopy(self, obj):
+        """Check that an astshim object can be deep-copied
+        """
         nobj = obj.getNobject()
         nref = obj.getRefCount()
         cp = obj.copy()
@@ -29,7 +31,7 @@ class ObjectTestCase(unittest.TestCase):
         self.assertEqual(cp.getRefCount(), 1)
 
     def checkPersistence(self, obj):
-        """Check that an Ast object can be persisted and unpersisted
+        """Check that an astshim object can be persisted and unpersisted
         """
         # round trip with a Channel
         ss1 = StringStream()

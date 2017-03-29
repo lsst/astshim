@@ -126,11 +126,11 @@ public:
 
     An inverse mapping is a deep copy of a mapping whose @ref Mapping_Invert "Invert" attribute
     has been toggled, as indicated by @ref isInverted. This swaps the meaning of "input" and "output",
-    and of "forward" and "inverse". Thus it swaps the behavior of @ref tranForward and @refTranInverse,
-    @ref getNin and @ref getNout, @ref hasTranForward and @ref hasTranInverse and so on.
+    and of "forward" and "inverse". Thus it swaps the behavior of @ref tranForward and @ref tranInverse,
+    @ref getNin and @ref getNout, @ref hasForward and @ref hasInverse and so on.
 
     Note that the inverse mapping contains exactly the same model coefficients as the original,
-    but they are used by @tranInverse instead of @tranForward. Thus for example if a @ref ZoomMap
+    but they are used by @ref tranInverse instead of @ref tranForward. Thus for example if a @ref ZoomMap
     has a zoom factor of 4.0 then its inverse also reports a zoom factor of 4.0 (despite behaving
     like an uninverted @ref ZoomMap with zoom factor of 0.25).
     */

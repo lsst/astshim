@@ -55,36 +55,43 @@ public:
     The two sets of coefficients are independent of each other: the inverse transform
     need not undo the forward transform.
 
-    @param[in] coeff_f  A `(2 + nin) x ncoeff_f` matrix of coefficients.
-            Each row of `2 + nin` elements describe a single coefficient of the forward transformation.
-            Within each such row, the first element is the coefficient value; the next element is
-            the integer index of the @ref PolyMap output which uses the coefficient within its defining
-            polynomial (the first output has index 1); the remaining elements of
-            the row give the integer powers to use with each input coordinate value (powers
-            must not be negative, and floating point values are rounded to the nearest integer).
-
-            For instance, if the @ref PolyMap has 3 inputs and 2 outputs, each row consisting
-            of 5 elements, A row such as "(1.2, 2.0, 1.0, 3.0, 0.0)" describes a coefficient
-            with value 1.2 which is used within the definition of output 2.  The output value
-            is incremented by the product of the coefficient value, the value of input coordinate
-            1 raised to the power 1, and the value of input coordinate 2 raised to the power
-            3. Input coordinate 3 is not used since its power is specified as 0.  As another
-            example, the row "(-1.0, 1.0, 0.0, 0.0, 0.0)" adds a constant value -1.0 to output 1
-            (it is a constant value since the power for every input axis is given as 0).
-
-            Each final output coordinate value is the sum of the terms described
-            by the `ncoeff_f` columns in the supplied array.
-
-            If coeff_f is empty then no forward transformation is provided.
-    @param[in] coeff_i  A (2 + nout) x ncoeff_i` matrix of coefficients.
-            Each row of `2 + nout` adjacent elements describe a single coefficient of
-            the inverse transformation, using the same schame as `coeff_f`,
-            except that "inputs" and "outputs" are transposed.
-
-            If coeff_i is empty then no inverse transformation is provided,
-            unless you specify suitable options to request an iterative inverse
-            (see the other constructor for details).
+    @param[in] coeff_f  A `(2 + nin) x ncoeff_f` @ref PolyMap_CoefficientMatrices "matrix of coefficients"
+        describing the forward transformation. If `coeff_f` is empty then no forward transformation
+        is provided.
+    @param[in] coeff_i  A (2 + nout) x ncoeff_i` matrix of coefficients
+        for the inverse transformation. If coeff_i is empty then no inverse transformation is provided
+        unless you specify suitable options to request an iterative inverse; see the
+        @ref PolyMap(ndarray::Array<double, 2, 2> const &, int, std::string const &) "other constructor"
+        for details.
     @param[in] options  Comma-separated list of attribute assignments.
+
+    @subsection PolyMap_CoefficientMatrices Coefficient Matrices
+
+    The coefficients describing a forward transformation are specified as an `ncoeff_f x (2 + nin)`
+    matrix, where `ncoeff_f` is the number of coefficients for the forward
+    direction, and each coefficient is described by `2 + nin` contiguous values, as follows:
+    - The first element is the coefficient value.
+    - The next element is the integer index of the @ref PolyMap output
+        which uses the coefficient within its defining polynomial
+        (the first output has index 1).
+    - The remaining elements give the integer power to use with each corresponding input coordinate
+        value, or 0 to ignore that input coordinate. Powers must not be negative and floating point
+        values are rounded to the nearest integer.
+
+    For instance, if the @ref PolyMap has 3 inputs and 2 outputs, each row consisting
+    of 5 elements, and the row `(1.2, 2, 6, 3, 0)` describes a coefficient
+    that increments output 2 as follows:
+        `out2 += 1.2 * in1^6 * in2^3 * in3^0`
+    and the row `(-1.5, 1, 0, 0, 0)` describes a coefficient that increments
+    output 2 with a constant value of -1.5 (since all powers are 0):
+        `out1 += -1.5 * in1^0 * in2^0 * in3^0`
+    Each final output coordinate value is the sum of the terms described
+    by the `ncoeff_f` columns in the supplied array. If no coefficients increment
+    a given output then it will be set to 0.
+
+    The coefficients describing the inverse transformation work the same way,
+    but of course the matrix is of size `ncoeff_i x (2 + nout)`, where `ncoeff_i` is the
+    number of coefficients for the inverse transformation.
     */
     explicit PolyMap(
         ndarray::Array<double, 2, 2> const & coeff_f,
@@ -107,32 +114,13 @@ public:
         that is valid over a specified range.
     - The polyTran inverse is more efficient to compute.
 
-    @param[in] coeff_f  A `(2 + nin) x ncoeff_f` matrix of coefficients.
-            Each row of `2 + nin` elements describe a single coefficient of the forward transformation.
-            Within each such row:
-            - The first element is the coefficient value.
-            - The next element is the integer index of the @ref PolyMap output
-                which uses the coefficient within its defining polynomial
-                (the first output has index 1).
-            - The remaining elements give the integer power to use with each corresponding input coordinate
-                value, or 0 to ignore that input coordinate. Powers must not be negative and floating point
-                values are rounded to the nearest integer.
-
-            For instance, if the @ref PolyMap has 3 inputs and 2 outputs, each row consisting
-            of 5 elements, a row such as "(1.2, 2.0, 1.0, 3.0, 0.0)" describes a coefficient
-            with value 1.2 which is used within the definition of output 2.  The output value
-            is incremented by the product of the coefficient value, the value of input coordinate
-            1 raised to the power 1, and the value of input coordinate 2 raised to the power
-            3. Input coordinate 3 is not used since its power is specified as 0.  As another
-            example, the row "(-1.0, 1.0, 0.0, 0.0, 0.0)" adds a constant value -1.0 to output 1
-            (it is a constant value since the power for every input axis is given as 0).
-
-            Each final output coordinate value is the sum of the terms described
-            by the `ncoeff_f` columns in the supplied array.
+    @param[in] coeff_f  A `(2 + nin) x ncoeff_f` @ref PolyMap_CoefficientMatrices "matrix of coefficients"
+        describing the forward transformation. If `coeff_f` is empty then no forward transformation
+        is provided.
     @param[in] nout  Number of output coordinates.
     @param[in] options  Comma-separated list of attribute assignments. Useful attributes include:
         @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NiterInverse "NiterInverse" and
-        @ref PolyMap_TolInverse "TolInverse"
+        @ref PolyMap_TolInverse "TolInverse".
     */
     explicit PolyMap(
         ndarray::Array<double, 2, 2> const & coeff_f,

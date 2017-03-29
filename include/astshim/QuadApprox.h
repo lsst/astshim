@@ -31,25 +31,7 @@ class Mapping;
 A quadratic approximation to a 2D Mapping.
 
 Construct the class to compute the contained fields:
-- fit:   A vector of coefficients of the quadratic
-       approximation to the specified transformation. This vector
-       will contain "6*Nout", elements. The first 6 elements hold the
-       fit to the first Mapping output. The next 6 elements hold the
-       fit to the second Mapping output, etc. So if the Mapping has 2
-       inputs and 2 outputs the quadratic approximation to the forward
-       transformation is:
 
-          X_out = fit[0] + fit[1]*X_in + fit[2]*Y_in + fit[3]*X_in*Y_in +
-                  fit[4]*X_in*X_in + fit[5]*Y_in*Y_in
-          Y_out = fit[6] + fit[7]*X_in + fit[8]*Y_in + fit[9]*X_in*Y_in +
-                  fit[10]*X_in*X_in + fit[11]*Y_in*Y_in
-          X_out = fit(1) + fit(2)*X_in + fit(3)*Y_in + fit(4)*X_in*Y_in +
-                  fit(5)*X_in*X_in + fit(6)*Y_in*Y_in
-          Y_out = fit(7) + fit(8)*X_in + fit(9)*Y_in + fit(10)*X_in*Y_in +
-                  fit(11)*X_in*X_in + fit(12)*Y_in*Y_in
-
-    rms:  The RMS residual between the fit and the Mapping, summed over all
-       Mapping outputs.
 */
 class QuadApprox {
 public:
@@ -59,7 +41,7 @@ public:
     Compute the coefficients of a quadratic fit to the
     supplied Mapping over the input area specified by `lbnd` and `ubnd`.
     The Mapping must have 2 inputs, but may have any number of outputs.
-    The i'th Mapping output is modelled as a quadratic function of the
+    The i'th Mapping output is modeled as a quadratic function of the
     2 inputs (x,y):
 
     output_i = a_i_0 + a_i_1*x + a_i_2*y + a_i_3*x*y + a_i_4*x*x +
@@ -96,7 +78,28 @@ public:
     QuadApprox & operator=(QuadApprox const &) = default;
     QuadApprox & operator=(QuadApprox &&) = default;
 
+    /**
+    A vector of coefficients of the quadratic approximation to the specified transformation.
+
+    This vector will contain "6*Nout", elements:
+    the first 6 elements hold the fit to the first Mapping output,
+    the next 6 elements hold the fit to the second Mapping output, etc.
+    So if the Mapping has 2 inputs and 2 outputs the quadratic approximation
+    to the forward transformation is:
+ 
+        X_out = fit[0] + fit[1]*X_in + fit[2]*Y_in + fit[3]*X_in*Y_in +
+                fit[4]*X_in*X_in + fit[5]*Y_in*Y_in
+        Y_out = fit[6] + fit[7]*X_in + fit[8]*Y_in + fit[9]*X_in*Y_in +
+                fit[10]*X_in*X_in + fit[11]*Y_in*Y_in
+        X_out = fit(1) + fit(2)*X_in + fit(3)*Y_in + fit(4)*X_in*Y_in +
+                fit(5)*X_in*X_in + fit(6)*Y_in*Y_in
+        Y_out = fit(7) + fit(8)*X_in + fit(9)*Y_in + fit(10)*X_in*Y_in +
+                fit(11)*X_in*X_in + fit(12)*Y_in*Y_in
+    */
     std::vector<double> fit;
+    /**
+    The RMS residual between the fit and the Mapping, summed over all Mapping outputs.
+    */
     double rms;
 };
 
