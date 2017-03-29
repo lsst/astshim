@@ -38,7 +38,7 @@ MapBox::MapBox(Mapping const & map,
     lbndIn(lbnd),
     ubndIn(ubnd),
     minOutCoord(minOutCoord),
-    maxOutCoord(maxOutCoord),
+    maxOutCoord(maxOutCoord),  // if 0 then _compute will set it to # of outputs
     lbndOut(),
     ubndOut(),
     xl(),
@@ -57,13 +57,11 @@ void MapBox::_compute(Mapping const & map,
     detail::assertEqual(ubnd.size(), "ubnd.size()", nin, "Nin");
     if (maxOutCoord == 0) {
         maxOutCoord = nout;
-    } else {
-       if (maxOutCoord > nout) {
-           std::ostringstream os;
-           os << "maxOutCoord = " << maxOutCoord << " not in range [1, " << nout
-                << "], or 0 for all remaining";
-           throw std::invalid_argument(os.str());
-       }
+    } else if ((maxOutCoord < 0) || (maxOutCoord > nout)) {
+       std::ostringstream os;
+       os << "maxOutCoord = " << maxOutCoord << " not in range [1, " << nout
+            << "], or 0 for all remaining";
+       throw std::invalid_argument(os.str());
     }
     if ((minOutCoord < 0) || (minOutCoord > maxOutCoord)) {
            std::ostringstream os;
