@@ -34,17 +34,6 @@ class Mapping;
 
 /**
 A Mapping split off as a subset of another Mapping.
-
-Fields:
-- splitMap:  Shared pointer to the split mapping.
-- origIn:  Indices of the inputs of the original mapping were picked for the split mapping
-        (a copy of the `in` argument of the constructor).
-- origOut:  Indices of the outputs of the original mapping which are fed by the picked inputs.
-        This will contain splitMap->getNout() elements, each in the range [1, nout of the original mapping].
-        The `i`th element holds the index within the original mapping which corresponds to
-        the `i`th output of the split mapping. For example if the 1st output of the split mapping
-        came from the 5th output of the original mapping, then origOut[0] = 5 (0 because
-        vectors use 0-based indexing, and 5 because AST index values are 1-based).
 */
 class MapSplit {
 public:
@@ -72,8 +61,25 @@ public:
     MapSplit & operator=(MapSplit const &) = default;
     MapSplit & operator=(MapSplit &&) = default;
 
+    /**
+    The Mapping that was split off.
+    */
     std::shared_ptr<Mapping> splitMap;
+    /**
+    Indices of the inputs of the original mapping were picked for the split mapping
+
+    This is a copy of the `in` argument of the constructor.
+    */
     std::vector<int> origIn;
+    /**
+    Indices of the outputs of the original mapping which are fed by the picked inputs.
+
+    This will contain splitMap->getNout() elements, each in the range [1, nout of the original mapping].
+    The `i`th element holds the index within the original mapping which corresponds to
+    the `i`th output of the split mapping. For example if the 1st output of the split mapping
+    came from the 5th output of the original mapping, then origOut[0] = 5 (0 because
+    vectors use 0-based indexing, and 5 because AST index values are 1-based).
+    */
     std::vector<int> origOut;
 };
 

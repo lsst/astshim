@@ -44,6 +44,7 @@ PYBIND11_PLUGIN(frameSet) {
     // def_readonly_static makes in only available in the class, not instances, so...
     cls.attr("BASE") = py::cast(AST__BASE);
     cls.attr("CURRENT") = py::cast(AST__CURRENT);
+    cls.attr("NOFRAME") = py::cast(AST__NOFRAME);
 
     cls.def("copy", &FrameSet::copy);
     cls.def("addAxes", &FrameSet::addAxes);

@@ -36,20 +36,6 @@ class Mapping;
 Object to compute the bounding box which just encloses another box
 after it has been transformed by a mapping.
 
-Fields:
-- lbndIn  The lower bound specified by the user for each input coordinate
-- ubndIn  The upper bound specified by the user for each output coordinate
-- minOutCoord  The index of the first output coordinate (starting at 1)
-            over which the output box was computed.
-- maxOutCoord  The index of the last output coordinate (starting at 1)
-            over which the output box was computed.
-- lbndOut  The lower bound of the output box; the elements are for output coord
-            `minOutCoord` through `maxOutCoord`.
-- ubndOut  The upper bound of the output box; the elements are for output coord
-            `minOutCoord` through `maxOutCoord`.
-- xl  a 2-d array of [out coord, an input point at which the lower bound occurred]
-- xu  a 2-d array of [out coord, an input point at which the upper bound occurred]
-
 @warning  The points in `xl` and `xu` are not predictable if more than one input value
     gives the same output boundary value.
 */
@@ -72,7 +58,8 @@ public:
         an output bounding box, starting from 1
     @param[in] maxOutCoord  Maximum output coordinate axis for which to compute
         an output bounding box, starting from 1,
-        or 0 for all remaining output coordinate axes.
+        or 0 for all remaining output coordinate axes (in which case
+        the field of the same name will be set to the number of outputs)
 
     @return A @ref MapBox containing the computed outputs and a copy of the inputs.
 
@@ -104,16 +91,19 @@ public:
     MapBox & operator=(MapBox const &) = default;
     MapBox & operator=(MapBox &&) = default;
 
-    std::vector<double> lbndIn;
-    std::vector<double> ubndIn;
+    std::vector<double> lbndIn;  ///< Lower bound of the input box.
+    std::vector<double> ubndIn;  ///< Upper bound of the input box.
+    /// Minimum output coordinate axis for which to compute an output bounding box, starting from 1
     int minOutCoord;
+    /// Maximum output coordinate axis for which to compute an output bounding box, starting from 1
     int maxOutCoord;
-    std::vector<double> lbndOut;
-    std::vector<double> ubndOut;
-    Array2D xl;
-    Array2D xu;
+    std::vector<double> lbndOut;  ///< Lower bound of the output box.
+    std::vector<double> ubndOut;  ///< Upper bound of the output box.
+    Array2D xl;  ///< 2-d array of [out coord, an input point at which the lower bound occurred]
+    Array2D xu;  ///< 2-d array of [out coord, an input point at which the upper bound occurred]
 
 private:
+    /// Compute the outputs
     void _compute(Mapping const & map,
                   std::vector<double> const & lbnd,
                   std::vector<double> const & ubnd,

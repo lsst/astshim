@@ -102,6 +102,7 @@ friend class Object;
 public:
     static int constexpr BASE = AST__BASE;  ///< index of base frame
     static int constexpr CURRENT = AST__CURRENT;  ///< index of current frame
+    static int constexpr NOFRAME = AST__NOFRAME; ///< an invalid frame index
     /**
     Construct a FrameSet from a Frame
 
@@ -346,7 +347,7 @@ public:
        in the @ref FrameSet (as given by @ref getNframe).
        If `AST__NOFRAME` is supplied (or the current @ref Frame is specified),
        then any mirroring established by a previous call to this function is disabled.
-       A value of `FrameSet::BASE may be given to specify the base frame.
+       A value of FrameSet::BASE may be given to specify the base frame.
 
     ### Notes:
     - Mirrors can be chained. That is, if @ref Frame B is set to be a mirror

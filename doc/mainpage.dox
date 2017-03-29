@@ -36,9 +36,9 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
         and @ref Mapping.over as a convient way to make a @ref ParallelMap.
     - Added @ref Frame.over as a convenient way to make a @ref CmpFrame.
     - Instead of wrapping `astDecompose`:
-        - Call @ref CmpMap.operator[] to retrieve a mapping from a compound mapping.
+        - Call CmpMap.operator[] to retrieve a mapping from a compound mapping.
         - Call @ref CmpMap.getSeries to find out if a compound mapping is in series.
-        - Call @ref CmpFrame.operator[] to retrieve a @ref Frame from a @ref CmpFrame
+        - Call CmpFrame.operator[] to retrieve a @ref Frame from a @ref CmpFrame
 - Exceptions are raised on errors, leaving AST in a normal (non-error) state:
     - Where practical, the wrapper checks arguments and throws `std::invalid_argument`
         before calling AST code.
@@ -72,6 +72,8 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
         (implementing `astMapGet0<X>`, `astMapGet1<X>`, `astMapPut0<X>` and `astMapPut1<X>`).
     - Methods `append` and `replace` are used to alter values in existing entries
         (implementing `astMapPutElem...<X>`).
+- @ref PolyMap has two separate constructors, one that takes foward and inverse coefficients,
+    one that takes only forward coefficients. Neither provides an iterative inverse by default.
 
 ## Missing Functionality
 

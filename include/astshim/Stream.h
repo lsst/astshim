@@ -136,10 +136,12 @@ protected:
     /// set isFits
     void setIsFits(bool isFits) { _isFits = isFits; }
 
-    std::shared_ptr<std::istream> _istreamPtr;
-    std::shared_ptr<std::ostream> _ostreamPtr;
-    std::string _sourceStr;  // a local copy so sink can return data that won't disappear
-    bool _isFits;
+    std::shared_ptr<std::istream> _istreamPtr;  ///< input stream
+    std::shared_ptr<std::ostream> _ostreamPtr;  ///< output stream
+    /// string containing a local copy of sourced data,
+    /// so @ref source can return a `char *` that won't disappear right away
+    std::string _sourceStr;
+    bool _isFits;  ///< is this a FITS stream?
 };
 
 
@@ -178,7 +180,7 @@ public:
     std::string getPath() const { return _path; }
 
 private:
-    std::string _path;
+    std::string _path;  ///< Path to file
 };
 
 
@@ -223,8 +225,9 @@ public:
     }
 
 private:
-    // add explicit pointers to stringstreams for access to stringstream-specific methods
+    /// input stream as an istringstream, so stringstream-specific methods are available
     std::shared_ptr<std::istringstream> _istringstreamPtr;
+    /// output stream as an ostringstream, so stringstream-specific methods are available
     std::shared_ptr<std::ostringstream> _ostringstreamPtr;
 };
 

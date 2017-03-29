@@ -52,7 +52,7 @@ private:
     using Deleter = void (*)(AstObject *);
 
 public:
-    using ObjectPtr = std::unique_ptr<AstObject, Deleter>;
+    using ObjectPtr = std::unique_ptr<AstObject, Deleter>;  ///< unique pointer holding an AST raw pointer
 
     virtual ~Object() {}
 
@@ -255,10 +255,12 @@ public:
 
     Intended for internal use only, but cannot be made protected
     without endless "friend class" declarations.
+    @{
     */
     AstObject const * getRawPtr() const { return &*_objPtr; };
 
     AstObject * getRawPtr() { return &*_objPtr; };
+    ///@}
 
 protected:
 
@@ -308,6 +310,18 @@ protected:
         return retptr;
     }
 
+    /**
+    Return a deep copy of this object. This is called by @ref copy.
+
+    Each subclass must override this method. The standard implementation is:
+    ```
+        return _copyImpl<astshim_class, ast_class>();
+    ```
+    for example @ref Frame implements this as:
+    ```
+        return _copyImpl<Frame, AstFrame>();
+    ```
+    */
     virtual std::shared_ptr<Object> _copyPolymorphic() const = 0;
 
     /**

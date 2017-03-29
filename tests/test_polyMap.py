@@ -1,3 +1,4 @@
+
 from __future__ import absolute_import, division, print_function
 import unittest
 
@@ -10,15 +11,15 @@ from astshim.test import MappingTestCase
 
 class TestMatrixMap(MappingTestCase):
 
-    def test_PolyMapUnidirectional(self):
-        """Test a default unidirectional polymap, which has a numeric inverse
+    def test_PolyMapIterativeInverse(self):
+        """Test a unidirectional polymap with its default iterative inverse
         """
         coeff_f = np.array([
             [1.2, 1, 2, 0],
             [-0.5, 1, 1, 1],
             [1.0, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, 2)
+        pm = astshim.PolyMap(coeff_f, 2, "IterInverse=1")
         self.assertIsInstance(pm, astshim.Object)
         self.assertIsInstance(pm, astshim.Mapping)
         self.assertIsInstance(pm, astshim.PolyMap)
@@ -29,7 +30,6 @@ class TestMatrixMap(MappingTestCase):
         self.assertTrue(pm.hasForward())
         self.assertTrue(pm.hasInverse())
 
-        # checkBasicSimplify segfaults!
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
         self.checkPersistence(pm)
@@ -91,7 +91,7 @@ class TestMatrixMap(MappingTestCase):
             [-0.5, 1, 1, 1],
             [1.0, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, 2, "IterInverse=0")
+        pm = astshim.PolyMap(coeff_f, 2)
         self.assertIsInstance(pm, astshim.PolyMap)
         self.assertEqual(pm.getNin(), 2)
         self.assertEqual(pm.getNout(), 2)
@@ -148,6 +148,50 @@ class TestMatrixMap(MappingTestCase):
 
         self.checkRoundTrip(pm, pin)
 
+    def test_PolyMapEmptyForwardCoeffs(self):
+        """Test constructing a PolyMap with empty forward coefficients
+        """
+        coeff_f = np.array([], dtype=float)
+        coeff_f.shape = (0, 4)
+        coeff_i = np.array([
+            [0.5, 1, 1, 0],
+            [0.5, 1, 0, 1],
+            [0.5, 2, 1, 0],
+            [-0.5, 2, 0, 1],
+        ])
+        pm = astshim.PolyMap(coeff_f, coeff_i)
+        self.assertEqual(pm.getNin(), 2)
+        self.assertEqual(pm.getNout(), 2)
+
+        self.checkBasicSimplify(pm)
+        self.checkCopy(pm)
+        self.checkPersistence(pm)
+
+        self.assertFalse(pm.hasForward())
+        self.assertTrue(pm.hasInverse())
+
+    def test_PolyMapEmptyInverseCoeffs(self):
+        """Test constructing a PolyMap with empty inverse coefficients
+        """
+        coeff_f = np.array([
+            [1., 1, 1, 0],
+            [1., 1, 0, 1],
+            [1., 2, 1, 0],
+            [-1., 2, 0, 1]
+        ])
+        coeff_i = np.array([], dtype=float)
+        coeff_i.shape = (0, 4)
+        pm = astshim.PolyMap(coeff_f, coeff_i)
+        self.assertEqual(pm.getNin(), 2)
+        self.assertEqual(pm.getNout(), 2)
+
+        self.checkBasicSimplify(pm)
+        self.checkCopy(pm)
+        self.checkPersistence(pm)
+
+        self.assertTrue(pm.hasForward())
+        self.assertFalse(pm.hasInverse())
+
     def test_PolyMapPolyTran(self):
         coeff_f = np.array([
             [1., 1, 1, 0],
@@ -178,6 +222,42 @@ class TestMatrixMap(MappingTestCase):
         npt.assert_equal(pout, pout2)
         pin2 = pm2.tranInverse(pout)
         npt.assert_allclose(pin, pin2, atol=1.0e-10)
+
+    def test_PolyMapPolyMapUnivertible(self):
+        """Test polyTran on a PolyMap without a single-valued inverse
+
+        The equation is y = x^2 - x^3, whose inverse has 3 values
+        between roughly -0.66 and 2.0
+        """
+        coeff_f = np.array([
+            [2.0, 1, 2],
+            [-1.0, 1, 3],
+        ])
+        pm = astshim.PolyMap(coeff_f, 1, "IterInverse=1")
+
+        self.checkBasicSimplify(pm)
+        self.checkCopy(pm)
+        self.checkPersistence(pm)
+
+        pin = np.array([
+            [-0.5],
+            [0.5],
+            [1.1],
+            [1.8],
+        ])
+        des_pout = 2.0*pin**2 - pin**3
+        pout = pm.tranForward(pin)
+        npt.assert_allclose(pout, des_pout)
+
+        # the iterative inverse should give valid values
+        pinIterative = pm.tranInverse(pout)
+        poutRoundTrip = pm.tranForward(pinIterative)
+        npt.assert_allclose(pout, poutRoundTrip)
+
+        with self.assertRaises(RuntimeError):
+            # includes the range where the inverse has multiple values,
+            # so no inverse is possible
+            pm.polyTran(False, 1e-3, 1e-3, 10, [-1.0], [2.5])
 
 
 if __name__ == "__main__":
