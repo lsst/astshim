@@ -11,6 +11,7 @@
 #include "astshim/Mapping.h"
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
+#include "astshim/functional.h"
 
 // channels
 #include "astshim/FitsChan.h"

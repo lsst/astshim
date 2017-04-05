@@ -4,6 +4,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 from .channel import Channel
+from .polyMap import PolyMap
 from .xmlChan import XmlChan
 from .stream import StringStream
 
@@ -131,3 +132,66 @@ class MappingTestCase(ObjectTestCase):
             self.assertEqual(mb.getNout(), cmp3.getNout())
             self.assertEqual(cmp3.getNin(), cmp3simp.getNin())
             self.assertEqual(cmp3.getNout(), cmp3simp.getNout())
+
+
+def makePolyMapCoeffs(nIn, nOut):
+    """Make an array of coefficients for astshim.PolyMap for the following equation:
+
+    fj(x) = C0j x0^2 + C1j x1^2 + C2j x2^2 + ... + CNj xN^2
+    where:
+    * i ranges from 0 to N=nIn-1
+    * j ranges from 0 to nOut-1,
+    * Cij = 0.001 (i+j+1)
+    """
+    baseCoeff = 0.001
+    forwardCoeffs = []
+    for out_ind in range(nOut):
+        coeffOffset = baseCoeff * out_ind
+        for in_ind in range(nIn):
+            coeff = baseCoeff * (in_ind + 1) + coeffOffset
+            coeffArr = [coeff, out_ind + 1] + [2 if i == in_ind else 0 for i in range(nIn)]
+            forwardCoeffs.append(coeffArr)
+    return np.array(forwardCoeffs, dtype=float)
+
+
+def makeTwoWayPolyMap(nIn, nOut):
+    """Make an astShim.PolyMap suitable for testing
+
+    The forward transform is as follows:
+    fj(x) = C0j x0^2 + C1j x1^2 + C2j x2^2 + ... + CNj xN^2 where Cij = 0.001 (i+j+1)
+
+    The reverse transform is the same equation with i and j reversed
+    thus it is NOT the inverse of the forward direction,
+    but is something that can be easily evaluated.
+
+    The equation is chosen for the following reasons:
+    - It is well defined for any positive value of nIn, nOut
+    - It stays small for small x, to avoid wraparound of angles for SpherePoint endpoints
+    """
+    forwardCoeffs = makePolyMapCoeffs(nIn, nOut)
+    reverseCoeffs = makePolyMapCoeffs(nOut, nIn)
+    polyMap = PolyMap(forwardCoeffs, reverseCoeffs)
+    assert polyMap.getNin() == nIn
+    assert polyMap.getNout() == nOut
+    assert polyMap.hasForward()
+    assert polyMap.hasInverse()
+    return polyMap
+
+
+def makeForwardPolyMap(nIn, nOut):
+    """Make an astShim.PolyMap suitable for testing
+
+    The forward transform is the same as for `makeTwoWayPolyMap`.
+    This map does not have a reverse transform.
+
+    The equation is chosen for the following reasons:
+    - It is well defined for any positive value of nIn, nOut
+    - It stays small for small x, to avoid wraparound of angles for SpherePoint endpoints
+    """
+    forwardCoeffs = makePolyMapCoeffs(nIn, nOut)
+    polyMap = PolyMap(forwardCoeffs, nOut, "IterInverse=0")
+    assert polyMap.getNin() == nIn
+    assert polyMap.getNout() == nOut
+    assert polyMap.hasForward()
+    assert not polyMap.hasInverse()
+    return polyMap

@@ -32,6 +32,8 @@ extern "C" {
   #include "ast.h"
 }
 
+// Do not delete this or free functions and enums will not be documented
+/// AST wrapper classes and functions.
 namespace ast {
 
 /**
