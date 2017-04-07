@@ -184,7 +184,7 @@ public:
 
     ### Examples
 
-    - `auto wcsmap = astshim::WcsMap(2, WcsType::MER, 1, 2, "")`
+    - `auto wcsmap = ast::WcsMap(2, WcsType::MER, 1, 2, "")`
 
         Create a WcsMap that implements a FITS-WCS Mercator
         projection on pairs of coordinates, with coordinates 1 and 2
@@ -192,7 +192,7 @@ public:
         that the FITS-WCS Mercator projection does not require any
         projection parameters.
 
-    - `auto wcsmap = astshim::WcsMap(3, WcsType::COE, 2, 3, "PV3_1=40.0")`
+    - `auto wcsmap = ast::WcsMap(3, WcsType::COE, 2, 3, "PV3_1=40.0")`
 
         Create a WcsMap that implements a FITS-WCS conical equal
         area projection. The WcsMap acts on points in a 3-dimensional
