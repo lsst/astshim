@@ -172,7 +172,7 @@ public:
     @param[in] iframe  The index of the Frame within the FrameSet which describes the coordinate system
         upon which the new one is to be based.  This value should lie in the range from
         1 to the number of frames already in this FrameSet (as given by @ref getNframe).
-        A value of `FrameSet::BASE` or `FrameSet::CURRENT` may be given to specify the base @ref Frame
+        A value of FrameSet::BASE or FrameSet::CURRENT may be given to specify the base @ref Frame
         or the current @ref Frame respectively.
         A value of `AST__ALLFRAMES` is not permitted; call `addAllFrames` instead.
     @param[in] map  A @ref Mapping which describes how to convert coordinates from the old coordinate
@@ -260,7 +260,7 @@ public:
 
     @param[in] iframe  The index of the required @ref Frame within this @ref FrameSet.
         This value should lie in the range 1 to the number of frames already in this @ref FrameSet
-        (as given by @ref getNframe). A value of `FrameSet::BASE` or `FrameSet::CURRENT`
+        (as given by @ref getNframe). A value of FrameSet::Base or FrameSet::CURRENT
         may be given to specify the base @ref Frame or the current @ref Frame, respectively.
     */
     std::shared_ptr<Frame> getFrame(int iframe) const {
@@ -381,7 +381,7 @@ public:
     @param[in] iframe  The index within the @ref FrameSet of the @ref Frame to be modified.
         This value should lie in the range
         1 to the number of frames already in this @ref FrameSet (as given by @ref getNframe).
-        A value of `FrameSet::BASE or `FrameSet::CURRENT` may be given
+        A value of `FrameSet::BASE or FrameSet::CURRENT may be given
         to specify the base @ref Frame or the current @ref Frame respectively.
     @param[in] map  A @ref Mapping whose forward transformation converts coordinate values from
         the original coordinate system described by the @ref Frame to the new one, and whose
@@ -417,7 +417,7 @@ public:
     @param[in] iframe  The index of the required @ref Frame within this @ref FrameSet.
         This value should lie in the range 1 to the number of @ref Frame "Frames"
         in this @ref FrameSet (as given by @ref getNframe).
-        A value of `FrameSet::BASE or `FrameSet::CURRENT` may be given
+        A value of FrameSet::BASE or FrameSet::CURRENT may be given
         to specify the base @ref Frame or the current @ref Frame, respectively.
 
     ### Notes
