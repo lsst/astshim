@@ -409,12 +409,12 @@ public:
     };
 
     /**
-    Remove a @ref Frame Frame from a @ref FrameSet.
+    Remove a @ref Frame from a @ref FrameSet
 
     All other Frames in the FrameSet have their indices re-numbered from one (if necessary),
     but are otherwise unchanged.
 
-    @param[in] iframe  The index of the required @ref Frame Frame within this @ref FrameSet.
+    @param[in] iframe  The index of the required @ref Frame within this @ref FrameSet.
         This value should lie in the range 1 to the number of @ref Frame "Frames"
         in this @ref FrameSet (as given by @ref getNframe).
         A value of `FrameSet::BASE or `FrameSet::CURRENT` may be given
