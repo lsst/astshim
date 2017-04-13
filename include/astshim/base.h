@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_BASE_H
@@ -29,9 +29,11 @@
 #include "ndarray.h"
 
 extern "C" {
-  #include "ast.h"
+#include "ast.h"
 }
 
+// Do not delete this or free functions and enums will not be documented
+/// AST wrapper classes and functions.
 namespace ast {
 
 /**
@@ -39,10 +41,10 @@ Exception thrown when a search is unsuccessful.
 
 Thrown by Frame.convert and Frame.findFrame
 */
-class notfound_error: public std::runtime_error {
+class notfound_error : public std::runtime_error {
 public:
     /// Construct a notfound_error with a specified error message
-    notfound_error(std::string const & msg) : std::runtime_error(msg) {};
+    notfound_error(std::string const &msg) : std::runtime_error(msg){};
 };
 
 using Array2D = ndarray::Array<double, 2, 2>;
@@ -87,7 +89,7 @@ Throw std::runtime_error if AST's state is bad
 @note on the first call an error handler is registered
 that saves error messages to a buffer.
 */
-void assertOK(AstObject * rawPtr1=nullptr, AstObject * rawPtr2=nullptr);
+void assertOK(AstObject *rawPtr1 = nullptr, AstObject *rawPtr2 = nullptr);
 
 /**
 Control whether graphical escape sequences are included in strings.
@@ -119,7 +121,7 @@ can be changed using this function.
 - Unlike the AST function `astEscapes`, this function will not attempt to execute
     if an error has already occurred.
 */
-inline bool escapes(int include=-1) {
+inline bool escapes(int include = -1) {
     assertOK();
     int ret = astEscapes(include);
     assertOK();

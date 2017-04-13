@@ -13,6 +13,7 @@ scripts.BasicSConscript.pybind11([
     "mapBox",
     "mapSplit",
     "quadApprox",
+    "functional",
 
     "fitsChan",
     "xmlChan",

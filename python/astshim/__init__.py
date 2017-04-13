@@ -18,7 +18,7 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <https://www.lsstcorp.org/LegalNotices/>.
-#/
+#
 
 """lsst.astshim
 """
@@ -35,6 +35,7 @@ from .keyMap import *
 from .mapBox import *
 from .mapSplit import *
 from .quadApprox import *
+from .functional import *
 # channels
 from .fitsChan import *
 from .xmlChan import *
