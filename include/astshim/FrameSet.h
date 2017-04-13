@@ -381,7 +381,7 @@ public:
     @param[in] iframe  The index within the @ref FrameSet of the @ref Frame to be modified.
         This value should lie in the range
         1 to the number of frames already in this @ref FrameSet (as given by @ref getNframe).
-        A value of `FrameSet::BASE or FrameSet::CURRENT may be given
+        A value of FrameSet::BASE or FrameSet::CURRENT may be given
         to specify the base @ref Frame or the current @ref Frame respectively.
     @param[in] map  A @ref Mapping whose forward transformation converts coordinate values from
         the original coordinate system described by the @ref Frame to the new one, and whose
