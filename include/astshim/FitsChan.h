@@ -23,6 +23,8 @@
 #define ASTSHIM_FITSCHAN_H
 
 #include <complex>
+#include <string>
+#include <vector>
 
 #include "astshim/base.h"
 #include "astshim/Object.h"
@@ -483,6 +485,14 @@ public:
     Get @ref FitsChan_CardName "CardName": the keyword name of the current card
     */
     std::string getCardName() const { return getC("CardName"); }
+
+    /**
+    Get the name of all cards, in order, starting from the first card
+
+    Not "const" because the code changes the index of the current card while operating
+    (but restores the original index when done).
+    */
+    std::vector<std::string> getCardNames();
 
     /**
     Get @ref FitsChan_CardType "CardType": data type of the current FITS card
