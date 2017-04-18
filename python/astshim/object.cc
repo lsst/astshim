@@ -53,6 +53,7 @@ PYBIND11_PLUGIN(object) {
     cls.def("getObjSize", &Object::getObjSize);
     cls.def("getRefCount", &Object::getRefCount);
     cls.def("getUseDefs", &Object::getUseDefs);
+
     cls.def("lock", &Object::lock, "wait"_a);
     cls.def("same", &Object::same, "other"_a);
     cls.def("setID", &Object::setID, "id"_a);
@@ -62,6 +63,20 @@ PYBIND11_PLUGIN(object) {
     cls.def("test", &Object::test, "attrib"_a);
     cls.def("unlock", &Object::unlock, "report"_a=false);
     // do not wrap getRawPtr, since it returns a bare AST pointer
+
+    cls.def("getB", &Object::getB, "attrib"_a);
+    cls.def("getC", &Object::getC, "attrib"_a);
+    cls.def("getD", &Object::getD, "attrib"_a);
+    cls.def("getF", &Object::getF, "attrib"_a);
+    cls.def("getI", &Object::getI, "attrib"_a);
+    cls.def("getL", &Object::getL, "attrib"_a);
+
+    cls.def("setB", &Object::setB, "attrib"_a, "value"_a);
+    cls.def("setC", &Object::setC, "attrib"_a, "value"_a);
+    cls.def("setD", &Object::setD, "attrib"_a, "value"_a);
+    cls.def("setF", &Object::setF, "attrib"_a, "value"_a);
+    cls.def("setI", &Object::setI, "attrib"_a, "value"_a);
+    cls.def("setL", &Object::setL, "attrib"_a, "value"_a);
 
     return mod.ptr();
 }

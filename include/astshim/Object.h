@@ -262,68 +262,6 @@ public:
     AstObject * getRawPtr() { return &*_objPtr; };
     ///@}
 
-protected:
-
-    /**
-    Construct an @ref Object from a pointer to a raw AstObject
-    */
-    explicit Object(AstObject * object) :
-        _objPtr(object, &detail::annulAstObject)
-    {
-        assertOK();
-        if (!object) {
-            throw std::runtime_error("Null pointer");
-        }
-    }
-
-    /**
-    Given a bare AST object pointer return a shared pointer to an ast::Object of the correct type
-
-    The returned object takes ownership of the pointer. This is almost always what you want,
-    for instance astDecompose returns shallow copies of the internal pointers.
-
-    @param[in] rawObj  A bare AST object pointer
-    */
-    static std::shared_ptr<Object> _basicFromAstObject(AstObject *rawObj);
-
-    /**
-    Functor to make an astshim instance from a raw AST pointer of the corresponding type.
-
-    @tparam ShimT  Output astshim class
-    @tparam AstT  Output AST class
-    */
-    template <typename ShimT, typename AstT>
-    static std::shared_ptr<ShimT> makeShim(AstObject * p) {
-        return std::shared_ptr<ShimT>(new ShimT(reinterpret_cast<AstT*>(p)));
-    }
-
-    /**
-    Implementation of deep copy
-
-    Should be called to implement _copyPolymorphic by all derived classes.
-    */
-    template<typename T, typename AstT>
-    std::shared_ptr<T> _copyImpl() const {
-        auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
-        auto retptr = std::shared_ptr<T>(new T(rawptr));
-        assertOK();
-        return retptr;
-    }
-
-    /**
-    Return a deep copy of this object. This is called by @ref copy.
-
-    Each subclass must override this method. The standard implementation is:
-    ```
-        return _copyImpl<astshim_class, ast_class>();
-    ```
-    for example @ref Frame implements this as:
-    ```
-        return _copyImpl<Frame, AstFrame>();
-    ```
-    */
-    virtual std::shared_ptr<Object> _copyPolymorphic() const = 0;
-
     /**
     Get the value of an attribute as a bool
 
@@ -403,29 +341,6 @@ protected:
     }        
 
     /**
-    Assign a set of attribute values, over-riding any previous values.
-
-    The attributes and their new values are specified via a character string,
-    which should contain a comma-separated list of the form:
-        "attribute_1 = value_1, attribute_2 = value_2, ... "
-    where "attribute_n" specifies an attribute name, and the value to the right of each " =" sign
-    should be a suitable textual representation of the value to be assigned.
-    This value will be interpreted according to the attribute's data type.
-
-    ### Notes
-
-    - Attribute names are not case sensitive and may be surrounded by white space
-    - Attribute names are not case sensitive and may be surrounded by white space.
-    - White space may also surround attribute values, where it will generally be ignored (except for
-      string-valued attributes where it is significant and forms part of the value to be assigned).
-    - To include a literal comma or percent sign in the value assigned to an attribute,
-      the whole attribute value should be enclosed in quotation markes.
-    
-    @throw std::runtime_error if the attribute is read-only
-    */
-    void set(std::string const & setting) { astSet(getRawPtr(), setting.c_str()); }
-
-    /**
     Set the value of an attribute as a bool
 
     If possible, the type you provide is converted to the actual type of the attribute.
@@ -496,6 +411,91 @@ protected:
         astSetL(getRawPtr(), attrib.c_str(), value);
         assertOK();
     }
+
+protected:
+
+    /**
+    Assign a set of attribute values, over-riding any previous values.
+
+    The attributes and their new values are specified via a character string,
+    which should contain a comma-separated list of the form:
+        "attribute_1 = value_1, attribute_2 = value_2, ... "
+    where "attribute_n" specifies an attribute name, and the value to the right of each " =" sign
+    should be a suitable textual representation of the value to be assigned.
+    This value will be interpreted according to the attribute's data type.
+
+    ### Notes
+
+    - Attribute names are not case sensitive and may be surrounded by white space
+    - Attribute names are not case sensitive and may be surrounded by white space.
+    - White space may also surround attribute values, where it will generally be ignored (except for
+      string-valued attributes where it is significant and forms part of the value to be assigned).
+    - To include a literal comma or percent sign in the value assigned to an attribute,
+      the whole attribute value should be enclosed in quotation markes.
+    
+    @throw std::runtime_error if the attribute is read-only
+    */
+    void set(std::string const & setting) { astSet(getRawPtr(), setting.c_str()); }
+
+    /**
+    Construct an @ref Object from a pointer to a raw AstObject
+    */
+    explicit Object(AstObject * object) :
+        _objPtr(object, &detail::annulAstObject)
+    {
+        assertOK();
+        if (!object) {
+            throw std::runtime_error("Null pointer");
+        }
+    }
+
+    /**
+    Given a bare AST object pointer return a shared pointer to an ast::Object of the correct type
+
+    The returned object takes ownership of the pointer. This is almost always what you want,
+    for instance astDecompose returns shallow copies of the internal pointers.
+
+    @param[in] rawObj  A bare AST object pointer
+    */
+    static std::shared_ptr<Object> _basicFromAstObject(AstObject *rawObj);
+
+    /**
+    Functor to make an astshim instance from a raw AST pointer of the corresponding type.
+
+    @tparam ShimT  Output astshim class
+    @tparam AstT  Output AST class
+    */
+    template <typename ShimT, typename AstT>
+    static std::shared_ptr<ShimT> makeShim(AstObject * p) {
+        return std::shared_ptr<ShimT>(new ShimT(reinterpret_cast<AstT*>(p)));
+    }
+
+    /**
+    Implementation of deep copy
+
+    Should be called to implement _copyPolymorphic by all derived classes.
+    */
+    template<typename T, typename AstT>
+    std::shared_ptr<T> _copyImpl() const {
+        auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
+        auto retptr = std::shared_ptr<T>(new T(rawptr));
+        assertOK();
+        return retptr;
+    }
+
+    /**
+    Return a deep copy of this object. This is called by @ref copy.
+
+    Each subclass must override this method. The standard implementation is:
+    ```
+        return _copyImpl<astshim_class, ast_class>();
+    ```
+    for example @ref Frame implements this as:
+    ```
+        return _copyImpl<Frame, AstFrame>();
+    ```
+    */
+    virtual std::shared_ptr<Object> _copyPolymorphic() const = 0;
 
 private:
     ObjectPtr _objPtr;

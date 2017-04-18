@@ -25,9 +25,8 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
     both for vectors and 2-dimensional ndarrays.
     For example if nAxes = 2 then the data is in this order: x0, y0, x1, y1, x2, y2...
     Note that memory order is transposed from the memory order AST uses.
-- @ref Mapping "Mappings" may not be inverted in place.
-    Instead call @ref Mapping.getInverse to get an inverse mapping,
-    and @ref Mapping.isInverted to find out if a mapping is inverted.
+- The recommended way to get an inverse mapping is call @ref Mapping.getInverse;
+    call @ref Mapping.isInverted to find out if a mapping has been inverted.
 - Compound mappings and frames have a few minor changes:
     - New classes @ref SeriesMap and @ref ParallelMap are subclasses of @ref CmpMap
         and any compound mapping will always be an instance of one or the other of these subclasses.
