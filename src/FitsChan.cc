@@ -21,6 +21,8 @@
  */
 
 #include <complex>
+#include <string>
+#include <vector>
 
 #include "astshim/base.h"
 #include "astshim/detail/utils.h"
@@ -108,6 +110,24 @@ namespace ast {
         assertOK();
         std::string val = found ? rawval : defval;
         return FoundValue<std::string>(found, val);
+    }
+
+    std::vector<std::string> FitsChan::getAllCardNames() {
+        int const initialIndex = getCard();
+        int const numCards = getNcard();
+        std::vector<std::string> nameList;
+        nameList.reserve(numCards);
+        try {
+            for (auto i = 1; i <= numCards; ++i) {
+                setCard(i);
+                nameList.emplace_back(getCardName());
+            }
+        } catch (...) {
+            setCard(initialIndex);
+            throw;
+        }
+        setCard(initialIndex);
+        return nameList;
     }
 
     FoundValue<std::string> FitsChan::findFits(std::string const & name, bool inc) {

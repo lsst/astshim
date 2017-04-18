@@ -74,19 +74,26 @@ class TestObject(ObjectTestCase):
         fv = fc.getFitsS("FRED")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value, "99")
+        self.assertEqual(fc.getNcard(), 1)
+        self.assertEqual(fc.getAllCardNames(), ["FRED"])
+        # replace this card
         fc.setFitsF("FRED1", 99.9, "Hello there", True)
         fv = fc.getFitsS("FRED1")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value, "99.9")
-        fc.setFitsCF("FRED2", complex(99.9, 99.8), "Hello there", True)
-        fv = fc.getFitsCF("FRED2")
+        self.assertEqual(fc.getNcard(), 1)
+        self.assertEqual(fc.getAllCardNames(), ["FRED1"])
+        fc.setFitsCF("FRED1", complex(99.9, 99.8), "Hello there", True)
+        fv = fc.getFitsCF("FRED1")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value.real, 99.9)
         self.assertEqual(fv.value.imag, 99.8)
-        fc.setFitsS("FRED4", "-12", "Hello there", True)
-        fv = fc.getFitsI("FRED4")
+        fc.setFitsS("FRED1", "-12", "Hello there", True)
+        fv = fc.getFitsI("FRED1")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value, -12)
+        self.assertEqual(fc.getNcard(), 1)
+        self.assertEqual(fc.getAllCardNames(), ["FRED1"])
 
     def test_FitsChanEmptyFits(self):
         ss = astshim.StringStream("".join(self.cards))
@@ -106,11 +113,15 @@ class TestObject(ObjectTestCase):
         self.assertEqual(fc.getCard(), 3)
         fc.clearCard()
         self.assertEqual(fc.getCard(), 1)
+        self.assertEqual(fc.getAllCardNames(), ["CRVAL1", "CRVAL2"])
 
+        # insert new cards at the beginning
         for card in self.cards[0:8]:
             fc.putFits(card, False)
         self.assertEqual(fc.getNcard(), 10)
         self.assertEqual(fc.getCard(), 9)
+        predCardNames = [c.split()[0] for c in self.cards[0:8]] + ["CRVAL1", "CRVAL2"]
+        self.assertEqual(fc.getAllCardNames(), predCardNames)
 
     def test_FitsChanFindFits(self):
         ss = astshim.StringStream("".join(self.cards))

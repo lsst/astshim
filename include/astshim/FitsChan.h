@@ -23,6 +23,8 @@
 #define ASTSHIM_FITSCHAN_H
 
 #include <complex>
+#include <string>
+#include <vector>
 
 #include "astshim/base.h"
 #include "astshim/Object.h"
@@ -462,6 +464,14 @@ public:
     has a defined value, prior to calling this function.
     */
     FoundValue<std::string> getFitsS(std::string const & name, std::string defval="") const;
+
+    /**
+    Get the name of all cards, in order, starting from the first card
+
+    Not "const" because the code changes the index of the current card while operating
+    (but restores the original index when done).
+    */
+    std::vector<std::string> getAllCardNames();
 
     /**
     Get @ref FitsChan_AllWarnings "AllWarnings": a space separated list of
