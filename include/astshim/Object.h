@@ -70,7 +70,7 @@ public:
     }
 
     /**
-    Given a bare AST object pointer return a shared pointer to an astshim::Object of the correct type
+    Given a bare AST object pointer return a shared pointer to an ast::Object of the correct type
 
     The returned object takes ownership of the pointer. This is almost always what you want,
     for instance astDecompose returns shallow copies of the internal pointers.
@@ -277,7 +277,7 @@ protected:
     }
 
     /**
-    Given a bare AST object pointer return a shared pointer to an astshim::Object of the correct type
+    Given a bare AST object pointer return a shared pointer to an ast::Object of the correct type
 
     The returned object takes ownership of the pointer. This is almost always what you want,
     for instance astDecompose returns shallow copies of the internal pointers.

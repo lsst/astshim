@@ -65,7 +65,7 @@ public:
         for details.
     @param[in] options  Comma-separated list of attribute assignments.
 
-    @subsection PolyMap_CoefficientMatrices Coefficient Matrices
+    @anchor PolyMap_CoefficientMatrices Coefficient Matrices
 
     The coefficients describing a forward transformation are specified as an `ncoeff_f x (2 + nin)`
     matrix, where `ncoeff_f` is the number of coefficients for the forward
