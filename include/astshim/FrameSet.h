@@ -262,14 +262,21 @@ public:
         This value should lie in the range 1 to the number of frames already in this @ref FrameSet
         (as given by @ref getNframe). A value of FrameSet::Base or FrameSet::CURRENT
         may be given to specify the base @ref Frame or the current @ref Frame, respectively.
+    @param[in] copy  If true return a deep copy, else a shallow copy.
+
+    @warning: to permute axes of a frame in a FrameSet, such that
+    the connecting mappings are updated: set the current frame
+    to the frame in question and call `permAxes` directly on the FrameSet.
+    Do *not* call `permAxes` on a shallow copy of the frame (retrieved
+    by getFrame) as this will not affect the connected mappings.
     */
-    std::shared_ptr<Frame> getFrame(int iframe) const {
+    std::shared_ptr<Frame> getFrame(int iframe, bool copy=true) const {
         auto * rawFrame = reinterpret_cast<AstObject *>(astGetFrame(getRawPtr(), iframe));
         assertOK(rawFrame);
         if (!rawFrame) {
             throw std::runtime_error("getFrame failed (returned a null frame)");
         }
-        return Object::fromAstObject<Frame>(rawFrame, true);
+        return Object::fromAstObject<Frame>(rawFrame, copy);
     }
 
     /**
