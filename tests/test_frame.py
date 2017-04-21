@@ -96,8 +96,7 @@ class TestFrame(MappingTestCase):
         assert_allclose(outdata, indata)
         self.checkRoundTrip(fset, indata)
 
-        with self.assertRaises(RuntimeError):
-            frame.convert(astshim.Frame(3))
+        self.assertIsNone(frame.convert(astshim.Frame(3)))
 
     def test_FrameFindFrame(self):
         frame = astshim.Frame(2)
@@ -118,8 +117,7 @@ class TestFrame(MappingTestCase):
         assert_allclose(outdata, indata)
         self.checkRoundTrip(fset, indata)
 
-        with self.assertRaises(RuntimeError):
-            frame.findFrame(astshim.Frame(3))
+        self.assertIsNone(frame.findFrame(astshim.Frame(3)))
 
     def test_FrameDistance(self):
         frame = astshim.Frame(2)

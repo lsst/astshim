@@ -154,6 +154,7 @@ std::string Object::show() const {
 }
 
 // Explicit instantiations
+template std::shared_ptr<FrameSet> Object::fromAstObject<FrameSet>(AstObject *, bool);
 template std::shared_ptr<Frame> Object::fromAstObject<Frame>(AstObject *, bool);
 template std::shared_ptr<Mapping> Object::fromAstObject<Mapping>(AstObject *, bool);
 template std::shared_ptr<Object> Object::fromAstObject<Object>(AstObject *, bool);

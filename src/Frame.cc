@@ -27,24 +27,24 @@
 
 namespace ast {
 
-FrameSet Frame::convert(Frame const &to, std::string const &domainlist) {
+std::shared_ptr<FrameSet> Frame::convert(Frame const &to, std::string const &domainlist) {
     auto *rawFrameSet =
         reinterpret_cast<AstFrameSet *>(astConvert(getRawPtr(), to.getRawPtr(), domainlist.c_str()));
     assertOK(reinterpret_cast<AstObject *>(rawFrameSet));
     if (!rawFrameSet) {
-        throw notfound_error("convert found no suitable frame set");
+        return std::shared_ptr<FrameSet>();
     }
-    return FrameSet(rawFrameSet);
+    return Object::fromAstObject<FrameSet>(reinterpret_cast<AstObject *>(rawFrameSet), false);    
 }
 
-FrameSet Frame::findFrame(Frame const &tmplt, std::string const &domainlist) {
+std::shared_ptr<FrameSet> Frame::findFrame(Frame const &tmplt, std::string const &domainlist) {
     auto *rawFrameSet =
         reinterpret_cast<AstFrameSet *>(astFindFrame(getRawPtr(), tmplt.getRawPtr(), domainlist.c_str()));
     assertOK(reinterpret_cast<AstObject *>(rawFrameSet));
     if (!rawFrameSet) {
-        throw notfound_error("findFrame found no suitable frame set");
+        return std::shared_ptr<FrameSet>();
     }
-    return FrameSet(rawFrameSet);
+    return Object::fromAstObject<FrameSet>(reinterpret_cast<AstObject *>(rawFrameSet), false);    
 }
 
 std::vector<double> Frame::intersect(std::vector<double> const &a1, std::vector<double> const &a2,

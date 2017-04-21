@@ -36,17 +36,6 @@ extern "C" {
 /// AST wrapper classes and functions.
 namespace ast {
 
-/**
-Exception thrown when a search is unsuccessful.
-
-Thrown by Frame.convert and Frame.findFrame
-*/
-class notfound_error : public std::runtime_error {
-public:
-    /// Construct a notfound_error with a specified error message
-    notfound_error(std::string const &msg) : std::runtime_error(msg){};
-};
-
 using Array2D = ndarray::Array<double, 2, 2>;
 using ConstArray2D = ndarray::Array<double const, 2, 2>;
 using PointI = std::vector<int>;
