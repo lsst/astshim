@@ -166,8 +166,10 @@ public:
     Add a new Frame and an associated @ref Mapping to this FrameSet so as to define a new coordinate system,
     derived from one which already exists within this FrameSet.
 
-    The new Frame becomes this FrameSet's current Frame.
-    This function may also be used to merge two FrameSets.
+    If `frame` is a Frame then it becomes the current frame and its index is the new number of frames.
+    If `frame` is a FrameSet then its current frame becomes the new current frame and the indices
+    of all its frames are increased by the number of frames originally in this FrameSet.
+    In both cases the indices of the Frames already in this FrameSet are left unchanged.
 
     @param[in] iframe  The index of the Frame within the FrameSet which describes the coordinate system
         upon which the new one is to be based.  This value should lie in the range from
@@ -418,8 +420,8 @@ public:
     /**
     Remove a @ref Frame from a @ref FrameSet
 
-    All other Frames in the FrameSet have their indices re-numbered from one (if necessary),
-    but are otherwise unchanged.
+    Other Frame indices in the FrameSet are re-numbered as follows: Frame indices greater than `iframe`
+    are decremented by one; other Frame indeces retain the same index.
 
     @param[in] iframe  The index of the required @ref Frame within this @ref FrameSet.
         This value should lie in the range 1 to the number of @ref Frame "Frames"
