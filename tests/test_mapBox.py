@@ -22,6 +22,8 @@ class TestMapBox(MappingTestCase):
         inbnd_a = np.array([-1.2, 3.3])
         inbnd_b = np.array([2.7, 2.2])
         mapbox = astshim.MapBox(winmap, inbnd_a, inbnd_b)
+        # If maxOutCoord is not specified by the user, it should be set to nout
+        self.assertEqual(mapbox.maxOutCoord, winmap.getNout())
 
         lbndin = np.minimum(inbnd_a, inbnd_b)
         ubndin = np.maximum(inbnd_a, inbnd_b)

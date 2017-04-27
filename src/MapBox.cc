@@ -57,6 +57,7 @@ void MapBox::_compute(Mapping const & map,
     detail::assertEqual(ubnd.size(), "ubnd.size()", nin, "Nin");
     if (maxOutCoord == 0) {
         maxOutCoord = nout;
+        this->maxOutCoord = maxOutCoord; // DM-10008
     } else if ((maxOutCoord < 0) || (maxOutCoord > nout)) {
        std::ostringstream os;
        os << "maxOutCoord = " << maxOutCoord << " not in range [1, " << nout
