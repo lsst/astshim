@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_MATHMAP_H
@@ -59,7 +59,8 @@ In addition to those attributes provided by @ref Mapping and @ref Object,
 - @ref MathMap_SimpIF "SimpIF": Inverse-forward MathMap pairs simplify?
 */
 class MathMap : public Mapping {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a Mathmap
@@ -371,25 +372,21 @@ public:
     All operators associate from left-to-right, except for unary `+`, unary `-`, `!`, `.not.` and `**`
     which associate from right-to-left.
     */
-    MathMap(int nin, int nout, std::vector<std::string> const & fwd,
-                std::vector<std::string> const & rev, std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(
-            astMathMap(nin, nout,
-                       fwd.size(), getCStrVec(fwd).data(),
-                       rev.size(), getCStrVec(rev).data(), options.c_str())))
-    {}
+    MathMap(int nin, int nout, std::vector<std::string> const &fwd, std::vector<std::string> const &rev,
+            std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(astMathMap(nin, nout, fwd.size(), getCStrVec(fwd).data(),
+                                                                rev.size(), getCStrVec(rev).data(),
+                                                                options.c_str()))) {}
 
     virtual ~MathMap() {}
 
     MathMap(MathMap const &) = delete;
     MathMap(MathMap &&) = default;
-    MathMap & operator=(MathMap const &) = delete;
-    MathMap & operator=(MathMap &&) = default;
+    MathMap &operator=(MathMap const &) = delete;
+    MathMap &operator=(MathMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<MathMap> copy() const {
-        return std::static_pointer_cast<MathMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<MathMap> copy() const { return std::static_pointer_cast<MathMap>(_copyPolymorphic()); }
 
     /**
     Get @ref MathMap_Seed "Seed": random number seed
@@ -409,12 +406,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<MathMap, AstMathMap>();
-    }    
+    }
 
     /// Construct a MathMap from a raw AST pointer
-    explicit MathMap(AstMathMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit MathMap(AstMathMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAMathMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a MathMap";
@@ -424,9 +419,9 @@ protected:
 
 private:
     /// Convert a vector<string> to a vector<char const *>
-    std::vector<char const *> getCStrVec(std::vector<std::string> const & strVec) {
+    std::vector<char const *> getCStrVec(std::vector<std::string> const &strVec) {
         std::vector<char const *> cstrVec;
-        for (auto const & str : strVec) {
+        for (auto const &str : strVec) {
             cstrVec.push_back(str.c_str());
         }
         return cstrVec;

@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_FRAMESET_H
@@ -97,25 +97,25 @@ inherited by any FrameSet which has a @ref SkyFrame as its current
 change when a new current @ref Frame is selected.
 */
 class FrameSet : public Frame {
-friend class Frame;  // so Frame can call the protected raw ptr constructor
-friend class Object;
+    friend class Frame;  // so Frame can call the protected raw ptr constructor
+    friend class Object;
+
 public:
-    static int constexpr BASE = AST__BASE;  ///< index of base frame
+    static int constexpr BASE = AST__BASE;        ///< index of base frame
     static int constexpr CURRENT = AST__CURRENT;  ///< index of current frame
-    static int constexpr NOFRAME = AST__NOFRAME; ///< an invalid frame index
+    static int constexpr NOFRAME = AST__NOFRAME;  ///< an invalid frame index
     /**
     Construct a FrameSet from a Frame
 
     The frame is deep copied.
 
-    @param[in] frame  the first @ref Frame to be inserted into the @ref FrameSet. 
-                    This initially becomes both the base and the current Frame. 
+    @param[in] frame  the first @ref Frame to be inserted into the @ref FrameSet.
+                    This initially becomes both the base and the current Frame.
                     Further Frames may be added using @ref addFrame
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit FrameSet(Frame const & frame, std::string const & options="") :
-        FrameSet(astFrameSet(frame.copy()->getRawPtr(), options.c_str()))
-    {}
+    explicit FrameSet(Frame const &frame, std::string const &options = "")
+            : FrameSet(astFrameSet(frame.copy()->getRawPtr(), options.c_str())) {}
 
     /**
     Construct a FrameSet from two frames and a mapping that connects them
@@ -127,7 +127,7 @@ public:
     @param[in] currentFrame  current @ref Frame.
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit FrameSet(Frame const & baseFrame, Mapping const & mapping, Frame const & currentFrame,
+    explicit FrameSet(Frame const &baseFrame, Mapping const &mapping, Frame const &currentFrame,
                       std::string const &options = "")
             : FrameSet(astFrameSet(baseFrame.copy()->getRawPtr(), options.c_str())) {
         addFrame(1, mapping, currentFrame);
@@ -137,13 +137,11 @@ public:
 
     FrameSet(FrameSet const &) = delete;
     FrameSet(FrameSet &&) = default;
-    FrameSet & operator=(FrameSet const &) = delete;
-    FrameSet & operator=(FrameSet &&) = default;
+    FrameSet &operator=(FrameSet const &) = delete;
+    FrameSet &operator=(FrameSet &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<FrameSet> copy() const {
-        return std::static_pointer_cast<FrameSet>(_copyPolymorphic());
-    }
+    std::shared_ptr<FrameSet> copy() const { return std::static_pointer_cast<FrameSet>(_copyPolymorphic()); }
 
     /**
     Append the axes from a specified @ref Frame to every existing @ref Frame in this FrameSet.
@@ -157,7 +155,7 @@ public:
 
     @param[in] frame  @ref Frame whose axes are to be appended to each @ref Frame in this FrameSet.
     */
-    void addAxes(Frame const & frame) {
+    void addAxes(Frame const &frame) {
         astAddFrame(getRawPtr(), AST__ALLFRAMES, nullptr, frame.getRawPtr());
         assertOK();
     }
@@ -180,7 +178,7 @@ public:
     @param[in] map  A @ref Mapping which describes how to convert coordinates from the old coordinate
         system (described by the @ref Frame with index `iframe` ) into coordinates in the
         new system.  The Mapping's forward transformation should perform this conversion,
-        and its inverse transformation should convert in the opposite direction. 
+        and its inverse transformation should convert in the opposite direction.
     @param[in] frame  A @ref Frame that describes the new coordinate system.  Any type of @ref Frame
         may be supplied (including Regions and FrameSets).
         This function may also be used to merge two FrameSets by supplying a pointer to
@@ -207,7 +205,7 @@ public:
         and the `current` @ref Frame of the `frame` FrameSet. This latter @ref Frame becomes
         the current @ref Frame in this FrameSet.
     */
-    void addFrame(int iframe, Mapping const & map, Frame const & frame) {
+    void addFrame(int iframe, Mapping const &map, Frame const &frame) {
         if (iframe == AST__ALLFRAMES) {
             throw std::runtime_error("iframe = AST__ALLFRAMES; call addAxes instead");
         }
@@ -236,7 +234,7 @@ public:
         This is only the case if the astMirrorVariants function has been called
         to make the current Frame act as a mirror.
     */
-    void addVariant(Mapping const & map, std::string const & name) {
+    void addVariant(Mapping const &map, std::string const &name) {
         astAddVariant(getRawPtr(), map.getRawPtr(), name.c_str());
         assertOK();
     }
@@ -272,8 +270,8 @@ public:
     Do *not* call `permAxes` on a shallow copy of the frame (retrieved
     by getFrame) as this will not affect the connected mappings.
     */
-    std::shared_ptr<Frame> getFrame(int iframe, bool copy=true) const {
-        auto * rawFrame = reinterpret_cast<AstObject *>(astGetFrame(getRawPtr(), iframe));
+    std::shared_ptr<Frame> getFrame(int iframe, bool copy = true) const {
+        auto *rawFrame = reinterpret_cast<AstObject *>(astGetFrame(getRawPtr(), iframe));
         assertOK(rawFrame);
         if (!rawFrame) {
             throw std::runtime_error("getFrame failed (returned a null frame)");
@@ -285,13 +283,13 @@ public:
     Obtain a @ref Mapping that converts between two @ref Frame "Frames" in a @ref FrameSet
 
     @param[in] ind1   The index of the first @ref Frame in the @ref FrameSet, the frame
-        describing the coordinate system for the "input" end of the Mapping.    
+        describing the coordinate system for the "input" end of the Mapping.
         This value should lie in the range 1 to the number of frames already in this @ref FrameSet
-        (as given by @ref getNframe).    
+        (as given by @ref getNframe).
     @param[in] ind2   The index of the second @ref Frame in the @ref FrameSet,
         the frame describing the coordinate system for the "output" end of the @ref Mapping.
         This value should lie in the range 1 to the number of frames already in this @ref FrameSet
-        (as given by @ref getNframe).    
+        (as given by @ref getNframe).
 
     @return A @ref Mapping whose forward transformation converts coordinates from the first
         frame to the second one, and whose inverse transformation converts coordinates
@@ -304,10 +302,10 @@ public:
     - It should always be possible to generate the @ref Mapping requested, but this does not
         necessarily guarantee that it will be able to perform the required coordinate conversion.
         If necessary, the `TranForward` and `TranInverse` attributes of the returned @ref Mapping
-        should be inspected to determine if the required transformation is available.    
+        should be inspected to determine if the required transformation is available.
     */
-    std::shared_ptr<Mapping> getMapping(int ind1=BASE, int ind2=CURRENT) const {
-        AstObject * rawMap = reinterpret_cast<AstObject *>(astGetMapping(getRawPtr(), ind1, ind2));
+    std::shared_ptr<Mapping> getMapping(int ind1 = BASE, int ind2 = CURRENT) const {
+        AstObject *rawMap = reinterpret_cast<AstObject *>(astGetMapping(getRawPtr(), ind1, ind2));
         assertOK(rawMap);
         if (!rawMap) {
             throw std::runtime_error("getMapping failed (returned a null mapping)");
@@ -401,7 +399,7 @@ public:
     - The relationship between the selected @ref Frame and any other @ref Frame
         within the @ref FrameSet will be modified by this function, but the relationship between
         all other @ref Frame "Frames" in the @ref FrameSet remains unchanged.
-    - The number of input and output coordinate values of the @ref Mapping 
+    - The number of input and output coordinate values of the @ref Mapping
         must be equal and must match the number of axes in the @ref Frame being modified.
     - If a simple change of axis order is required, then @ref permAxes may provide
         a more straightforward method of making the required changes to the @ref FrameSet.
@@ -412,7 +410,7 @@ public:
         (except for the current variant) will be lost as a consequence of calling this method
         (see attribute `Variant`).
     */
-    void remapFrame(int iframe, Mapping & map) {
+    void remapFrame(int iframe, Mapping &map) {
         astRemapFrame(getRawPtr(), iframe, map.getRawPtr());
         assertOK();
     };
@@ -465,7 +463,7 @@ public:
         This is only the case if the astMirrorVariants function has been called
         to make the current Frame act as a mirror.
     */
-    void renameVariant(std::string const & name) {
+    void renameVariant(std::string const &name) {
         astAddVariant(getRawPtr(), nullptr, name.c_str());
         assertOK();
     }
@@ -483,7 +481,7 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<FrameSet, AstFrameSet>();
-    }    
+    }
 
     /**
     Construct a FrameSet from a raw AST pointer
@@ -492,9 +490,7 @@ protected:
 
     @throw std::invalid_argument if `rawPtr` is not an AstFrameSet.
     */
-    explicit FrameSet(AstFrameSet * rawPtr) :
-        Frame(reinterpret_cast<AstFrame *>(rawPtr))
-    {
+    explicit FrameSet(AstFrameSet *rawPtr) : Frame(reinterpret_cast<AstFrame *>(rawPtr)) {
         if (!astIsAFrameSet(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a FrameSet";

@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_XMLCHAN_H
@@ -55,19 +55,17 @@ public:
             where either stream can be nullptr if not wanted
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit XmlChan(Stream & stream, std::string const & options="")
-    :
-        Channel(
-            reinterpret_cast<AstChannel *>(astXmlChan(detail::source, detail::sink, options.c_str())),
-            stream)
-    {}
+    explicit XmlChan(Stream &stream, std::string const &options = "")
+            : Channel(reinterpret_cast<AstChannel *>(
+                              astXmlChan(detail::source, detail::sink, options.c_str())),
+                      stream) {}
 
     virtual ~XmlChan() {}
 
     XmlChan(XmlChan const &) = delete;
     XmlChan(XmlChan &&) = default;
-    XmlChan & operator=(XmlChan const &) = delete;
-    XmlChan & operator=(XmlChan &&) = default;
+    XmlChan &operator=(XmlChan const &) = delete;
+    XmlChan &operator=(XmlChan &&) = default;
 
     /// Get @ref XmlChan_XmlFormat "XmlFormat" System for formatting Objects as XML.
     std::string getXmlFormat() const { return getC("XmlFormat"); }
@@ -79,13 +77,13 @@ public:
     std::string getXmlPrefix() { return getC("XmlPrefix"); }
 
     /// Set @ref XmlChan_XmlFormat "XmlFormat" System for formatting Objects as XML.
-    void setXmlFormat(std::string const & format) { setC("XmlFormat", format); }
+    void setXmlFormat(std::string const &format) { setC("XmlFormat", format); }
 
     /// Set @ref XmlChan_XmlLength "XmlLength": controls output buffer length; 0 for no limit.
     void setXmlLength(int len) { setI("XmlLength", len); }
 
     /// Set @ref XmlChan_XmlPrefix "XmlPrefix": the namespace prefix to use when writing.
-    void setXmlPrefix(std::string const & prefix) { setC("XmlPrefix", prefix); }
+    void setXmlPrefix(std::string const &prefix) { setC("XmlPrefix", prefix); }
 };
 
 }  // namespace ast

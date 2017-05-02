@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_WINMAP_H
@@ -42,8 +42,9 @@ edges being parallel to the coordinate axes).
 
 @ref WinMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
-class WinMap: public Mapping {
-friend class Object;
+class WinMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Create a WinMap from the coordinates of two opposite corners (A and B)
@@ -57,37 +58,28 @@ public:
 
     @throw std::invalid_argument if the lengths of the input vectors do not all match.
     */
-    explicit WinMap(
-        std::vector<double> const & ina,
-        std::vector<double> const & inb,
-        std::vector<double> const & outa,
-        std::vector<double> const & outb,
-        std::string const & options=""
-    ) :
-        Mapping(reinterpret_cast<AstMapping *>(_makeRawWinMap(ina, inb, outa, outb, options)))
-    {}
+    explicit WinMap(std::vector<double> const &ina, std::vector<double> const &inb,
+                    std::vector<double> const &outa, std::vector<double> const &outb,
+                    std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(_makeRawWinMap(ina, inb, outa, outb, options))) {}
 
     virtual ~WinMap() {}
 
     WinMap(WinMap const &) = delete;
     WinMap(WinMap &&) = default;
-    WinMap & operator=(WinMap const &) = delete;
-    WinMap & operator=(WinMap &&) = default;
+    WinMap &operator=(WinMap const &) = delete;
+    WinMap &operator=(WinMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<WinMap> copy() const {
-        return std::static_pointer_cast<WinMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<WinMap> copy() const { return std::static_pointer_cast<WinMap>(_copyPolymorphic()); }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<WinMap, AstWinMap>();
-    }    
+    }
 
     /// Construct a WinMap from a raw AST pointer
-    explicit WinMap(AstWinMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit WinMap(AstWinMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAWinMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a WinMap";
@@ -96,13 +88,9 @@ protected:
     }
 
 private:
-    AstWinMap * _makeRawWinMap(
-        std::vector<double> const & ina,
-        std::vector<double> const & inb,
-        std::vector<double> const & outa,
-        std::vector<double> const & outb,
-        std::string const & options=""
-     ) {
+    AstWinMap *_makeRawWinMap(std::vector<double> const &ina, std::vector<double> const &inb,
+                              std::vector<double> const &outa, std::vector<double> const &outb,
+                              std::string const &options = "") {
         auto const ncoord = ina.size();
         if (inb.size() != ncoord) {
             std::ostringstream os;

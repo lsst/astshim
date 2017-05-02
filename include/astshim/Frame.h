@@ -50,7 +50,7 @@ public:
     */
     DirectionPoint(double direction, PointD const &point) : direction(direction), point(point){};
     double direction;  ///< Direction, an angle in radians
-    PointD point;  ///< Point
+    PointD point;      ///< Point
 };
 
 /**
@@ -65,7 +65,7 @@ public:
     @param[in] value  Value that was read
     */
     NReadValue(int nread, double value) : nread(nread), value(value){};
-    int nread;  ///< Number of characters that was read
+    int nread;     ///< Number of characters that was read
     double value;  ///< Value that was read
 };
 
@@ -81,8 +81,8 @@ public:
     */
     explicit ResolvedPoint(int naxes) : point(naxes), d1(), d2() {}
     std::vector<double> point;  ///< Point
-    double d1;  ///< Resolved vector component 1
-    double d2;  ///< Resolved vector component 2
+    double d1;                  ///< Resolved vector component 1
+    double d2;                  ///< Resolved vector component 2
 };
 
 /**
@@ -96,12 +96,11 @@ public:
     @param[in,out] frame  Frame
     @param[in,out] mapping  Mapping
     */
-    FrameMapping(std::shared_ptr<Frame> frame, std::shared_ptr<Mapping> mapping) :
-     frame(frame), mapping(mapping) {}
-    std::shared_ptr<Frame> frame;  ///< Frame
+    FrameMapping(std::shared_ptr<Frame> frame, std::shared_ptr<Mapping> mapping)
+            : frame(frame), mapping(mapping) {}
+    std::shared_ptr<Frame> frame;      ///< Frame
     std::shared_ptr<Mapping> mapping;  ///< Mapping
 };
-
 
 class FrameSet;
 
@@ -167,7 +166,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit Frame(int naxes, std::string const &options = "")
-        : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str()))) {}
 
     virtual ~Frame() {}
 
@@ -456,7 +455,7 @@ public:
         in the inverses of the @ref FrameSet "FrameSets" (using @ref Mapping.getInverse "getInverse")
         so as to interchange their base and current frames.
     */
-    std::shared_ptr<FrameSet> convert(Frame const &to, std::string const &domainlist="");
+    std::shared_ptr<FrameSet> convert(Frame const &to, std::string const &domainlist = "");
 
     /**
     Find the distance between two points whose Frame coordinates are given.

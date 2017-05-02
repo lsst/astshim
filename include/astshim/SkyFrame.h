@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_SKYFRAME_H
@@ -64,7 +64,8 @@ SkyFrame provides the following attributes, in addition to those provided by @re
 - @ref SkyFrame_SkyTol "SkyTol": smallest significant shift in sky coordinates.
 */
 class SkyFrame : public Frame {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a SkyFrame
@@ -80,20 +81,20 @@ public:
         Creates a SkyFrame to describe the default ICRS celestial coordinate system.
 
     - `auto auto = astSkyFrame("System = FK5, Equinox = J2005, Digits = 10")`
-       
+
        Creates a SkyFrame to describe the FK5 celestial
        coordinate system, with a mean Equinox oc        Because especially accurate coordinates will be used,
        additional precision (10 digits) has been requested. This will
        be used when coordinate values are formatted for display.
 
     - `auto auto = astSkyFrame("System = FK4, Equinox = 1955-sep-2")`
-       
+
        Creates a SkyFrame to describe the old FK4 celestial
        coordinate system.  A default Epoch value (B1950.0) is used,
        but the mean Equinox value is given explicitly as "1955-sep-2".
 
     - `auto auto = astSkyFrame("System = GAPPT, Epoch = J2000")`
-       
+
        Creates a SkyFrame to describe the Geocentric Apparent
        celestial coordinate system.
 
@@ -120,22 +121,18 @@ public:
         relationship between positions on the sky measured in the two
         systems.
     */
-    explicit SkyFrame(std::string const & options="")
-    :
-        Frame(reinterpret_cast<AstFrame *>(astSkyFrame(options.c_str())))
-    {}
+    explicit SkyFrame(std::string const &options = "")
+            : Frame(reinterpret_cast<AstFrame *>(astSkyFrame(options.c_str()))) {}
 
     virtual ~SkyFrame() {}
 
     SkyFrame(SkyFrame const &) = delete;
     SkyFrame(SkyFrame &&) = default;
-    SkyFrame & operator=(SkyFrame const &) = delete;
-    SkyFrame & operator=(SkyFrame &&) = default;
+    SkyFrame &operator=(SkyFrame const &) = delete;
+    SkyFrame &operator=(SkyFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SkyFrame> copy() const {
-        return std::static_pointer_cast<SkyFrame>(_copyPolymorphic());
-    }
+    std::shared_ptr<SkyFrame> copy() const { return std::static_pointer_cast<SkyFrame>(_copyPolymorphic()); }
 
     /// Get @ref SkyFrame_AlignOffset "AlignOffset": align SkyFrames using the offset coordinate system?
     bool getAlignOffset() const { return getB("AlignOffset"); }
@@ -154,10 +151,10 @@ public:
 
     /// Get @ref SkyFrame_LatAxis "LatAxis": index of the latitude axis.
     int getLatAxis() const { return getI("LatAxis"); }
-    
+
     /// Get @ref SkyFrame_LonAxis "LonAxis": index of the longitude axis.
     int getLonAxis() const { return getI("LonAxis"); }
-    
+
     /// Get @ref SkyFrame_NegLon "NegLon": display longitude values in the range [-pi,pi]?
     bool getNegLon() const { return getB("NegLon"); }
 
@@ -190,7 +187,6 @@ public:
     /// Get @ref SkyFrame_SkyTol "SkyTol": smallest significant shift in sky coordinates.
     double getSkyTol() const { return getD("SkyTol"); }
 
-
     /// Set @ref SkyFrame_AlignOffset "AlignOffset": align SkyFrames using the offset coordinate system?
     void setAlignOffset(bool alignOffset) { setB("AlignOffset", alignOffset); }
 
@@ -199,15 +195,15 @@ public:
 
     /// Set @ref SkyFrame_Equinox "Equinox": epoch of the mean equinox.
     void setEquinox(double equinox) { setD("Equinox", equinox); }
-    
+
     /// Set @ref SkyFrame_NegLon "NegLon": display longitude values in the range [-pi,pi]?
     void setNegLon(bool negLon) { setB("NegLon", negLon); }
 
     /// Set @ref SkyFrame_Projection "Projection": sky projection description.
-    void setProjection(std::string const & projection) { setC("Projection", projection); }
+    void setProjection(std::string const &projection) { setC("Projection", projection); }
 
     /// Set @ref SkyFrame_SkyRef "SkyRef": position defining location of the offset coordinate system.
-    void setSkyRef(std::vector<double> const & skyRef) {
+    void setSkyRef(std::vector<double> const &skyRef) {
         detail::assertEqual(skyRef.size(), "skyRef length", 2, "number of axes");
         for (int i = 0; i < 2; ++i) {
             setD(detail::formatAxisAttr("SkyRef", i + 1), skyRef[i]);
@@ -215,10 +211,10 @@ public:
     }
 
     /// Set @ref SkyFrame_SkyRefIs "SkyRefIs": selects the nature of the offset coordinate system.
-    void setSkyRefIs(std::string const & skyRefIs) { setC("SkyRefIs", skyRefIs); }
+    void setSkyRefIs(std::string const &skyRefIs) { setC("SkyRefIs", skyRefIs); }
 
     /// Set @ref SkyFrame_SkyRefP "SkyRefP": position defining orientation of the offset coordinate system.
-    void setSkyRefP(std::vector<double> const & skyRefP) {
+    void setSkyRefP(std::vector<double> const &skyRefP) {
         detail::assertEqual(skyRefP.size(), "skyRefP length", 2, "number of axes");
         for (int i = 0; i < 2; ++i) {
             setD(detail::formatAxisAttr("SkyRefP", i + 1), skyRefP[i]);
@@ -237,19 +233,17 @@ public:
     A @ref UnitMap is returned if the sky frame does not define an offset coordinate system.
     */
     std::shared_ptr<Mapping> skyOffsetMap() {
-        auto * rawMap = reinterpret_cast<AstObject *>(astSkyOffsetMap(getRawPtr()));
+        auto *rawMap = reinterpret_cast<AstObject *>(astSkyOffsetMap(getRawPtr()));
         return Object::fromAstObject<Mapping>(rawMap, false);
     }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<SkyFrame, AstSkyFrame>();
-    }    
+    }
 
     /// Construct a SkyFrame from a raw AST pointer
-    explicit SkyFrame(AstSkyFrame * rawptr) :
-        Frame(reinterpret_cast<AstFrame *>(rawptr))
-    {
+    explicit SkyFrame(AstSkyFrame *rawptr) : Frame(reinterpret_cast<AstFrame *>(rawptr)) {
         if (!astIsASkyFrame(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a SkyFrame";

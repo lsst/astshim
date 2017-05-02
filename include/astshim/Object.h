@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_OBJECT_H
@@ -47,7 +47,8 @@ Object provides the following attributes:
 - @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
 */
 class Object {
-friend class MapSplit;
+    friend class MapSplit;
+
 private:
     using Deleter = void (*)(AstObject *);
 
@@ -58,14 +59,14 @@ public:
 
     Object(Object const &) = delete;
     Object(Object &&) = default;
-    Object & operator=(Object const &) = delete;
-    Object & operator=(Object &&) = default;
+    Object &operator=(Object const &) = delete;
+    Object &operator=(Object &&) = default;
 
     /**
     Construct an @ref Object from a string, using astFromString
     */
-    static std::shared_ptr<Object> fromString(std::string const & str) {
-        auto * rawPtr = reinterpret_cast<AstObject *>(astFromString(str.c_str()));
+    static std::shared_ptr<Object> fromString(std::string const &str) {
+        auto *rawPtr = reinterpret_cast<AstObject *>(astFromString(str.c_str()));
         return Object::_basicFromAstObject(rawPtr);
     }
 
@@ -94,7 +95,7 @@ public:
     This also causes the astTest function to return the value zero for the attribute,
     indicating that no value has been set.
     */
-    void clear(std::string const & attrib) {
+    void clear(std::string const &attrib) {
         astClear(getRawPtr(), attrib.c_str());
         assertOK();
     }
@@ -102,7 +103,7 @@ public:
     /**
     Does this object have an attribute with the specified name?
     */
-    bool hasAttribute(std::string const & attrib) const {
+    bool hasAttribute(std::string const &attrib) const {
         bool ret = astHasAttribute(getRawPtr(), attrib.c_str());
         assertOK();
         return ret;
@@ -178,13 +179,13 @@ public:
 
     This is a test of identity, not of equality.
     */
-    bool same(Object const & other) const { return astSame(getRawPtr(), other.getRawPtr()); }
+    bool same(Object const &other) const { return astSame(getRawPtr(), other.getRawPtr()); }
 
     /// Set @ref Object_ID "ID": object identification string that is not copied.
-    void setID(std::string const & id) { setC("ID", id); }
+    void setID(std::string const &id) { setC("ID", id); }
 
     /// Set @ref Object_Ident "Ident": object identification string that is copied.
-    void setIdent(std::string const & ident) { setC("Ident", ident); }
+    void setIdent(std::string const &ident) { setC("Ident", ident); }
 
     /// Set @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
     void setUseDefs(bool usedefs) { setB("UseDefs", usedefs); }
@@ -194,7 +195,7 @@ public:
 
     It is provided primarily as an aid to debugging
     */
-    void show(std::ostream & os) const;
+    void show(std::ostream &os) const;
 
     /**
     Return a textual description the object as a string.
@@ -215,7 +216,7 @@ public:
 
     @throw std::runtime_error if an error results.
     */
-    bool test(std::string const & attrib) {
+    bool test(std::string const &attrib) {
         bool res = astTest(getRawPtr(), attrib.c_str());
         assertOK();
         return res;
@@ -245,7 +246,7 @@ public:
     been built without POSIX thread support (i.e. the "-with-pthreads"
     option was not specified when running the "configure" script).
     */
-    void unlock(bool report=false) {
+    void unlock(bool report = false) {
         astUnlock(getRawPtr(), static_cast<int>(report));
         assertOK();
     }
@@ -257,19 +258,16 @@ public:
     without endless "friend class" declarations.
     @{
     */
-    AstObject const * getRawPtr() const { return &*_objPtr; };
+    AstObject const *getRawPtr() const { return &*_objPtr; };
 
-    AstObject * getRawPtr() { return &*_objPtr; };
+    AstObject *getRawPtr() { return &*_objPtr; };
     ///@}
 
 protected:
-
     /**
     Construct an @ref Object from a pointer to a raw AstObject
     */
-    explicit Object(AstObject * object) :
-        _objPtr(object, &detail::annulAstObject)
-    {
+    explicit Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
         assertOK();
         if (!object) {
             throw std::runtime_error("Null pointer");
@@ -293,8 +291,8 @@ protected:
     @tparam AstT  Output AST class
     */
     template <typename ShimT, typename AstT>
-    static std::shared_ptr<ShimT> makeShim(AstObject * p) {
-        return std::shared_ptr<ShimT>(new ShimT(reinterpret_cast<AstT*>(p)));
+    static std::shared_ptr<ShimT> makeShim(AstObject *p) {
+        return std::shared_ptr<ShimT>(new ShimT(reinterpret_cast<AstT *>(p)));
     }
 
     /**
@@ -302,9 +300,9 @@ protected:
 
     Should be called to implement _copyPolymorphic by all derived classes.
     */
-    template<typename T, typename AstT>
+    template <typename T, typename AstT>
     std::shared_ptr<T> _copyImpl() const {
-        auto * rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
+        auto *rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
         auto retptr = std::shared_ptr<T>(new T(rawptr));
         assertOK();
         return retptr;
@@ -331,11 +329,11 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    bool getB(std::string const & attrib) const {
+    bool getB(std::string const &attrib) const {
         bool val = astGetI(getRawPtr(), attrib.c_str());
         assertOK();
         return val;
-    }        
+    }
 
     /**
     Get the value of an attribute as a string
@@ -344,8 +342,8 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    std::string const getC(std::string const & attrib) const {
-        char const * rawval = astGetC(getRawPtr(), attrib.c_str());
+    std::string const getC(std::string const &attrib) const {
+        char const *rawval = astGetC(getRawPtr(), attrib.c_str());
         assertOK();
         return std::string(rawval);
     }
@@ -357,7 +355,7 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    double getD(std::string const & attrib) const {
+    double getD(std::string const &attrib) const {
         double val = astGetD(getRawPtr(), attrib.c_str());
         assertOK();
         return val;
@@ -370,11 +368,11 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    float getF(std::string const & attrib) const {
+    float getF(std::string const &attrib) const {
         float val = astGetF(getRawPtr(), attrib.c_str());
         assertOK();
         return val;
-    }        
+    }
 
     /**
     Get the value of an attribute as an int
@@ -383,11 +381,11 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    int getI(std::string const & attrib) const {
+    int getI(std::string const &attrib) const {
         int val = astGetI(getRawPtr(), attrib.c_str());
         assertOK();
         return val;
-    }        
+    }
 
     /**
     Get the value of an attribute as a long int
@@ -396,11 +394,11 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    long int getL(std::string const & attrib) const {
+    long int getL(std::string const &attrib) const {
         long int val = astGetL(getRawPtr(), attrib.c_str());
         assertOK();
         return val;
-    }        
+    }
 
     /**
     Assign a set of attribute values, over-riding any previous values.
@@ -420,10 +418,10 @@ protected:
       string-valued attributes where it is significant and forms part of the value to be assigned).
     - To include a literal comma or percent sign in the value assigned to an attribute,
       the whole attribute value should be enclosed in quotation markes.
-    
+
     @throw std::runtime_error if the attribute is read-only
     */
-    void set(std::string const & setting) { astSet(getRawPtr(), setting.c_str()); }
+    void set(std::string const &setting) { astSet(getRawPtr(), setting.c_str()); }
 
     /**
     Set the value of an attribute as a bool
@@ -432,7 +430,7 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    void setB(std::string const & attrib, bool value) {
+    void setB(std::string const &attrib, bool value) {
         astSetI(getRawPtr(), attrib.c_str(), value);
         assertOK();
     }
@@ -444,7 +442,7 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    void setC(std::string const & attrib, std::string const & value) {
+    void setC(std::string const &attrib, std::string const &value) {
         astSetC(getRawPtr(), attrib.c_str(), value.c_str());
         assertOK();
     }
@@ -456,7 +454,7 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    void setD(std::string const & attrib, double value) {
+    void setD(std::string const &attrib, double value) {
         astSetD(getRawPtr(), attrib.c_str(), value);
         assertOK();
     }
@@ -468,7 +466,7 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    void setF(std::string const & attrib, float value) {
+    void setF(std::string const &attrib, float value) {
         astSetF(getRawPtr(), attrib.c_str(), value);
         assertOK();
     }
@@ -480,7 +478,7 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    void setI(std::string const & attrib, int value) {
+    void setI(std::string const &attrib, int value) {
         astSetI(getRawPtr(), attrib.c_str(), value);
         assertOK();
     }
@@ -492,7 +490,7 @@ protected:
 
     @throw std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    void setL(std::string const & attrib, long int value) {
+    void setL(std::string const &attrib, long int value) {
         astSetL(getRawPtr(), attrib.c_str(), value);
         assertOK();
     }

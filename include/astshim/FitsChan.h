@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_FITSCHAN_H
@@ -37,9 +37,9 @@ namespace ast {
 Enums describing the presence or absence of a FITS keyword
 */
 enum class FitsKeyState {
-    ABSENT = 0, // keyword is not present
-    NOVALUE,    // keyword is present, but has no value
-    PRESENT     // keyword is present and has a value
+    ABSENT = 0,  // keyword is not present
+    NOVALUE,     // keyword is present, but has no value
+    PRESENT      // keyword is present and has a value
 };
 
 /**
@@ -64,7 +64,7 @@ A value and associated validity flag
 One could use std::pair instead, but this is a bit nicer,
 and also easier to python-wrap for complicated types.
 */
-template<typename T>
+template <typename T>
 class FoundValue {
 public:
     /**
@@ -73,16 +73,12 @@ public:
     @param[in] found  Was the value found?
     @param[in] value  The value (must be a valid value, even if found false)
     */
-    FoundValue(bool found, T const & value) :
-        found(found), value(value)
-    {}
+    FoundValue(bool found, T const &value) : found(found), value(value) {}
 
     /// Default constructor: found false, value is default-constructed
-    FoundValue() :
-        found(false), value()
-    {}
+    FoundValue() : found(false), value() {}
     bool found;  ///< Was the value found?
-    T value;   ///< The found value; ignore if `found` is false
+    T value;     ///< The found value; ignore if `found` is false
 };
 
 /**
@@ -210,14 +206,14 @@ public:
             where either stream can be nullptr if not wanted
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit FitsChan(Stream & stream, std::string const & options="");
+    explicit FitsChan(Stream &stream, std::string const &options = "");
 
     virtual ~FitsChan();
 
     FitsChan(FitsChan const &) = delete;
     FitsChan(FitsChan &&) = default;
-    FitsChan & operator=(FitsChan const &) = delete;
-    FitsChan & operator=(FitsChan &&) = default;
+    FitsChan &operator=(FitsChan const &) = delete;
+    FitsChan &operator=(FitsChan &&) = default;
 
     /**
     Delete the current FITS card.
@@ -342,7 +338,7 @@ public:
         any of the keywords "CRVAL1", "CRVAL2" or "CRVAL3" would be matched).
         Advance the @ref FitsChan_Card "Card" attribute to the card that follows.
     */
-    FoundValue<std::string> findFits(std::string const & name, bool inc);
+    FoundValue<std::string> findFits(std::string const &name, bool inc);
 
     /**
     Get the value of a complex double card by key name
@@ -383,7 +379,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsCN(std::string const & name, std::string defval="") const;
+    FoundValue<std::string> getFitsCN(std::string const &name, std::string defval = "") const;
 
     /**
     Get the value of a double card by key name
@@ -402,7 +398,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<double> getFitsF(std::string const & name, double defval=0) const;
+    FoundValue<double> getFitsF(std::string const &name, double defval = 0) const;
 
     /**
     Get the value of a int card by key name
@@ -421,7 +417,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<int> getFitsI(std::string const & name, int defval=0) const;
+    FoundValue<int> getFitsI(std::string const &name, int defval = 0) const;
 
     /**
     Get the value of a bool card by key name
@@ -440,7 +436,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<bool> getFitsL(std::string const & name, bool defval=false) const;
+    FoundValue<bool> getFitsL(std::string const &name, bool defval = false) const;
 
     /**
     Get the value of a string card by key name
@@ -463,7 +459,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsS(std::string const & name, std::string defval="") const;
+    FoundValue<std::string> getFitsS(std::string const &name, std::string defval = "") const;
 
     /**
     Get the name of all cards, in order, starting from the first card
@@ -596,7 +592,7 @@ public:
                     This is the format produced by the fits_hdr2str function in the
                     CFITSIO library.
     */
-    void putCards(std::string const & cards) {
+    void putCards(std::string const &cards) {
         astPutCards(getRawPtr(), cards.c_str());
         assertOK();
     }
@@ -624,7 +620,7 @@ public:
         is appended as the last card in the @ref FitsChan.
     - An error will result if the supplied string cannot be interpreted as a FITS header card.
     */
-    void putFits(std::string const & card, bool overwrite) {
+    void putFits(std::string const &card, bool overwrite) {
         astPutFits(getRawPtr(), card.c_str(), overwrite);
         assertOK();
     }
@@ -672,16 +668,15 @@ public:
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
-            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is inserted
-            before the current card and the current card is left unchanged. In either
-            case, if the current card on entry points to the "end-of-file", the new card
-            is appended to the end of the list.
+            to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
+    inserted before the current card and the current card is left unchanged. In either case, if the current
+    card on entry points to the "end-of-file", the new card is appended to the end of the list.
     */
-    void setFitsCF(std::string const & name, std::complex<double> value,
-                   std::string const & comment="", bool overwrite=false) {
+    void setFitsCF(std::string const &name, std::complex<double> value, std::string const &comment = "",
+                   bool overwrite = false) {
         // this use of reinterpret_cast is explicitly permitted, for C compatibility
-        astSetFitsCF(getRawPtr(), name.c_str(), reinterpret_cast<double(&)[2]>(value),
-                     comment.c_str(), overwrite);
+        astSetFitsCF(getRawPtr(), name.c_str(), reinterpret_cast<double(&)[2]>(value), comment.c_str(),
+                     overwrite);
         assertOK();
     }
 
@@ -707,7 +702,7 @@ public:
         then the current card is left pointing at the "end-of-file" .
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    void setFitsCM(std::string const & comment, bool overwrite=false) {
+    void setFitsCM(std::string const &comment, bool overwrite = false) {
         astSetFitsCM(getRawPtr(), comment.c_str(), overwrite);
         assertOK();
     }
@@ -738,8 +733,8 @@ public:
         then the current card is left pointing at the "end-of-file" .
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    void setFitsCN(std::string const & name, std::string value,
-                   std::string const & comment="", bool overwrite=false) {
+    void setFitsCN(std::string const &name, std::string value, std::string const &comment = "",
+                   bool overwrite = false) {
         astSetFitsCN(getRawPtr(), name.c_str(), value.c_str(), comment.c_str(), overwrite);
         assertOK();
     }
@@ -768,8 +763,8 @@ public:
         then the current card is left pointing at the "end-of-file" .
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    void setFitsF(std::string const & name, double value,
-                  std::string const & comment="", bool overwrite=false) {
+    void setFitsF(std::string const &name, double value, std::string const &comment = "",
+                  bool overwrite = false) {
         astSetFitsF(getRawPtr(), name.c_str(), value, comment.c_str(), overwrite);
         assertOK();
     }
@@ -798,8 +793,8 @@ public:
         then the current card is left pointing at the "end-of-file" .
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    void setFitsI(std::string const & name, int value,
-                  std::string const & comment="", bool overwrite=false) {
+    void setFitsI(std::string const &name, int value, std::string const &comment = "",
+                  bool overwrite = false) {
         astSetFitsI(getRawPtr(), name.c_str(), value, comment.c_str(), overwrite);
         assertOK();
     }
@@ -828,8 +823,8 @@ public:
         then the current card is left pointing at the "end-of-file" .
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    void setFitsL(std::string const & name, bool value,
-                  std::string const & comment="", bool overwrite=false) {
+    void setFitsL(std::string const &name, bool value, std::string const &comment = "",
+                  bool overwrite = false) {
         astSetFitsL(getRawPtr(), name.c_str(), value, comment.c_str(), overwrite);
         assertOK();
     }
@@ -866,8 +861,8 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    void setFitsS(std::string const & name, std::string value,
-                  std::string const & comment="", bool overwrite=false) {
+    void setFitsS(std::string const &name, std::string value, std::string const &comment = "",
+                  bool overwrite = false) {
         astSetFitsS(getRawPtr(), name.c_str(), value.c_str(), comment.c_str(), overwrite);
         assertOK();
     }
@@ -897,8 +892,7 @@ public:
         then the current card is left pointing at the "end-of-file" .
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    void setFitsU(std::string const & name,
-                  std::string const & comment="", bool overwrite=false) {
+    void setFitsU(std::string const &name, std::string const &comment = "", bool overwrite = false) {
         astSetFitsU(getRawPtr(), name.c_str(), comment.c_str(), overwrite);
         assertOK();
     }
@@ -906,7 +900,7 @@ public:
     /**
     Get @ref FitsChan_CDMatrix "CDMatrix": Use CDi_j keywords to represent pixel scaling,
     rotation, etc?
-    */    
+    */
     void setCDMatrix(bool cdMatrix) { setB("CDMatrix", cdMatrix); }
 
     /**
@@ -927,7 +921,7 @@ public:
     Set @ref FitsChan_Encoding "Encoding": the encoding system to use when AST
     @ref Object "Objects" are stored as FITS header cards in a @ref FitsChan.
     */
-    void setEncoding(std::string const & encoding) { setC("Encoding", encoding); }
+    void setEncoding(std::string const &encoding) { setC("Encoding", encoding); }
 
     /**
     Set @ref FitsChan_FitsAxisOrder "FitsAxisOrder": the order for the WCS axes in any new
@@ -935,7 +929,7 @@ public:
 
     See @ref getFitsAxisOrder for details.
     */
-    void setFitsAxisOrder(std::string const & order) { setC("FitsAxisOrder", order); }
+    void setFitsAxisOrder(std::string const &order) { setC("FitsAxisOrder", order); }
 
     /**
     Set @ref FitsChan_FitsDigits "FitsDigits": digits of precision
@@ -973,7 +967,7 @@ public:
 
     See @ref getWarnings for details.
     */
-    void setWarnings(std::string const & warnings) { setC("Warnings", warnings); }
+    void setWarnings(std::string const &warnings) { setC("Warnings", warnings); }
 
     /**
     Write all the cards in the channel to standard output
@@ -995,7 +989,7 @@ public:
       as this will minimise the time spent searching for cards.
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    FitsKeyState testFits(std::string const & name) const;
+    FitsKeyState testFits(std::string const &name) const;
 
     /**
     Write out all cards currently in the channel and clear the channel.

@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_PERMMAP_H
@@ -44,8 +44,9 @@ to any new ones.
 
 @ref PermMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
-class PermMap: public Mapping {
-friend class Object;
+class PermMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Construct a PermMap
@@ -73,34 +74,27 @@ public:
     - `inperm` or `outperm` are empty
     - `inperm` or `outperm` specify a constant that is not available because `constant` has too few elements.
     */
-    explicit PermMap(std::vector<int> const & inperm, 
-                     std::vector<int> const & outperm,
-                     std::vector<double> const & constant={},
-                     std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(makeRawMap(inperm, outperm, constant, options)))
-    {}
+    explicit PermMap(std::vector<int> const &inperm, std::vector<int> const &outperm,
+                     std::vector<double> const &constant = {}, std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(makeRawMap(inperm, outperm, constant, options))) {}
 
     virtual ~PermMap() {}
 
     PermMap(PermMap const &) = delete;
     PermMap(PermMap &&) = default;
-    PermMap & operator=(PermMap const &) = delete;
-    PermMap & operator=(PermMap &&) = default;
+    PermMap &operator=(PermMap const &) = delete;
+    PermMap &operator=(PermMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PermMap> copy() const {
-        return std::static_pointer_cast<PermMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<PermMap> copy() const { return std::static_pointer_cast<PermMap>(_copyPolymorphic()); }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<PermMap, AstPermMap>();
-    }    
+    }
 
-    /// Construct a PermMap from a raw AST pointer   
-    explicit PermMap(AstPermMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    /// Construct a PermMap from a raw AST pointer
+    explicit PermMap(AstPermMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAPermMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a PermMap";
@@ -109,10 +103,8 @@ protected:
     }
 
 private:
-    AstPermMap * makeRawMap(std::vector<int> const & inperm, 
-                            std::vector<int> const & outperm,
-                            std::vector<double> const & constant={},
-                            std::string const & options="");
+    AstPermMap *makeRawMap(std::vector<int> const &inperm, std::vector<int> const &outperm,
+                           std::vector<double> const &constant = {}, std::string const &options = "");
 };
 
 }  // namespace ast

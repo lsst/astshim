@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_PARALLELMAP_H
@@ -48,7 +48,8 @@ individual @ref Mapping "Mappings" in this way.
 @ref ParallelMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
 class ParallelMap : public CmpMap {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a ParallelMap
@@ -62,32 +63,29 @@ public:
     @warning @ref ParallelMap contains shallow copies of the provided mappings (just like AST).
     If you want a deep copy then copy the mapping before adding it.
     */
-    explicit ParallelMap(Mapping const & map1, Mapping const & map2, std::string const & options="") :
-        CmpMap(map1, map2, false, options)
-    {}
+    explicit ParallelMap(Mapping const &map1, Mapping const &map2, std::string const &options = "")
+            : CmpMap(map1, map2, false, options) {}
 
     virtual ~ParallelMap() {}
 
     ParallelMap(ParallelMap const &) = delete;
     ParallelMap(ParallelMap &&) = default;
-    ParallelMap & operator=(ParallelMap const &) = delete;
-    ParallelMap & operator=(ParallelMap &&) = default;
+    ParallelMap &operator=(ParallelMap const &) = delete;
+    ParallelMap &operator=(ParallelMap &&) = default;
 
     /// Return a deep copy of this object.
     std::shared_ptr<ParallelMap> copy() const {
         return std::static_pointer_cast<ParallelMap>(_copyPolymorphic());
-    }        
+    }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<ParallelMap, AstCmpMap>();
-    }    
+    }
 
     /// Construct a ParallelMap from a raw AST pointer
     /// @todo add a test that the CmpMap is parallel
-    explicit ParallelMap(AstCmpMap * rawptr) :
-        CmpMap(rawptr)
-    {
+    explicit ParallelMap(AstCmpMap *rawptr) : CmpMap(rawptr) {
         if (getSeries()) {
             throw std::runtime_error("Compound mapping is in series");
         }

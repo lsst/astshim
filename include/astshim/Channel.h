@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_CHANNEL_H
@@ -58,7 +58,8 @@ Note that a channel cannot be deep-copied because the contained stream cannot be
 - @ref Channel_Strict "Strict": Generate errors instead of warnings?
 */
 class Channel : public Object {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a channel that uses a provided @ref Stream
@@ -70,19 +71,19 @@ public:
             where either stream can be nullptr if not wanted
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit Channel(Stream & stream, std::string const & options="");
+    explicit Channel(Stream &stream, std::string const &options = "");
 
     virtual ~Channel();
 
     Channel(Channel const &) = delete;
     Channel(Channel &&) = default;
-    Channel & operator=(Channel const &) = delete;
-    Channel & operator=(Channel &&) = default;
+    Channel &operator=(Channel const &) = delete;
+    Channel &operator=(Channel &&) = default;
 
     /// Return a deep copy of this object.
     std::shared_ptr<Channel> copy() const {
         throw std::logic_error(
-            "Channel cannot be deep copied because its contained stream cannot be deep copied");
+                "Channel cannot be deep copied because its contained stream cannot be deep copied");
     }
 
     /// Get @ref Channel_Comment "Comment": include textual comments in output?
@@ -152,24 +153,22 @@ public:
     KeyMap warnings() const;
 
     /// Write an object to a channel.
-    int write(Object const & object);
+    int write(Object const &object);
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return std::shared_ptr<Object>();
-    }    
+    virtual std::shared_ptr<Object> _copyPolymorphic() const override { return std::shared_ptr<Object>(); }
 
     /**
     Construct a channel from an AST channel pointer and a @ref Stream
 
     This is the constructor most subclasses use for their high-level constructor.
     */
-    explicit Channel(AstChannel * chan, Stream & stream);
+    explicit Channel(AstChannel *chan, Stream &stream);
 
     /**
     Construct a channel from an AST channel pointer that has its own stream
     */
-    explicit Channel(AstChannel * chan);
+    explicit Channel(AstChannel *chan);
 
     Stream _stream;  ///< stream read and/or written read by the channel
 };

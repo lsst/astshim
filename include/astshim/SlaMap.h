@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_SLAMAP_H
@@ -55,16 +55,16 @@ For details of the individual coordinate conversions available, see the descript
     will eliminate any steps which turn out not to be needed.
 */
 class SlaMap : public Mapping {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a SlaMap
 
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit SlaMap(std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(astSlaMap(0, options.c_str())))
-    {
+    explicit SlaMap(std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(astSlaMap(0, options.c_str()))) {
         assertOK();
     }
 
@@ -72,13 +72,11 @@ public:
 
     SlaMap(SlaMap const &) = delete;
     SlaMap(SlaMap &&) = default;
-    SlaMap & operator=(SlaMap const &) = delete;
-    SlaMap & operator=(SlaMap &&) = default;
+    SlaMap &operator=(SlaMap const &) = delete;
+    SlaMap &operator=(SlaMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SlaMap> copy() const {
-        return std::static_pointer_cast<SlaMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<SlaMap> copy() const { return std::static_pointer_cast<SlaMap>(_copyPolymorphic()); }
 
     /**
     Add one of the standard celestial coordinate system conversions provided by the SLALIB
@@ -173,7 +171,7 @@ public:
     Thus, the effects of diurnal aberration are taken into account in the conversions but
     the effects of atmospheric refraction are not.
     */
-    void add(std::string const & cvt, std::vector<double> const & args=std::vector<double>()) {
+    void add(std::string const &cvt, std::vector<double> const &args = std::vector<double>()) {
         astSlaAdd(getRawPtr(), cvt.c_str(), args.size(), args.data());
         assertOK();
     }
@@ -181,12 +179,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<SlaMap, AstSlaMap>();
-    }    
+    }
 
     /// Construct a SlaMap from a raw AST pointer
-    explicit SlaMap(AstSlaMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit SlaMap(AstSlaMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsASlaMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a SlaMap";

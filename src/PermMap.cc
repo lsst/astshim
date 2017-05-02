@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <memory>
@@ -37,15 +37,15 @@ Throw std::invalid_argument if a permutation array calls for a constant that is 
 @param[in] perm  Permutation vector (inperm or outperm)
 @param[in] name  Name of permutation vector, to use in reporting a problem
 */
-void checkConstant(int numConst, std::vector<int> const & perm, std::string const & name) {
+void checkConstant(int numConst, std::vector<int> const& perm, std::string const& name) {
     int maxConst = 0;
-    for (int const & innum : perm) {
+    for (int const& innum : perm) {
         maxConst = std::max(maxConst, -innum);
     }
     if (maxConst > numConst) {
         std::ostringstream os;
-        os << name << " specifies max constant number (min negative number) " << maxConst
-            << ", but only " << numConst << " constants are available";
+        os << name << " specifies max constant number (min negative number) " << maxConst << ", but only "
+           << numConst << " constants are available";
         throw std::invalid_argument(os.str());
     }
 }

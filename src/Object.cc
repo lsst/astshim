@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <functional>
@@ -73,39 +73,39 @@ extern "C" void sinkToOstream(const char *text) {
     (*osptr) << text << std::endl;
 }
 
-} // anonymous namespace
+}  // anonymous namespace
 
 std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
     static std::unordered_map<std::string, std::function<std::shared_ptr<Object>(AstObject *)>>
-        ClassCasterMap = {
-            {"CmpFrame", makeShim<CmpFrame, AstCmpFrame>},
-            {"Frame", makeShim<Frame, AstFrame>},
-            {"FrameSet", makeShim<FrameSet, AstFrameSet>},
-            {"KeyMap", makeShim<KeyMap, AstKeyMap>},
-            {"LutMap", makeShim<LutMap, AstLutMap>},
-            {"MathMap", makeShim<MathMap, AstMathMap>},
-            {"MatrixMap", makeShim<MatrixMap, AstMatrixMap>},
-            {"NormMap", makeShim<NormMap, AstNormMap>},
-            {"ParallelMap", makeShim<ParallelMap, AstCmpMap>},
-            {"PcdMap", makeShim<PcdMap, AstPcdMap>},
-            {"PermMap", makeShim<PermMap, AstPermMap>},
-            {"PolyMap", makeShim<PolyMap, AstPolyMap>},
-            {"RateMap", makeShim<RateMap, AstRateMap>},
-            {"SeriesMap", makeShim<SeriesMap, AstCmpMap>},
-            {"ShiftMap", makeShim<ShiftMap, AstShiftMap>},
-            {"SkyFrame", makeShim<SkyFrame, AstSkyFrame>},
-            {"SlaMap", makeShim<SlaMap, AstSlaMap>},
-            {"SpecFrame", makeShim<SpecFrame, AstSpecFrame>},
-            {"SphMap", makeShim<SphMap, AstSphMap>},
-            {"TimeFrame", makeShim<TimeFrame, AstTimeFrame>},
-            {"TimeMap", makeShim<TimeMap, AstTimeMap>},
-            {"TranMap", makeShim<TranMap, AstTranMap>},
-            {"UnitMap", makeShim<UnitMap, AstUnitMap>},
-            {"UnitNormMap", makeShim<UnitNormMap, AstUnitNormMap>},
-            {"WcsMap", makeShim<WcsMap, AstWcsMap>},
-            {"WinMap", makeShim<WinMap, AstWinMap>},
-            {"ZoomMap", makeShim<ZoomMap, AstZoomMap>},
-        };
+            ClassCasterMap = {
+                    {"CmpFrame", makeShim<CmpFrame, AstCmpFrame>},
+                    {"Frame", makeShim<Frame, AstFrame>},
+                    {"FrameSet", makeShim<FrameSet, AstFrameSet>},
+                    {"KeyMap", makeShim<KeyMap, AstKeyMap>},
+                    {"LutMap", makeShim<LutMap, AstLutMap>},
+                    {"MathMap", makeShim<MathMap, AstMathMap>},
+                    {"MatrixMap", makeShim<MatrixMap, AstMatrixMap>},
+                    {"NormMap", makeShim<NormMap, AstNormMap>},
+                    {"ParallelMap", makeShim<ParallelMap, AstCmpMap>},
+                    {"PcdMap", makeShim<PcdMap, AstPcdMap>},
+                    {"PermMap", makeShim<PermMap, AstPermMap>},
+                    {"PolyMap", makeShim<PolyMap, AstPolyMap>},
+                    {"RateMap", makeShim<RateMap, AstRateMap>},
+                    {"SeriesMap", makeShim<SeriesMap, AstCmpMap>},
+                    {"ShiftMap", makeShim<ShiftMap, AstShiftMap>},
+                    {"SkyFrame", makeShim<SkyFrame, AstSkyFrame>},
+                    {"SlaMap", makeShim<SlaMap, AstSlaMap>},
+                    {"SpecFrame", makeShim<SpecFrame, AstSpecFrame>},
+                    {"SphMap", makeShim<SphMap, AstSphMap>},
+                    {"TimeFrame", makeShim<TimeFrame, AstTimeFrame>},
+                    {"TimeMap", makeShim<TimeMap, AstTimeMap>},
+                    {"TranMap", makeShim<TranMap, AstTranMap>},
+                    {"UnitMap", makeShim<UnitMap, AstUnitMap>},
+                    {"UnitNormMap", makeShim<UnitNormMap, AstUnitNormMap>},
+                    {"WcsMap", makeShim<WcsMap, AstWcsMap>},
+                    {"WinMap", makeShim<WinMap, AstWinMap>},
+                    {"ZoomMap", makeShim<ZoomMap, AstZoomMap>},
+            };
     assertOK(rawObj);
     auto className = detail::getClassName(rawObj);
     auto name_caster = ClassCasterMap.find(className);

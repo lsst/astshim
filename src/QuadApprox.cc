@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 
@@ -28,17 +28,14 @@
 
 namespace ast {
 
-QuadApprox::QuadApprox(Mapping const & map,
-                       std::vector<double> const & lbnd, std::vector<double> const & ubnd,
-                       int nx, int ny) :
-    fit(6*map.getNout()),
-    rms(0)
-{
+QuadApprox::QuadApprox(Mapping const& map, std::vector<double> const& lbnd, std::vector<double> const& ubnd,
+                       int nx, int ny)
+        : fit(6 * map.getNout()), rms(0) {
     int const nIn = map.getNin();
     detail::assertEqual(nIn, "map.getNin()", 2, "required nIn");
     detail::assertEqual(lbnd.size(), "lbnd.size", nIn, "nIn");
     detail::assertEqual(ubnd.size(), "ubnd.size", nIn, "nIn");
-    fit.reserve(6*map.getNout());
+    fit.reserve(6 * map.getNout());
     bool isok = astQuadApprox(map.getRawPtr(), lbnd.data(), ubnd.data(), nx, ny, fit.data(), &rms);
     if (!isok) {
         throw std::runtime_error("Failed to fit a quadratic approximation");

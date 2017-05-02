@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_PCDMAP_H
@@ -70,8 +70,9 @@ In addition to those attributes provided by @ref Mapping and @ref Object,
 - @anchor PcdMap_PcdCen `PcdCen(axis)`: Centre coordinates of pincushion/barrel distortion.
 
 */
-class PcdMap: public Mapping {
-friend class Object;
+class PcdMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Construct a PcdMap
@@ -83,21 +84,18 @@ public:
 
     @throw std::invalid_argument if pcdcen does not have exactly 2 elements.
     */
-    PcdMap(double disco, std::vector<double> const & pcdcen, std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(_makeRawPcdMap(disco, pcdcen, options)))
-    {}
+    PcdMap(double disco, std::vector<double> const &pcdcen, std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(_makeRawPcdMap(disco, pcdcen, options))) {}
 
     virtual ~PcdMap() {}
 
     PcdMap(PcdMap const &) = delete;
     PcdMap(PcdMap &&) = default;
-    PcdMap & operator=(PcdMap const &) = delete;
-    PcdMap & operator=(PcdMap &&) = default;
+    PcdMap &operator=(PcdMap const &) = delete;
+    PcdMap &operator=(PcdMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PcdMap> copy() const {
-        return std::static_pointer_cast<PcdMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<PcdMap> copy() const { return std::static_pointer_cast<PcdMap>(_copyPolymorphic()); }
 
     /// Get @ref PcdMap_Disco "Disco": pincushion/barrel distortion coefficient
     double getDisco() const { return getD("Disco"); };
@@ -117,12 +115,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<PcdMap, AstPcdMap>();
-    }    
+    }
 
     /// Construct a PcdMap from a raw AST pointer
-    explicit PcdMap(AstPcdMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit PcdMap(AstPcdMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAPcdMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a PcdMap";

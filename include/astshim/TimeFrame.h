@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_TIMEFRAME_H
@@ -78,23 +78,23 @@ So for instance, "Unit" is allowed in place of "Unit(1)".
 
 */
 class TimeFrame : public Frame {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a TimeFrame
 
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit TimeFrame(std::string const & options="") :
-        Frame(reinterpret_cast<AstFrame *>(astTimeFrame(options.c_str())))
-    {}
+    explicit TimeFrame(std::string const &options = "")
+            : Frame(reinterpret_cast<AstFrame *>(astTimeFrame(options.c_str()))) {}
 
     virtual ~TimeFrame() {}
 
     TimeFrame(TimeFrame const &) = delete;
     TimeFrame(TimeFrame &&) = default;
-    TimeFrame & operator=(TimeFrame const &) = delete;
-    TimeFrame & operator=(TimeFrame &&) = default;
+    TimeFrame &operator=(TimeFrame const &) = delete;
+    TimeFrame &operator=(TimeFrame &&) = default;
 
     /// Return a deep copy of this object.
     std::shared_ptr<TimeFrame> copy() const {
@@ -117,9 +117,7 @@ public:
         since the epoch `00:00:00 UTC 1 January 1970 AD` (equivalent to TAI with a constant offset).
     - Any inaccuracy in the system clock will be reflected in the value returned by this function.
     */
-    double currentTime() const {
-        return detail::safeDouble(astCurrentTime(getRawPtr()));
-    }
+    double currentTime() const { return detail::safeDouble(astCurrentTime(getRawPtr())); }
 
     /// Get @ref TimeFrame_AlignTimeScale "AlignTimeScale": time scale in which to align TimeFrames.
     std::string getAlignTimeScale() const { return getC("AlignTimeScale"); }
@@ -134,7 +132,7 @@ public:
     std::string getTimeScale() const { return getC("TimeScale"); }
 
     /// Set @ref TimeFrame_AlignTimeScale "AlignTimeScale": time scale in which to align TimeFrames.
-    void setAlignTimeScale(std::string const & scale) { return setC("AlignTimeScale", scale); }
+    void setAlignTimeScale(std::string const &scale) { return setC("AlignTimeScale", scale); }
 
     /// Set @ref TimeFrame_LTOffset "LTOffset": the offset of Local Time from UTC, in hours.
     void setLTOffset(double offset) { return setD("LTOffset", offset); }
@@ -143,17 +141,15 @@ public:
     void setTimeOrigin(double origin) { return setD("TimeOrigin", origin); }
 
     /// Set @ref TimeFrame_TimeScale "TimeScale": the timescale used by the TimeFrame.
-    void setTimeScale(std::string const & scale) { return setC("TimeScale", scale); }
+    void setTimeScale(std::string const &scale) { return setC("TimeScale", scale); }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<TimeFrame, AstTimeFrame>();
-    }    
+    }
 
     /// Construct a TimeFrame from a raw AST pointer
-    explicit TimeFrame(AstTimeFrame * rawptr) :
-        Frame(reinterpret_cast<AstFrame *>(rawptr))
-    {
+    explicit TimeFrame(AstTimeFrame *rawptr) : Frame(reinterpret_cast<AstFrame *>(rawptr)) {
         if (!astIsATimeFrame(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a TimeFrame";

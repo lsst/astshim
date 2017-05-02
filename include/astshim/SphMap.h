@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_SPHMAP_H
@@ -51,29 +51,27 @@ from the origin (i.e. unit vectors).
 - If the Cartesian coordinates are all zero, then the longitude and latitude are
   set to the value AST__BAD.
 */
-class SphMap: public Mapping {
-friend class Object;
+class SphMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Construct a @ref SphMap
 
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit SphMap(std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(astSphMap(options.c_str())))
-    {}
+    explicit SphMap(std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(astSphMap(options.c_str()))) {}
 
     virtual ~SphMap() {}
 
     SphMap(SphMap const &) = delete;
     SphMap(SphMap &&) = default;
-    SphMap & operator=(SphMap const &) = delete;
-    SphMap & operator=(SphMap &&) = default;
+    SphMap &operator=(SphMap const &) = delete;
+    SphMap &operator=(SphMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SphMap> copy() const {
-        return std::static_pointer_cast<SphMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<SphMap> copy() const { return std::static_pointer_cast<SphMap>(_copyPolymorphic()); }
 
     /// Get @ref SphMap_UnitRadius "UnitRadius": input vectors lie on a unit sphere?
     bool getUnitRadius() const { return getB("UnitRadius"); }
@@ -84,12 +82,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<SphMap, AstSphMap>();
-    }    
+    }
 
     /// Construct a SphMap from a raw AST pointer
-    explicit SphMap(AstSphMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit SphMap(AstSphMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsASphMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a SphMap";

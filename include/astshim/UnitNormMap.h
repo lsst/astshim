@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_UNITNORMMAP_H
@@ -50,8 +50,9 @@ UnitNormMap enables radially symmetric transformations, as follows:
 
 @ref UnitNormMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
-class UnitNormMap: public Mapping {
-friend class Object;
+class UnitNormMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Construct a @ref UnitNormMap
@@ -62,16 +63,16 @@ public:
                         (and one less than the number of outputs).
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit UnitNormMap(std::vector<double> const & centre, std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(astUnitNormMap(centre.size(), centre.data(), options.c_str())))
-    {}
+    explicit UnitNormMap(std::vector<double> const &centre, std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(
+                      astUnitNormMap(centre.size(), centre.data(), options.c_str()))) {}
 
     virtual ~UnitNormMap() {}
 
     UnitNormMap(UnitNormMap const &) = delete;
     UnitNormMap(UnitNormMap &&) = default;
-    UnitNormMap & operator=(UnitNormMap const &) = delete;
-    UnitNormMap & operator=(UnitNormMap &&) = default;
+    UnitNormMap &operator=(UnitNormMap const &) = delete;
+    UnitNormMap &operator=(UnitNormMap &&) = default;
 
     /// Return a deep copy of this object.
     std::shared_ptr<UnitNormMap> copy() const {
@@ -81,12 +82,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<UnitNormMap, AstUnitNormMap>();
-    }    
+    }
 
     /// Construct a UnitNormMap from a raw AST pointer
-    explicit UnitNormMap(AstUnitNormMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit UnitNormMap(AstUnitNormMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAUnitNormMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a UnitNormMap";
