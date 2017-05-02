@@ -28,5 +28,6 @@ namespace ast {
 // These make sure the constants have an address; needed for pybind11
 int constexpr FrameSet::BASE;
 int constexpr FrameSet::CURRENT;
+int constexpr FrameSet::NOFRAME;
 
 }  // namespace ast
