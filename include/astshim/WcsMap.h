@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_WCSMAP_H
@@ -142,8 +142,9 @@ direction.
 many projections do not cover the entire celestial sphere), then
 a WcsMap will yield coordinate values of `nan`.
 */
-class WcsMap: public Mapping {
-friend class Object;
+class WcsMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Create a WcsMap
@@ -203,23 +204,20 @@ public:
         no default, so is set explicitly to 40.0 degrees. Projection
         parameter 2 (corresponding to FITS keyword "PV3_2") is required
         but has a default of zero, so need not be specified.
-    */    
-    explicit WcsMap(int ncoord, WcsType type, int lonax, int latax, std::string const & options="") :
-        Mapping(reinterpret_cast<AstMapping *>(
-            astWcsMap(ncoord, static_cast<int>(type), lonax, latax, options.c_str())))
-    {}
+    */
+    explicit WcsMap(int ncoord, WcsType type, int lonax, int latax, std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(
+                      astWcsMap(ncoord, static_cast<int>(type), lonax, latax, options.c_str()))) {}
 
     virtual ~WcsMap() {}
 
     WcsMap(WcsMap const &) = delete;
     WcsMap(WcsMap &&) = default;
-    WcsMap & operator=(WcsMap const &) = delete;
-    WcsMap & operator=(WcsMap &&) = default;
+    WcsMap &operator=(WcsMap const &) = delete;
+    WcsMap &operator=(WcsMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<WcsMap> copy() const {
-        return std::static_pointer_cast<WcsMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<WcsMap> copy() const { return std::static_pointer_cast<WcsMap>(_copyPolymorphic()); }
 
     /// get @ref WcsMap_NatLat "NatLat": native latitude of the reference point of a FITS-WCS projection.
     double getNatLat() const { return getD("NatLat"); }
@@ -240,14 +238,10 @@ public:
     }
 
     /// Get @ref WcsMap_PVMax "PVMax(axis)" for one axis: maximum number of FITS-WCS projection parameters.
-    int getPVMax(int axis) const {
-        return getI(detail::formatAxisAttr("PVMax", axis));
-    }
+    int getPVMax(int axis) const { return getI(detail::formatAxisAttr("PVMax", axis)); }
 
     /// Get @ref WcsMap_WcsAxis "WcsAxis(lonlat)" for lon or lat: FITS-WCS projection axis.
-    int getWcsAxis(int lonlat) const {
-        return getI(detail::formatAxisAttr("WcsAxis", lonlat));
-    }
+    int getWcsAxis(int lonlat) const { return getI(detail::formatAxisAttr("WcsAxis", lonlat)); }
 
     /// Get @ref WcsMap_WcsType "WcsType": FITS-WCS projection type.
     WcsType getWcsType() const { return static_cast<WcsType>(getI("WcsType")); }
@@ -255,12 +249,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<WcsMap, AstWcsMap>();
-    }    
+    }
 
     /// Construct a WcsMap from a raw AST pointer
-    explicit WcsMap(AstWcsMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit WcsMap(AstWcsMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAWcsMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a WcsMap";

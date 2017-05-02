@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <cmath>
@@ -34,13 +34,9 @@
 
 namespace ast {
 
-SeriesMap Mapping::of(Mapping const & first) const {
-    return SeriesMap(first, *this);
-}
+SeriesMap Mapping::of(Mapping const &first) const { return SeriesMap(first, *this); }
 
-ParallelMap Mapping::over(Mapping const & first) const {
-    return ParallelMap(first, *this);
-}
+ParallelMap Mapping::over(Mapping const &first) const { return ParallelMap(first, *this); }
 
 std::shared_ptr<Mapping> Mapping::getInverse() const {
     auto rawCopy = reinterpret_cast<AstMapping *>(astCopy(getRawPtr()));
@@ -50,11 +46,7 @@ std::shared_ptr<Mapping> Mapping::getInverse() const {
     return Object::fromAstObject<Mapping>(reinterpret_cast<AstObject *>(rawCopy), false);
 }
 
-Array2D Mapping::linearApprox(
-    PointD const & lbnd,
-    PointD const & ubnd,
-    double tol
-) const {
+Array2D Mapping::linearApprox(PointD const &lbnd, PointD const &ubnd, double tol) const {
     int const nIn = getNin();
     int const nOut = getNout();
     detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nIn), "nIn");
@@ -68,7 +60,7 @@ Array2D Mapping::linearApprox(
     return fit;
 }
 
-template<typename Class>
+template <typename Class>
 std::shared_ptr<Class> Mapping::_decompose(int i, bool copy) const {
     if ((i < 0) || (i > 1)) {
         std::ostringstream os;
@@ -78,8 +70,8 @@ std::shared_ptr<Class> Mapping::_decompose(int i, bool copy) const {
     // Report pre-existing problems now so our later test for "not a compound object" is accurate
     assertOK();
 
-    AstMapping * rawMap1;
-    AstMapping * rawMap2;
+    AstMapping *rawMap1;
+    AstMapping *rawMap2;
     int series, invert1, invert2;
     astDecompose(getRawPtr(), &rawMap1, &rawMap2, &series, &invert1, &invert2);
 
@@ -92,7 +84,7 @@ std::shared_ptr<Class> Mapping::_decompose(int i, bool copy) const {
     }
 
     // Make a deep copy of the returned object and free the shallow copies
-    AstMapping * retRawMap;
+    AstMapping *retRawMap;
     int invert;
     if (i == 0) {
         retRawMap = reinterpret_cast<AstMapping *>(astCopy(reinterpret_cast<AstObject *>(rawMap1)));
@@ -114,44 +106,35 @@ std::shared_ptr<Class> Mapping::_decompose(int i, bool copy) const {
     return Object::fromAstObject<Class>(reinterpret_cast<AstObject *>(retRawMap), copy);
 }
 
-void Mapping::_tran(
-    ConstArray2D const & from,
-    bool doForward,
-    Array2D const & to
-) const {
-    int const nFromAxes = doForward ? getNin()  : getNout();
-    int const nToAxes   = doForward ? getNout() : getNin();
-    detail::assertEqual(from.getSize<1>(), "from.size[1]", static_cast<std::size_t>(nFromAxes), "from coords");
+void Mapping::_tran(ConstArray2D const &from, bool doForward, Array2D const &to) const {
+    int const nFromAxes = doForward ? getNin() : getNout();
+    int const nToAxes = doForward ? getNout() : getNin();
+    detail::assertEqual(from.getSize<1>(), "from.size[1]", static_cast<std::size_t>(nFromAxes),
+                        "from coords");
     detail::assertEqual(to.getSize<1>(), "to.size[1]", static_cast<std::size_t>(nToAxes), "to coords");
     detail::assertEqual(from.getSize<0>(), "from.size[1]", to.getSize<0>(), "to.size[1]");
     int const nPts = from.getSize<0>();
     // astTranN uses fortran ordering x0, x1, x2, ..., y0, y1, y2, ..., ... so transpose in and out
     Array2D fromT = ndarray::copy(from.transpose());
     Array2D toT = ndarray::allocate(ndarray::makeVector(nToAxes, nPts));
-    astTranN(getRawPtr(), nPts, nFromAxes, nPts, fromT.getData(),
-             static_cast<int>(doForward), nToAxes, nPts, toT.getData());
+    astTranN(getRawPtr(), nPts, nFromAxes, nPts, fromT.getData(), static_cast<int>(doForward), nToAxes, nPts,
+             toT.getData());
     assertOK();
     to.transpose() = toT;
     detail::astBadToNan(to);
 }
 
-void Mapping::_tranGrid(
-    PointI const & lbnd,
-    PointI const & ubnd,
-    double tol,
-    int maxpix,
-    bool doForward,
-    Array2D const & to
-) const {
-    int const nFromAxes = doForward ? getNin()  : getNout();
-    int const nToAxes   = doForward ? getNout() : getNin();
+void Mapping::_tranGrid(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix, bool doForward,
+                        Array2D const &to) const {
+    int const nFromAxes = doForward ? getNin() : getNout();
+    int const nToAxes = doForward ? getNout() : getNin();
     detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nFromAxes), "from coords");
     detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nFromAxes), "from coords");
     detail::assertEqual(to.getSize<1>(), "to.size[0]", static_cast<std::size_t>(nToAxes), "to coords");
     int const nPts = to.getSize<0>();
     Array2D toT = ndarray::allocate(ndarray::makeVector(nToAxes, nPts));
-    astTranGrid(getRawPtr(), nFromAxes, lbnd.data(), ubnd.data(),
-                tol, maxpix, static_cast<int>(doForward), nToAxes, nPts, toT.getData());
+    astTranGrid(getRawPtr(), nFromAxes, lbnd.data(), ubnd.data(), tol, maxpix, static_cast<int>(doForward),
+                nToAxes, nPts, toT.getData());
     assertOK();
     to.transpose() = toT;
     detail::astBadToNan(to);

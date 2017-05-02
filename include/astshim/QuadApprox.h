@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_QUADAPPROX_H
@@ -69,14 +69,13 @@ public:
         or if lbnd or ubnd do not each contain 2 elements.
     @throw std::runtime_error if the fit cannot be computed.
     */
-    explicit QuadApprox(Mapping const & map,
-                       std::vector<double> const & lbnd, std::vector<double> const & ubnd,
-                       int nx=3, int ny=3);
+    explicit QuadApprox(Mapping const &map, std::vector<double> const &lbnd, std::vector<double> const &ubnd,
+                        int nx = 3, int ny = 3);
 
     QuadApprox(QuadApprox const &) = default;
     QuadApprox(QuadApprox &&) = default;
-    QuadApprox & operator=(QuadApprox const &) = default;
-    QuadApprox & operator=(QuadApprox &&) = default;
+    QuadApprox &operator=(QuadApprox const &) = default;
+    QuadApprox &operator=(QuadApprox &&) = default;
 
     /**
     A vector of coefficients of the quadratic approximation to the specified transformation.
@@ -86,7 +85,7 @@ public:
     the next 6 elements hold the fit to the second Mapping output, etc.
     So if the Mapping has 2 inputs and 2 outputs the quadratic approximation
     to the forward transformation is:
- 
+
         X_out = fit[0] + fit[1]*X_in + fit[2]*Y_in + fit[3]*X_in*Y_in +
                 fit[4]*X_in*X_in + fit[5]*Y_in*Y_in
         Y_out = fit[6] + fit[7]*X_in + fit[8]*Y_in + fit[9]*X_in*Y_in +

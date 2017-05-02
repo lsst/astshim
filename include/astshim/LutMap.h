@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_LUTMAP_H
@@ -60,7 +60,8 @@ In addition to those attributes provided by @ref Mapping and @ref Object,
     the inverse transformation will result in an error.
 */
 class LutMap : public Mapping {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct an LutMap
@@ -70,27 +71,22 @@ public:
     @param[in] start  The input coordinate value which corresponds to the first lookup table entry.
     @param[in] inc  The lookup table spacing (the increment in input coordinate value between successive
                     lookup table entries). This value may be positive or negative, but must not be zero.
-    @param[in] options   Comma-separated list of attribute assignments.   
+    @param[in] options   Comma-separated list of attribute assignments.
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit LutMap(std::vector<double> const & lut, double start, double inc, std::string const & options="")
-    :
-        Mapping(reinterpret_cast<AstMapping *>(
-            astLutMap(lut.size(), lut.data(), start, inc, options.c_str())
-        ))
-    {}
+    explicit LutMap(std::vector<double> const &lut, double start, double inc, std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(
+                      astLutMap(lut.size(), lut.data(), start, inc, options.c_str()))) {}
 
     virtual ~LutMap() {}
 
     LutMap(LutMap const &) = delete;
     LutMap(LutMap &&) = default;
-    LutMap & operator=(LutMap const &) = delete;
-    LutMap & operator=(LutMap &&) = default;
+    LutMap &operator=(LutMap const &) = delete;
+    LutMap &operator=(LutMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<LutMap> copy() const {
-        return std::static_pointer_cast<LutMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<LutMap> copy() const { return std::static_pointer_cast<LutMap>(_copyPolymorphic()); }
 
     /**
     Get attribute @ref LutMap_LutEpsilon "LutEpsilon": the relative error of the values in the table.
@@ -105,12 +101,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<LutMap, AstLutMap>();
-    }    
+    }
 
-    /// Construct an LutMap from a raw AST pointer    
-    explicit LutMap(AstLutMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    /// Construct an LutMap from a raw AST pointer
+    explicit LutMap(AstLutMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsALutMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a LutMap";

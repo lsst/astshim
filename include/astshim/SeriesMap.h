@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_SERIESMAP_H
@@ -48,7 +48,8 @@ complexity may be built from simple individual @ref Mapping "Mappings" in this w
 @ref SeriesMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
 class SeriesMap : public CmpMap {
-friend class Object;
+    friend class Object;
+
 public:
     /**
     Construct a SeriesMap.
@@ -62,32 +63,29 @@ public:
     @warning @ref SeriesMap contains shallow copies of the provided mappings (just like AST).
     If you deep copies then provide deep copies to this constructor.
     */
-    explicit SeriesMap(Mapping const & map1, Mapping const & map2, std::string const & options="") :
-        CmpMap(map1, map2, true, options)
-    {}
+    explicit SeriesMap(Mapping const &map1, Mapping const &map2, std::string const &options = "")
+            : CmpMap(map1, map2, true, options) {}
 
     virtual ~SeriesMap() {}
 
     SeriesMap(SeriesMap const &) = delete;
     SeriesMap(SeriesMap &&) = default;
-    SeriesMap & operator=(SeriesMap const &) = delete;
-    SeriesMap & operator=(SeriesMap &&) = default;
+    SeriesMap &operator=(SeriesMap const &) = delete;
+    SeriesMap &operator=(SeriesMap &&) = default;
 
     /// Return a deep copy of this object.
     std::shared_ptr<SeriesMap> copy() const {
         return std::static_pointer_cast<SeriesMap>(_copyPolymorphic());
-    }        
+    }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<SeriesMap, AstCmpMap>();
-    }    
+    }
 
     /// Construct a SeriesMap from a raw AST pointer
     /// @ todo: test rawptr to make sure it is in series
-    explicit SeriesMap(AstCmpMap * rawptr) :
-        CmpMap(rawptr)
-    {
+    explicit SeriesMap(AstCmpMap *rawptr) : CmpMap(rawptr) {
         if (!getSeries()) {
             throw std::runtime_error("Compound mapping is in parallel");
         }

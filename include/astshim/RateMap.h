@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_RATEMAP_H
@@ -50,8 +50,9 @@ an inverse transformation but not a forward transformation.
 
 @ref RateMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
-class RateMap: public Mapping {
-friend class Object;
+class RateMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Construct a @ref RateMap
@@ -75,23 +76,19 @@ public:
 
     RateMap(RateMap const &) = delete;
     RateMap(RateMap &&) = default;
-    RateMap & operator=(RateMap const &) = delete;
-    RateMap & operator=(RateMap &&) = default;
+    RateMap &operator=(RateMap const &) = delete;
+    RateMap &operator=(RateMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<RateMap> copy() const {
-        return std::static_pointer_cast<RateMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<RateMap> copy() const { return std::static_pointer_cast<RateMap>(_copyPolymorphic()); }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<RateMap, AstRateMap>();
-    }    
+    }
 
     /// Construct a RateMap from a raw AST pointer
-    explicit RateMap(AstRateMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit RateMap(AstRateMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsARateMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a RateMap";

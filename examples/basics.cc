@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <iostream>
@@ -30,7 +30,6 @@
 #include "astshim.h"
 
 int main() {
-
     std::vector<double> fromVec = {1.1, 1.2, 2.1, 2.2, 3.1, 3.2};
 
     // Mappings can transform vectors or 2-d arrays;
@@ -39,8 +38,8 @@ int main() {
 
     auto zoomMap = ast::ZoomMap(2, 5);
     std::cout << "ref count for Mapping = " << zoomMap.getRefCount() << std::endl;
-    std::cout << "zoomMap for Mapping = " << zoomMap.getZoom()
-        << "; is inverted=" << zoomMap.isInverted() << std::endl;
+    std::cout << "zoomMap for Mapping = " << zoomMap.getZoom() << "; is inverted=" << zoomMap.isInverted()
+              << std::endl;
 
     ast::Array2D to = ndarray::allocate(ndarray::makeVector(3, 2));
     zoomMap.tranForward(from, to);

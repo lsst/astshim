@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_MAPBOX_H
@@ -81,15 +81,13 @@ public:
     determining the output bounds, even although the nominated
     output coordinate might still have a valid value at such points.
     */
-    explicit MapBox(Mapping const & map,
-                    std::vector<double> const & lbnd,
-                    std::vector<double> const & ubnd,
-                    int minOutCoord=1, int maxOutCoord=0);
+    explicit MapBox(Mapping const &map, std::vector<double> const &lbnd, std::vector<double> const &ubnd,
+                    int minOutCoord = 1, int maxOutCoord = 0);
 
     MapBox(MapBox const &) = default;
     MapBox(MapBox &&) = default;
-    MapBox & operator=(MapBox const &) = default;
-    MapBox & operator=(MapBox &&) = default;
+    MapBox &operator=(MapBox const &) = default;
+    MapBox &operator=(MapBox &&) = default;
 
     std::vector<double> lbndIn;  ///< Lower bound of the input box.
     std::vector<double> ubndIn;  ///< Upper bound of the input box.
@@ -104,10 +102,8 @@ public:
 
 private:
     /// Compute the outputs
-    void _compute(Mapping const & map,
-                  std::vector<double> const & lbnd,
-                  std::vector<double> const & ubnd,
-                  int minOutCoord=1, int maxOutCoord=0);
+    void _compute(Mapping const &map, std::vector<double> const &lbnd, std::vector<double> const &ubnd,
+                  int minOutCoord = 1, int maxOutCoord = 0);
 };
 
 }  // namespace ast

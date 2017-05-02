@@ -24,6 +24,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/complex.h>
+#include <pybind11/stl.h>
 
 #include "astshim/Channel.h"
 #include "astshim/FitsChan.h"
@@ -90,6 +91,7 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("getFitsI", &FitsChan::getFitsI, "name"_a, "defval"_a=0);
     cls.def("getFitsL", &FitsChan::getFitsL, "name"_a, "defval"_a=false);
     cls.def("getFitsS", &FitsChan::getFitsS, "name"_a, "defval"_a="");
+    cls.def("getAllCardNames", &FitsChan::getAllCardNames);
     cls.def("getAllWarnings", &FitsChan::getAllWarnings);
     cls.def("getCard", &FitsChan::getCard);
     cls.def("getCardComm", &FitsChan::getCardComm);

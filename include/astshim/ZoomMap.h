@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_ZOOMMAP_H
@@ -42,8 +42,9 @@ In addition to those attributes provided by @ref Mapping and @ref Object,
 
 - @anchor ZoomMap_Zoom `Zoom`: scale factor.
 */
-class ZoomMap: public Mapping {
-friend class Object;
+class ZoomMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Create a ZoomMap
@@ -57,22 +58,18 @@ public:
               but should not be zero.
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit ZoomMap(int ncoord, double zoom, std::string const & options=""):
-        Mapping(reinterpret_cast<AstMapping *>(
-            astZoomMap(ncoord, zoom, options.c_str())))
-    {}
+    explicit ZoomMap(int ncoord, double zoom, std::string const &options = "")
+            : Mapping(reinterpret_cast<AstMapping *>(astZoomMap(ncoord, zoom, options.c_str()))) {}
 
     virtual ~ZoomMap() {}
 
     ZoomMap(ZoomMap const &) = delete;
     ZoomMap(ZoomMap &&) = default;
-    ZoomMap & operator=(ZoomMap const &) = delete;
-    ZoomMap & operator=(ZoomMap &&) = default;
+    ZoomMap &operator=(ZoomMap const &) = delete;
+    ZoomMap &operator=(ZoomMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<ZoomMap> copy() const {
-        return std::static_pointer_cast<ZoomMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<ZoomMap> copy() const { return std::static_pointer_cast<ZoomMap>(_copyPolymorphic()); }
 
     /// Get @ref ZoomMap_Zoom "Zoom": scale factor
     double getZoom() const { return getF("Zoom"); }
@@ -80,12 +77,10 @@ public:
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<ZoomMap, AstZoomMap>();
-    }    
+    }
 
     /// Construct a ZoomMap from a raw AST pointer
-    explicit ZoomMap(AstZoomMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit ZoomMap(AstZoomMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAZoomMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a ZoomMap";

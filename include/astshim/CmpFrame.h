@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_CMPFRAME_H
@@ -80,13 +80,11 @@ public:
 
     CmpFrame(CmpFrame const &) = delete;
     CmpFrame(CmpFrame &&) = default;
-    CmpFrame & operator=(CmpFrame const &) = delete;
-    CmpFrame & operator=(CmpFrame &&) = default;
+    CmpFrame &operator=(CmpFrame const &) = delete;
+    CmpFrame &operator=(CmpFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<CmpFrame> copy() const {
-        return std::static_pointer_cast<CmpFrame>(_copyPolymorphic());
-    }
+    std::shared_ptr<CmpFrame> copy() const { return std::static_pointer_cast<CmpFrame>(_copyPolymorphic()); }
 
     /**
     Return a shallow copy of one of the two component frames.
@@ -94,20 +92,16 @@ public:
     @param[in] i  Index: 0 for the first frame, 1 for the second.
     @throw std::invalid_argument if `i` is not 0 or 1.
     */
-    std::shared_ptr<Frame> operator[](int i) const {
-        return _decompose<Frame>(i, false);
-    }
+    std::shared_ptr<Frame> operator[](int i) const { return _decompose<Frame>(i, false); }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<CmpFrame, AstCmpFrame>();
-    }    
+    }
 
     /// Construct a CmpFrame from a raw AST pointer
     /// (protected instead of private so that SeriesMap and ParallelMap can call it)
-    explicit CmpFrame(AstCmpFrame * rawptr) :
-        Frame(reinterpret_cast<AstFrame *>(rawptr))
-    {
+    explicit CmpFrame(AstCmpFrame *rawptr) : Frame(reinterpret_cast<AstFrame *>(rawptr)) {
         if (!astIsACmpFrame(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a CmpFrame";

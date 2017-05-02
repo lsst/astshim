@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_NORMMAP_H
@@ -48,8 +48,9 @@ a @ref NormMap, the @ref CmpMap will still cancel with its own inverse.
 
 @ref NormMap has no attributes beyond those provided by @ref Mapping and @ref Object.
 */
-class NormMap: public Mapping {
-friend class Object;
+class NormMap : public Mapping {
+    friend class Object;
+
 public:
     /**
     Construct a NormMap
@@ -65,23 +66,19 @@ public:
 
     NormMap(NormMap const &) = delete;
     NormMap(NormMap &&) = default;
-    NormMap & operator=(NormMap const &) = delete;
-    NormMap & operator=(NormMap &&) = default;
+    NormMap &operator=(NormMap const &) = delete;
+    NormMap &operator=(NormMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<NormMap> copy() const {
-        return std::static_pointer_cast<NormMap>(_copyPolymorphic());
-    }
+    std::shared_ptr<NormMap> copy() const { return std::static_pointer_cast<NormMap>(_copyPolymorphic()); }
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
         return _copyImpl<NormMap, AstNormMap>();
-    }    
+    }
 
     /// Construct a NormMap from a raw AST pointer
-    explicit NormMap(AstNormMap * rawptr) :
-        Mapping(reinterpret_cast<AstMapping *>(rawptr))
-    {
+    explicit NormMap(AstNormMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsANormMap(getRawPtr())) {
             std::ostringstream os;
             os << "this is a " << getClass() << ", which is not a NormMap";

@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <stdexcept>
@@ -27,24 +27,24 @@
 
 namespace ast {
 
-FrameSet Frame::convert(Frame const &to, std::string const &domainlist) {
+std::shared_ptr<FrameSet> Frame::convert(Frame const &to, std::string const &domainlist) {
     auto *rawFrameSet =
-        reinterpret_cast<AstFrameSet *>(astConvert(getRawPtr(), to.getRawPtr(), domainlist.c_str()));
+            reinterpret_cast<AstFrameSet *>(astConvert(getRawPtr(), to.getRawPtr(), domainlist.c_str()));
     assertOK(reinterpret_cast<AstObject *>(rawFrameSet));
     if (!rawFrameSet) {
-        throw notfound_error("convert found no suitable frame set");
+        return std::shared_ptr<FrameSet>();
     }
-    return FrameSet(rawFrameSet);
+    return Object::fromAstObject<FrameSet>(reinterpret_cast<AstObject *>(rawFrameSet), false);
 }
 
-FrameSet Frame::findFrame(Frame const &tmplt, std::string const &domainlist) {
+std::shared_ptr<FrameSet> Frame::findFrame(Frame const &tmplt, std::string const &domainlist) {
     auto *rawFrameSet =
-        reinterpret_cast<AstFrameSet *>(astFindFrame(getRawPtr(), tmplt.getRawPtr(), domainlist.c_str()));
+            reinterpret_cast<AstFrameSet *>(astFindFrame(getRawPtr(), tmplt.getRawPtr(), domainlist.c_str()));
     assertOK(reinterpret_cast<AstObject *>(rawFrameSet));
     if (!rawFrameSet) {
-        throw notfound_error("findFrame found no suitable frame set");
+        return std::shared_ptr<FrameSet>();
     }
-    return FrameSet(rawFrameSet);
+    return Object::fromAstObject<FrameSet>(reinterpret_cast<AstObject *>(rawFrameSet), false);
 }
 
 std::vector<double> Frame::intersect(std::vector<double> const &a1, std::vector<double> const &a2,
@@ -67,12 +67,12 @@ CmpFrame Frame::over(Frame const &first) const { return CmpFrame(first, *this); 
 FrameMapping Frame::pickAxes(std::vector<int> const &axes) const {
     AstMapping *rawMap;
     auto *rawFrame =
-        reinterpret_cast<AstFrame *>(astPickAxes(getRawPtr(), axes.size(), axes.data(), &rawMap));
+            reinterpret_cast<AstFrame *>(astPickAxes(getRawPtr(), axes.size(), axes.data(), &rawMap));
     assertOK(reinterpret_cast<AstObject *>(rawFrame), reinterpret_cast<AstObject *>(rawMap));
     std::shared_ptr<Frame> frame;
     try {
         frame = Object::fromAstObject<Frame>(reinterpret_cast<AstObject *>(rawFrame), false);
-    } catch(...) {
+    } catch (...) {
         astAnnul(rawMap);
         throw;
     }

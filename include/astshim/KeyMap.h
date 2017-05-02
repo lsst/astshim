@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_KEYMAP_H
@@ -33,7 +33,7 @@ namespace ast {
 
 namespace {
 
-void throwKeyNotFound(std::string const & key) {
+void throwKeyNotFound(std::string const &key) {
     // make sure there isn't some other error, first
     assertOK();
     std::ostringstream os;
@@ -41,7 +41,7 @@ void throwKeyNotFound(std::string const & key) {
     throw std::runtime_error(os.str());
 }
 
-}  // <anonymous>
+}  // namespace
 
 /**
 KeyMap is used to store a set of values with associated keys which identify the values.
@@ -90,7 +90,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit KeyMap(std::string const &options = "")
-        : Object(reinterpret_cast<AstObject *>(astKeyMap(options.c_str()))) {}
+            : Object(reinterpret_cast<AstObject *>(astKeyMap(options.c_str()))) {}
 
     virtual ~KeyMap(){};
 
@@ -401,8 +401,7 @@ public:
     }
 
     /// Add a vector of strings
-    void putC(std::string const &key, std::vector<std::string> const &vec,
-              std::string const &comment = "") {
+    void putC(std::string const &key, std::vector<std::string> const &vec, std::string const &comment = "") {
         _assertVectorNotEmpty(key, vec.size());
         // to simplify memory management, create the key with the first element and append the rest
         for (int i = 0, size = vec.size(); i < size; ++i) {

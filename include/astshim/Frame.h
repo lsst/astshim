@@ -50,7 +50,7 @@ public:
     */
     DirectionPoint(double direction, PointD const &point) : direction(direction), point(point){};
     double direction;  ///< Direction, an angle in radians
-    PointD point;  ///< Point
+    PointD point;      ///< Point
 };
 
 /**
@@ -65,7 +65,7 @@ public:
     @param[in] value  Value that was read
     */
     NReadValue(int nread, double value) : nread(nread), value(value){};
-    int nread;  ///< Number of characters that was read
+    int nread;     ///< Number of characters that was read
     double value;  ///< Value that was read
 };
 
@@ -81,8 +81,8 @@ public:
     */
     explicit ResolvedPoint(int naxes) : point(naxes), d1(), d2() {}
     std::vector<double> point;  ///< Point
-    double d1;  ///< Resolved vector component 1
-    double d2;  ///< Resolved vector component 2
+    double d1;                  ///< Resolved vector component 1
+    double d2;                  ///< Resolved vector component 2
 };
 
 /**
@@ -96,12 +96,11 @@ public:
     @param[in,out] frame  Frame
     @param[in,out] mapping  Mapping
     */
-    FrameMapping(std::shared_ptr<Frame> frame, std::shared_ptr<Mapping> mapping) :
-     frame(frame), mapping(mapping) {}
-    std::shared_ptr<Frame> frame;  ///< Frame
+    FrameMapping(std::shared_ptr<Frame> frame, std::shared_ptr<Mapping> mapping)
+            : frame(frame), mapping(mapping) {}
+    std::shared_ptr<Frame> frame;      ///< Frame
     std::shared_ptr<Mapping> mapping;  ///< Mapping
 };
-
 
 class FrameSet;
 
@@ -167,7 +166,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit Frame(int naxes, std::string const &options = "")
-        : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str()))) {}
 
     virtual ~Frame() {}
 
@@ -265,8 +264,9 @@ public:
     /**
     Compute a frameset that describes the conversion between this frame and another frame.
 
-    If conversion is possible, it returns a @ref FrameSet which describes the conversion and which may be used
-    (as a Mapping) to transform coordinate values in either direction.
+    If conversion is possible, it returns a shared pointer to a @ref FrameSet which describes
+    the conversion and which may be used (as a Mapping) to transform coordinate values in either direction.
+    Otherwise it returns an empty shared pointer.
 
     The same function may also be used to determine how to convert between two @ref FrameSet "FrameSets"
     (or between a Frame and a @ref FrameSet, or vice versa). This mode is intended for use when
@@ -425,7 +425,8 @@ public:
                 If this fails, the second domain in the list will be used, and so on, until conversion
                 is achieved.  A blank domain (e.g.  two consecutive commas) indicates that all
                 coordinate systems should be considered, regardless of their domains.
-    @return A @ref FrameSet which describes the conversion and contains two Frames.
+    @return A @ref FrameSet which describes the conversion and contains two Frames,
+        or an empty shared pointer if the conversion is not possible.
         Frame number 1 (its base Frame) will describe the source coordinate
         system, corresponding to the "from" parameter. Frame number 2
         (its current Frame) will describe the destination coordinate
@@ -441,9 +442,6 @@ public:
         is used as a Frame, its attributes will describe the
         destination coordinate system.
 
-    @throw ast::notfound_error if the search is not successful
-        (unlike AST, which silently returns a null pointer).
-
     ### Notes
 
     -  The Mapping represented by the returned @ref FrameSet results in
@@ -457,7 +455,7 @@ public:
         in the inverses of the @ref FrameSet "FrameSets" (using @ref Mapping.getInverse "getInverse")
         so as to interchange their base and current frames.
     */
-    FrameSet convert(Frame const &to, std::string const &domainlist="");
+    std::shared_ptr<FrameSet> convert(Frame const &to, std::string const &domainlist = "");
 
     /**
     Find the distance between two points whose Frame coordinates are given.
@@ -734,9 +732,11 @@ public:
         (subject to the template) regardless of its domain.
         This list is case-insensitive and all white space is ignored.  If you do not wish
         to restrict the domain in this way, you should supply an empty string.
-    @return A @ref FrameSet which contains the Frame found and a
+    @return A @ref shared_ptr<FrameSet> which contains the Frame found and a
         description of how to convert to (and from) the coordinate
-        system it represents. This @ref FrameSet will contain two Frames.
+        system it represents. If the Frame is not found then return a null pointer.
+
+        This @ref FrameSet will contain two Frames.
         Frame number 1 (its base Frame) represents the target coordinate
         system and will be the same as the (base Frame of the)
         target. Frame number 2 (its current Frame) will be a Frame
@@ -752,9 +752,6 @@ public:
         transformation is selected). If it is used as a Frame, its
         attributes will describe the new coordinate system.
 
-    @throw ast::notfound_error if the search is not successful
-        (unlike AST, which silently returns a null pointer).
-
     ### Notes
 
     - This method is not const because if called on a @ref FrameSet then the BASE frame
@@ -769,7 +766,7 @@ public:
     using a "domainlist" string which does not include the template's domain
     (or a blank field). If you do so, no coordinate system will be found.
     */
-    FrameSet findFrame(Frame const &tmplt, std::string const &domainlist = "");
+    std::shared_ptr<FrameSet> findFrame(Frame const &tmplt, std::string const &domainlist = "");
 
     /**
     Return a string containing the formatted (character) version of a coordinate value for a Frame axis.

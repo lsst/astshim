@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_MAPPING_H
@@ -57,15 +57,15 @@ Mapping also has the following attributes:
 - @ref Mapping_TranInverse "TranInverse": Is the inverse transformation defined?
 */
 class Mapping : public Object {
-friend class Object;
-public:
+    friend class Object;
 
+public:
     virtual ~Mapping() {}
 
     Mapping(Mapping const &) = delete;
     Mapping(Mapping &&) = default;
-    Mapping & operator=(Mapping const &) = delete;
-    Mapping & operator=(Mapping &&) = default;
+    Mapping &operator=(Mapping const &) = delete;
+    Mapping &operator=(Mapping &&) = default;
 
     /// Return a deep copy of this object.
     std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(_copyPolymorphic()); }
@@ -160,11 +160,7 @@ public:
 
     @throw std::runtime_error if the forward transformation cannot be modeled to within the specified `tol`.
     */
-    Array2D linearApprox(
-        PointD const & lbnd,
-        PointD const & ubnd,
-        double tol
-    ) const;
+    Array2D linearApprox(PointD const &lbnd, PointD const &ubnd, double tol) const;
 
     /**
     Return a series compound mapping this(first(input)).
@@ -174,7 +170,7 @@ public:
     @throw std::invalid_argument if the number of output axes of `first` does not match
         the number of input axes of this mapping.
     */
-    SeriesMap of(Mapping const & first) const;
+    SeriesMap of(Mapping const &first) const;
 
     /**
     Return a parallel compound mapping
@@ -186,7 +182,7 @@ public:
 
     @param[in] first  the mapping that processes axes 1 through `first.getNin()`
     */
-    ParallelMap over(Mapping const & first) const;
+    ParallelMap over(Mapping const &first) const;
 
     /**
     Evaluate the rate of change of the Mapping with respect to a specified input, at a specified position.
@@ -206,11 +202,7 @@ public:
     @return The rate of change of Mapping output `ax1` with respect to input `ax2`, evaluated at `at`,
                     or `nan` if the value cannot be calculated.
     */
-    double rate(
-        PointD const & at,
-        int ax1,
-        int ax2
-    ) const {
+    double rate(PointD const &at, int ax1, int ax2) const {
         detail::assertEqual(at.size(), "at.size", static_cast<std::size_t>(getNin()), "nIn");
         double result = astRate(getRawPtr(), const_cast<double *>(at.data()), ax1, ax2);
         assertOK();
@@ -244,7 +236,7 @@ public:
     * The returned mapping is always independent of the original (a deep copy), unlike astSimplify.
     */
     std::shared_ptr<Mapping> simplify() const {
-        AstObject * rawSimpMap = reinterpret_cast<AstObject *>(astSimplify(getRawPtr()));
+        AstObject *rawSimpMap = reinterpret_cast<AstObject *>(astSimplify(getRawPtr()));
         assertOK(rawSimpMap);
         return Object::fromAstObject<Mapping>(rawSimpMap, true);
     }
@@ -255,12 +247,7 @@ public:
     @param[in] from  input coordinates, with dimensions (nPts, nIn)
     @param[out] to  transformed coordinates, with dimensions (nPts, nOut)
     */
-    void tranForward(
-        ConstArray2D const & from,
-        Array2D const & to
-    ) const {
-        _tran(from, true, to);
-    }
+    void tranForward(ConstArray2D const &from, Array2D const &to) const { _tran(from, true, to); }
 
     /**
     Perform a forward transformation on a 2-D array, returning the results as a new array
@@ -268,9 +255,7 @@ public:
     @param[in] from  input coordinates, with dimensions (nPts, nIn)
     @return the results as a new array with dimensions (nPts, nOut)
     */
-    Array2D tranForward(
-        ConstArray2D const & from
-    ) const {
+    Array2D tranForward(ConstArray2D const &from) const {
         Array2D to = ndarray::allocate(from.getSize<0>(), getNout());
         _tran(from, true, to);
         return to;
@@ -282,9 +267,7 @@ public:
     @param[in] from  input coordinates as a vector, with axes adjacent, e.g. x0, y0, x1, y1...xn, yn
     @return the results as a new vector
     */
-    std::vector<double> tranForward(
-        std::vector<double> const & from
-    ) const {
+    std::vector<double> tranForward(std::vector<double> const &from) const {
         auto fromArr = arrayFromVector(from, getNin());
         std::vector<double> to(fromArr.getSize<0>() * getNout());
         auto toArr = arrayFromVector(to, getNout());
@@ -298,12 +281,7 @@ public:
     @param[in] from  input coordinates, with dimensions (nPts, nOut)
     @param[out] to  transformed coordinates, with dimensions (nPts, nIn)
     */
-    void tranInverse(
-        ConstArray2D const & from,
-        Array2D const & to
-    ) const {
-        _tran(from, false, to);
-    }
+    void tranInverse(ConstArray2D const &from, Array2D const &to) const { _tran(from, false, to); }
 
     /**
     Perform an inverse transformation on a 2-D array, returning the results as a new 2-D array
@@ -311,9 +289,7 @@ public:
     @param[in] from  output coordinates, with dimensions (nPts, nOut)
     @return the results as a new array with dimensions (nPts, nIn)
     */
-    Array2D tranInverse(
-        ConstArray2D const & from
-    ) const {
+    Array2D tranInverse(ConstArray2D const &from) const {
         Array2D to = ndarray::allocate(from.getSize<0>(), getNin());
         _tran(from, false, to);
         return to;
@@ -325,9 +301,7 @@ public:
     @param[in] from  input coordinates as a vector, with axes adjacent, e.g. x0, y0, x1, y1...xn, yn
     @return the results as a new vector
     */
-    std::vector<double> tranInverse(
-        std::vector<double> const & from
-    ) const {
+    std::vector<double> tranInverse(std::vector<double> const &from) const {
         auto fromArr = arrayFromVector(from, getNout());
         std::vector<double> to(fromArr.getSize<0>() * getNin());
         auto toArr = arrayFromVector(to, getNin());
@@ -371,13 +345,8 @@ public:
                 performance, accurate results will still be obtained.
     @param[in] to  Computed points, with dimensions (nPts, nOut), where nPts the desired number of points
     */
-    void tranGridForward(
-        PointI const & lbnd,
-        PointI const & ubnd,
-        double tol,
-        int maxpix,
-        Array2D const & to
-    ) const {
+    void tranGridForward(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix,
+                         Array2D const &to) const {
         _tranGrid(lbnd, ubnd, tol, maxpix, true, to);
     }
 
@@ -387,13 +356,7 @@ public:
     See the overload of tranGridForward that outputs the data as the last argument
     for more information
     */
-    Array2D tranGridForward(
-        PointI const & lbnd,
-        PointI const & ubnd,
-        double tol,
-        int maxpix,
-        int nPts
-    ) const {
+    Array2D tranGridForward(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix, int nPts) const {
         Array2D to = ndarray::allocate(nPts, getNout());
         _tranGrid(lbnd, ubnd, tol, maxpix, true, to);
         return to;
@@ -404,13 +367,8 @@ public:
 
     See tranGridForward for the arguments, swapping nIn and nOut
     */
-    void tranGridInverse(
-        PointI const & lbnd,
-        PointI const & ubnd,
-        double tol,
-        int maxpix,
-        Array2D const & to
-    ) const {
+    void tranGridInverse(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix,
+                         Array2D const &to) const {
         _tranGrid(lbnd, ubnd, tol, maxpix, false, to);
     }
 
@@ -419,13 +377,7 @@ public:
 
     See tranGridForward for the arguments, swapping nIn and nOut
     */
-    Array2D tranGridInverse(
-        PointI const & lbnd,
-        PointI const & ubnd,
-        double tol,
-        int maxpix,
-        int nPts
-    ) const {
+    Array2D tranGridInverse(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix, int nPts) const {
         Array2D to = ndarray::allocate(nPts, getNin());
         _tranGrid(lbnd, ubnd, tol, maxpix, false, to);
         return to;
@@ -435,9 +387,7 @@ protected:
     /**
     Construct a mapping from a pointer to a raw AST subclass of AstMapping
     */
-    explicit Mapping(AstMapping * rawMap) :
-        Object(reinterpret_cast<AstObject *>(rawMap))
-    {
+    explicit Mapping(AstMapping *rawMap) : Object(reinterpret_cast<AstObject *>(rawMap)) {
         assertOK();
         if (!astIsAMapping(getRawPtr())) {
             std::ostringstream os;
@@ -464,7 +414,7 @@ protected:
     @throw std::invalid_argument if `i` is not 0 or 1.
     @throw std::runtime_error if this mapping is not a compound mapping.
     */
-    template<typename Class>
+    template <typename Class>
     std::shared_ptr<Class> _decompose(int i, bool copy) const;
 
 private:
@@ -475,23 +425,13 @@ private:
     @param[in] doForward  if true then perform a forward transform, else inverse
     @param[out] to  transformed coordinates, with dimensions (nPts, nOut)
     */
-    void _tran(
-        ConstArray2D const & from,
-        bool doForward,
-        Array2D const & to
-    ) const;
+    void _tran(ConstArray2D const &from, bool doForward, Array2D const &to) const;
 
     /**
     Implementat tranGridForward and tranGridInverse, which see.
     */
-    void _tranGrid(
-        PointI const & lbnd,
-        PointI const & ubnd,
-        double tol,
-        int maxpix,
-        bool doForward,
-        Array2D const & to
-    ) const;
+    void _tranGrid(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix, bool doForward,
+                   Array2D const &to) const;
 };
 
 }  // namespace ast

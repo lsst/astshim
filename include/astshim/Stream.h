@@ -1,7 +1,7 @@
-/* 
+/*
  * LSST Data Management System
  * Copyright 2016  AURA/LSST.
- * 
+ *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
  *
@@ -9,14 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the LSST License Statement and 
- * the GNU General Public License along with this program.  If not, 
+ *
+ * You should have received a copy of the LSST License Statement and
+ * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #ifndef ASTSHIM_SOURCESINK_H
@@ -33,7 +33,7 @@
 
 namespace ast {
 
-class FitsChan; // forward declaration for friendship
+class FitsChan;  // forward declaration for friendship
 
 /**
 A stream for ast::Channel
@@ -48,13 +48,8 @@ public:
     @param[in] ostreamPtr  sink/output stream; may match `istreamPtr`;
                         may be nullptr if sinking not needed
     */
-    explicit Stream(std::istream * istreamPtr, std::ostream * ostreamPtr)
-    : 
-        _istreamPtr(),
-        _ostreamPtr(),
-        _sourceStr(),
-        _isFits(false)
-    {
+    explicit Stream(std::istream *istreamPtr, std::ostream *ostreamPtr)
+            : _istreamPtr(), _ostreamPtr(), _sourceStr(), _isFits(false) {
         if (istreamPtr) {
             _istreamPtr = std::make_shared<std::istream>(istreamPtr->rdbuf());
         }
@@ -63,22 +58,19 @@ public:
         }
     }
 
-
     explicit Stream() : Stream(nullptr, nullptr) {}
 
     virtual ~Stream() {}
 
     Stream(Stream const &) = default;
     Stream(Stream &&) = default;
-    Stream & operator=(Stream const &) = default;
-    Stream & operator=(Stream &&) = default;
+    Stream &operator=(Stream const &) = default;
+    Stream &operator=(Stream &&) = default;
 
     /**
     Return true if this Stream has an input or output std::stream
     */
-    bool hasStdStream() {
-        return _istreamPtr || _ostreamPtr;
-    }
+    bool hasStdStream() { return _istreamPtr || _ostreamPtr; }
 
     /**
     Source (read) from the stream
@@ -89,7 +81,7 @@ public:
         The Stream owns the string buffer, and it will be invalidated on the next
         call to this function.
     */
-    char const * source() {
+    char const *source() {
         if ((_istreamPtr) && (*_istreamPtr)) {
             if (_isFits) {
                 // http://codereview.stackexchange.com/a/28759
@@ -115,7 +107,7 @@ public:
     @note this function is not virtual because of type slicing: this function is called from code
     that casts a void pointer to a Stream pointer without knowing which kind of Stream it is.
     */
-    bool sink(char const * cstr) {
+    bool sink(char const *cstr) {
         if (_ostreamPtr) {
             (*_ostreamPtr) << cstr;
             if (!_isFits) {
@@ -144,7 +136,6 @@ protected:
     bool _isFits;  ///< is this a FITS stream?
 };
 
-
 /**
 File-based source or sink (not both) for channels
 */
@@ -156,11 +147,7 @@ public:
     @param[in] path  Path to file as a string
     @param[in] doWrite  If true then write to the file, otherwise read from the file
     */
-    explicit FileStream(std::string const & path, bool doWrite=false)
-    :
-        Stream(),
-        _path(path)
-    {
+    explicit FileStream(std::string const &path, bool doWrite = false) : Stream(), _path(path) {
         auto mode = doWrite ? std::ios_base::out : std::ios_base::in;
         auto fstreamPtr = std::make_shared<std::fstream>(path, mode);
         if (!*fstreamPtr) {
@@ -183,7 +170,6 @@ private:
     std::string _path;  ///< Path to file
 };
 
-
 /**
 String-based source and sink for channels
 
@@ -197,12 +183,7 @@ public:
 
     @param[in] data  initial data for the source stream
     */
-    explicit StringStream(std::string const & data="")
-    :
-        Stream(),
-        _istringstreamPtr(),
-        _ostringstreamPtr()
-    {
+    explicit StringStream(std::string const &data = "") : Stream(), _istringstreamPtr(), _ostringstreamPtr() {
         _istringstreamPtr = std::make_shared<std::istringstream>(data);
         _ostringstreamPtr = std::make_shared<std::ostringstream>();
         _istreamPtr = _istringstreamPtr;
@@ -239,7 +220,7 @@ Source function that allows astChannel to source from a Stream
 This function retrieves a pointer to a Stream `ssptr` using astChannelData,
 then returns the result of calling `ssptr->source()`
 */
-inline const char * source() {
+inline const char *source() {
     auto ssptr = reinterpret_cast<Stream *>(astChannelData);
     if (ssptr) {
         return ssptr->source();
@@ -254,7 +235,7 @@ Sink function that allows astChannel to sink to a Stream
 This function retrieves a pointer to a Stream `ssptr` using astChannelData,
 then calls `ssptr->sink(cstr)`.
 */
-inline void sink(const char * cstr) {
+inline void sink(const char *cstr) {
     auto ssptr = reinterpret_cast<Stream *>(astChannelData);
     if (ssptr) {
         auto isok = ssptr->sink(cstr);
@@ -264,7 +245,7 @@ inline void sink(const char * cstr) {
     }
 }
 
-}  // namespace ast::detail
+}  // namespace detail
 
 }  // namespace ast
 
