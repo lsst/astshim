@@ -40,6 +40,7 @@ from .functional import *
 from .fitsChan import *
 from .xmlChan import *
 # mappings
+from .chebyMap import *
 from .cmpMap import *
 from .lutMap import *
 from .mathMap import *

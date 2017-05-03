@@ -18,6 +18,7 @@ scripts.BasicSConscript.pybind11([
     "fitsChan",
     "xmlChan",
 
+    "chebyMap",
     "cmpMap",
     "lutMap",
     "mathMap",
