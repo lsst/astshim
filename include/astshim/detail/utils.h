@@ -19,8 +19,8 @@
  * the GNU General Public License along with this program.  If not, 
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#ifndef ASTSHIM_DETAIL_H
-#define ASTSHIM_DETAIL_H
+#ifndef ASTSHIM_DETAIL_UTILS_H
+#define ASTSHIM_DETAIL_UTILS_H
 
 #include <stdexcept>
 
