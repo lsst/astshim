@@ -59,5 +59,5 @@ PYBIND11_PLUGIN(mapBox) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

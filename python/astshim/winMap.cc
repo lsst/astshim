@@ -50,5 +50,5 @@ PYBIND11_PLUGIN(winMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

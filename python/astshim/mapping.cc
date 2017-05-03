@@ -79,15 +79,17 @@ PYBIND11_PLUGIN(mapping) {
     cls.def("tranInverse",
             (std::vector<double>(Mapping::*)(std::vector<double> const &) const) & Mapping::tranInverse,
             "from"_a);
-    cls.def("tranGridForward", (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
-                                       Mapping::tranGridForward,
+    cls.def("tranGridForward",
+            (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
+                    Mapping::tranGridForward,
             "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
-    cls.def("tranGridInverse", (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
-                                       Mapping::tranGridInverse,
+    cls.def("tranGridInverse",
+            (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
+                    Mapping::tranGridInverse,
             "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

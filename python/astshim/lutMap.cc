@@ -42,7 +42,7 @@ PYBIND11_PLUGIN(lutMap) {
     py::class_<LutMap, std::shared_ptr<LutMap>, Mapping> cls(mod, "LutMap");
 
     cls.def(py::init<std::vector<double> const &, double, double, std::string const &>(), "lut"_a, "start"_a,
-            "inc"_a, "options"_a="");
+            "inc"_a, "options"_a = "");
 
     cls.def("copy", &LutMap::copy);
     cls.def("getLutEpsilon", &LutMap::getLutEpsilon);
@@ -51,5 +51,5 @@ PYBIND11_PLUGIN(lutMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

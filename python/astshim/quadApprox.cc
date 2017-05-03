@@ -47,5 +47,5 @@ PYBIND11_PLUGIN(quadApprox) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

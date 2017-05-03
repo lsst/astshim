@@ -41,12 +41,12 @@ PYBIND11_PLUGIN(unitNormMap) {
 
     py::class_<UnitNormMap, std::shared_ptr<UnitNormMap>, Mapping> cls(mod, "UnitNormMap");
 
-    cls.def(py::init<std::vector<double> const &, std::string const &>(), "centre"_a, "options"_a="");
+    cls.def(py::init<std::vector<double> const &, std::string const &>(), "centre"_a, "options"_a = "");
 
     cls.def("copy", &UnitNormMap::copy);
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

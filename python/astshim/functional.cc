@@ -39,5 +39,5 @@ PYBIND11_PLUGIN(functional) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

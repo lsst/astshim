@@ -24,7 +24,7 @@
 namespace ast {
 namespace detail {
 
-void astBadToNan(ast::Array2D const & arr) {
+void astBadToNan(ast::Array2D const &arr) {
     for (auto i = arr.begin(); i != arr.end(); ++i) {
         for (auto j = i->begin(); j != i->end(); ++j) {
             if (*j == AST__BAD) {
@@ -34,7 +34,7 @@ void astBadToNan(ast::Array2D const & arr) {
     }
 }
 
-std::string getClassName(AstObject const * rawObj) {
+std::string getClassName(AstObject const *rawObj) {
     std::string name = astGetC(rawObj, "Class");
     assertOK();
     if (name != "CmpMap") {
@@ -44,14 +44,14 @@ std::string getClassName(AstObject const * rawObj) {
     return series ? "SeriesMap" : "ParallelMap";
 }
 
-bool isSeries(AstCmpMap const * cmpMap) {
-    AstMapping * rawMap1;
-    AstMapping * rawMap2;
+bool isSeries(AstCmpMap const *cmpMap) {
+    AstMapping *rawMap1;
+    AstMapping *rawMap2;
     int series, invert1, invert2;
     astDecompose(cmpMap, &rawMap1, &rawMap2, &series, &invert1, &invert2);
     assertOK();
     return series;
 }
 
-}  // detail
-}  // ast
+}  // namespace detail
+}  // namespace ast

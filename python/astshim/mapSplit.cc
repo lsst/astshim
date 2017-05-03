@@ -47,5 +47,5 @@ PYBIND11_PLUGIN(mapSplit) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

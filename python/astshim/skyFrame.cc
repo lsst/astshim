@@ -42,7 +42,7 @@ PYBIND11_PLUGIN(skyFrame) {
 
     py::class_<SkyFrame, std::shared_ptr<SkyFrame>, Frame> cls(mod, "SkyFrame");
 
-    cls.def(py::init<std::string const &>(), "options"_a="");
+    cls.def(py::init<std::string const &>(), "options"_a = "");
 
     cls.def("copy", &SkyFrame::copy);
 
@@ -55,11 +55,11 @@ PYBIND11_PLUGIN(skyFrame) {
     cls.def("getLonAxis", &SkyFrame::getLonAxis);
     cls.def("getNegLon", &SkyFrame::getNegLon);
     cls.def("getProjection", &SkyFrame::getProjection);
-    cls.def("getSkyRef", (double (SkyFrame::*)(int) const) &SkyFrame::getSkyRef, "axis"_a);
-    cls.def("getSkyRef", (std::vector<double> (SkyFrame::*)() const) &SkyFrame::getSkyRef);
+    cls.def("getSkyRef", (double (SkyFrame::*)(int) const) & SkyFrame::getSkyRef, "axis"_a);
+    cls.def("getSkyRef", (std::vector<double>(SkyFrame::*)() const) & SkyFrame::getSkyRef);
     cls.def("getSkyRefIs", &SkyFrame::getSkyRefIs);
-    cls.def("getSkyRefP", (double (SkyFrame::*)(int) const) &SkyFrame::getSkyRefP, "axis"_a);
-    cls.def("getSkyRefP", (std::vector<double> (SkyFrame::*)() const) &SkyFrame::getSkyRefP);
+    cls.def("getSkyRefP", (double (SkyFrame::*)(int) const) & SkyFrame::getSkyRefP, "axis"_a);
+    cls.def("getSkyRefP", (std::vector<double>(SkyFrame::*)() const) & SkyFrame::getSkyRefP);
     cls.def("getSkyTol", &SkyFrame::getSkyTol);
 
     cls.def("setAlignOffset", &SkyFrame::setAlignOffset);
@@ -77,5 +77,5 @@ PYBIND11_PLUGIN(skyFrame) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

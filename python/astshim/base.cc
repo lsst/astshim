@@ -34,25 +34,24 @@ PYBIND11_PLUGIN(base) {
 
     // Note: do not wrap arrayFromVector because it is unsafe (the array
     // will be corrupted if the vector is deleted) and unnecessary (use numpy)
-    mod.def("assertOK", &assertOK, "rawObj1"_a=nullptr, "rawObj2"_a=nullptr);
-    mod.def("escapes", &escapes, "include"_a=-1);
+    mod.def("assertOK", &assertOK, "rawObj1"_a = nullptr, "rawObj2"_a = nullptr);
+    mod.def("escapes", &escapes, "include"_a = -1);
 
     py::enum_<DataType>(mod, "DataType")
-        .value("IntType", DataType::IntType)
-        .value("ShortIntType", DataType::ShortIntType)
-        .value("ByteType", DataType::ByteType)
-        .value("DoubleType", DataType::DoubleType)
-        .value("FloatType", DataType::FloatType)
-        .value("StringType", DataType::StringType)
-        .value("ObjectType", DataType::ObjectType)
-        .value("PointerType", DataType::PointerType)
-        .value("UndefinedType", DataType::UndefinedType)
-        .value("BadType", DataType::BadType)
-        .export_values();
-
+            .value("IntType", DataType::IntType)
+            .value("ShortIntType", DataType::ShortIntType)
+            .value("ByteType", DataType::ByteType)
+            .value("DoubleType", DataType::DoubleType)
+            .value("FloatType", DataType::FloatType)
+            .value("StringType", DataType::StringType)
+            .value("ObjectType", DataType::ObjectType)
+            .value("PointerType", DataType::PointerType)
+            .value("UndefinedType", DataType::UndefinedType)
+            .value("BadType", DataType::BadType)
+            .export_values();
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

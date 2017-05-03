@@ -39,7 +39,7 @@ PYBIND11_PLUGIN(sphMap) {
 
     py::class_<SphMap, std::shared_ptr<SphMap>, Mapping> cls(mod, "SphMap");
 
-    cls.def(py::init<std::string const &>(), "options"_a="");
+    cls.def(py::init<std::string const &>(), "options"_a = "");
 
     cls.def("copy", &SphMap::copy);
     cls.def("getUnitRadius", &SphMap::getUnitRadius);
@@ -48,5 +48,5 @@ PYBIND11_PLUGIN(sphMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

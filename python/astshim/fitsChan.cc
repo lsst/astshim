@@ -36,7 +36,7 @@ namespace ast {
 namespace {
 
 template <typename T>
-void wrapFoundValue(py::module &mod, std::string const & suffix) {
+void wrapFoundValue(py::module &mod, std::string const &suffix) {
     py::class_<FoundValue<T>> cls(mod, ("FoundValue" + suffix).c_str());
 
     cls.def(py::init<bool, T const &>(), "found"_a, "value"_a);
@@ -51,24 +51,24 @@ PYBIND11_PLUGIN(fitsChan) {
     py::module::import("astshim.channel");
 
     py::enum_<FitsKeyState>(mod, "FitsKeyState")
-        .value("ABSENT", FitsKeyState::ABSENT)
-        .value("NOVALUE", FitsKeyState::NOVALUE)
-        .value("PRESENT", FitsKeyState::PRESENT)
-        .export_values();
+            .value("ABSENT", FitsKeyState::ABSENT)
+            .value("NOVALUE", FitsKeyState::NOVALUE)
+            .value("PRESENT", FitsKeyState::PRESENT)
+            .export_values();
 
     py::enum_<CardType>(mod, "CardType")
-        .value("NOTYPE", CardType::NOTYPE)
-        .value("COMMENT", CardType::COMMENT)
-        .value("INT", CardType::INT)
-        .value("FLOAT", CardType::FLOAT)
-        .value("STRING", CardType::STRING)
-        .value("COMPLEXF", CardType::COMPLEXF)
-        .value("COMPLEXI", CardType::COMPLEXI)
-        .value("COMPLEXI", CardType::COMPLEXI)
-        .value("LOGICAL", CardType::LOGICAL)
-        .value("CONTINUE", CardType::CONTINUE)
-        .value("UNDEF", CardType::UNDEF)
-        .export_values();
+            .value("NOTYPE", CardType::NOTYPE)
+            .value("COMMENT", CardType::COMMENT)
+            .value("INT", CardType::INT)
+            .value("FLOAT", CardType::FLOAT)
+            .value("STRING", CardType::STRING)
+            .value("COMPLEXF", CardType::COMPLEXF)
+            .value("COMPLEXI", CardType::COMPLEXI)
+            .value("COMPLEXI", CardType::COMPLEXI)
+            .value("LOGICAL", CardType::LOGICAL)
+            .value("CONTINUE", CardType::CONTINUE)
+            .value("UNDEF", CardType::UNDEF)
+            .export_values();
 
     // Wrap FoundValue struct for returning various types
     wrapFoundValue<std::string>(mod, "S");
@@ -80,17 +80,17 @@ PYBIND11_PLUGIN(fitsChan) {
     // Wrap FitsChan
     py::class_<FitsChan, std::shared_ptr<FitsChan>, Channel> cls(mod, "FitsChan");
 
-    cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a="");
+    cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
     cls.def("delFits", &FitsChan::delFits);
     cls.def("emptyFits", &FitsChan::emptyFits);
     cls.def("findFits", &FitsChan::findFits, "name"_a, "inc"_a);
-    cls.def("getFitsCF", &FitsChan::getFitsCF, "name"_a, "defval"_a=std::complex<double>(0, 0));
-    cls.def("getFitsCN", &FitsChan::getFitsCN, "name"_a, "defval"_a="");
-    cls.def("getFitsF", &FitsChan::getFitsF, "name"_a, "defval"_a=0);
-    cls.def("getFitsI", &FitsChan::getFitsI, "name"_a, "defval"_a=0);
-    cls.def("getFitsL", &FitsChan::getFitsL, "name"_a, "defval"_a=false);
-    cls.def("getFitsS", &FitsChan::getFitsS, "name"_a, "defval"_a="");
+    cls.def("getFitsCF", &FitsChan::getFitsCF, "name"_a, "defval"_a = std::complex<double>(0, 0));
+    cls.def("getFitsCN", &FitsChan::getFitsCN, "name"_a, "defval"_a = "");
+    cls.def("getFitsF", &FitsChan::getFitsF, "name"_a, "defval"_a = 0);
+    cls.def("getFitsI", &FitsChan::getFitsI, "name"_a, "defval"_a = 0);
+    cls.def("getFitsL", &FitsChan::getFitsL, "name"_a, "defval"_a = false);
+    cls.def("getFitsS", &FitsChan::getFitsS, "name"_a, "defval"_a = "");
     cls.def("getAllCardNames", &FitsChan::getAllCardNames);
     cls.def("getAllWarnings", &FitsChan::getAllWarnings);
     cls.def("getCard", &FitsChan::getCard);
@@ -115,14 +115,14 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("putFits", &FitsChan::putFits, "card"_a, "overwrite"_a);
     cls.def("readFits", &FitsChan::readFits);
     cls.def("retainFits", &FitsChan::retainFits);
-    cls.def("setFitsCF", &FitsChan::setFitsCF, "name"_a, "value"_a, "comment"_a="", "overwrite"_a=false);
-    cls.def("setFitsCM", &FitsChan::setFitsCM, "comment"_a="", "overwrite"_a=false);
-    cls.def("setFitsCN", &FitsChan::setFitsCN, "name"_a, "value"_a, "comment"_a="", "overwrite"_a=false);
-    cls.def("setFitsF", &FitsChan::setFitsF, "name"_a, "value"_a, "comment"_a="", "overwrite"_a=false);
-    cls.def("setFitsI", &FitsChan::setFitsI, "name"_a, "value"_a, "comment"_a="", "overwrite"_a=false);
-    cls.def("setFitsL", &FitsChan::setFitsL, "name"_a, "value"_a, "comment"_a="", "overwrite"_a=false);
-    cls.def("setFitsS", &FitsChan::setFitsS, "name"_a, "value"_a, "comment"_a="", "overwrite"_a=false);
-    cls.def("setFitsU", &FitsChan::setFitsU, "name"_a, "comment"_a="", "overwrite"_a=false);
+    cls.def("setFitsCF", &FitsChan::setFitsCF, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
+    cls.def("setFitsCM", &FitsChan::setFitsCM, "comment"_a = "", "overwrite"_a = false);
+    cls.def("setFitsCN", &FitsChan::setFitsCN, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
+    cls.def("setFitsF", &FitsChan::setFitsF, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
+    cls.def("setFitsI", &FitsChan::setFitsI, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
+    cls.def("setFitsL", &FitsChan::setFitsL, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
+    cls.def("setFitsS", &FitsChan::setFitsS, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
+    cls.def("setFitsU", &FitsChan::setFitsU, "name"_a, "comment"_a = "", "overwrite"_a = false);
     cls.def("setCDMatrix", &FitsChan::setCDMatrix, "cdmatrix"_a);
     cls.def("setClean", &FitsChan::setClean, "clean"_a);
     cls.def("setDefB1950", &FitsChan::setDefB1950, "defB1950"_a);
@@ -142,5 +142,5 @@ PYBIND11_PLUGIN(fitsChan) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

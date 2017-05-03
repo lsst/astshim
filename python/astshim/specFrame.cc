@@ -43,7 +43,7 @@ PYBIND11_PLUGIN(specFrame) {
 
     py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame> cls(mod, "SpecFrame");
 
-    cls.def(py::init<std::string const &>(), "options"_a="");
+    cls.def(py::init<std::string const &>(), "options"_a = "");
 
     cls.def("copy", &SpecFrame::copy);
 
@@ -65,12 +65,11 @@ PYBIND11_PLUGIN(specFrame) {
     cls.def("setAlignStdOfRest", &SpecFrame::setAlignStdOfRest, "stdOfRest"_a);
     cls.def("setRefDec", &SpecFrame::setRefDec, "refDec"_a);
     cls.def("setRefRA", &SpecFrame::setRefRA, "refRA"_a);
-    cls.def("setRefPos",
-            (void (SpecFrame::*)(SkyFrame const &, double, double)) & SpecFrame::setRefPos,
+    cls.def("setRefPos", (void (SpecFrame::*)(SkyFrame const &, double, double)) & SpecFrame::setRefPos,
             "frame"_a, "lon"_a, "lat"_a);
     cls.def("setRefPos", (void (SpecFrame::*)(double, double)) & SpecFrame::setRefPos, "ra"_a, "dec"_a);
-    cls.def("setRestFreq", (void (SpecFrame::*)(double)) &SpecFrame::setRestFreq, "freq"_a);
-    cls.def("setRestFreq", (void (SpecFrame::*)(std::string const &)) &SpecFrame::setRestFreq, "freq"_a);
+    cls.def("setRestFreq", (void (SpecFrame::*)(double)) & SpecFrame::setRestFreq, "freq"_a);
+    cls.def("setRestFreq", (void (SpecFrame::*)(std::string const &)) & SpecFrame::setRestFreq, "freq"_a);
     cls.def("setSourceSys", &SpecFrame::setSourceSys, "system"_a);
     cls.def("setSourceVel", &SpecFrame::setSourceVel, "vel"_a);
     cls.def("setSourceVRF", &SpecFrame::setSourceVRF, "vrf"_a);
@@ -80,5 +79,5 @@ PYBIND11_PLUGIN(specFrame) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

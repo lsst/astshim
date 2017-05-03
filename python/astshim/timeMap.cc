@@ -41,7 +41,7 @@ PYBIND11_PLUGIN(timeMap) {
 
     py::class_<TimeMap, std::shared_ptr<TimeMap>, Mapping> cls(mod, "TimeMap");
 
-    cls.def(py::init<std::string const &>(), "options"_a="");
+    cls.def(py::init<std::string const &>(), "options"_a = "");
 
     cls.def("copy", &TimeMap::copy);
     cls.def("add", &TimeMap::add, "cvt"_a, "args"_a);
@@ -49,5 +49,5 @@ PYBIND11_PLUGIN(timeMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

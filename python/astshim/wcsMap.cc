@@ -38,44 +38,44 @@ PYBIND11_PLUGIN(wcsMap) {
     py::module::import("astshim.mapping");
 
     py::enum_<WcsType>(mod, "WcsType")
-        .value("AZP", WcsType::AZP)
-        .value("SZP", WcsType::SZP)
-        .value("TAN", WcsType::TAN)
-        .value("STG", WcsType::STG)
-        .value("SIN", WcsType::SIN)
-        .value("ARC", WcsType::ARC)
-        .value("ZPN", WcsType::ZPN)
-        .value("ZEA", WcsType::ZEA)
-        .value("AIR", WcsType::AIR)
-        .value("CYP", WcsType::CYP)
-        .value("CEA", WcsType::CEA)
-        .value("CAR", WcsType::CAR)
-        .value("MER", WcsType::MER)
-        .value("SFL", WcsType::SFL)
-        .value("PAR", WcsType::PAR)
-        .value("MOL", WcsType::MOL)
-        .value("AIT", WcsType::AIT)
-        .value("COP", WcsType::COP)
-        .value("COE", WcsType::COE)
-        .value("COD", WcsType::COD)
-        .value("COO", WcsType::COO)
-        .value("BON", WcsType::BON)
-        .value("PCO", WcsType::PCO)
-        .value("TSC", WcsType::TSC)
-        .value("CSC", WcsType::CSC)
-        .value("QSC", WcsType::QSC)
-        .value("NCP", WcsType::NCP)
-        .value("GLS", WcsType::GLS)
-        .value("TPN", WcsType::TPN)
-        .value("HPX", WcsType::HPX)
-        .value("XPH", WcsType::XPH)
-        .value("WCSBAD", WcsType::WCSBAD)
-        .export_values();
+            .value("AZP", WcsType::AZP)
+            .value("SZP", WcsType::SZP)
+            .value("TAN", WcsType::TAN)
+            .value("STG", WcsType::STG)
+            .value("SIN", WcsType::SIN)
+            .value("ARC", WcsType::ARC)
+            .value("ZPN", WcsType::ZPN)
+            .value("ZEA", WcsType::ZEA)
+            .value("AIR", WcsType::AIR)
+            .value("CYP", WcsType::CYP)
+            .value("CEA", WcsType::CEA)
+            .value("CAR", WcsType::CAR)
+            .value("MER", WcsType::MER)
+            .value("SFL", WcsType::SFL)
+            .value("PAR", WcsType::PAR)
+            .value("MOL", WcsType::MOL)
+            .value("AIT", WcsType::AIT)
+            .value("COP", WcsType::COP)
+            .value("COE", WcsType::COE)
+            .value("COD", WcsType::COD)
+            .value("COO", WcsType::COO)
+            .value("BON", WcsType::BON)
+            .value("PCO", WcsType::PCO)
+            .value("TSC", WcsType::TSC)
+            .value("CSC", WcsType::CSC)
+            .value("QSC", WcsType::QSC)
+            .value("NCP", WcsType::NCP)
+            .value("GLS", WcsType::GLS)
+            .value("TPN", WcsType::TPN)
+            .value("HPX", WcsType::HPX)
+            .value("XPH", WcsType::XPH)
+            .value("WCSBAD", WcsType::WCSBAD)
+            .export_values();
 
     py::class_<WcsMap, std::shared_ptr<WcsMap>, Mapping> cls(mod, "WcsMap");
 
-    cls.def(py::init<int, WcsType, int, int, std::string const &>(),
-            "ncoord"_a, "type"_a, "lonax"_a, "latax"_a, "options"_a="");
+    cls.def(py::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,
+            "latax"_a, "options"_a = "");
 
     cls.def("copy", &WcsMap::copy);
     cls.def("getNatLat", &WcsMap::getNatLat);
@@ -88,5 +88,5 @@ PYBIND11_PLUGIN(wcsMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

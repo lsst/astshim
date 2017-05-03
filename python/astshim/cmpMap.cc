@@ -39,7 +39,7 @@ PYBIND11_PLUGIN(cmpMap) {
     py::class_<CmpMap, std::shared_ptr<CmpMap>, Mapping> cls(mod, "CmpMap");
 
     cls.def(py::init<Mapping const &, Mapping const &, bool, std::string const &>(), "map1"_a, "map2"_a,
-            "series"_a, "options"_a="");
+            "series"_a, "options"_a = "");
 
     cls.def("__getitem__", &CmpMap::operator[], py::is_operator());
     cls.def("__len__", [](CmpMap const &) { return 2; });
@@ -50,5 +50,5 @@ PYBIND11_PLUGIN(cmpMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

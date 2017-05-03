@@ -40,7 +40,7 @@ PYBIND11_PLUGIN(tranMap) {
     py::class_<TranMap, std::shared_ptr<TranMap>, Mapping> cls(mod, "TranMap");
 
     cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
-            "options"_a="");
+            "options"_a = "");
 
     cls.def("__getitem__", &TranMap::operator[], py::is_operator());
     cls.def("__len__", [](TranMap const &) { return 2; });
@@ -50,5 +50,5 @@ PYBIND11_PLUGIN(tranMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

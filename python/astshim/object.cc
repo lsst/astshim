@@ -41,7 +41,7 @@ PYBIND11_PLUGIN(object) {
     // do not wrap fromAstObject because it uses a bare AST pointer
 
     cls.def("__str__", &Object::getClass);
-    cls.def("__repr__", (std::string (Object::*)() const) &Object::show);
+    cls.def("__repr__", (std::string(Object::*)() const) & Object::show);
 
     cls.def("copy", &Object::copy);
     cls.def("clear", &Object::clear, "attrib"_a);
@@ -58,13 +58,13 @@ PYBIND11_PLUGIN(object) {
     cls.def("setID", &Object::setID, "id"_a);
     cls.def("setIdent", &Object::setIdent, "ident"_a);
     cls.def("setUseDefs", &Object::setUseDefs, "usedefs"_a);
-    cls.def("show", (std::string (Object::*)() const) &Object::show);
+    cls.def("show", (std::string(Object::*)() const) & Object::show);
     cls.def("test", &Object::test, "attrib"_a);
-    cls.def("unlock", &Object::unlock, "report"_a=false);
+    cls.def("unlock", &Object::unlock, "report"_a = false);
     // do not wrap getRawPtr, since it returns a bare AST pointer
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast
