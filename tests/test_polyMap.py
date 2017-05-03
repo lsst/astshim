@@ -9,7 +9,7 @@ import astshim
 from astshim.test import MappingTestCase
 
 
-class TestMatrixMap(MappingTestCase):
+class TestPolyMap(MappingTestCase):
 
     def test_PolyMapIterativeInverse(self):
         """Test a unidirectional polymap with its default iterative inverse
