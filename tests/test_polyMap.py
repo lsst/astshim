@@ -192,6 +192,21 @@ class TestPolyMap(MappingTestCase):
         self.assertTrue(pm.hasForward())
         self.assertFalse(pm.hasInverse())
 
+    def test_PolyMapNoTransform(self):
+        """Test constructing a PolyMap with neither forward nor inverse
+        coefficients
+        """
+        coeff_f = np.array([], dtype=float)
+        coeff_f.shape = (0, 4)
+        coeff_i = np.array([], dtype=float)
+        coeff_i.shape = (0, 3)
+
+        with self.assertRaises(ValueError):
+            astshim.PolyMap(coeff_f, coeff_i)
+
+        with self.assertRaises(ValueError):
+            astshim.PolyMap(coeff_f, 3)
+
     def test_PolyMapPolyTran(self):
         coeff_f = np.array([
             [1., 1, 1, 0],

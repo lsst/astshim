@@ -49,7 +49,7 @@ class PolyMap : public Mapping {
 
 public:
     /**
-    Construct a @ref PolyMap with specified forward and inverse transforms.
+    Construct a @ref PolyMap with specified forward and/or inverse transforms.
 
     The two sets of coefficients are independent of each other: the inverse transform
     need not undo the forward transform.
@@ -63,6 +63,8 @@ public:
         @ref PolyMap(ndarray::Array<double, 2, 2> const &, int, std::string const &) "other constructor"
         for details.
     @param[in] options  Comma-separated list of attribute assignments.
+
+    @throw std::invalid_argument if neither transform is specified (coeff_f and coeff_i are both empty)
 
     @anchor PolyMap_CoefficientMatrices Coefficient Matrices
 
@@ -116,6 +118,8 @@ public:
     @param[in] options  Comma-separated list of attribute assignments. Useful attributes include:
         @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NiterInverse "NiterInverse" and
         @ref PolyMap_TolInverse "TolInverse".
+
+    @throw std::invalid_argument if the forward transform is not specified (coeff_f is empty)
     */
     explicit PolyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
                      std::string const &options = "IterInverse=0")

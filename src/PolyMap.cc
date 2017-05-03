@@ -49,6 +49,10 @@ AstPolyMap *PolyMap::_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f
     const int nout = coeff_i.getSize<1>() - 2;
     const int ncoeff_i = coeff_i.getSize<0>();
 
+    if ((ncoeff_f == 0) && (ncoeff_i == 0)) {
+        throw std::invalid_argument(
+                "Must specify forward or inverse transform (coeff_f and coeff_i both empty)");
+    }
     if (nin <= 0) {
         std::ostringstream os;
         os << "coeff_f row length = " << nin + 2
@@ -70,6 +74,9 @@ AstPolyMap *PolyMap::_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f
                                      std::string const &options) const {
     const int nin = coeff_f.getSize<1>() - 2;
     const int ncoeff_f = coeff_f.getSize<0>();
+    if (ncoeff_f <= 0) {
+        throw std::invalid_argument("Must specify forward transform (coeff_f is empty)");
+    }
     if (nin <= 0) {
         std::ostringstream os;
         os << "coeff_f row length = " << nin + 2
