@@ -24,8 +24,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <sstream>
-#include <stdexcept>
 #include <vector>
 
 #include "astshim/base.h"
@@ -217,31 +215,7 @@ public:
                     if `forward` is true/false.
     */
     PolyMap polyTran(bool forward, double acc, double maxacc, int maxorder, std::vector<double> const &lbnd,
-                     std::vector<double> const &ubnd) const {
-        auto const desSize = static_cast<unsigned int>(forward ? getNin() : getNout());
-        if (lbnd.size() != desSize) {
-            std::ostringstream os;
-            os << "lbnd.size() = " << lbnd.size() << " != " << desSize << " = "
-               << (forward ? "getNin()" : "getNout()");
-            throw std::invalid_argument(os.str());
-        }
-        if (ubnd.size() != desSize) {
-            std::ostringstream os;
-            os << "ubnd.size() = " << ubnd.size() << " != " << desSize << " = "
-               << (forward ? "getNin()" : "getNout()");
-            throw std::invalid_argument(os.str());
-        }
-
-        void *map = astPolyTran(this->getRawPtr(), static_cast<int>(forward), acc, maxacc, maxorder,
-                                lbnd.data(), ubnd.data());
-        // Failure should result in a null pointer, so calling assertOK is unlikely to do anything,
-        // but better to be sure and than risk missing an uncaught error.
-        assertOK(reinterpret_cast<AstObject *>(map));
-        if (!map) {
-            throw std::runtime_error("Could not compute an inverse mapping");
-        }
-        return PolyMap(reinterpret_cast<AstPolyMap *>(map));
-    }
+                     std::vector<double> const &ubnd) const;
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
@@ -249,60 +223,17 @@ protected:
     }
 
     /// Construct a PolyMap from an raw AST pointer
-    PolyMap(AstPolyMap *map) : Mapping(reinterpret_cast<AstMapping *>(map)) {
-        if (!astIsAPolyMap(getRawPtr())) {
-            std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a PolyMap";
-            throw std::invalid_argument(os.str());
-        }
-    }
+    PolyMap(AstPolyMap *map);
 
 private:
     /// Make a raw AstPolyMap with specified forward and inverse transforms.
     AstPolyMap *_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f,
                                 ndarray::Array<double, 2, 2> const &coeff_i,
-                                std::string const &options = "") {
-        const int nin = coeff_f.getSize<1>() - 2;
-        const int ncoeff_f = coeff_f.getSize<0>();
-        const int nout = coeff_i.getSize<1>() - 2;
-        const int ncoeff_i = coeff_i.getSize<0>();
+                                std::string const &options = "") const;
 
-        if (nin <= 0) {
-            std::ostringstream os;
-            os << "coeff_f row length = " << nin + 2
-               << ", which is too short; length = nin + 2 and nin must be > 0";
-            throw std::invalid_argument(os.str());
-        }
-        if (nout <= 0) {
-            std::ostringstream os;
-            os << "coeff_i row length " << nout + 2
-               << ", which is too short; length = nout + 2 and nout must be > 0";
-            throw std::invalid_argument(os.str());
-        }
-
-        return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i, coeff_i.getData(),
-                          options.c_str());
-    }
-
-    /// Make a raw AstPolyMap with a specified forward transform and an iterative inverse.
+    /// Make a raw AstPolyMap with a specified forward transform and an optional iterative inverse.
     AstPolyMap *_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
-                                std::string const &options = "") {
-        const int nin = coeff_f.getSize<1>() - 2;
-        const int ncoeff_f = coeff_f.getSize<0>();
-        if (nin <= 0) {
-            std::ostringstream os;
-            os << "coeff_f row length = " << nin + 2
-               << ", which is too short; length = nin + 2 and nin must be > 0";
-            throw std::invalid_argument(os.str());
-        }
-        if (nout <= 0) {
-            std::ostringstream os;
-            os << "nout = " << nout << " <0 =";
-            throw std::invalid_argument(os.str());
-        }
-
-        return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), 0, nullptr, options.c_str());
-    }
+                                std::string const &options = "") const;
 };
 
 }  // namespace ast
