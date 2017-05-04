@@ -40,6 +40,8 @@ an iterative method can be used to evaluate the inverse based only on the forwar
 
 ### Attributes
 
+All those of @ref Mapping plus:
+
 - @ref PolyMap_IterInverse "IterInverse": provide an iterative inverse transformation?
 - @ref PolyMap_NiterInverse "NiterInverse": maximum number of iterations for iterative inverse.
 - @ref PolyMap_TolInverse "TolInverse": target relative error for iterative inverse.
@@ -215,8 +217,8 @@ public:
                     The new polynomial will be evaluated over this rectangle. The length
                     should equal getNin() or getNout(), depending on `forward`.
 
-    @throw std::invalid_argument if lbnd.size() or ubnd.size() does not match getNin()/getNout()
-                    if `forward` is true/false.
+    @throw std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` true)
+                    or getNout() (if `forward` false).
     */
     PolyMap polyTran(bool forward, double acc, double maxacc, int maxorder, std::vector<double> const &lbnd,
                      std::vector<double> const &ubnd) const;
