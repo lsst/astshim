@@ -126,33 +126,33 @@ public:
     Units and argument names are described at the end of
     the list of conversions, and "MJD" means Modified Julian Date.
 
-    - "MJDTOMJD"   2 (MJDOFF1, MJDOFF2): Convert MJD from one offset to another.
-    - "MJDTOJD"    2 (MJDOFF, JDOFF): Convert MJD to Julian Date.
-    - "JDTOMJD"    2 (JDOFF, MJDOFF): Convert Julian Date to MJD.
-    - "MJDTOBEP"   2 (MJDOFF, BEPOFF): Convert MJD to Besselian epoch.
-    - "BEPTOMJD"   2 (BEPOFF, MJDOFF): Convert Besselian epoch to MJD.
-    - "MJDTOJEP"   2 (MJDOFF, JEPOFF): Convert MJD to Julian epoch.
-    - "JEPTOMJD"   2 (JEPOFF, MJDOFF): Convert Julian epoch to MJD.
-    - "TAITOUTC"   1 (MJDOFF): Convert a TAI MJD to a UTC MJD.
-    - "UTCTOTAI"   1 (MJDOFF): Convert a UTC MJD to a TAI MJD.
-    - "TAITOTT"    1 (MJDOFF): Convert a TAI MJD to a TT MJD.
-    - "TTTOTAI"    1 (MJDOFF): Convert a TT MJD to a TAI MJD.
-    - "TTTOTDB"    4 (MJDOFF, OBSLON, OBSLAT, OBSALT): Convert a TT MJD to a TDB MJD.
-    - "TDBTOTT"    4 (MJDOFF, OBSLON, OBSLAT, OBSALT): Convert a TDB MJD to a TT MJD.
-    - "TTTOTCG"    1 (MJDOFF): Convert a TT MJD to a TCG MJD.
-    - "TCGTOTT"    1 (MJDOFF): Convert a TCG MJD to a TT MJD.
-    - "TDBTOTCB"   1 (MJDOFF): Convert a TDB MJD to a TCB MJD.
-    - "TCBTOTDB"   1 (MJDOFF): Convert a TCB MJD to a TDB MJD.
-    - "UTTOGMST"   1 (MJDOFF): Convert a UT MJD to a GMST MJD.
-    - "GMSTTOUT"   1 (MJDOFF): Convert a GMST MJD to a UT MJD.
-    - "GMSTTOLMST" 3 (MJDOFF, OBSLON, OBSLAT): Convert a GMST MJD to a LMST MJD.
-    - "LMSTTOGMST" 3 (MJDOFF, OBSLON, OBSLAT): Convert a LMST MJD to a GMST MJD.
-    - "LASTTOLMST" 3 (MJDOFF, OBSLON, OBSLAT): Convert a GMST MJD to a LMST MJD.
-    - "LMSTTOLAST" 3 (MJDOFF, OBSLON, OBSLAT): Convert a LMST MJD to a GMST MJD.
-    - "UTTOUTC"    1 (DUT1): Convert a UT1 MJD to a UTC MJD.
-    - "UTCTOUT"    1 (DUT1): Convert a UTC MJD to a UT1 MJD.
-    - "LTTOUTC"    1 (LTOFF): Convert a Local Time MJD to a UTC MJD.
-    - "UTCTOLT"    1 (LTOFF): Convert a UTC MJD to a Local Time MJD.
+    - "MJDTOMJD"  (MJDOFF1,MJDOFF2): Convert MJD from one offset to another.
+    - "MJDTOJD"  (MJDOFF,JDOFF): Convert MJD to Julian Date.
+    - "JDTOMJD"  (JDOFF,MJDOFF): Convert Julian Date to MJD.
+    - "MJDTOBEP" (MJDOFF,BEPOFF): Convert MJD to Besselian epoch.
+    - "BEPTOMJD" (BEPOFF,MJDOFF): Convert Besselian epoch to MJD.
+    - "MJDTOJEP" (MJDOFF,JEPOFF): Convert MJD to Julian epoch.
+    - "JEPTOMJD" (JEPOFF,MJDOFF): Convert Julian epoch to MJD.
+    - "TAITOUTC" (MJDOFF,DTAI): Convert a TAI MJD to a UTC MJD.
+    - "UTCTOTAI" (MJDOFF,DTAI): Convert a UTC MJD to a TAI MJD.
+    - "TAITOTT"  (MJDOFF): Convert a TAI MJD to a TT MJD.
+    - "TTTOTAI"  (MJDOFF): Convert a TT MJD to a TAI MJD.
+    - "TTTOTDB"  (MJDOFF,OBSLON,OBSLAT,OBSALT,DTAI): Convert a TT MJD to a TDB MJD.
+    - "TDBTOTT"  (MJDOFF,OBSLON,OBSLAT,OBSALT,DTAI): Convert a TDB MJD to a TT MJD.
+    - "TTTOTCG"  (MJDOFF): Convert a TT MJD to a TCG MJD.
+    - "TCGTOTT"  (MJDOFF): Convert a TCG MJD to a TT MJD.
+    - "TDBTOTCB" (MJDOFF): Convert a TDB MJD to a TCB MJD.
+    - "TCBTOTDB" (MJDOFF): Convert a TCB MJD to a TDB MJD.
+    - "UTTOGMST" (MJDOFF): Convert a UT MJD to a GMST MJD.
+    - "GMSTTOUT" (MJDOFF): Convert a GMST MJD to a UT MJD.
+    - "GMSTTOLMST" (MJDOFF,OBSLON,OBSLAT): Convert a GMST MJD to a LMST MJD.
+    - "LMSTTOGMST" (MJDOFF,OBSLON,OBSLAT): Convert a LMST MJD to a GMST MJD.
+    - "LASTTOLMST" (MJDOFF,OBSLON,OBSLAT): Convert a GMST MJD to a LMST MJD.
+    - "LMSTTOLAST" (MJDOFF,OBSLON,OBSLAT): Convert a LMST MJD to a GMST MJD.
+    - "UTTOUTC" (DUT1): Convert a UT1 MJD to a UTC MJD.
+    - "UTCTOUT" (DUT1): Convert a UTC MJD to a UT1 MJD.
+    - "LTTOUTC" (LTOFF): Convert a Local Time MJD to a UTC MJD.
+    - "UTCTOLT" (LTOFF): Convert a UTC MJD to a Local Time MJD.
 
     The units for the values processed by the above conversions are as follows:
 
