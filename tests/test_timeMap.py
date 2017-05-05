@@ -57,17 +57,17 @@ class TestTimeMap(MappingTestCase):
         timemap.add("BEPTOMJD", [560, 720])  # just right
 
         with self.assertRaises(Exception):
-            timemap.add("UTCTOTAI", [])  # too few arguments
+            timemap.add("UTCTOTAI", [560])  # just right
         with self.assertRaises(Exception):
-            timemap.add("UTCTOTAI", [560, 720])  # too many arguments
-        timemap.add("UTCTOTAI", [560])  # just right
+            timemap.add("UTCTOTAI", [560, 720, 23])  # too many arguments
+        timemap.add("UTCTOTAI", [560, 720])  # too many arguments
 
         with self.assertRaises(Exception):
-            timemap.add("TTTOTDB", [560, 720, 33])  # too few arguments
+            timemap.add("TTTOTDB", [560, 720, 33, 53])  # too few arguments
         with self.assertRaises(Exception):
             # too many arguments
-            timemap.add("TTTOTDB", [560, 720, 33, 53, 23])
-        timemap.add("TTTOTDB", [560, 720, 33, 53])  # just right
+            timemap.add("TTTOTDB", [560, 720, 33, 53, 23, 10, 20])
+        timemap.add("TTTOTDB", [560, 720, 33, 53, 10])  # just right
 
         with self.assertRaises(Exception):
             timemap.timeadd("UNRECOGNIZED", [1])
