@@ -29,18 +29,19 @@ namespace detail {
 template <class AstMapT, class MapT>
 AstMapT *polyTranImpl(MapT const &mapping, bool forward, double acc, double maxacc, int maxorder,
                       std::vector<double> const &lbnd, std::vector<double> const &ubnd) {
-    auto const desSize = static_cast<unsigned int>(forward ? mapping.getNin() : mapping.getNout());
+    // desired size of lbnd and ubnd
+    auto const bndSize = static_cast<unsigned int>(forward ? mapping.getNout() : mapping.getNin());
 
-    if (lbnd.size() != desSize) {
+    if (lbnd.size() != bndSize) {
         std::ostringstream os;
-        os << "lbnd.size() = " << lbnd.size() << " != " << desSize << " = "
-           << (forward ? "getNin()" : "getNout()");
+        os << "lbnd.size() = " << lbnd.size() << " != " << bndSize << " = "
+           << (forward ? "getNout()" : "getNin()");
         throw std::invalid_argument(os.str());
     }
-    if (ubnd.size() != desSize) {
+    if (ubnd.size() != bndSize) {
         std::ostringstream os;
-        os << "ubnd.size() = " << ubnd.size() << " != " << desSize << " = "
-           << (forward ? "getNin()" : "getNout()");
+        os << "ubnd.size() = " << ubnd.size() << " != " << bndSize << " = "
+           << (forward ? "getNout()" : "getNin()");
         throw std::invalid_argument(os.str());
     }
 

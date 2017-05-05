@@ -41,11 +41,11 @@ with a fit based on the other direction.
 @param[in] forward  If true the forward transformation is replaced.
                 Otherwise the inverse transformation is replaced.
 @param[in] acc  The target accuracy, expressed as a geodesic distance within
-                the ChebyMap's input space (if `forward` is true)
-                or output space (if `forward` is false).
+                the ChebyMap's input space (if `forward` is false)
+                or output space (if `forward` is true).
 @param[in] maxacc  The maximum allowed accuracy for an acceptable polynomial,
                 expressed as a geodesic distance within the ChebyMap's input space
-                (if `forward` is true) or output space (if `forward` is false).
+                (if `forward` is false) or output space (if `forward` is true).
 @param[in] maxorder  The maximum allowed polynomial order. This is one more than the
                 maximum power of either input axis. So for instance, a value of
                 3 refers to a quadratic polynomial.
@@ -53,18 +53,18 @@ with a fit based on the other direction.
                 are not inlcuded in the fit. So the maximum number of terms in
                 each of the fitted polynomials is `maxorder*(maxorder + 1)/2.`
 @param[in] lbnd  A vector holding the lower bounds of a rectangular region within
-                the ChebyMap's input space (if `forward` is true)
-                or output space (if `forward` is false).
+                the ChebyMap's input space (if `forward` is false)
+                or output space (if `forward` is true).
                 The new polynomial will be evaluated over this rectangle. The length
                 should equal getNin() or getNout(), depending on `forward`.
 @param[in] ubnd  A vector holding the upper bounds of a rectangular region within
-                the ChebyMap's input space (if `forward` is true)
-                or output space (if `forward` is false).
+                the ChebyMap's input space (if `forward` is false)
+                or output space (if `forward` is true).
                 The new polynomial will be evaluated over this rectangle. The length
                 should equal getNin() or getNout(), depending on `forward`.
 
-@throw std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` true)
-                or getNout() (if `forward` false).
+@throw std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
+                or getNout() (if `forward` true).
 */
 template <class AstMapT, class MapT>
 AstMapT *polyTranImpl(MapT const &mapping, bool forward, double acc, double maxacc, int maxorder,
