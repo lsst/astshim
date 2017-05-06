@@ -732,7 +732,7 @@ public:
         (subject to the template) regardless of its domain.
         This list is case-insensitive and all white space is ignored.  If you do not wish
         to restrict the domain in this way, you should supply an empty string.
-    @return A @ref shared_ptr<FrameSet> which contains the Frame found and a
+    @return A std::shared_ptr<FrameSet> which contains the Frame found and a
         description of how to convert to (and from) the coordinate
         system it represents. If the Frame is not found then return a null pointer.
 
