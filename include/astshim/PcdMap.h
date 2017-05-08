@@ -82,7 +82,7 @@ public:
     @param[in] pcdcen  A 2-element vector containing the coordinates of the centre of the distortion.
     @param[in] options  Comma-separated list of attribute assignments.
 
-    @throw std::invalid_argument if pcdcen does not have exactly 2 elements.
+    @throws std::invalid_argument if pcdcen does not have exactly 2 elements.
     */
     PcdMap(double disco, std::vector<double> const &pcdcen, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(_makeRawPcdMap(disco, pcdcen, options))) {}

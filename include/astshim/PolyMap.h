@@ -66,7 +66,7 @@ public:
         for details.
     @param[in] options  Comma-separated list of attribute assignments.
 
-    @throw std::invalid_argument if neither transform is specified (coeff_f and coeff_i are both empty)
+    @throws std::invalid_argument if neither transform is specified (coeff_f and coeff_i are both empty)
 
     @anchor PolyMap_CoefficientMatrices Coefficient Matrices
 
@@ -121,7 +121,7 @@ public:
         @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NiterInverse "NiterInverse" and
         @ref PolyMap_TolInverse "TolInverse".
 
-    @throw std::invalid_argument if the forward transform is not specified (coeff_f is empty)
+    @throws std::invalid_argument if the forward transform is not specified (coeff_f is empty)
     */
     explicit PolyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
                      std::string const &options = "IterInverse=0")
@@ -217,7 +217,7 @@ public:
                     The new polynomial will be evaluated over this rectangle. The length
                     should equal getNin() or getNout(), depending on `forward`.
 
-    @throw std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
+    @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
                     or getNout() (if `forward` true).
     */
     PolyMap polyTran(bool forward, double acc, double maxacc, int maxorder, std::vector<double> const &lbnd,

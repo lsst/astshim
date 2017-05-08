@@ -121,10 +121,10 @@ public:
     If a transform is not specified then the corresponding bounds are ignored (not even length-checked)
     and can be empty. For example if `coeff_f` is empty then `lbnd_f` and `ubnd_f` are ignored.
 
-    @throw std::invalid_argument if neither transform is specified (coeff_f and coeff_i are both empty).
-    @throw std::invalid_argument if the forward transform is specified (coeff_f is not empty)
+    @throws std::invalid_argument if neither transform is specified (coeff_f and coeff_i are both empty).
+    @throws std::invalid_argument if the forward transform is specified (coeff_f is not empty)
         and lbnd_f or ubnd_f do not have nin elements.
-    @throw std::invalid_argument if the inverse transform is specified (coeff_i is not empty)
+    @throws std::invalid_argument if the inverse transform is specified (coeff_i is not empty)
         and lbnd_i or ubnd_i do not have nout elements.
 
     @anchor ChebyMap_CoefficientMatrices Coefficient Matrices
@@ -181,8 +181,8 @@ public:
     @param[in] ubnd_f  Upper bounds for input data; one element per input axis
     @param[in] options  Comma-separated list of attribute assignments.
 
-    @throw std::invalid_argument if the forward transform is not defined (coeff_f is empty)
-    @throw std::invalid_argument if lbnd_f or ubnd_f do not have nin elements
+    @throws std::invalid_argument if the forward transform is not defined (coeff_f is empty)
+    @throws std::invalid_argument if lbnd_f or ubnd_f do not have nin elements
     */
     explicit ChebyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
                       std::vector<double> const &lbnd_f, std::vector<double> const &ubnd_f,
@@ -212,7 +212,7 @@ public:
     by calling MapBox on opposite direction's transformation.
 
     @param[in] forward  If true return the domain of the forward transform, else the inverse
-    @throw std::runtime_error if the domain cannot be computed
+    @throws std::runtime_error if the domain cannot be computed
     */
     ChebyDomain getDomain(bool forward) const;
 
@@ -254,7 +254,7 @@ public:
                     The new polynomial will be evaluated over this rectangle. The length
                     should equal getNin() or getNout(), depending on `forward`.
 
-    @throw std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
+    @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
                     or getNout() (if `forward` true).    
 
     The variant that takes omits the `lbnd` and `ubnd` arguments

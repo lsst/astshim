@@ -63,7 +63,7 @@ with a fit based on the other direction.
                 The new polynomial will be evaluated over this rectangle. The length
                 should equal getNin() or getNout(), depending on `forward`.
 
-@throw std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
+@throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
                 or getNout() (if `forward` true).
 */
 template <class AstMapT, class MapT>

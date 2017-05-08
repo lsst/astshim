@@ -65,9 +65,9 @@ public:
        first point is at `lbnd[1]` and the last is at `ubnd[1]`.
        If a value less than three is supplied a value of three will be used.
 
-    @throw std::invalid_argument if the mapping does not have 2 inputs,
+    @throws std::invalid_argument if the mapping does not have 2 inputs,
         or if lbnd or ubnd do not each contain 2 elements.
-    @throw std::runtime_error if the fit cannot be computed.
+    @throws std::runtime_error if the fit cannot be computed.
     */
     explicit QuadApprox(Mapping const &map, std::vector<double> const &lbnd, std::vector<double> const &ubnd,
                         int nx = 3, int ny = 3);

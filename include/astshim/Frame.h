@@ -193,7 +193,7 @@ public:
         from the positive direction of axis 2 to the positive direction of axis 1. If the
         Frame has more than 2 axes, a positive value will always be returned in the range (0, pi].
 
-    @throw std::invalid_argument if `a`, `b` or `c` have the wrong length
+    @throws std::invalid_argument if `a`, `b` or `c` have the wrong length
     */
     double angle(PointD const &a, PointD const &b, PointD const &c) const {
         assertPointLength(a, "a");
@@ -216,7 +216,7 @@ public:
         the positive direction of axis 1. If the Frame has more than 2 axes, a positive value
         will always be returned in the range (0, pi]
 
-    @throw std::invalid_argument if `a` or `b` have the wrong length
+    @throws std::invalid_argument if `a` or `b` have the wrong length
 
     ### Notes:
 
@@ -943,7 +943,7 @@ public:
 
     @return the point of intersection between the two geodesic curves.
 
-    @throw std::runtime_error if the frame is not 2-dimensional
+    @throws std::runtime_error if the frame is not 2-dimensional
 
     ### Notes
 
@@ -1058,7 +1058,7 @@ public:
     - The geodesic curve used by this function is the path of shortest distance between two points,
         as defined by the `distance` function.
 
-    @throw std::invalid_argument if:
+    @throws std::invalid_argument if:
     - point1 or point2 is the wrong length
     */
     PointD offset(PointD point1, PointD point2, double offset) const {
@@ -1095,7 +1095,7 @@ public:
         the positive direction of axis 2 to the positive direction of axis 1.
     - The offset point.
 
-    @throw std::invalid_argument if
+    @throws std::invalid_argument if
     - frame does not have naxes = 2
     - point1 or point2 are the wrong length, or point1 has any `AST__BAD` values
 
@@ -1501,7 +1501,7 @@ protected:
 
     This method is public so subclasses can call it.
 
-    @throw std::invalid_argument if `rawPtr` is not an AstFrame
+    @throws std::invalid_argument if `rawPtr` is not an AstFrame
 
     TODO make protected and use friend class
     */

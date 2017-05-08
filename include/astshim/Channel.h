@@ -120,7 +120,7 @@ public:
     Set @ref Channel_ReportLevel "ReportLevel": report level; an integer in the range [0, 3]
     where 0 is the most verbose.
 
-    @throw std::invalid_argument if level is not in range [0, 3]
+    @throws std::invalid_argument if level is not in range [0, 3]
     */
     void setReportLevel(int level) {
         if ((level < 0) || (level > 3)) {

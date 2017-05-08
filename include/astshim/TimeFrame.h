@@ -107,7 +107,7 @@ public:
     @return the current system time, as specified by the frame's attributes
         `System`, `TimeOrigin`, `LTOffset`, `TimeScale`, and `Unit`.
 
-    @throw std::runtime_error if the frame has a `TimeScale` value which cannot be converted to TAI
+    @throws std::runtime_error if the frame has a `TimeScale` value which cannot be converted to TAI
         (e.g. " angular" systems such as UT1, GMST, LMST and LAST).
 
     ### Notes:

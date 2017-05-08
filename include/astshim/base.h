@@ -63,7 +63,7 @@ with the returned array, else the array will be corrupted.
 @param[in] vec  Vector of points, with axes adjacent, e.g. x1, y1, x2, y2...xnPts, ynNpt
 @param[in] nAxes  Number of axes per point
 @return 2-dimensional array with dimensions (nPts, nAxes)
-@throw std::runtime_error if vec length is not a multiple of nAxes
+@throws std::runtime_error if vec length is not a multiple of nAxes
 */
 ConstArray2D arrayFromVector(std::vector<double> const &vec, int nAxes);
 

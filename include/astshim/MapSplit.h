@@ -52,7 +52,7 @@ public:
     @param[in] in  Indices of inputs of `map` to pick.
         Each element should have a value in the range [1, map.getNin()].
 
-    @throw std::runtime_error if `map` cannot be split as specified.
+    @throws std::runtime_error if `map` cannot be split as specified.
     */
     explicit MapSplit(Mapping const &map, std::vector<int> const &in);
 

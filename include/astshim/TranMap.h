@@ -73,7 +73,7 @@ public:
     Return a shallow copy of one of the two component mappings.
 
     @param[in] i  Index: 0 for the forward mapping, 1 for the inverse.
-    @throw std::invalid_argument if `i` is not 0 or 1.
+    @throws std::invalid_argument if `i` is not 0 or 1.
     */
     std::shared_ptr<Mapping> operator[](int i) const { return _decompose<Mapping>(i, false); };
 
