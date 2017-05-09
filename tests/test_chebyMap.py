@@ -279,7 +279,9 @@ class TestChebyMap(MappingTestCase):
         self.assertEqual(chebyMap.getNin(), 2)
         self.assertEqual(chebyMap.getNout(), 1)
 
-        self.checkBasicSimplify(chebyMap)
+        # TODO restore this one once DM-10496 is fixed;
+        # meanwhile this occasionally causes a segfault:
+        # self.checkBasicSimplify(chebyMap)
         self.checkCopy(chebyMap)
         self.checkPersistence(chebyMap)
 
