@@ -41,12 +41,12 @@ PYBIND11_PLUGIN(parallelMap) {
     py::class_<ParallelMap, std::shared_ptr<ParallelMap>, CmpMap> cls(mod, "ParallelMap");
 
     cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
-            "options"_a="");
+            "options"_a = "");
 
     cls.def("copy", &ParallelMap::copy);
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

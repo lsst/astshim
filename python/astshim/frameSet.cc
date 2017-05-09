@@ -37,9 +37,9 @@ PYBIND11_PLUGIN(frameSet) {
 
     py::class_<FrameSet, std::shared_ptr<FrameSet>, Frame> cls(mod, "FrameSet");
 
-    cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a="");
-    cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(),
-            "baseFrame"_a, "mapping"_a, "currentFrame"_a, "options"_a="");
+    cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
+    cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
+            "mapping"_a, "currentFrame"_a, "options"_a = "");
 
     // def_readonly_static makes in only available in the class, not instances, so...
     cls.attr("BASE") = py::cast(AST__BASE);
@@ -54,7 +54,7 @@ PYBIND11_PLUGIN(frameSet) {
     cls.def("getBase", &FrameSet::getBase);
     cls.def("getCurrent", &FrameSet::getCurrent);
     cls.def("getFrame", &FrameSet::getFrame, "iframe"_a, "copy"_a = true);
-    cls.def("getMapping", &FrameSet::getMapping, "ind1"_a=FrameSet::BASE, "ind2"_a=FrameSet::CURRENT);
+    cls.def("getMapping", &FrameSet::getMapping, "ind1"_a = FrameSet::BASE, "ind2"_a = FrameSet::CURRENT);
     cls.def("getNframe", &FrameSet::getNframe);
     cls.def("getVariant", &FrameSet::getVariant);
     cls.def("mirrorVariants", &FrameSet::mirrorVariants, "iframe"_a);
@@ -67,5 +67,5 @@ PYBIND11_PLUGIN(frameSet) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

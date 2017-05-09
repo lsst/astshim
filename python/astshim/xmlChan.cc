@@ -39,7 +39,7 @@ PYBIND11_PLUGIN(xmlChan) {
 
     py::class_<XmlChan, std::shared_ptr<XmlChan>, Channel> cls(mod, "XmlChan");
 
-    cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a="");
+    cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
     cls.def("getXmlFormat", &XmlChan::getXmlFormat);
     cls.def("getXmlLength", &XmlChan::getXmlLength);
@@ -51,5 +51,5 @@ PYBIND11_PLUGIN(xmlChan) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

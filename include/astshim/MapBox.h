@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -63,9 +63,9 @@ public:
 
     @return A @ref MapBox containing the computed outputs and a copy of the inputs.
 
-    @throw std::invalid_argument if minOutCoord is not in the range [1, getNout()]
+    @throws std::invalid_argument if minOutCoord is not in the range [1, getNout()]
         or maxOutCoord is neither 0 nor in the range [minOutCoord, getNout()].
-    @throw std::runtime_error if the required output bounds cannot be
+    @throws std::runtime_error if the required output bounds cannot be
         found. Typically, this might occur if all the input points which
         the function considers turn out to be invalid (see above). The
         number of points considered before generating such an error is

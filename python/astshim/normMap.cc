@@ -40,12 +40,12 @@ PYBIND11_PLUGIN(normMap) {
 
     py::class_<NormMap, std::shared_ptr<NormMap>, Mapping> cls(mod, "NormMap");
 
-    cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a="");
+    cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
 
     cls.def("copy", &NormMap::copy);
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

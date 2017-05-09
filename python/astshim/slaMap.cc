@@ -41,13 +41,13 @@ PYBIND11_PLUGIN(slaMap) {
 
     py::class_<SlaMap, std::shared_ptr<SlaMap>, Mapping> cls(mod, "SlaMap");
 
-    cls.def(py::init<std::string const &>(), "options"_a="");
+    cls.def(py::init<std::string const &>(), "options"_a = "");
 
     cls.def("copy", &SlaMap::copy);
-    cls.def("add", &SlaMap::add, "cvt"_a, "args"_a=std::vector<double>());
+    cls.def("add", &SlaMap::add, "cvt"_a, "args"_a = std::vector<double>());
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

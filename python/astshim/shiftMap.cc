@@ -41,12 +41,12 @@ PYBIND11_PLUGIN(shiftMap) {
 
     py::class_<ShiftMap, std::shared_ptr<ShiftMap>, Mapping> cls(mod, "ShiftMap");
 
-    cls.def(py::init<std::vector<double> const &, std::string const &>(), "shift"_a, "options"_a="");
+    cls.def(py::init<std::vector<double> const &, std::string const &>(), "shift"_a, "options"_a = "");
 
     cls.def("copy", &ShiftMap::copy);
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

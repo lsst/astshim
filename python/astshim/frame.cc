@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-void wrapDirectionPoint(py::module & mod) {
+void wrapDirectionPoint(py::module &mod) {
     py::class_<DirectionPoint> cls(mod, "DirectionPoint");
 
     cls.def(py::init<double, PointD>(), "direction"_a, "point"_a);
@@ -42,7 +42,7 @@ void wrapDirectionPoint(py::module & mod) {
     cls.def_readwrite("point", &DirectionPoint::point);
 }
 
-void wrapNReadValue(py::module & mod) {
+void wrapNReadValue(py::module &mod) {
     py::class_<NReadValue> cls(mod, "NReadValue");
 
     cls.def(py::init<int, double>(), "nread"_a, "value"_a);
@@ -51,7 +51,7 @@ void wrapNReadValue(py::module & mod) {
     cls.def_readwrite("value", &NReadValue::value);
 }
 
-void wrapResolvedPoint(py::module & mod) {
+void wrapResolvedPoint(py::module &mod) {
     py::class_<ResolvedPoint> cls(mod, "ResolvedPoint");
 
     cls.def(py::init<int>(), "naxes"_a);
@@ -61,7 +61,7 @@ void wrapResolvedPoint(py::module & mod) {
     cls.def_readwrite("d2", &ResolvedPoint::d2);
 }
 
-void wrapFrameMapping(py::module & mod) {
+void wrapFrameMapping(py::module &mod) {
     py::class_<FrameMapping> cls(mod, "FrameMapping");
 
     cls.def(py::init<std::shared_ptr<Frame>, std::shared_ptr<Mapping>>(), "frame"_a, "mapping"_a);
@@ -82,16 +82,16 @@ PYBIND11_PLUGIN(frame) {
 
     py::class_<Frame, std::shared_ptr<Frame>, Mapping> cls(mod, "Frame");
 
-    cls.def(py::init<int, std::string const &>(), "naxes"_a, "options"_a="");
+    cls.def(py::init<int, std::string const &>(), "naxes"_a, "options"_a = "");
 
     cls.def("copy", &Frame::copy);
     cls.def("angle", &Frame::angle, "a"_a, "b"_a, "c"_a);
     cls.def("axAngle", &Frame::axAngle, "a"_a, "b"_a, "axis"_a);
     cls.def("axDistance", &Frame::axDistance, "axis"_a, "v1"_a, "v2"_a);
     cls.def("axOffset", &Frame::axOffset, "axis"_a, "v1"_a, "dist"_a);
-    cls.def("convert", &Frame::convert, "to"_a, "domainlist"_a="");
+    cls.def("convert", &Frame::convert, "to"_a, "domainlist"_a = "");
     cls.def("distance", &Frame::distance, "point1"_a, "point2"_a);
-    cls.def("findFrame", &Frame::findFrame, "template"_a, "domainlist"_a="");
+    cls.def("findFrame", &Frame::findFrame, "template"_a, "domainlist"_a = "");
     cls.def("format", &Frame::format, "axis"_a, "value"_a);
     cls.def("getActiveUnit", &Frame::getActiveUnit);
     cls.def("getAlignSystem", &Frame::getAlignSystem);
@@ -130,13 +130,13 @@ PYBIND11_PLUGIN(frame) {
     cls.def("resolve", &Frame::resolve, "point1"_a, "point2"_a, "point3"_a);
     cls.def("setAlignSystem", &Frame::setAlignSystem, "system"_a);
     cls.def("setBottom", &Frame::setBottom, "axis"_a, "bottom"_a);
-    cls.def("setDigits", (void (Frame::*)(int)) &Frame::setDigits, "digits"_a);
-    cls.def("setDigits", (void (Frame::*)(int, int)) &Frame::setDigits, "digits"_a, "axis"_a);
+    cls.def("setDigits", (void (Frame::*)(int)) & Frame::setDigits, "digits"_a);
+    cls.def("setDigits", (void (Frame::*)(int, int)) & Frame::setDigits, "digits"_a, "axis"_a);
     cls.def("setDirection", &Frame::setDirection, "direction"_a, "axis"_a);
     cls.def("setDomain", &Frame::setDomain, "domain"_a);
     cls.def("setDut1", &Frame::setDut1, "dut1"_a);
-    cls.def("setEpoch", (void (Frame::*)(double)) &Frame::setEpoch, "epoch"_a);
-    cls.def("setEpoch", (void (Frame::*)(std::string const &)) &Frame::setEpoch, "epoch"_a);
+    cls.def("setEpoch", (void (Frame::*)(double)) & Frame::setEpoch, "epoch"_a);
+    cls.def("setEpoch", (void (Frame::*)(std::string const &)) & Frame::setEpoch, "epoch"_a);
     cls.def("setFormat", &Frame::setFormat, "axis"_a, "format"_a);
     cls.def("setLabel", &Frame::setLabel, "axis"_a, "label"_a);
     cls.def("setMatchEnd", &Frame::setMatchEnd, "match"_a);
@@ -158,5 +158,5 @@ PYBIND11_PLUGIN(frame) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

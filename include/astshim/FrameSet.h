@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -228,7 +228,7 @@ public:
                     to the new variant of the @ref getCurrent "current" Frame.
     @param[in] name  The name to associate with the new variant Mapping.
 
-    @throw std::runtime_error if:
+    @throws std::runtime_error if:
     - A variant with the supplied name already exists in the current Frame.
     - The current Frame is a mirror for the variant Mappings in another Frame.
         This is only the case if the astMirrorVariants function has been called
@@ -440,7 +440,7 @@ public:
         To ensure this, the `Base` and/or `Current` attributes of the @ref FrameSet will be changed,
         if necessary, to reflect any change in the indices of these @ref Frame "Frames".
 
-    @throw std::runtime_error if you attempt to remove the last frame
+    @throws std::runtime_error if you attempt to remove the last frame
     */
     void removeFrame(int iframe) {
         astRemoveFrame(getRawPtr(), iframe);
@@ -457,7 +457,7 @@ public:
 
     @param[in] name  The new name of the current variant Mapping.
 
-    @throw std::runtime_error if:
+    @throws std::runtime_error if:
     - A variant with the supplied name already exists in the current Frame.
     - The current Frame is a mirror for the variant Mappings in another Frame.
         This is only the case if the astMirrorVariants function has been called
@@ -488,7 +488,7 @@ protected:
 
     This method is public so @ref Frame can call it.
 
-    @throw std::invalid_argument if `rawPtr` is not an AstFrameSet.
+    @throws std::invalid_argument if `rawPtr` is not an AstFrameSet.
     */
     explicit FrameSet(AstFrameSet *rawPtr) : Frame(reinterpret_cast<AstFrame *>(rawPtr)) {
         if (!astIsAFrameSet(getRawPtr())) {

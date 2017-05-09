@@ -51,18 +51,19 @@ PYBIND11_PLUGIN(polyMap) {
 
     cls.def(py::init<ndarray::Array<double, 2, 2> const &, ndarray::Array<double, 2, 2> const &,
                      std::string const &>(),
-            "coeff_f"_a, "coeff_i"_a, "options"_a="IterInverse=0");
+            "coeff_f"_a, "coeff_i"_a, "options"_a = "IterInverse=0");
     cls.def(py::init<ndarray::Array<double, 2, 2> const &, int, std::string const &>(), "coeff_f"_a, "nout"_a,
-            "options"_a="IterInverse=0");
+            "options"_a = "IterInverse=0");
 
     cls.def("copy", &PolyMap::copy);
     cls.def("getIterInverse", &PolyMap::getIterInverse);
     cls.def("getNiterInverse", &PolyMap::getNiterInverse);
     cls.def("getTolInverse", &PolyMap::getTolInverse);
-    cls.def("polyTran", &PolyMap::polyTran);
+    cls.def("polyTran", &PolyMap::polyTran, "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a,
+            "ubnd"_a);
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

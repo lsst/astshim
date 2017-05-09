@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -89,7 +89,7 @@ public:
     Return a shallow copy of one of the two component mappings.
 
     @param[in] i  Index: 0 for the first mapping, 1 for the second.
-    @throw std::invalid_argument if `i` is not 0 or 1.
+    @throws std::invalid_argument if `i` is not 0 or 1.
     */
     std::shared_ptr<Mapping> operator[](int i) const { return _decompose<Mapping>(i, false); };
 

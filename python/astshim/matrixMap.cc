@@ -55,5 +55,5 @@ PYBIND11_PLUGIN(matrixMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

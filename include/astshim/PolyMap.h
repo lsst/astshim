@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -24,8 +24,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <sstream>
-#include <stdexcept>
 #include <vector>
 
 #include "astshim/base.h"
@@ -42,6 +40,8 @@ an iterative method can be used to evaluate the inverse based only on the forwar
 
 ### Attributes
 
+All those of @ref Mapping plus:
+
 - @ref PolyMap_IterInverse "IterInverse": provide an iterative inverse transformation?
 - @ref PolyMap_NiterInverse "NiterInverse": maximum number of iterations for iterative inverse.
 - @ref PolyMap_TolInverse "TolInverse": target relative error for iterative inverse.
@@ -51,7 +51,7 @@ class PolyMap : public Mapping {
 
 public:
     /**
-    Construct a @ref PolyMap with specified forward and inverse transforms.
+    Construct a @ref PolyMap with specified forward and/or inverse transforms.
 
     The two sets of coefficients are independent of each other: the inverse transform
     need not undo the forward transform.
@@ -65,6 +65,8 @@ public:
         @ref PolyMap(ndarray::Array<double, 2, 2> const &, int, std::string const &) "other constructor"
         for details.
     @param[in] options  Comma-separated list of attribute assignments.
+
+    @throws std::invalid_argument if neither transform is specified (coeff_f and coeff_i are both empty)
 
     @anchor PolyMap_CoefficientMatrices Coefficient Matrices
 
@@ -118,6 +120,8 @@ public:
     @param[in] options  Comma-separated list of attribute assignments. Useful attributes include:
         @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NiterInverse "NiterInverse" and
         @ref PolyMap_TolInverse "TolInverse".
+
+    @throws std::invalid_argument if the forward transform is not specified (coeff_f is empty)
     */
     explicit PolyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
                      std::string const &options = "IterInverse=0")
@@ -191,11 +195,11 @@ public:
     @param[in] forward  If true the forward transformation is replaced.
                     Otherwise the inverse transformation is replaced.
     @param[in] acc  The target accuracy, expressed as a geodesic distance within
-                    the PolyMap's input space (if `forward` is true)
-                    or output space (if `forward` is false).
+                    the PolyMap's input space (if `forward` is false)
+                    or output space (if `forward` is true).
     @param[in] maxacc  The maximum allowed accuracy for an acceptable polynomial,
                     expressed as a geodesic distance within the PolyMap's input space
-                    (if `forward` is true) or output space (if `forward` is false).
+                    (if `forward` is false) or output space (if `forward` is true).
     @param[in] maxorder  The maximum allowed polynomial order. This is one more than the
                     maximum power of either input axis. So for instance, a value of
                     3 refers to a quadratic polynomial.
@@ -203,45 +207,21 @@ public:
                     are not inlcuded in the fit. So the maximum number of terms in
                     each of the fitted polynomials is `maxorder*(maxorder + 1)/2.`
     @param[in] lbnd  A vector holding the lower bounds of a rectangular region within
-                    the PolyMap's input space (if `forward` is true)
-                    or output space (if `forward` is false).
+                    the PolyMap's input space (if `forward` is false)
+                    or output space (if `forward` is true).
                     The new polynomial will be evaluated over this rectangle. The length
                     should equal getNin() or getNout(), depending on `forward`.
     @param[in] ubnd  A vector holding the upper bounds of a rectangular region within
-                    the PolyMap's input space (if `forward` is true)
-                    or output space (if `forward` is false).
+                    the PolyMap's input space (if `forward` is false)
+                    or output space (if `forward` is true).
                     The new polynomial will be evaluated over this rectangle. The length
                     should equal getNin() or getNout(), depending on `forward`.
 
-    @throw std::invalid_argument if lbnd.size() or ubnd.size() does not match getNin()/getNout()
-                    if `forward` is true/false.
+    @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
+                    or getNout() (if `forward` true).
     */
     PolyMap polyTran(bool forward, double acc, double maxacc, int maxorder, std::vector<double> const &lbnd,
-                     std::vector<double> const &ubnd) const {
-        auto const desSize = static_cast<unsigned int>(forward ? getNin() : getNout());
-        if (lbnd.size() != desSize) {
-            std::ostringstream os;
-            os << "lbnd.size() = " << lbnd.size() << " != " << desSize << " = "
-               << (forward ? "getNin()" : "getNout()");
-            throw std::invalid_argument(os.str());
-        }
-        if (ubnd.size() != desSize) {
-            std::ostringstream os;
-            os << "ubnd.size() = " << ubnd.size() << " != " << desSize << " = "
-               << (forward ? "getNin()" : "getNout()");
-            throw std::invalid_argument(os.str());
-        }
-
-        void *map = astPolyTran(this->getRawPtr(), static_cast<int>(forward), acc, maxacc, maxorder,
-                                lbnd.data(), ubnd.data());
-        // Failure should result in a null pointer, so calling assertOK is unlikely to do anything,
-        // but better to be sure and than risk missing an uncaught error.
-        assertOK(reinterpret_cast<AstObject *>(map));
-        if (!map) {
-            throw std::runtime_error("Could not compute an inverse mapping");
-        }
-        return PolyMap(reinterpret_cast<AstPolyMap *>(map));
-    }
+                     std::vector<double> const &ubnd) const;
 
 protected:
     virtual std::shared_ptr<Object> _copyPolymorphic() const override {
@@ -249,60 +229,17 @@ protected:
     }
 
     /// Construct a PolyMap from an raw AST pointer
-    PolyMap(AstPolyMap *map) : Mapping(reinterpret_cast<AstMapping *>(map)) {
-        if (!astIsAPolyMap(getRawPtr())) {
-            std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a PolyMap";
-            throw std::invalid_argument(os.str());
-        }
-    }
+    PolyMap(AstPolyMap *map);
 
 private:
     /// Make a raw AstPolyMap with specified forward and inverse transforms.
     AstPolyMap *_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f,
                                 ndarray::Array<double, 2, 2> const &coeff_i,
-                                std::string const &options = "") {
-        const int nin = coeff_f.getSize<1>() - 2;
-        const int ncoeff_f = coeff_f.getSize<0>();
-        const int nout = coeff_i.getSize<1>() - 2;
-        const int ncoeff_i = coeff_i.getSize<0>();
+                                std::string const &options = "") const;
 
-        if (nin <= 0) {
-            std::ostringstream os;
-            os << "coeff_f row length = " << nin + 2
-               << ", which is too short; length = nin + 2 and nin must be > 0";
-            throw std::invalid_argument(os.str());
-        }
-        if (nout <= 0) {
-            std::ostringstream os;
-            os << "coeff_i row length " << nout + 2
-               << ", which is too short; length = nout + 2 and nout must be > 0";
-            throw std::invalid_argument(os.str());
-        }
-
-        return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i, coeff_i.getData(),
-                          options.c_str());
-    }
-
-    /// Make a raw AstPolyMap with a specified forward transform and an iterative inverse.
+    /// Make a raw AstPolyMap with a specified forward transform and an optional iterative inverse.
     AstPolyMap *_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
-                                std::string const &options = "") {
-        const int nin = coeff_f.getSize<1>() - 2;
-        const int ncoeff_f = coeff_f.getSize<0>();
-        if (nin <= 0) {
-            std::ostringstream os;
-            os << "coeff_f row length = " << nin + 2
-               << ", which is too short; length = nin + 2 and nin must be > 0";
-            throw std::invalid_argument(os.str());
-        }
-        if (nout <= 0) {
-            std::ostringstream os;
-            os << "nout = " << nout << " <0 =";
-            throw std::invalid_argument(os.str());
-        }
-
-        return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), 0, nullptr, options.c_str());
-    }
+                                std::string const &options = "") const;
 };
 
 }  // namespace ast

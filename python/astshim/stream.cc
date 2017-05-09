@@ -49,14 +49,14 @@ PYBIND11_PLUGIN(stream) {
     // FileStream
     py::class_<FileStream, std::shared_ptr<FileStream>, Stream> clsFileStream(mod, "FileStream");
 
-    clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a=false);
+    clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a = false);
 
     clsFileStream.def("getPath", &FileStream::getPath);
 
     // StringStream
     py::class_<StringStream, std::shared_ptr<StringStream>, Stream> clsStringStream(mod, "StringStream");
 
-    clsStringStream.def(py::init<std::string const &>(), "data"_a="");
+    clsStringStream.def(py::init<std::string const &>(), "data"_a = "");
 
     clsStringStream.def("getSourceData", &StringStream::getSourceData);
     clsStringStream.def("getSinkData", &StringStream::getSinkData);
@@ -65,5 +65,5 @@ PYBIND11_PLUGIN(stream) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

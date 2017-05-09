@@ -41,7 +41,7 @@ PYBIND11_PLUGIN(cmpFrame) {
     py::class_<CmpFrame, std::shared_ptr<CmpFrame>, Frame> cls(mod, "CmpFrame");
 
     cls.def(py::init<Frame const &, Frame const &, std::string const &>(), "frame1"_a, "frame2"_a,
-            "options"_a="");
+            "options"_a = "");
 
     cls.def("__getitem__", &CmpFrame::operator[], py::is_operator());
     cls.def("__len__", [](CmpFrame const &) { return 2; });
@@ -51,5 +51,5 @@ PYBIND11_PLUGIN(cmpFrame) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

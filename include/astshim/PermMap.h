@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -70,7 +70,7 @@ public:
               coordinate value.
     @param[in] options  Comma-separated list of attribute assignments.
 
-    @throw std::invalid_argument if:
+    @throws std::invalid_argument if:
     - `inperm` or `outperm` are empty
     - `inperm` or `outperm` specify a constant that is not available because `constant` has too few elements.
     */

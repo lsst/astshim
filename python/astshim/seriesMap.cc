@@ -41,12 +41,12 @@ PYBIND11_PLUGIN(seriesMap) {
     py::class_<SeriesMap, std::shared_ptr<SeriesMap>, CmpMap> cls(mod, "SeriesMap");
 
     cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
-            "options"_a="");
+            "options"_a = "");
 
     cls.def("copy", &SeriesMap::copy);
 
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

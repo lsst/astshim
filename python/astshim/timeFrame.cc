@@ -41,7 +41,7 @@ PYBIND11_PLUGIN(timeFrame) {
 
     py::class_<TimeFrame, std::shared_ptr<TimeFrame>, Frame> cls(mod, "TimeFrame");
 
-    cls.def(py::init<std::string const &>(), "options"_a="");
+    cls.def(py::init<std::string const &>(), "options"_a = "");
 
     cls.def("copy", &TimeFrame::copy);
     cls.def("currentTime", &TimeFrame::currentTime);
@@ -59,5 +59,5 @@ PYBIND11_PLUGIN(timeFrame) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

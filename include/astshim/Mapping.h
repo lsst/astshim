@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -158,7 +158,7 @@ public:
                 Y_out = fit[0, 1] + fit[1, 1] X_in + fit[2, 1] Y_in
                 Z_out = fit[0, 2] + fit[1, 2] X_in + fit[2, 2] Y_in
 
-    @throw std::runtime_error if the forward transformation cannot be modeled to within the specified `tol`.
+    @throws std::runtime_error if the forward transformation cannot be modeled to within the specified `tol`.
     */
     Array2D linearApprox(PointD const &lbnd, PointD const &ubnd, double tol) const;
 
@@ -167,7 +167,7 @@ public:
 
     @param[in] first  the mapping whose output is the input of this mapping
 
-    @throw std::invalid_argument if the number of output axes of `first` does not match
+    @throws std::invalid_argument if the number of output axes of `first` does not match
         the number of input axes of this mapping.
     */
     SeriesMap of(Mapping const &first) const;
@@ -411,8 +411,8 @@ protected:
     @param[in] i  Index: 0 for the first mapping, 1 for the second
     @param[in] copy  If true make a deep copy, else a shallow copy
 
-    @throw std::invalid_argument if `i` is not 0 or 1.
-    @throw std::runtime_error if this mapping is not a compound mapping.
+    @throws std::invalid_argument if `i` is not 0 or 1.
+    @throws std::runtime_error if this mapping is not a compound mapping.
     */
     template <typename Class>
     std::shared_ptr<Class> _decompose(int i, bool copy) const;

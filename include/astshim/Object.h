@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -214,7 +214,7 @@ public:
     - Attribute names are not case sensitive and may be surrounded by white space.
     - As you might expect, the returned value for a read-only attribute is always `false`.
 
-    @throw std::runtime_error if an error results.
+    @throws std::runtime_error if an error results.
     */
     bool test(std::string const &attrib) {
         bool res = astTest(getRawPtr(), attrib.c_str());
@@ -327,7 +327,7 @@ protected:
 
     If possible, the attribute value is converted to the type you request.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     bool getB(std::string const &attrib) const {
         bool val = astGetI(getRawPtr(), attrib.c_str());
@@ -340,7 +340,7 @@ protected:
 
     If possible, the attribute value is converted to the type you request.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     std::string const getC(std::string const &attrib) const {
         char const *rawval = astGetC(getRawPtr(), attrib.c_str());
@@ -353,7 +353,7 @@ protected:
 
     If possible, the attribute value is converted to the type you request.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     double getD(std::string const &attrib) const {
         double val = astGetD(getRawPtr(), attrib.c_str());
@@ -366,7 +366,7 @@ protected:
 
     If possible, the attribute value is converted to the type you request.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     float getF(std::string const &attrib) const {
         float val = astGetF(getRawPtr(), attrib.c_str());
@@ -379,7 +379,7 @@ protected:
 
     If possible, the attribute value is converted to the type you request.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     int getI(std::string const &attrib) const {
         int val = astGetI(getRawPtr(), attrib.c_str());
@@ -392,7 +392,7 @@ protected:
 
     If possible, the attribute value is converted to the type you request.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     long int getL(std::string const &attrib) const {
         long int val = astGetL(getRawPtr(), attrib.c_str());
@@ -419,7 +419,7 @@ protected:
     - To include a literal comma or percent sign in the value assigned to an attribute,
       the whole attribute value should be enclosed in quotation markes.
 
-    @throw std::runtime_error if the attribute is read-only
+    @throws std::runtime_error if the attribute is read-only
     */
     void set(std::string const &setting) { astSet(getRawPtr(), setting.c_str()); }
 
@@ -428,7 +428,7 @@ protected:
 
     If possible, the type you provide is converted to the actual type of the attribute.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     void setB(std::string const &attrib, bool value) {
         astSetI(getRawPtr(), attrib.c_str(), value);
@@ -440,7 +440,7 @@ protected:
 
     If possible, the type you provide is converted to the actual type of the attribute.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     void setC(std::string const &attrib, std::string const &value) {
         astSetC(getRawPtr(), attrib.c_str(), value.c_str());
@@ -452,7 +452,7 @@ protected:
 
     If possible, the type you provide is converted to the actual type of the attribute.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     void setD(std::string const &attrib, double value) {
         astSetD(getRawPtr(), attrib.c_str(), value);
@@ -464,7 +464,7 @@ protected:
 
     If possible, the type you provide is converted to the actual type of the attribute.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     void setF(std::string const &attrib, float value) {
         astSetF(getRawPtr(), attrib.c_str(), value);
@@ -476,7 +476,7 @@ protected:
 
     If possible, the type you provide is converted to the actual type of the attribute.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     void setI(std::string const &attrib, int value) {
         astSetI(getRawPtr(), attrib.c_str(), value);
@@ -488,7 +488,7 @@ protected:
 
     If possible, the type you provide is converted to the actual type of the attribute.
 
-    @throw std::runtime_error if the attribute does not exist or the value cannot be converted
+    @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
     void setL(std::string const &attrib, long int value) {
         astSetL(getRawPtr(), attrib.c_str(), value);

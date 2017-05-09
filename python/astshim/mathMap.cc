@@ -43,7 +43,8 @@ PYBIND11_PLUGIN(mathMap) {
     py::class_<MathMap, std::shared_ptr<MathMap>, Mapping> cls(mod, "MathMap");
 
     cls.def(py::init<int, int, std::vector<std::string> const &, std::vector<std::string> const &,
-            std::string const &>(), "nin"_a, "nout"_a, "fwd"_a, "ref"_a, "options"_a="");
+                     std::string const &>(),
+            "nin"_a, "nout"_a, "fwd"_a, "ref"_a, "options"_a = "");
 
     cls.def("copy", &MathMap::copy);
     cls.def("getSeed", &MathMap::getSeed);
@@ -53,5 +54,5 @@ PYBIND11_PLUGIN(mathMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

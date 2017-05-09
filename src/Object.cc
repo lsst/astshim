@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -29,6 +29,7 @@
 #include "astshim/base.h"
 #include "astshim/detail/utils.h"
 #include "astshim/Object.h"
+#include "astshim/ChebyMap.h"
 #include "astshim/CmpFrame.h"
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
@@ -78,6 +79,7 @@ extern "C" void sinkToOstream(const char *text) {
 std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
     static std::unordered_map<std::string, std::function<std::shared_ptr<Object>(AstObject *)>>
             ClassCasterMap = {
+                    {"ChebyMap", makeShim<ChebyMap, AstChebyMap>},
                     {"CmpFrame", makeShim<CmpFrame, AstCmpFrame>},
                     {"Frame", makeShim<Frame, AstFrame>},
                     {"FrameSet", makeShim<FrameSet, AstFrameSet>},

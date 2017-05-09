@@ -41,7 +41,7 @@ PYBIND11_PLUGIN(channel) {
 
     py::class_<Channel, std::shared_ptr<Channel>, Object> cls(mod, "Channel");
 
-    cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a="");
+    cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
     cls.def("copy", &Channel::copy);
     cls.def("getComment", &Channel::getComment);
@@ -63,5 +63,5 @@ PYBIND11_PLUGIN(channel) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast

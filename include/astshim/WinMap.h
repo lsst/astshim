@@ -1,6 +1,6 @@
 /*
  * LSST Data Management System
- * Copyright 2016  AURA/LSST.
+ * Copyright 2017 AURA/LSST.
  *
  * This product includes software developed by the
  * LSST Project (http://www.lsst.org/).
@@ -56,7 +56,7 @@ public:
     @param[in] outb   Coordinates of corner B of the window in the output coordinate system.
     @param[in] options  Comma-separated list of attribute assignments.
 
-    @throw std::invalid_argument if the lengths of the input vectors do not all match.
+    @throws std::invalid_argument if the lengths of the input vectors do not all match.
     */
     explicit WinMap(std::vector<double> const &ina, std::vector<double> const &inb,
                     std::vector<double> const &outa, std::vector<double> const &outb,
