@@ -274,6 +274,35 @@ class TestPolyMap(MappingTestCase):
             # so no inverse is possible
             pm.polyTran(False, 1e-3, 1e-3, 10, [-1.0], [2.5])
 
+    def test_PolyMapDM10496(self):
+        """Test for a segfault when simplifying a SeriesMap
+
+        We saw an intermittent segfault when simplifying a SeriesMap
+        consisting of the inverse of PolyMap with 2 inputs and one output
+        followed by its inverse (which should simplify to a UnitMap
+        with one input and one output). David Berry fixed this bug in AST
+        2017-05-10.
+
+        I tried this test on an older version of astshim and found that it
+        triggering a segfault nearly every time.
+        """
+        coeff_f = np.array([
+            [-1.1, 1, 2, 0],
+            [1.3, 1, 3, 1],
+        ])
+        coeff_i = np.array([
+            [1.6, 1, 3],
+            [-3.6, 2, 1],
+        ])
+
+        # execute many times to increase the odds of a segfault
+        for i in range(1000):
+            amap = astshim.PolyMap(coeff_f, coeff_i)
+            amapinv = amap.getInverse()
+            cmp2 = amap.of(amapinv)
+            result = cmp2.simplify()
+            self.assertIsInstance(result, astshim.UnitMap)
+
 
 if __name__ == "__main__":
     unittest.main()
