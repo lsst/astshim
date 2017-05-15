@@ -25,15 +25,14 @@ class TestMathMap(MappingTestCase):
         self.checkPersistence(mathmap)
 
         indata = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
         outdata = mathmap.tranForward(indata)
-        x = indata[:, 0]
-        y = indata[:, 1]
-        r = outdata[:, 0]
-        theta = outdata[:, 1]
+        x = indata[0]
+        y = indata[1]
+        r = outdata[0]
+        theta = outdata[1]
         pred_r = np.sqrt(x * x + y * y)
         pred_theta = np.arctan2(y, x)
         assert_allclose(r, pred_r)

@@ -60,7 +60,8 @@ Reshape a vector as a 2-dimensional array that shares the same memory
 @warning You must hold onto the original vector until you are done
 with the returned array, else the array will be corrupted.
 
-@param[in] vec  Vector of points, with axes adjacent, e.g. x1, y1, x2, y2...xnPts, ynNpt
+@param[in] vec  Vector of points, with all values for one axis first,
+    then the next axes, and so on, e.g. x1, x2, ...xnPt, y1, y2, ...ynNpt
 @param[in] nAxes  Number of axes per point
 @return 2-dimensional array with dimensions (nPts, nAxes)
 @throws std::runtime_error if vec length is not a multiple of nAxes

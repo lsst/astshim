@@ -256,7 +256,7 @@ public:
     @return the results as a new array with dimensions (nPts, nOut)
     */
     Array2D tranForward(ConstArray2D const &from) const {
-        Array2D to = ndarray::allocate(from.getSize<0>(), getNout());
+        Array2D to = ndarray::allocate(getNout(), from.getSize<1>());
         _tran(from, true, to);
         return to;
     }
@@ -269,7 +269,7 @@ public:
     */
     std::vector<double> tranForward(std::vector<double> const &from) const {
         auto fromArr = arrayFromVector(from, getNin());
-        std::vector<double> to(fromArr.getSize<0>() * getNout());
+        std::vector<double> to(fromArr.getSize<1>() * getNout());
         auto toArr = arrayFromVector(to, getNout());
         _tran(fromArr, true, toArr);
         return to;
@@ -290,7 +290,7 @@ public:
     @return the results as a new array with dimensions (nPts, nIn)
     */
     Array2D tranInverse(ConstArray2D const &from) const {
-        Array2D to = ndarray::allocate(from.getSize<0>(), getNin());
+        Array2D to = ndarray::allocate(getNin(), from.getSize<1>());
         _tran(from, false, to);
         return to;
     }
@@ -303,7 +303,7 @@ public:
     */
     std::vector<double> tranInverse(std::vector<double> const &from) const {
         auto fromArr = arrayFromVector(from, getNout());
-        std::vector<double> to(fromArr.getSize<0>() * getNin());
+        std::vector<double> to(fromArr.getSize<1>() * getNin());
         auto toArr = arrayFromVector(to, getNin());
         _tran(fromArr, false, toArr);
         return to;

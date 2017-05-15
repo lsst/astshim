@@ -19,7 +19,7 @@ def normalize(inArray, lbnd, ubnd):
     Parameters
     ----------
     inArray : `numpy.array` of float
-        Value(s) to normalize; a list of nPoints x nAxes values
+        Value(s) to normalize; a list of nAxes x nPoints values
         (the form used by astshim.Mapping.tranForward)
     lbnd : sequence of `float`
         Lower bounds (one element per axis)
@@ -35,7 +35,7 @@ def normalize(inArray, lbnd, ubnd):
     lbnd = np.array(lbnd)
     ubnd = np.array(ubnd)
     delta = ubnd - lbnd
-    return -1 + ((inArray - lbnd) * 2.0 / delta)
+    return (-1 + ((inArray.T - lbnd) * 2.0 / delta)).T
 
 
 class ReferenceCheby(object):
@@ -74,12 +74,12 @@ class ReferenceCheby(object):
             inArray transformed by referenceCheby (after normalizing inArray)
         """
         inNormalized = normalize(inArray, self.lbnd, self.ubnd)
-        outdata = [self.referenceCheby(inPoint) for inPoint in inNormalized]
+        outdata = [self.referenceCheby(inPoint) for inPoint in inNormalized.T]
         arr = np.array(outdata)
         if len(arr.shape) > 2:
             # trim unwanted extra dimension (occurs when nin=1)
             arr.shape = arr.shape[0:2]
-        return arr
+        return arr.T
 
 
 class TestChebyMap(MappingTestCase):
@@ -131,10 +131,8 @@ class TestChebyMap(MappingTestCase):
 
         # arbitary input points that cover the full domain
         indata = np.array([
-            [-2.0, -2.5],
-            [-0.5, 1.5],
-            [0.5, -0.5],
-            [1.5, 2.5],
+            [-2.0, -0.5, 0.5, 1.5],
+            [-2.5, 1.5, -0.5, 2.5],
         ])
 
         refCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
@@ -216,10 +214,8 @@ class TestChebyMap(MappingTestCase):
 
         # cover the domain
         indata_f = np.array([
-            [-2.0, -1.0],
-            [-1.5, -2.5],
-            [0.1, -0.5],
-            [1.5, -0.5],
+            [-2.0, -1.5, 0.1, 1.5],
+            [-1.0, -2.5, -0.5, -0.5],
         ])
 
         lbnd_i = [-3.0]
@@ -227,11 +223,7 @@ class TestChebyMap(MappingTestCase):
 
         # cover the domain
         indata_i = np.array([
-            [-3.0],
-            [-1.1],
-            [-1.5],
-            [-2.3],
-            [-1.0],
+            [-3.0, -1.1, -1.5, -2.3, -1.0],
         ])
         # Coefficients for the following polynomial:
         # y1 = -1.1 T2(x1') T0(x2') + 1.3 T3(x1') T1(x2')
@@ -284,14 +276,14 @@ class TestChebyMap(MappingTestCase):
         self.checkPersistence(chebyMap)
 
         outdata_f = chebyMap.tranForward(indata_f)
-        desiredOutPoints_f = refCheby_f.transform(indata_f)
+        des_outdata_f = refCheby_f.transform(indata_f)
 
-        npt.assert_allclose(outdata_f, desiredOutPoints_f)
+        npt.assert_allclose(outdata_f, des_outdata_f)
 
         outdata_i = chebyMap.tranInverse(indata_i)
-        desiredOutPoints_i = refCheby_i.transform(indata_i)
+        des_outdata_i = refCheby_i.transform(indata_i)
 
-        npt.assert_allclose(outdata_i, desiredOutPoints_i)
+        npt.assert_allclose(outdata_i, des_outdata_i)
 
     def test_ChebyMapPolyTran(self):
         nin = 2
@@ -301,11 +293,8 @@ class TestChebyMap(MappingTestCase):
 
         # arbitrary points that cover the input range
         indata = np.array([
-            [-2.0, 0.0],
-            [-1.0, -2.5],
-            [0.1, -0.2],
-            [1.5, 2.5],
-            [1.0, 2.5],
+            [-2.0, -1.0, 0.1, 1.5, 1.0],
+            [0.0, -2.5, -0.2, 2.5, 2.5],
         ])
 
         # Coefficients for the following gently varying polynomial:
@@ -350,9 +339,9 @@ class TestChebyMap(MappingTestCase):
         outdata = chebyMap1.tranForward(indata)
 
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
-        desiredOutPoints = referenceCheby.transform(indata)
+        des_outdata = referenceCheby.transform(indata)
 
-        npt.assert_allclose(outdata, desiredOutPoints)
+        npt.assert_allclose(outdata, des_outdata)
 
         # fit an inverse transform
         chebyMap2 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
@@ -384,11 +373,8 @@ class TestChebyMap(MappingTestCase):
 
         # arbitrary points that cover the input range
         indata = np.array([
-            [-2.0, 0.0],
-            [-1.0, -2.5],
-            [0.1, -0.2],
-            [1.5, 2.5],
-            [1.0, 2.5],
+            [-2.0, -1.0, 0.1, 1.5, 1.0],
+            [0.0, -2.5, -0.2, 2.5, 2.5],
         ])
 
         # Coefficients for the following not-gently-varying polynomial:
@@ -425,9 +411,9 @@ class TestChebyMap(MappingTestCase):
         outdata = chebyMap1.tranForward(indata)
 
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
-        desiredOutPoints = referenceCheby.transform(indata)
+        des_outdata = referenceCheby.transform(indata)
 
-        npt.assert_allclose(outdata, desiredOutPoints)
+        npt.assert_allclose(outdata, des_outdata)
 
         with self.assertRaises(RuntimeError):
             chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
@@ -458,12 +444,11 @@ class TestChebyMap(MappingTestCase):
         x1Edge = np.linspace(lbnd_f[0], ubnd_f[0], 1000)
         x2Edge = np.linspace(lbnd_f[1], ubnd_f[1], 1000)
         x1Grid, x2Grid = np.meshgrid(x1Edge, x2Edge)
-        indata = np.array([x1Grid.ravel(), x2Grid.ravel()]).transpose()
-        indata = indata.copy()  # make contiguous
+        indata = np.array([x1Grid.ravel(), x2Grid.ravel()])
 
         outdata = chebyMap1.tranForward(indata)
-        pred_lbnd = outdata.min(0)
-        pred_ubnd = outdata.max(0)
+        pred_lbnd = outdata.min(1)
+        pred_ubnd = outdata.max(1)
 
         domain = chebyMap1.getDomain(forward=False)
         npt.assert_allclose(domain.lbnd, pred_lbnd, atol=0.0001)
@@ -477,15 +462,12 @@ class TestChebyMap(MappingTestCase):
 
         # points that cover the full domain
         points = np.array([
-            [-2.0, -2.5],
-            [-0.5, 1.5],
-            [0.5, -0.5],
-            [1.5, 2.5],
+            [-2.0, -0.5, 0.5, 1.5],
+            [-2.5, 1.5, 0.5, 2.5]
         ])
 
         normPoints = normalize(points, lbnd, ubnd)
-        normByAxis = normPoints.transpose()
-        for normAxis in normByAxis:
+        for normAxis in normPoints:
             self.assertAlmostEqual(normAxis.min(), -1)
             self.assertAlmostEqual(normAxis.max(), 1)
 

@@ -21,10 +21,6 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
         This is the simplest version to use if you wish to transorm a single point.
     - Accept a 2-dimensional ndarray and return a newly allocated 2-dimensional ndarray.
     - Accept a 2-dimensional ndarray and fill a pre-allocated 2-dimensional ndarray.
-- Lists of points are stored in memory such that adjacent axes adjacent are adjacent in memory,
-    both for vectors and 2-dimensional ndarrays.
-    For example if nAxes = 2 then the data is in this order: x0, y0, x1, y1, x2, y2...
-    Note that memory order is transposed from the memory order AST uses.
 - @ref Mapping "Mappings" may not be inverted in place.
     Instead call @ref Mapping.getInverse to get an inverse mapping,
     and @ref Mapping.isInverted to find out if a mapping is inverted.

@@ -76,9 +76,8 @@ class TestObject(ObjectTestCase):
         ])
         pm = astshim.PolyMap(coeff_f, 2, "IterInverse=0")
         indata = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
 
         # make sure the error string contains "Error"

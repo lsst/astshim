@@ -41,11 +41,8 @@ class TestMapping(MappingTestCase):
         self.assertTrue(invmap.hasInverse())
 
         indata = np.array([
-            [1, 3],
-            [2, 99],
-            [-6, -5],
-            [30, 21],
-            [0, 0],
+            [1.0, 2.0, -6.0, 30.0, 0.0],
+            [3.0, 99.0, -5.0, 21.0, 0.0],
         ], dtype=float)
         self.checkRoundTrip(self.zoommap, indata)
         self.checkRoundTrip(invmap, indata)

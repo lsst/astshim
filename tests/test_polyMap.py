@@ -35,15 +35,14 @@ class TestPolyMap(MappingTestCase):
         self.checkPersistence(pm)
 
         indata = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
         outdata = pm.tranForward(indata)
-        xin, yin = indata.transpose()
+        xin, yin = indata
         pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
         pred_yout = yin
-        xout, yout = outdata.transpose()
+        xout, yout = outdata
         npt.assert_allclose(xout, pred_xout)
         npt.assert_allclose(yout, pred_yout)
 
@@ -68,15 +67,14 @@ class TestPolyMap(MappingTestCase):
         self.assertTrue(pm.hasInverse())
 
         indata = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
         outdata = pm.tranForward(indata)
-        xin, yin = indata.transpose()
+        xin, yin = indata
         pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
         pred_yout = yin
-        xout, yout = outdata.transpose()
+        xout, yout = outdata
         npt.assert_allclose(xout, pred_xout)
         npt.assert_allclose(yout, pred_yout)
 
@@ -99,9 +97,8 @@ class TestPolyMap(MappingTestCase):
         self.assertFalse(pm.hasInverse())
 
         indata = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
         outdata = pm.tranForward(indata)
         with self.assertRaises(RuntimeError):
@@ -141,9 +138,8 @@ class TestPolyMap(MappingTestCase):
         self.checkPersistence(pm)
 
         indata = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
 
         self.checkRoundTrip(pm, indata)
@@ -223,9 +219,8 @@ class TestPolyMap(MappingTestCase):
         pm = astshim.PolyMap(coeff_f, coeff_i)
 
         indata = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
 
         outdata = pm.tranForward(indata)
@@ -235,8 +230,8 @@ class TestPolyMap(MappingTestCase):
         pm2 = pm.polyTran(forward, 1.0E-10, 1.0E-10, 4, [-1.0, -1.0], [1.0, 1.0])
         outdata2 = pm2.tranForward(indata)
         npt.assert_equal(outdata, outdata2)
-        pin2 = pm2.tranInverse(outdata)
-        npt.assert_allclose(indata, pin2, atol=1.0e-10)
+        indata2 = pm2.tranInverse(outdata)
+        npt.assert_allclose(indata, indata2, atol=1.0e-10)
 
     def test_PolyMapPolyMapUnivertible(self):
         """Test polyTran on a PolyMap without a single-valued inverse
@@ -254,13 +249,8 @@ class TestPolyMap(MappingTestCase):
         self.checkCopy(pm)
         self.checkPersistence(pm)
 
-        indata = np.array([
-            [-0.5],
-            [0.5],
-            [1.1],
-            [1.8],
-        ])
-        pred_outdata = 2.0*indata**2 - indata**3
+        indata = np.array([-0.5, 0.5, 1.1, 1.8])
+        pred_outdata = (2.0*indata.T**2 - indata.T**3).T
         outdata = pm.tranForward(indata)
         npt.assert_allclose(outdata, pred_outdata)
 

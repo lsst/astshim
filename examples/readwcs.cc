@@ -36,7 +36,7 @@ int main() {
 
     // Transform some points. Mappings can transform vectors or 2-d arrays;
     // this example uses 2-d arrays because they can be printed to stdout.
-    std::vector<double> fromVec = {0, 0, 1000, 0, 0, 1000, 1000, 1000};
+    std::vector<double> fromVec = {0, 1000, 0, 1000, 0, 0, 1000, 1000};
     ast::Array2D from = ast::arrayFromVector(fromVec, 2);
     ast::Array2D to = ndarray::allocate(ndarray::makeVector(4, 2));
     frameSetPtr->tranForward(from, to);

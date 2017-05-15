@@ -25,9 +25,8 @@ class TestNormMap(MappingTestCase):
         self.checkPersistence(normmap)
 
         indata = np.array([
-            [100.0, -100.0],
-            [2000.0, -1000.0],
-            [30000.0, -20000.0],
+            [100.0, 2000.0, 3000.0],
+            [-100.0, -1000.0, -2000.0],
         ], dtype=float)
         outdata = normmap.tranForward(indata)
         assert_allclose(outdata, indata)
@@ -60,7 +59,7 @@ class TestNormMap(MappingTestCase):
         # I'm not sure why 100 is needed; I expected ~10 (2 pi)
         eps = 100 * sys.float_info.epsilon
 
-        indata = np.array([
+        indata = (np.array([
             [0, 0],
             [-eps, 0],  # lon out of range
             [2 * pi - eps, 0],
@@ -69,7 +68,7 @@ class TestNormMap(MappingTestCase):
             [0, -pi / 2 - eps],  # lat too small; offset lat by pi
             [0, pi / 2 - eps],
             [0, pi / 2 + eps],  # lat too big; offset lat by pi
-        ], dtype=float)
+        ], dtype=float)).T.copy()  # tranForward can't accept a view
         pred_outdata = np.array([
             [0, 0],
             [2 * pi - eps, 0],
@@ -79,7 +78,7 @@ class TestNormMap(MappingTestCase):
             [pi, -pi / 2 + eps],
             [0, pi / 2 - eps],
             [pi, pi / 2 - eps],
-        ])
+        ]).T
         outdata = normmap.tranForward(indata)
         assert_allclose(outdata, pred_outdata)
 

@@ -26,24 +26,22 @@ class TestUnitNormMap(MappingTestCase):
             self.checkPersistence(unitnormmap)
 
             indata = np.array([
-                [1, 3, -5, 7],
-                [2, 99, 3, -23],
-                [-6, -5, -7, -3],
-                [30, 21, 37, 45],
-                [1, 0, 0, 0],
-            ], dtype=float)
-            indata = np.array(indata[:, 0:nin])
+                [1.0, 2.0, -6.0, 30.0, 1.0],
+                [3.0, 99.0, -5.0, 21.0, 0.0],
+                [-5.0, 3.0, -7.0, 37.0, 0.0],
+                [7.0, -23.0, -3.0, 45.0, 0.0],
+            ], dtype=float)[0:nin]
             self.checkRoundTrip(unitnormmap, indata)
 
-            topos = unitnormmap.tranForward(indata)
-            norm = topos[:, -1]
+            outdata = unitnormmap.tranForward(indata)
+            norm = outdata[-1]
 
-            rel_indata = indata - center
-            pred_norm = np.linalg.norm(rel_indata, axis=1)
+            relindata = (indata.T - center).T
+            pred_norm = np.linalg.norm(relindata, axis=0)
             assert_allclose(norm, pred_norm)
 
-            pred_rel_indata = (topos[:, 0:nin].T * norm).T
-            assert_allclose(rel_indata, pred_rel_indata)
+            pred_relindata = outdata[0:nin] * norm
+            assert_allclose(relindata, pred_relindata)
 
         # UnitNormMap must have at least one input
         with self.assertRaises(Exception):
@@ -63,11 +61,10 @@ class TestUnitNormMap(MappingTestCase):
         shift = [3, 7, -9]
         # an array of points, each of 4 axes, the max we'll need
         testpoints = np.array([
-            [1, 3, -5, 7],
-            [2, 99, 3, -23],
-            [-6, -5, -7, -3],
-            [30, 21, 37, 45],
-            [1, 0, 0, 0],
+            [1.0, 2.0, -6.0, 30.0, 1.0],
+            [3.0, 99.0, -5.0, 21.0, 0.0],
+            [-5.0, 3.0, -7.0, 37.0, 0.0],
+            [7.0, -23.0, -3.0, 45.0, 0.0],
         ], dtype=float)
         unm1 = astshim.UnitNormMap(center1)
         unm1inv = unm1.getInverse()
@@ -95,7 +92,7 @@ class TestUnitNormMap(MappingTestCase):
             self.assertEqual(cmpmap_simp.getClass(), pred_simplified_class_name)
             self.assertEqual(cmpmap.getNin(), cmpmap_simp.getNin())
             self.assertEqual(cmpmap.getNout(), cmpmap_simp.getNout())
-            testptview = np.array(testpoints[:, 0:cmpmap.getNin()])
+            testptview = np.array(testpoints[0:cmpmap.getNin()])
             assert_allclose(cmpmap.tranForward(
                 testptview), cmpmap_simp.tranForward(testptview))
 

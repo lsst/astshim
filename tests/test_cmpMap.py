@@ -35,13 +35,10 @@ class TestCmpMap(MappingTestCase):
         self.checkPersistence(sermap)
 
         indata = np.array([
-            [1, 3],
-            [2, 99.9],
-            [-6, -5.1],
-            [30, 21],
-            [0.2, 0],
+            [1.0, 2.0, -6.0, 30.0, 0.2],
+            [3.0, 99.9, -5.1, 21.0, 0.0],
         ], dtype=float)
-        pred_outdata = (indata + self.shift) * self.zoom
+        pred_outdata = ((indata.T + self.shift) * self.zoom).T
         topos = sermap.tranForward(indata)
         assert_allclose(topos, pred_outdata)
 
@@ -66,13 +63,14 @@ class TestCmpMap(MappingTestCase):
         self.checkPersistence(parmap)
 
         indata = np.array([
-            [-3, 2.2, -5.6, 0.32],
-            [1, 3, 2, 99.9],
-            [-6, -5.1, 30, 21],
+            [3.0, 1.0, -6.0],
+            [2.2, 3.0, -5.1],
+            [-5.6, 2.0, 30.0],
+            [0.32, 99.9, 21.0],
         ], dtype=float)
         pred_outdata = indata.copy()
-        pred_outdata[:, 0:2] += self.shift
-        pred_outdata[:, 2:4] *= self.zoom
+        pred_outdata.T[:, 0:2] += self.shift
+        pred_outdata.T[:, 2:4] *= self.zoom
         topos = parmap.tranForward(indata)
         assert_allclose(topos, pred_outdata)
 

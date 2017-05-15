@@ -29,11 +29,8 @@ class TestTranMap(MappingTestCase):
         self.checkPersistence(tranmap)
 
         indata = np.array([
-            [1, 3],
-            [2, 99],
-            [-6, -5],
-            [30, 21],
-            [1, 0],
+            [1.0, 2.0, -6.0, 30.0, 1.0],
+            [3.0, 99.0, -5.0, 21.0, 0.0],
         ], dtype=float)
         outdata = tranmap.tranForward(indata)
         assert_allclose(outdata, indata)
@@ -56,11 +53,8 @@ class TestTranMap(MappingTestCase):
         self.checkPersistence(tranmap)
 
         indata = np.array([
-            [1, 3],
-            [2, 99],
-            [-6, -5],
-            [30, 21],
-            [1, 0],
+            [1.0, 2.0, -6.0, 30.0, 1.0],
+            [3.0, 99.0, -5.0, 21.0, 0.0],
         ], dtype=float)
         outdata = tranmap.tranForward(indata)
         assert_allclose(outdata, indata * zoomfac)

@@ -40,16 +40,12 @@ class TestWcsMap(MappingTestCase):
         self.checkPersistence(wcsmap)
 
         indata = np.array([
-            [0, 0],
-            [0.001, 0],
-            [0, 0.001],
-            [0, 1],
+            [0.0, 0.001, 0.0, 0.0],
+            [0.0, 0.0, 0.001, 1.0],
         ], dtype=float)
         pred_outdata = np.array([
-            [0, 0],
-            [0.001, 0],
-            [0, 0.001],
-            [0, 0.95885108],  # by observation, not computation
+            [0.0, 0.001, 0.0, 0.0],
+            [0.0, 0.0, 0.001, 0.95885108],
         ])
         outdata = wcsmap.tranForward(indata)
         assert_allclose(outdata, pred_outdata)

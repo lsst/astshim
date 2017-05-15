@@ -11,7 +11,7 @@ from astshim.test import MappingTestCase
 class TestPcdMap(MappingTestCase):
 
     def test_PcdMap(self):
-        coeff = 0.2
+        coeff = 0.002
         ctr = [2, 3]
         pcdmap = astshim.PcdMap(coeff, ctr)
         self.assertEqual(pcdmap.getClass(), "PcdMap")
@@ -29,16 +29,14 @@ class TestPcdMap(MappingTestCase):
         self.checkPersistence(pcdmap)
 
         # the center maps to itself
-        ctrpt = np.array([ctr], dtype=float)
-        assert_allclose(pcdmap.tranForward(ctrpt), ctrpt)
-        return
+        assert_allclose(pcdmap.tranForward(ctr), ctr)
 
         indata = np.array([
-            [0, 0],
-            [-1, 7.3],
-            [43.2, -35.3],
+            [0.0, -1.0, 4.2],
+            [0.0, 7.3, -5.3],
         ])
-        self.checkRoundTrip(pcdmap, indata)
+        # inverse uses a fit so don't expect too much
+        self.checkRoundTrip(pcdmap, indata, atol=1e-4)
 
         outdata = pcdmap.tranForward(indata)
 
@@ -46,14 +44,14 @@ class TestPcdMap(MappingTestCase):
         #   outrad = inrad*(1 + coeff*inrad^2)
         #   outdir = indir
         # where radius and direction are relative to the center of distortion
-        inrelctr = indata - ctr
-        inrelctrrad = np.hypot(inrelctr)
-        inrelctrdir = np.arctan2(inrelctr[:, 1], inrelctr[:, 0])
+        inrelctr = (indata.T - ctr).T
+        inrelctrrad = np.hypot(inrelctr[0], inrelctr[1])
+        inrelctrdir = np.arctan2(inrelctr[1], inrelctr[0])
         pred_outrad = inrelctrrad * (1 + coeff * inrelctrrad * inrelctrrad)
         pred_outrelctr = np.zeros(indata.shape, dtype=float)
-        pred_outrelctr[:, 0] = pred_outrad * np.cos(inrelctrdir)
-        pred_outrelctr[:, 1] = pred_outrad * np.sin(inrelctrdir)
-        pred_outdata = pred_outrelctr + ctr
+        pred_outrelctr[0, :] = pred_outrad * np.cos(inrelctrdir)
+        pred_outrelctr[1, :] = pred_outrad * np.sin(inrelctrdir)
+        pred_outdata = pred_outrelctr + np.expand_dims(ctr, 1)
         assert_allclose(outdata, pred_outdata)
 
     def test_PcdMapBadConstruction(self):
