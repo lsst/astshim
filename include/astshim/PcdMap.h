@@ -42,7 +42,7 @@ the radial distortion. The forward transformation of a PcdMap applies the distor
 
     RD = R * ( 1 + disco * R * R )
 
-where `R` is the undistorted radial distance from `pcdcen`,the distortion centre,
+where `R` is the undistorted radial distance from `pcdcen`, the distortion centre,
 `RD` is the radial distance from the same centre in the presence of distortion.
 
 The inverse transformation of a PcdMap removes the distortion produced by the forward transformation.
