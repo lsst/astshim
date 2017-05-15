@@ -24,20 +24,18 @@ class TestMatrixMap(MappingTestCase):
         self.checkCopy(mm)
         self.checkPersistence(mm)
 
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ], dtype=float)
-        pout = mm.tranForward(pin)
-        despout = np.array([
-            [-1.0, 0.0],
-            [-2.0, 2.0],
-            [-3.0, 4.0],
+        outdata = mm.tranForward(indata)
+        pred_outdata = np.array([
+            [-1.0, -2.0, -3.0],
+            [0.0, 2.0, 4.0],
         ], dtype=float)
-        assert_allclose(pout, despout)
+        assert_allclose(outdata, pred_outdata)
 
-        self.checkRoundTrip(mm, pin)
+        self.checkRoundTrip(mm, indata)
 
     def test_MatrixMapMatrix(self):
         """Test MatrixMap constructed with a 2-d matrix
@@ -58,18 +56,17 @@ class TestMatrixMap(MappingTestCase):
         self.assertTrue(mm.hasForward())
         self.assertFalse(mm.hasInverse())
 
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ], dtype=float)
-        pout = mm.tranForward(pin)
-        despout = np.array([
-            [0.0, 2.0, -1.0],
-            [1.0, 7.0, -4.0],
-            [2.0, 12.0, -7.0],
+        outdata = mm.tranForward(indata)
+        pred_outdata = np.array([
+            [0.0, 1.0, 2.0],
+            [2.0, 7.0, 12.0],
+            [-1.0, -4.0, -7.0],
         ], dtype=float)
-        assert_allclose(pout, despout)
+        assert_allclose(outdata, pred_outdata)
 
 
 if __name__ == "__main__":

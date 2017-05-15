@@ -42,8 +42,8 @@ class TestTimeMap(MappingTestCase):
             [512346],
         ], dtype=float)
         outdata = timemap.tranForward(indata)
-        predoutdata = indata - dut1 / SecPerDay
-        assert_allclose(outdata, predoutdata, atol=1e-15, rtol=0)
+        pred_outdata = indata - dut1 / SecPerDay
+        assert_allclose(outdata, pred_outdata, atol=1e-15, rtol=0)
 
         self.checkRoundTrip(timemap, indata)
 

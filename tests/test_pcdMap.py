@@ -49,12 +49,12 @@ class TestPcdMap(MappingTestCase):
         inrelctr = indata - ctr
         inrelctrrad = np.hypot(inrelctr)
         inrelctrdir = np.arctan2(inrelctr[:, 1], inrelctr[:, 0])
-        predoutrad = inrelctrrad * (1 + coeff * inrelctrrad * inrelctrrad)
-        predoutrelctr = np.zeros(indata.shape, dtype=float)
-        predoutrelctr[:, 0] = predoutrad * np.cos(inrelctrdir)
-        predoutrelctr[:, 1] = predoutrad * np.sin(inrelctrdir)
-        predout = predoutrelctr + ctr
-        assert_allclose(outdata, predout)
+        pred_outrad = inrelctrrad * (1 + coeff * inrelctrrad * inrelctrrad)
+        pred_outrelctr = np.zeros(indata.shape, dtype=float)
+        pred_outrelctr[:, 0] = pred_outrad * np.cos(inrelctrdir)
+        pred_outrelctr[:, 1] = pred_outrad * np.sin(inrelctrdir)
+        pred_outdata = pred_outrelctr + ctr
+        assert_allclose(outdata, pred_outdata)
 
     def test_PcdMapBadConstruction(self):
         with self.assertRaises(Exception):

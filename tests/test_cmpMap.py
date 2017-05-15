@@ -34,22 +34,22 @@ class TestCmpMap(MappingTestCase):
         self.checkCopy(sermap)
         self.checkPersistence(sermap)
 
-        frompos = np.array([
+        indata = np.array([
             [1, 3],
             [2, 99.9],
             [-6, -5.1],
             [30, 21],
             [0.2, 0],
         ], dtype=float)
-        predtopos = (frompos + self.shift) * self.zoom
-        topos = sermap.tranForward(frompos)
-        assert_allclose(topos, predtopos)
+        pred_outdata = (indata + self.shift) * self.zoom
+        topos = sermap.tranForward(indata)
+        assert_allclose(topos, pred_outdata)
 
-        self.checkRoundTrip(sermap, frompos)
+        self.checkRoundTrip(sermap, indata)
 
         cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, True)
-        cmtopos = cmpmap.tranForward(frompos)
-        assert_allclose(cmtopos, predtopos)
+        cmtopos = cmpmap.tranForward(indata)
+        assert_allclose(cmtopos, pred_outdata)
 
     def test_ParallelMap(self):
         parmap = astshim.ParallelMap(self.shiftmap, self.zoommap)
@@ -65,22 +65,22 @@ class TestCmpMap(MappingTestCase):
         self.checkCopy(parmap)
         self.checkPersistence(parmap)
 
-        frompos = np.array([
+        indata = np.array([
             [-3, 2.2, -5.6, 0.32],
             [1, 3, 2, 99.9],
             [-6, -5.1, 30, 21],
         ], dtype=float)
-        predtopos = frompos.copy()
-        predtopos[:, 0:2] += self.shift
-        predtopos[:, 2:4] *= self.zoom
-        topos = parmap.tranForward(frompos)
-        assert_allclose(topos, predtopos)
+        pred_outdata = indata.copy()
+        pred_outdata[:, 0:2] += self.shift
+        pred_outdata[:, 2:4] *= self.zoom
+        topos = parmap.tranForward(indata)
+        assert_allclose(topos, pred_outdata)
 
-        self.checkRoundTrip(parmap, frompos)
+        self.checkRoundTrip(parmap, indata)
 
         cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, False)
-        cmtopos = cmpmap.tranForward(frompos)
-        assert_allclose(cmtopos, predtopos)
+        cmtopos = cmpmap.tranForward(indata)
+        assert_allclose(cmtopos, pred_outdata)
 
 
 if __name__ == "__main__":

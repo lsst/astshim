@@ -24,13 +24,13 @@ class TestNormMap(MappingTestCase):
         self.checkCopy(normmap)
         self.checkPersistence(normmap)
 
-        pin = np.array([
+        indata = np.array([
             [100.0, -100.0],
             [2000.0, -1000.0],
             [30000.0, -20000.0],
         ], dtype=float)
-        pout = normmap.tranForward(pin)
-        assert_allclose(pout, pin)
+        outdata = normmap.tranForward(indata)
+        assert_allclose(outdata, indata)
 
     def testNormMapMap(self):
         """Check that NormMap(Mapping) is an error"""
@@ -60,7 +60,7 @@ class TestNormMap(MappingTestCase):
         # I'm not sure why 100 is needed; I expected ~10 (2 pi)
         eps = 100 * sys.float_info.epsilon
 
-        pin = np.array([
+        indata = np.array([
             [0, 0],
             [-eps, 0],  # lon out of range
             [2 * pi - eps, 0],
@@ -70,7 +70,7 @@ class TestNormMap(MappingTestCase):
             [0, pi / 2 - eps],
             [0, pi / 2 + eps],  # lat too big; offset lat by pi
         ], dtype=float)
-        despout = np.array([
+        pred_outdata = np.array([
             [0, 0],
             [2 * pi - eps, 0],
             [2 * pi - eps, 0],
@@ -80,8 +80,8 @@ class TestNormMap(MappingTestCase):
             [0, pi / 2 - eps],
             [pi, pi / 2 - eps],
         ])
-        pout = normmap.tranForward(pin)
-        assert_allclose(pout, despout)
+        outdata = normmap.tranForward(indata)
+        assert_allclose(outdata, pred_outdata)
 
 
 if __name__ == "__main__":

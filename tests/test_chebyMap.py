@@ -74,8 +74,8 @@ class ReferenceCheby(object):
             inArray transformed by referenceCheby (after normalizing inArray)
         """
         inNormalized = normalize(inArray, self.lbnd, self.ubnd)
-        outPoints = [self.referenceCheby(inPoint) for inPoint in inNormalized]
-        arr = np.array(outPoints)
+        outdata = [self.referenceCheby(inPoint) for inPoint in inNormalized]
+        arr = np.array(outdata)
         if len(arr.shape) > 2:
             # trim unwanted extra dimension (occurs when nin=1)
             arr.shape = arr.shape[0:2]
@@ -130,7 +130,7 @@ class TestChebyMap(MappingTestCase):
         self.assertEqual(nin, null_coeff.shape[1] - 2)
 
         # arbitary input points that cover the full domain
-        inPoints = np.array([
+        indata = np.array([
             [-2.0, -2.5],
             [-0.5, 1.5],
             [0.5, -0.5],
@@ -155,13 +155,13 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(domain1.lbnd, lbnd_f)
         npt.assert_allclose(domain1.ubnd, ubnd_f)
 
-        outPoints = chebyMap1.tranForward(inPoints)
+        outdata = chebyMap1.tranForward(indata)
 
         with self.assertRaises(RuntimeError):
-            chebyMap1.tranInverse(inPoints)
+            chebyMap1.tranInverse(indata)
 
-        expectedOut = refCheby.transform(inPoints)
-        npt.assert_allclose(outPoints, expectedOut)
+        pred_outdata = refCheby.transform(indata)
+        npt.assert_allclose(outdata, pred_outdata)
 
         # bidirectional constructor, forward only specified
         chebyMap2 = astshim.ChebyMap(coeff_f, null_coeff, lbnd_f, ubnd_f, [], [])
@@ -179,11 +179,11 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(domain2.lbnd, lbnd_f)
         npt.assert_allclose(domain2.ubnd, ubnd_f)
 
-        outPoints2 = chebyMap2.tranForward(inPoints)
-        npt.assert_allclose(outPoints2, outPoints)
+        outdata2 = chebyMap2.tranForward(indata)
+        npt.assert_allclose(outdata2, outdata)
 
         with self.assertRaises(RuntimeError):
-            chebyMap2.tranInverse(inPoints)
+            chebyMap2.tranInverse(indata)
 
         # bidirectional constructor, inverse only specified
         chebyMap3 = astshim.ChebyMap(null_coeff, coeff_f, [], [], lbnd_f, ubnd_f)
@@ -198,11 +198,11 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(domain3.lbnd, lbnd_f)
         npt.assert_allclose(domain3.ubnd, ubnd_f)
 
-        outPoints3 = chebyMap3.tranInverse(inPoints)
-        npt.assert_allclose(outPoints3, outPoints)
+        outdata3 = chebyMap3.tranInverse(indata)
+        npt.assert_allclose(outdata3, outdata)
 
         with self.assertRaises(RuntimeError):
-            chebyMap3.tranForward(inPoints)
+            chebyMap3.tranForward(indata)
 
     def test_ChebyMapBidirectional(self):
         """Test a ChebyMap with separate forward and inverse mappings
@@ -215,7 +215,7 @@ class TestChebyMap(MappingTestCase):
         ubnd_f = [1.5, -0.5]
 
         # cover the domain
-        inPoints_f = np.array([
+        indata_f = np.array([
             [-2.0, -1.0],
             [-1.5, -2.5],
             [0.1, -0.5],
@@ -226,7 +226,7 @@ class TestChebyMap(MappingTestCase):
         ubnd_i = [-1.0]
 
         # cover the domain
-        inPoints_i = np.array([
+        indata_i = np.array([
             [-3.0],
             [-1.1],
             [-1.5],
@@ -283,15 +283,15 @@ class TestChebyMap(MappingTestCase):
         self.checkCopy(chebyMap)
         self.checkPersistence(chebyMap)
 
-        outPoints_f = chebyMap.tranForward(inPoints_f)
-        desiredOutPoints_f = refCheby_f.transform(inPoints_f)
+        outdata_f = chebyMap.tranForward(indata_f)
+        desiredOutPoints_f = refCheby_f.transform(indata_f)
 
-        npt.assert_allclose(outPoints_f, desiredOutPoints_f)
+        npt.assert_allclose(outdata_f, desiredOutPoints_f)
 
-        outPoints_i = chebyMap.tranInverse(inPoints_i)
-        desiredOutPoints_i = refCheby_i.transform(inPoints_i)
+        outdata_i = chebyMap.tranInverse(indata_i)
+        desiredOutPoints_i = refCheby_i.transform(indata_i)
 
-        npt.assert_allclose(outPoints_i, desiredOutPoints_i)
+        npt.assert_allclose(outdata_i, desiredOutPoints_i)
 
     def test_ChebyMapPolyTran(self):
         nin = 2
@@ -300,7 +300,7 @@ class TestChebyMap(MappingTestCase):
         ubnd_f = [1.5, 2.5]
 
         # arbitrary points that cover the input range
-        inPoints = np.array([
+        indata = np.array([
             [-2.0, 0.0],
             [-1.0, -2.5],
             [0.1, -0.2],
@@ -347,12 +347,12 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap1.hasForward())
         self.assertFalse(chebyMap1.hasInverse())
 
-        outPoints = chebyMap1.tranForward(inPoints)
+        outdata = chebyMap1.tranForward(indata)
 
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
-        desiredOutPoints = referenceCheby.transform(inPoints)
+        desiredOutPoints = referenceCheby.transform(indata)
 
-        npt.assert_allclose(outPoints, desiredOutPoints)
+        npt.assert_allclose(outdata, desiredOutPoints)
 
         # fit an inverse transform
         chebyMap2 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
@@ -360,9 +360,9 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap2.hasForward())
         self.assertTrue(chebyMap2.hasInverse())
         # forward should be identical to the original
-        npt.assert_equal(chebyMap2.tranForward(inPoints), outPoints)
-        roundTripIn2 = chebyMap2.tranInverse(outPoints)
-        npt.assert_allclose(roundTripIn2, inPoints, atol=0.0002)
+        npt.assert_equal(chebyMap2.tranForward(indata), outdata)
+        roundTripIn2 = chebyMap2.tranInverse(outdata)
+        npt.assert_allclose(roundTripIn2, indata, atol=0.0002)
 
         # fit an inverse transform with default bounds (which are the same bounds
         # used for fitting chebyMap2, so the results should be identical)
@@ -370,8 +370,8 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap2.hasForward())
         self.assertTrue(chebyMap2.hasInverse())
         # forward should be identical to the original
-        npt.assert_equal(chebyMap3.tranForward(inPoints), outPoints)
-        roundTripIn3 = chebyMap3.tranInverse(outPoints)
+        npt.assert_equal(chebyMap3.tranForward(indata), outdata)
+        roundTripIn3 = chebyMap3.tranInverse(outdata)
         npt.assert_equal(roundTripIn3, roundTripIn2)
 
     def test_ChebyMapChebyMapUnivertible(self):
@@ -383,7 +383,7 @@ class TestChebyMap(MappingTestCase):
         ubnd_f = [1.5, 2.5]
 
         # arbitrary points that cover the input range
-        inPoints = np.array([
+        indata = np.array([
             [-2.0, 0.0],
             [-1.0, -2.5],
             [0.1, -0.2],
@@ -422,12 +422,12 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap1.hasForward())
         self.assertFalse(chebyMap1.hasInverse())
 
-        outPoints = chebyMap1.tranForward(inPoints)
+        outdata = chebyMap1.tranForward(indata)
 
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
-        desiredOutPoints = referenceCheby.transform(inPoints)
+        desiredOutPoints = referenceCheby.transform(indata)
 
-        npt.assert_allclose(outPoints, desiredOutPoints)
+        npt.assert_allclose(outdata, desiredOutPoints)
 
         with self.assertRaises(RuntimeError):
             chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
@@ -454,16 +454,16 @@ class TestChebyMap(MappingTestCase):
 
         chebyMap1 = astshim.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
 
-        # compute inPoints as a grid of points that cover the input range
+        # compute indata as a grid of points that cover the input range
         x1Edge = np.linspace(lbnd_f[0], ubnd_f[0], 1000)
         x2Edge = np.linspace(lbnd_f[1], ubnd_f[1], 1000)
         x1Grid, x2Grid = np.meshgrid(x1Edge, x2Edge)
-        inPoints = np.array([x1Grid.ravel(), x2Grid.ravel()]).transpose()
-        inPoints = inPoints.copy()  # make contiguous
+        indata = np.array([x1Grid.ravel(), x2Grid.ravel()]).transpose()
+        indata = indata.copy()  # make contiguous
 
-        outPoints = chebyMap1.tranForward(inPoints)
-        pred_lbnd = outPoints.min(0)
-        pred_ubnd = outPoints.max(0)
+        outdata = chebyMap1.tranForward(indata)
+        pred_lbnd = outdata.min(0)
+        pred_ubnd = outdata.max(0)
 
         domain = chebyMap1.getDomain(forward=False)
         npt.assert_allclose(domain.lbnd, pred_lbnd, atol=0.0001)

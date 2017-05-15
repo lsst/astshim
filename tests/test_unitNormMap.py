@@ -25,25 +25,25 @@ class TestUnitNormMap(MappingTestCase):
             self.checkCopy(unitnormmap)
             self.checkPersistence(unitnormmap)
 
-            frompos = np.array([
+            indata = np.array([
                 [1, 3, -5, 7],
                 [2, 99, 3, -23],
                 [-6, -5, -7, -3],
                 [30, 21, 37, 45],
                 [1, 0, 0, 0],
             ], dtype=float)
-            frompos = np.array(frompos[:, 0:nin])
-            self.checkRoundTrip(unitnormmap, frompos)
+            indata = np.array(indata[:, 0:nin])
+            self.checkRoundTrip(unitnormmap, indata)
 
-            topos = unitnormmap.tranForward(frompos)
+            topos = unitnormmap.tranForward(indata)
             norm = topos[:, -1]
 
-            relfrompos = frompos - center
-            prednorm = np.linalg.norm(relfrompos, axis=1)
-            assert_allclose(norm, prednorm)
+            rel_indata = indata - center
+            pred_norm = np.linalg.norm(rel_indata, axis=1)
+            assert_allclose(norm, pred_norm)
 
-            predrelfrompos = (topos[:, 0:nin].T * norm).T
-            assert_allclose(relfrompos, predrelfrompos)
+            pred_rel_indata = (topos[:, 0:nin].T * norm).T
+            assert_allclose(rel_indata, pred_rel_indata)
 
         # UnitNormMap must have at least one input
         with self.assertRaises(Exception):
@@ -79,7 +79,7 @@ class TestUnitNormMap(MappingTestCase):
         winmap_notunitscale = astshim.WinMap(
             np.zeros(3), shift, np.ones(3), np.ones(3) * 2 + shift)
 
-        for map1, map2, des_simplified_class_name in (
+        for map1, map2, pred_simplified_class_name in (
             (unm1, unm2inv, "WinMap"),  # ShiftMap gets simplified to WinMap
             (shiftmap, unm1, "UnitNormMap"),
             (winmap_unitscale, unm1, "UnitNormMap"),
@@ -92,7 +92,7 @@ class TestUnitNormMap(MappingTestCase):
             self.assertEqual(map1.getNin(), cmpmap.getNin())
             self.assertEqual(map2.getNout(), cmpmap.getNout())
             cmpmap_simp = cmpmap.simplify()
-            self.assertEqual(cmpmap_simp.getClass(), des_simplified_class_name)
+            self.assertEqual(cmpmap_simp.getClass(), pred_simplified_class_name)
             self.assertEqual(cmpmap.getNin(), cmpmap_simp.getNin())
             self.assertEqual(cmpmap.getNout(), cmpmap_simp.getNout())
             testptview = np.array(testpoints[:, 0:cmpmap.getNin()])

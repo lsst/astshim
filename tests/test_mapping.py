@@ -40,15 +40,15 @@ class TestMapping(MappingTestCase):
         self.assertTrue(invmap.hasForward())
         self.assertTrue(invmap.hasInverse())
 
-        frompos = np.array([
+        indata = np.array([
             [1, 3],
             [2, 99],
             [-6, -5],
             [30, 21],
             [0, 0],
         ], dtype=float)
-        self.checkRoundTrip(self.zoommap, frompos)
-        self.checkRoundTrip(invmap, frompos)
+        self.checkRoundTrip(self.zoommap, indata)
+        self.checkRoundTrip(invmap, indata)
 
     def test_MapBox(self):
         """Test MapBox for the simple case of a shift and zoom"""

@@ -32,7 +32,7 @@ class TestSphMap(MappingTestCase):
             # normalize to round trip works
             [1 / math.sqrt(3), 1 / math.sqrt(3), 1 / math.sqrt(3)],
         ], dtype=float)
-        predoutdata = np.array([
+        pred_outdata = np.array([
             [0, 0],
             [math.pi / 2, 0],
             [0, math.pi / 2],
@@ -42,7 +42,7 @@ class TestSphMap(MappingTestCase):
             [math.pi / 4, math.atan(1 / math.sqrt(2))],
         ], dtype=float)
         outdata = sphmap.tranForward(indata)
-        assert_allclose(outdata, predoutdata)
+        assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(sphmap, indata)
 

@@ -28,20 +28,20 @@ class TestTranMap(MappingTestCase):
         self.checkCopy(tranmap)
         self.checkPersistence(tranmap)
 
-        frompos = np.array([
+        indata = np.array([
             [1, 3],
             [2, 99],
             [-6, -5],
             [30, 21],
             [1, 0],
         ], dtype=float)
-        topos = tranmap.tranForward(frompos)
-        assert_allclose(topos, frompos)
-        rtpos = tranmap.tranInverse(topos)
-        assert_allclose(frompos, rtpos * zoomfac)
+        outdata = tranmap.tranForward(indata)
+        assert_allclose(outdata, indata)
+        outdata_roundtrip = tranmap.tranInverse(outdata)
+        assert_allclose(indata, outdata_roundtrip * zoomfac)
 
         with self.assertRaises(AssertionError):
-            self.checkRoundTrip(tranmap, frompos)
+            self.checkRoundTrip(tranmap, indata)
 
     def test_TranMapSymmetric(self):
         zoomfac = 0.53
@@ -55,17 +55,17 @@ class TestTranMap(MappingTestCase):
         self.checkCopy(tranmap)
         self.checkPersistence(tranmap)
 
-        frompos = np.array([
+        indata = np.array([
             [1, 3],
             [2, 99],
             [-6, -5],
             [30, 21],
             [1, 0],
         ], dtype=float)
-        topos = tranmap.tranForward(frompos)
-        assert_allclose(topos, frompos * zoomfac)
+        outdata = tranmap.tranForward(indata)
+        assert_allclose(outdata, indata * zoomfac)
 
-        self.checkRoundTrip(tranmap, frompos)
+        self.checkRoundTrip(tranmap, indata)
 
 
 if __name__ == "__main__":

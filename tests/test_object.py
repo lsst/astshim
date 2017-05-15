@@ -75,7 +75,7 @@ class TestObject(ObjectTestCase):
             [1.0, 2, 0, 1],
         ])
         pm = astshim.PolyMap(coeff_f, 2, "IterInverse=0")
-        pin = np.array([
+        indata = np.array([
             [1.0, 0.0],
             [2.0, 1.0],
             [3.0, 2.0],
@@ -83,14 +83,14 @@ class TestObject(ObjectTestCase):
 
         # make sure the error string contains "Error"
         try:
-            pm.tranInverse(pin)
+            pm.tranInverse(indata)
         except RuntimeError as e:
             self.assertEqual(e.args[0].count("Error"), 1)
             print(e)
 
         # cause another error and make sure the first error message was purged
         try:
-            pm.tranInverse(pin)
+            pm.tranInverse(indata)
         except RuntimeError as e:
             self.assertEqual(e.args[0].count("Error"), 1)
 

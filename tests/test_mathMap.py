@@ -24,22 +24,22 @@ class TestMathMap(MappingTestCase):
         self.checkCopy(mathmap)
         self.checkPersistence(mathmap)
 
-        pin = np.array([
+        indata = np.array([
             [1.0, 0.0],
             [2.0, 1.0],
             [3.0, 2.0],
         ])
-        pout = mathmap.tranForward(pin)
-        x = pin[:, 0]
-        y = pin[:, 1]
-        r = pout[:, 0]
-        theta = pout[:, 1]
-        desR = np.sqrt(x * x + y * y)
-        desTheta = np.arctan2(y, x)
-        assert_allclose(r, desR)
-        assert_allclose(theta, desTheta)
+        outdata = mathmap.tranForward(indata)
+        x = indata[:, 0]
+        y = indata[:, 1]
+        r = outdata[:, 0]
+        theta = outdata[:, 1]
+        pred_r = np.sqrt(x * x + y * y)
+        pred_theta = np.arctan2(y, x)
+        assert_allclose(r, pred_r)
+        assert_allclose(theta, pred_theta)
 
-        self.checkRoundTrip(mathmap, pin)
+        self.checkRoundTrip(mathmap, indata)
 
         self.assertEqual(mathmap.getSeed(), -57)
         self.assertTrue(mathmap.getSimpFI())

@@ -45,14 +45,14 @@ class TestWcsMap(MappingTestCase):
             [0, 0.001],
             [0, 1],
         ], dtype=float)
-        predoutdata = np.array([
+        pred_outdata = np.array([
             [0, 0],
             [0.001, 0],
             [0, 0.001],
             [0, 0.95885108],  # by observation, not computation
         ])
         outdata = wcsmap.tranForward(indata)
-        assert_allclose(outdata, predoutdata)
+        assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(wcsmap, indata)
 
