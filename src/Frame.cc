@@ -51,10 +51,10 @@ std::vector<double> Frame::intersect(std::vector<double> const &a1, std::vector<
                                      std::vector<double> const &b1, std::vector<double> const &b2) const {
     int const naxes = 2;
     detail::assertEqual(getNaxes(), "# axes", naxes, "");
-    detail::assertEqual(a1.size(), "a1.size()", naxes, "");
-    detail::assertEqual(a2.size(), "a2.size()", naxes, "");
-    detail::assertEqual(b1.size(), "b1.size()", naxes, "");
-    detail::assertEqual(b2.size(), "b2.size()", naxes, "");
+    detail::assertEqual(a1.size(), "a1.size()", static_cast<std::size_t>(naxes), "");
+    detail::assertEqual(a2.size(), "a2.size()", static_cast<std::size_t>(naxes), "");
+    detail::assertEqual(b1.size(), "b1.size()", static_cast<std::size_t>(naxes), "");
+    detail::assertEqual(b2.size(), "b2.size()", static_cast<std::size_t>(naxes), "");
     std::vector<double> ret(naxes);
     astIntersect(getRawPtr(), a1.data(), a2.data(), b1.data(), b2.data(), ret.data());
     assertOK();
@@ -83,9 +83,9 @@ FrameMapping Frame::pickAxes(std::vector<int> const &axes) const {
 ResolvedPoint Frame::resolve(std::vector<double> const &point1, std::vector<double> const &point2,
                              std::vector<double> const &point3) const {
     int const naxes = getNaxes();
-    detail::assertEqual(point1.size(), "a1.size()", naxes, "");
-    detail::assertEqual(point2.size(), "a2.size()", naxes, "");
-    detail::assertEqual(point3.size(), "b1.size()", naxes, "");
+    detail::assertEqual(point1.size(), "a1.size()", static_cast<std::size_t>(naxes), "");
+    detail::assertEqual(point2.size(), "a2.size()", static_cast<std::size_t>(naxes), "");
+    detail::assertEqual(point3.size(), "b1.size()", static_cast<std::size_t>(naxes), "");
     ResolvedPoint ret(naxes);
     astResolve(getRawPtr(), point1.data(), point2.data(), point3.data(), ret.point.data(), &ret.d1, &ret.d2);
     assertOK();

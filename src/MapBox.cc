@@ -48,8 +48,8 @@ void MapBox::_compute(Mapping const& map, std::vector<double> const& lbnd, std::
                       int minOutCoord, int maxOutCoord) {
     int const nin = map.getNin();
     int const nout = map.getNout();
-    detail::assertEqual(lbnd.size(), "lbnd.size()", nin, "Nin");
-    detail::assertEqual(ubnd.size(), "ubnd.size()", nin, "Nin");
+    detail::assertEqual(lbnd.size(), "lbnd.size()", static_cast<std::size_t>(nin), "Nin");
+    detail::assertEqual(ubnd.size(), "ubnd.size()", static_cast<std::size_t>(nin), "Nin");
     if (maxOutCoord == 0) {
         maxOutCoord = nout;
         this->maxOutCoord = maxOutCoord;  // DM-10008
