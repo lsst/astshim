@@ -207,7 +207,7 @@ public:
     */
     explicit WcsMap(int ncoord, WcsType type, int lonax, int latax, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
-                      astWcsMap(ncoord, static_cast<int>(type), lonax, latax, options.c_str()))) {}
+                      astWcsMap(ncoord, static_cast<int>(type), lonax, latax, "%s", options.c_str()))) {}
 
     virtual ~WcsMap() {}
 

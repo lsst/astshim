@@ -61,7 +61,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit SphMap(std::string const &options = "")
-            : Mapping(reinterpret_cast<AstMapping *>(astSphMap(options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astSphMap("%s", options.c_str()))) {}
 
     virtual ~SphMap() {}
 

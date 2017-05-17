@@ -58,7 +58,7 @@ public:
             : Mapping(reinterpret_cast<AstMapping *>(
                       // form 0 = full matrix, 1 = diagonal elements only
                       astMatrixMap(matrix.getSize<1>(), matrix.getSize<0>(), 0, matrix.getData(),
-                                   options.c_str()))) {}
+                                   "%s", options.c_str()))) {}
 
     /**
     Construct a MatrixMap from a 1-d vector of diagonal elements of a diagonal matrix
@@ -73,7 +73,7 @@ public:
     explicit MatrixMap(std::vector<double> const &diag, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
                       // form 0 = full matrix, 1 = diagonal elements only
-                      astMatrixMap(diag.size(), diag.size(), 1, diag.data(), options.c_str()))) {}
+                      astMatrixMap(diag.size(), diag.size(), 1, diag.data(), "%s", options.c_str()))) {}
 
     virtual ~MatrixMap() {}
 

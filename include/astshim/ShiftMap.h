@@ -48,7 +48,7 @@ public:
     */
     explicit ShiftMap(std::vector<double> const &shift, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
-                      astShiftMap(shift.size(), shift.data(), options.c_str()))) {}
+                      astShiftMap(shift.size(), shift.data(), "%s", options.c_str()))) {}
 
     virtual ~ShiftMap() {}
 

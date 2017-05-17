@@ -122,7 +122,7 @@ public:
         systems.
     */
     explicit SkyFrame(std::string const &options = "")
-            : Frame(reinterpret_cast<AstFrame *>(astSkyFrame(options.c_str()))) {}
+            : Frame(reinterpret_cast<AstFrame *>(astSkyFrame("%s", options.c_str()))) {}
 
     virtual ~SkyFrame() {}
 

@@ -57,7 +57,7 @@ public:
     */
     explicit XmlChan(Stream &stream, std::string const &options = "")
             : Channel(reinterpret_cast<AstChannel *>(
-                              astXmlChan(detail::source, detail::sink, options.c_str())),
+                              astXmlChan(detail::source, detail::sink, "%s", options.c_str())),
                       stream) {}
 
     virtual ~XmlChan() {}

@@ -108,7 +108,7 @@ private:
             throw std::invalid_argument(os.str());
         }
         return astWinMap(static_cast<int>(ncoord), ina.data(), inb.data(), outa.data(), outb.data(),
-                         options.c_str());
+                         "%s", options.c_str());
     }
 };
 

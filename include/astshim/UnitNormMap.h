@@ -65,7 +65,7 @@ public:
     */
     explicit UnitNormMap(std::vector<double> const &centre, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
-                      astUnitNormMap(centre.size(), centre.data(), options.c_str()))) {}
+                      astUnitNormMap(centre.size(), centre.data(), "%s", options.c_str()))) {}
 
     virtual ~UnitNormMap() {}
 

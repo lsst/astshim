@@ -114,7 +114,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit SpecFrame(std::string const &options = "")
-            : Frame(reinterpret_cast<AstFrame *>(astSpecFrame(options.c_str()))) {}
+            : Frame(reinterpret_cast<AstFrame *>(astSpecFrame("%s", options.c_str()))) {}
 
     virtual ~SpecFrame() {}
 

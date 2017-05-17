@@ -421,7 +421,7 @@ protected:
 
     @throws std::runtime_error if the attribute is read-only
     */
-    void set(std::string const &setting) { astSet(getRawPtr(), setting.c_str()); }
+    void set(std::string const &setting) { astSet(getRawPtr(), "%s", setting.c_str()); }
 
     /**
     Set the value of an attribute as a bool

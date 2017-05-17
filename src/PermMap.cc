@@ -68,7 +68,7 @@ AstPermMap* PermMap::makeRawMap(std::vector<int> const& inperm, std::vector<int>
 
     double const* constptr = constant.size() > 0 ? constant.data() : nullptr;
     return astPermMap(inperm.size(), inperm.data(), outperm.size(), outperm.data(), constptr,
-                      options.c_str());
+                      "%s", options.c_str());
 }
 
 }  // namespace ast

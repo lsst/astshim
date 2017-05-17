@@ -113,7 +113,7 @@ AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<double, 2, 2> const &coef
 
     return reinterpret_cast<AstChebyMap *>(astChebyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i,
                                                        coeff_i.getData(), lbnd_f.data(), ubnd_f.data(),
-                                                       lbnd_i.data(), ubnd_i.data(), options.c_str()));
+                                                       lbnd_i.data(), ubnd_i.data(), "%s", options.c_str()));
 }
 
 /// Make a raw AstChebyMap with a specified forward transform and an optional iterative inverse.
@@ -144,7 +144,7 @@ AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<double, 2, 2> const &coef
 
     return reinterpret_cast<AstChebyMap *>(astChebyMap(nin, nout, ncoeff_f, coeff_f.getData(), 0, nullptr,
                                                        lbnd_f.data(), ubnd_f.data(), nullptr, nullptr,
-                                                       options.c_str()));
+                                                       "%s", options.c_str()));
 }
 
 }  // namespace ast
