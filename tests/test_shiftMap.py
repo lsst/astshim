@@ -22,11 +22,13 @@ class TestShiftMap(MappingTestCase):
         self.checkPersistence(shiftmap)
 
         indata = np.array([
-            [1.1, 2.2, 3.3],
-            [-43.5, 1309.31, 0.005],
+            [1.1, -43.5],
+            [2.2, 1309.31],
+            [3.3, 0.005],
         ])
         outdata = shiftmap.tranForward(indata)
-        assert_allclose(outdata, indata + offset)
+        pred_outdata = (indata.T + offset).T
+        assert_allclose(outdata, pred_outdata)
         self.checkRoundTrip(shiftmap, indata)
 
 

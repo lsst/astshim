@@ -25,25 +25,23 @@ class TestUnitNormMap(MappingTestCase):
             self.checkCopy(unitnormmap)
             self.checkPersistence(unitnormmap)
 
-            frompos = np.array([
-                [1, 3, -5, 7],
-                [2, 99, 3, -23],
-                [-6, -5, -7, -3],
-                [30, 21, 37, 45],
-                [1, 0, 0, 0],
-            ], dtype=float)
-            frompos = np.array(frompos[:, 0:nin])
-            self.checkRoundTrip(unitnormmap, frompos)
+            indata = np.array([
+                [1.0, 2.0, -6.0, 30.0, 1.0],
+                [3.0, 99.0, -5.0, 21.0, 0.0],
+                [-5.0, 3.0, -7.0, 37.0, 0.0],
+                [7.0, -23.0, -3.0, 45.0, 0.0],
+            ], dtype=float)[0:nin]
+            self.checkRoundTrip(unitnormmap, indata)
 
-            topos = unitnormmap.tranForward(frompos)
-            norm = topos[:, -1]
+            outdata = unitnormmap.tranForward(indata)
+            norm = outdata[-1]
 
-            relfrompos = frompos - center
-            prednorm = np.linalg.norm(relfrompos, axis=1)
-            assert_allclose(norm, prednorm)
+            relindata = (indata.T - center).T
+            pred_norm = np.linalg.norm(relindata, axis=0)
+            assert_allclose(norm, pred_norm)
 
-            predrelfrompos = (topos[:, 0:nin].T * norm).T
-            assert_allclose(relfrompos, predrelfrompos)
+            pred_relindata = outdata[0:nin] * norm
+            assert_allclose(relindata, pred_relindata)
 
         # UnitNormMap must have at least one input
         with self.assertRaises(Exception):
@@ -63,11 +61,10 @@ class TestUnitNormMap(MappingTestCase):
         shift = [3, 7, -9]
         # an array of points, each of 4 axes, the max we'll need
         testpoints = np.array([
-            [1, 3, -5, 7],
-            [2, 99, 3, -23],
-            [-6, -5, -7, -3],
-            [30, 21, 37, 45],
-            [1, 0, 0, 0],
+            [1.0, 2.0, -6.0, 30.0, 1.0],
+            [3.0, 99.0, -5.0, 21.0, 0.0],
+            [-5.0, 3.0, -7.0, 37.0, 0.0],
+            [7.0, -23.0, -3.0, 45.0, 0.0],
         ], dtype=float)
         unm1 = astshim.UnitNormMap(center1)
         unm1inv = unm1.getInverse()
@@ -79,7 +76,7 @@ class TestUnitNormMap(MappingTestCase):
         winmap_notunitscale = astshim.WinMap(
             np.zeros(3), shift, np.ones(3), np.ones(3) * 2 + shift)
 
-        for map1, map2, des_simplified_class_name in (
+        for map1, map2, pred_simplified_class_name in (
             (unm1, unm2inv, "WinMap"),  # ShiftMap gets simplified to WinMap
             (shiftmap, unm1, "UnitNormMap"),
             (winmap_unitscale, unm1, "UnitNormMap"),
@@ -92,10 +89,10 @@ class TestUnitNormMap(MappingTestCase):
             self.assertEqual(map1.getNin(), cmpmap.getNin())
             self.assertEqual(map2.getNout(), cmpmap.getNout())
             cmpmap_simp = cmpmap.simplify()
-            self.assertEqual(cmpmap_simp.getClass(), des_simplified_class_name)
+            self.assertEqual(cmpmap_simp.getClass(), pred_simplified_class_name)
             self.assertEqual(cmpmap.getNin(), cmpmap_simp.getNin())
             self.assertEqual(cmpmap.getNout(), cmpmap_simp.getNout())
-            testptview = np.array(testpoints[:, 0:cmpmap.getNin()])
+            testptview = np.array(testpoints[0:cmpmap.getNin()])
             assert_allclose(cmpmap.tranForward(
                 testptview), cmpmap_simp.tranForward(testptview))
 

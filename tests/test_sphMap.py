@@ -23,26 +23,17 @@ class TestSphMap(MappingTestCase):
         self.checkPersistence(sphmap)
 
         indata = np.array([
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-            [-1, 0, 0],
-            [0, -1, 0],
-            [0, 0, -1],
-            # normalize to round trip works
-            [1 / math.sqrt(3), 1 / math.sqrt(3), 1 / math.sqrt(3)],
+            [1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0 / math.sqrt(3.0)],
+            [0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 1.0 / math.sqrt(3.0)],
+            [0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 1.0 / math.sqrt(3.0)],
         ], dtype=float)
-        predoutdata = np.array([
-            [0, 0],
-            [math.pi / 2, 0],
-            [0, math.pi / 2],
-            [math.pi, 0],
-            [-math.pi / 2, 0],
-            [0, -math.pi / 2],
-            [math.pi / 4, math.atan(1 / math.sqrt(2))],
+        halfpi = math.pi / 2.0
+        pred_outdata = np.array([
+            [0.0, halfpi, 0.0, math.pi, -halfpi, 0.0, math.pi / 4.0],
+            [0.0, 0.0, halfpi, 0.0, 0.0, -halfpi, math.atan(1.0 / math.sqrt(2.0))],
         ], dtype=float)
         outdata = sphmap.tranForward(indata)
-        assert_allclose(outdata, predoutdata)
+        assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(sphmap, indata)
 

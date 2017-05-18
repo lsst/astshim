@@ -73,6 +73,9 @@ class MappingTestCase(ObjectTestCase):
         atol is the absolute tolerance for numpy.testing.assert_allclose
         """
         poslist = np.array(poslist, dtype=float)
+        if len(poslist.shape) == 1:
+            # supplied data was a single list of points
+            poslist.shape = (1, len(poslist))
         # forward with tranForward, inverse with tranInverse
         to_poslist = amap.tranForward(poslist)
         rt_poslist = amap.tranInverse(to_poslist)
@@ -90,6 +93,8 @@ class MappingTestCase(ObjectTestCase):
         # test vector versions of forward and inverse
         posvec = list(poslist.flat)
         to_posvec = amap.tranForward(posvec)
+        # cast to_poslist to np.array because if poslist has 1 axis then
+        # a list is returned, which has no `flat` attribute
         assert_allclose(to_posvec, list(to_poslist.flat), rtol=rtol, atol=atol)
 
         rt_posvec = amap.tranInverse(to_posvec)

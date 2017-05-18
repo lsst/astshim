@@ -23,15 +23,17 @@ class TestPermMap(MappingTestCase):
         self.checkPersistence(permmap)
 
         indata = np.array([
-            [1.1, 2.2, 3.3],
-            [-43.5, 1309.31, 0.005],
+            [1.1, -43.5],
+            [2.2, 1309.31],
+            [3.3, 0.005],
         ])
         outdata = permmap.tranForward(indata)
-        desoutdata = np.array([
-            [3.3, 1.1, 2.2],
-            [0.005, -43.5, 1309.31],
+        pred_outdata = np.array([
+            [3.3, 0.005],
+            [1.1, -43.5],
+            [2.2, 1309.31],
         ])
-        assert_allclose(outdata, desoutdata)
+        assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(permmap, indata)
 
@@ -46,14 +48,12 @@ class TestPermMap(MappingTestCase):
         self.checkPersistence(permmap)
 
         indata = np.array([1.1, 2.2, -3.3])
-        indata.shape = (1, 3)
         outdata = permmap.tranForward(indata)
-        assert_allclose(outdata, [[-3.3, 1.1]])
+        assert_allclose(outdata, [-3.3, 1.1])
 
         indata = np.array([1.1, 2.2])
-        indata.shape = (1, 2)
         outdata = permmap.tranInverse(indata)
-        assert_allclose(outdata, [[2.2, 1.1, np.nan]], equal_nan=True)
+        assert_allclose(outdata, [2.2, 1.1, np.nan], equal_nan=True)
 
     def test_PermMapWithConstants(self):
         """Test a PermMap with constant values
@@ -64,12 +64,11 @@ class TestPermMap(MappingTestCase):
         self.assertEqual(permmap.getNout(), 3)
 
         indata = np.array([1.1, 2.2, 3.3])
-        indata.shape = (1, 3)
         outdata = permmap.tranForward(indata)
-        assert_allclose(outdata, [[2.2, 1.1, 75.3]])
+        assert_allclose(outdata, [2.2, 1.1, 75.3])
 
         outdata2 = permmap.tranInverse(indata)
-        assert_allclose(outdata2, [[-126.5, 1.1, 3.3]])
+        assert_allclose(outdata2, [-126.5, 1.1, 3.3])
 
 
 if __name__ == "__main__":

@@ -22,17 +22,16 @@ class TestSlaMap(MappingTestCase):
         self.checkCopy(slamap)
         self.checkPersistence(slamap)
 
-        pin = np.array([
-            [0.0, -0.5],
-            [1.0, 0.9],
-            [3.0, 0.1],
+        indata = np.array([
+            [0.0, 1.0, 3.0],
+            [-0.5, 0.9, 0.1],
         ])
-        pout = slamap.tranForward(pin)
-        predpout = pin
-        predpout[:, 0] = last - pin[:, 0]
-        assert_allclose(pout, predpout)
+        outdata = slamap.tranForward(indata)
+        pred_outdata = indata
+        pred_outdata[0] = last - indata[0]
+        assert_allclose(outdata, pred_outdata)
 
-        self.checkRoundTrip(slamap, pin)
+        self.checkRoundTrip(slamap, indata)
 
 
 if __name__ == "__main__":

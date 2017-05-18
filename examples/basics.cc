@@ -30,7 +30,7 @@
 #include "astshim.h"
 
 int main() {
-    std::vector<double> fromVec = {1.1, 1.2, 2.1, 2.2, 3.1, 3.2};
+    std::vector<double> fromVec = {1.1, 2.1, 3.1, 1.2, 2.2, 3.2};
 
     // Mappings can transform vectors or 2-d arrays;
     // this example uses 2-d arrays because they can be printed to stdout.

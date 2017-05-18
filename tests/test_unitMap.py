@@ -21,8 +21,9 @@ class TestUnitMap(MappingTestCase):
         self.checkPersistence(unitmap)
 
         indata = np.array([
-            [1.1, 2.2, 3.3],
-            [-43.5, 1309.31, 0.005],
+            [1.1, 2.2, 3.3, 4.4],
+            [-43.5, 1309.31, 0.005, -36.5],
+            [0.0, -2.3, 44.4, 3.14],
         ])
         outdata = unitmap.tranForward(indata)
         assert_allclose(outdata, indata)

@@ -34,21 +34,20 @@ class TestPolyMap(MappingTestCase):
         self.checkCopy(pm)
         self.checkPersistence(pm)
 
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
-        pout = pm.tranForward(pin)
-        xin, yin = pin.transpose()
-        xoutExpected = (1.2 * xin * xin) - (0.5 * yin * xin)
-        youtExpected = yin
-        xout, yout = pout.transpose()
-        npt.assert_allclose(xout, xoutExpected)
-        npt.assert_allclose(yout, youtExpected)
+        outdata = pm.tranForward(indata)
+        xin, yin = indata
+        pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
+        pred_yout = yin
+        xout, yout = outdata
+        npt.assert_allclose(xout, pred_xout)
+        npt.assert_allclose(yout, pred_yout)
 
-        pinRoundTrip = pm.tranInverse(pout)
-        npt.assert_allclose(pin, pinRoundTrip, atol=1.0e-4)
+        indata_roundtrip = pm.tranInverse(outdata)
+        npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-4)
 
     def test_polyMapAtributes(self):
         coeff_f = np.array([
@@ -67,21 +66,20 @@ class TestPolyMap(MappingTestCase):
         self.assertTrue(pm.hasForward())
         self.assertTrue(pm.hasInverse())
 
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
-        pout = pm.tranForward(pin)
-        xin, yin = pin.transpose()
-        xoutExpected = (1.2 * xin * xin) - (0.5 * yin * xin)
-        youtExpected = yin
-        xout, yout = pout.transpose()
-        npt.assert_allclose(xout, xoutExpected)
-        npt.assert_allclose(yout, youtExpected)
+        outdata = pm.tranForward(indata)
+        xin, yin = indata
+        pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
+        pred_yout = yin
+        xout, yout = outdata
+        npt.assert_allclose(xout, pred_xout)
+        npt.assert_allclose(yout, pred_yout)
 
-        pinRoundTrip = pm.tranInverse(pout)
-        npt.assert_allclose(pin, pinRoundTrip, atol=1.0e-6)
+        indata_roundtrip = pm.tranInverse(outdata)
+        npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-6)
 
     def test_polyMapNoInverse(self):
         """Test a unidirectional polymap with no numeric inverse
@@ -98,26 +96,25 @@ class TestPolyMap(MappingTestCase):
         self.assertTrue(pm.hasForward())
         self.assertFalse(pm.hasInverse())
 
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
-        pout = pm.tranForward(pin)
+        outdata = pm.tranForward(indata)
         with self.assertRaises(RuntimeError):
-            pm.tranInverse(pin)
+            pm.tranInverse(indata)
 
         pminv = pm.getInverse()
         self.assertFalse(pminv.hasForward())
         self.assertTrue(pminv.hasInverse())
         self.assertTrue(pminv.isInverted())
 
-        pout2 = pminv.tranInverse(pin)
-        # pout and pout2 should be identical because inverting
+        outdata2 = pminv.tranInverse(indata)
+        # outdata and outdata2 should be identical because inverting
         # swaps the behavior of tranForward and tranInverse
-        npt.assert_equal(pout, pout2)
+        npt.assert_equal(outdata, outdata2)
         with self.assertRaises(RuntimeError):
-            pminv.tranForward(pin)
+            pminv.tranForward(indata)
 
     def test_PolyMapBidirectional(self):
         coeff_f = np.array([
@@ -140,13 +137,12 @@ class TestPolyMap(MappingTestCase):
         self.checkCopy(pm)
         self.checkPersistence(pm)
 
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
 
-        self.checkRoundTrip(pm, pin)
+        self.checkRoundTrip(pm, indata)
 
     def test_PolyMapEmptyForwardCoeffs(self):
         """Test constructing a PolyMap with empty forward coefficients
@@ -222,21 +218,20 @@ class TestPolyMap(MappingTestCase):
         ])
         pm = astshim.PolyMap(coeff_f, coeff_i)
 
-        pin = np.array([
-            [1.0, 0.0],
-            [2.0, 1.0],
-            [3.0, 2.0],
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
         ])
 
-        pout = pm.tranForward(pin)
+        outdata = pm.tranForward(indata)
 
         # create a PolyMap with an identical forward transform and a fit inverse
         forward = False
         pm2 = pm.polyTran(forward, 1.0E-10, 1.0E-10, 4, [-1.0, -1.0], [1.0, 1.0])
-        pout2 = pm2.tranForward(pin)
-        npt.assert_equal(pout, pout2)
-        pin2 = pm2.tranInverse(pout)
-        npt.assert_allclose(pin, pin2, atol=1.0e-10)
+        outdata2 = pm2.tranForward(indata)
+        npt.assert_equal(outdata, outdata2)
+        indata2 = pm2.tranInverse(outdata)
+        npt.assert_allclose(indata, indata2, atol=1.0e-10)
 
     def test_PolyMapPolyMapUnivertible(self):
         """Test polyTran on a PolyMap without a single-valued inverse
@@ -254,20 +249,15 @@ class TestPolyMap(MappingTestCase):
         self.checkCopy(pm)
         self.checkPersistence(pm)
 
-        pin = np.array([
-            [-0.5],
-            [0.5],
-            [1.1],
-            [1.8],
-        ])
-        des_pout = 2.0*pin**2 - pin**3
-        pout = pm.tranForward(pin)
-        npt.assert_allclose(pout, des_pout)
+        indata = np.array([-0.5, 0.5, 1.1, 1.8])
+        pred_outdata = (2.0*indata.T**2 - indata.T**3).T
+        outdata = pm.tranForward(indata)
+        npt.assert_allclose(outdata, pred_outdata)
 
         # the iterative inverse should give valid values
-        pinIterative = pm.tranInverse(pout)
-        poutRoundTrip = pm.tranForward(pinIterative)
-        npt.assert_allclose(pout, poutRoundTrip)
+        indata_iterative = pm.tranInverse(outdata)
+        outdata_roundtrip = pm.tranForward(indata_iterative)
+        npt.assert_allclose(outdata, outdata_roundtrip)
 
         with self.assertRaises(RuntimeError):
             # includes the range where the inverse has multiple values,

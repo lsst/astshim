@@ -22,8 +22,8 @@ class TestRateMap(MappingTestCase):
         self.checkPersistence(ratemap)
 
         indata = np.array([
-            [1.1, 2.2],
-            [-43.5, 1309.31],
+            [1.1, -43.5, -5.54],
+            [2.2, 1309.31, 35.2],
         ])
         outdata = ratemap.tranForward(indata)
         assert_allclose(outdata, zoomfac)
@@ -33,8 +33,8 @@ class TestRateMap(MappingTestCase):
         ratemap = astshim.RateMap(astshim.ZoomMap(2, zoomfac), 2, 1)
 
         indata = np.array([
-            [1.1, 2.2],
-            [-43.5, 1309.31],
+            [1.1, -43.5, -5.54],
+            [2.2, 1309.31, 35.2],
         ])
         outdata = ratemap.tranForward(indata)
         assert_allclose(outdata, 0)
