@@ -36,11 +36,29 @@ extern "C" {
 /// AST wrapper classes and functions.
 namespace ast {
 
+/**
+2D array of const double; typically used for lists of const points
+*/
 using Array2D = ndarray::Array<double, 2, 2>;
+/**
+2D array of const double; typically used for lists of const points
+*/
 using ConstArray2D = ndarray::Array<double const, 2, 2>;
+/**
+Vector of ints; typically used for the bounds of Mapping.tranGridForward and inverse
+*/
 using PointI = std::vector<int>;
+/**
+Vector of double; used for bounds, points
+
+Also used to store a list of points as sequential data,
+as an alternative to Array2D and ConstArray2D
+*/
 using PointD = std::vector<double>;
 
+/**
+Data types held by a KeyMap
+*/
 enum class DataType {
     IntType = AST__INTTYPE,
     ShortIntType = AST__SINTTYPE,
@@ -65,10 +83,12 @@ with the returned array, else the array will be corrupted.
 @param[in] nAxes  Number of axes per point
 @return 2-dimensional array with dimensions (nPts, nAxes)
 @throws std::runtime_error if vec length is not a multiple of nAxes
+@{
 */
 ConstArray2D arrayFromVector(std::vector<double> const &vec, int nAxes);
 
 Array2D arrayFromVector(std::vector<double> &vec, int nAxes);
+/// @}
 
 /**
 Throw std::runtime_error if AST's state is bad
