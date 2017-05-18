@@ -275,16 +275,6 @@ protected:
     }
 
     /**
-    Given a bare AST object pointer return a shared pointer to an ast::Object of the correct type
-
-    The returned object takes ownership of the pointer. This is almost always what you want,
-    for instance astDecompose returns shallow copies of the internal pointers.
-
-    @param[in] rawObj  A bare AST object pointer
-    */
-    static std::shared_ptr<Object> _basicFromAstObject(AstObject *rawObj);
-
-    /**
     Functor to make an astshim instance from a raw AST pointer of the corresponding type.
 
     @tparam ShimT  Output astshim class
@@ -496,6 +486,16 @@ protected:
     }
 
 private:
+    /**
+    Given a bare AST object pointer return a shared pointer to an ast::Object of the correct type
+
+    The returned object takes ownership of the pointer. This is almost always what you want,
+    for instance astDecompose returns shallow copies of the internal pointers.
+
+    @param[in] rawObj  A bare AST object pointer
+    */
+    static std::shared_ptr<Object> _basicFromAstObject(AstObject *rawObj);
+
     ObjectPtr _objPtr;
 };
 
