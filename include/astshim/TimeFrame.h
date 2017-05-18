@@ -87,7 +87,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit TimeFrame(std::string const &options = "")
-            : Frame(reinterpret_cast<AstFrame *>(astTimeFrame(options.c_str()))) {}
+            : Frame(reinterpret_cast<AstFrame *>(astTimeFrame("%s", options.c_str()))) {}
 
     virtual ~TimeFrame() {}
 

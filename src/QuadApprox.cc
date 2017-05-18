@@ -33,8 +33,8 @@ QuadApprox::QuadApprox(Mapping const& map, std::vector<double> const& lbnd, std:
         : fit(6 * map.getNout()), rms(0) {
     int const nIn = map.getNin();
     detail::assertEqual(nIn, "map.getNin()", 2, "required nIn");
-    detail::assertEqual(lbnd.size(), "lbnd.size", nIn, "nIn");
-    detail::assertEqual(ubnd.size(), "ubnd.size", nIn, "nIn");
+    detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nIn), "nIn");
+    detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nIn), "nIn");
     fit.reserve(6 * map.getNout());
     bool isok = astQuadApprox(map.getRawPtr(), lbnd.data(), ubnd.data(), nx, ny, fit.data(), &rms);
     if (!isok) {

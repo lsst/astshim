@@ -146,7 +146,7 @@ public:
     that increments output 2 as follows:
 
     out2 += 1.2 * T6(in1') * T3(in2') * T0(in3')
-    
+
     and the row `(-1.5, 1, 0, 0, 0)` describes a coefficient that increments
     output 1 with a constant value of -1.5 (since all powers are 0):
 
@@ -255,7 +255,7 @@ public:
                     should equal getNin() or getNout(), depending on `forward`.
 
     @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
-                    or getNout() (if `forward` true).    
+                    or getNout() (if `forward` true).
 
     The variant that takes omits the `lbnd` and `ubnd` arguments
     uses the full domain of the polynomial whose inverse is being fit.

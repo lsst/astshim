@@ -122,7 +122,7 @@ public:
         systems.
     */
     explicit SkyFrame(std::string const &options = "")
-            : Frame(reinterpret_cast<AstFrame *>(astSkyFrame(options.c_str()))) {}
+            : Frame(reinterpret_cast<AstFrame *>(astSkyFrame("%s", options.c_str()))) {}
 
     virtual ~SkyFrame() {}
 
@@ -204,7 +204,7 @@ public:
 
     /// Set @ref SkyFrame_SkyRef "SkyRef": position defining location of the offset coordinate system.
     void setSkyRef(std::vector<double> const &skyRef) {
-        detail::assertEqual(skyRef.size(), "skyRef length", 2, "number of axes");
+        detail::assertEqual(skyRef.size(), "skyRef length", 2u, "number of axes");
         for (int i = 0; i < 2; ++i) {
             setD(detail::formatAxisAttr("SkyRef", i + 1), skyRef[i]);
         }
@@ -215,7 +215,7 @@ public:
 
     /// Set @ref SkyFrame_SkyRefP "SkyRefP": position defining orientation of the offset coordinate system.
     void setSkyRefP(std::vector<double> const &skyRefP) {
-        detail::assertEqual(skyRefP.size(), "skyRefP length", 2, "number of axes");
+        detail::assertEqual(skyRefP.size(), "skyRefP length", 2u, "number of axes");
         for (int i = 0; i < 2; ++i) {
             setD(detail::formatAxisAttr("SkyRefP", i + 1), skyRefP[i]);
         }

@@ -76,7 +76,7 @@ public:
     */
     explicit LutMap(std::vector<double> const &lut, double start, double inc, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
-                      astLutMap(lut.size(), lut.data(), start, inc, options.c_str()))) {}
+                      astLutMap(lut.size(), lut.data(), start, inc, "%s", options.c_str()))) {}
 
     virtual ~LutMap() {}
 

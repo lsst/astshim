@@ -140,7 +140,7 @@ std::shared_ptr<Class> Object::fromAstObject(AstObject *rawObj, bool copy) {
 }
 
 void Object::show(std::ostream &os) const {
-    auto ch = astChannel(nullptr, sinkToOstream, "");
+    auto ch = astChannel(nullptr, sinkToOstream, "%s", "");
 
     // Store a poiner to the ostream in the channel, as required by sinkToOstream
     astPutChannelData(ch, &os);

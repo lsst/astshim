@@ -69,8 +69,8 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit RateMap(Mapping const &map, int ax1, int ax2, std::string const &options = "")
-            : Mapping(reinterpret_cast<AstMapping *>(
-                      astRateMap(const_cast<AstObject *>(map.getRawPtr()), ax1, ax2, options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astRateMap(const_cast<AstObject *>(map.getRawPtr()), ax1,
+                                                                ax2, "%s", options.c_str()))) {}
 
     virtual ~RateMap() {}
 

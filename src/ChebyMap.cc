@@ -103,17 +103,21 @@ AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<double, 2, 2> const &coef
         throw std::invalid_argument(os.str());
     }
     if (has_fwd) {
-        detail::assertEqual(lbnd_f.size(), "lbnd_f size", nin, "number of input axes");
-        detail::assertEqual(ubnd_f.size(), "ubnd_f size", nin, "number of input axes");
+        detail::assertEqual(lbnd_f.size(), "lbnd_f size", static_cast<std::size_t>(nin),
+                            "number of input axes");
+        detail::assertEqual(ubnd_f.size(), "ubnd_f size", static_cast<std::size_t>(nin),
+                            "number of input axes");
     }
     if (has_inv) {
-        detail::assertEqual(lbnd_i.size(), "lbnd_i size", nout, "number of output axes");
-        detail::assertEqual(ubnd_i.size(), "ubnd_i size", nout, "number of output axes");
+        detail::assertEqual(lbnd_i.size(), "lbnd_i size", static_cast<std::size_t>(nout),
+                            "number of output axes");
+        detail::assertEqual(ubnd_i.size(), "ubnd_i size", static_cast<std::size_t>(nout),
+                            "number of output axes");
     }
 
     return reinterpret_cast<AstChebyMap *>(astChebyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i,
                                                        coeff_i.getData(), lbnd_f.data(), ubnd_f.data(),
-                                                       lbnd_i.data(), ubnd_i.data(), options.c_str()));
+                                                       lbnd_i.data(), ubnd_i.data(), "%s", options.c_str()));
 }
 
 /// Make a raw AstChebyMap with a specified forward transform and an optional iterative inverse.
@@ -139,11 +143,11 @@ AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<double, 2, 2> const &coef
            << ", which is too short; length = nout + 2 and nout must be > 0";
         throw std::invalid_argument(os.str());
     }
-    detail::assertEqual(lbnd_f.size(), "lbnd_f size", nin, "number of input axes");
-    detail::assertEqual(ubnd_f.size(), "ubnd_f size", nin, "number of input axes");
+    detail::assertEqual(lbnd_f.size(), "lbnd_f size", static_cast<std::size_t>(nin), "number of input axes");
+    detail::assertEqual(ubnd_f.size(), "ubnd_f size", static_cast<std::size_t>(nin), "number of input axes");
 
     return reinterpret_cast<AstChebyMap *>(astChebyMap(nin, nout, ncoeff_f, coeff_f.getData(), 0, nullptr,
-                                                       lbnd_f.data(), ubnd_f.data(), nullptr, nullptr,
+                                                       lbnd_f.data(), ubnd_f.data(), nullptr, nullptr, "%s",
                                                        options.c_str()));
 }
 

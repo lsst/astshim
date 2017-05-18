@@ -64,7 +64,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit SlaMap(std::string const &options = "")
-            : Mapping(reinterpret_cast<AstMapping *>(astSlaMap(0, options.c_str()))) {
+            : Mapping(reinterpret_cast<AstMapping *>(astSlaMap(0, "%s", options.c_str()))) {
         assertOK();
     }
 

@@ -107,7 +107,7 @@ private:
             os << "outb.size() = " << outb.size() << " != " << ncoord << " = ina.size()";
             throw std::invalid_argument(os.str());
         }
-        return astWinMap(static_cast<int>(ncoord), ina.data(), inb.data(), outa.data(), outb.data(),
+        return astWinMap(static_cast<int>(ncoord), ina.data(), inb.data(), outa.data(), outb.data(), "%s",
                          options.c_str());
     }
 };

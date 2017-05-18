@@ -33,7 +33,8 @@
 namespace ast {
 
 FitsChan::FitsChan(Stream &stream, std::string const &options)
-        : Channel(reinterpret_cast<AstChannel *>(astFitsChan(detail::source, detail::sink, options.c_str())),
+        : Channel(reinterpret_cast<AstChannel *>(
+                          astFitsChan(detail::source, detail::sink, "%s", options.c_str())),
                   stream) {
     _stream.setIsFits(true);
 }

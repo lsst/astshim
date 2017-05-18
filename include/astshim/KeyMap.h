@@ -90,7 +90,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit KeyMap(std::string const &options = "")
-            : Object(reinterpret_cast<AstObject *>(astKeyMap(options.c_str()))) {}
+            : Object(reinterpret_cast<AstObject *>(astKeyMap("%s", options.c_str()))) {}
 
     virtual ~KeyMap(){};
 

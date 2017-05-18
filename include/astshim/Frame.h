@@ -166,7 +166,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit Frame(int naxes, std::string const &options = "")
-            : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, "%s", options.c_str()))) {}
 
     virtual ~Frame() {}
 
@@ -1125,7 +1125,7 @@ public:
     axis order for output data).
     */
     void permAxes(std::vector<int> perm) {
-        detail::assertEqual(static_cast<int>(perm.size()), "perm.size()", getNaxes(), "naxes");
+        detail::assertEqual(perm.size(), "perm.size()", static_cast<std::size_t>(getNaxes()), "naxes");
         astPermAxes(getRawPtr(), perm.data());
         assertOK();
     }
