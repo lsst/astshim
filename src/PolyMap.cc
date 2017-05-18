@@ -66,7 +66,8 @@ AstPolyMap *PolyMap::_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f
         throw std::invalid_argument(os.str());
     }
 
-    return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i, coeff_i.getData(), "%s", options.c_str());
+    return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i, coeff_i.getData(), "%s",
+                      options.c_str());
 }
 
 /// Make a raw AstPolyMap with a specified forward transform and an optional iterative inverse.

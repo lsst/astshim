@@ -375,8 +375,8 @@ public:
     MathMap(int nin, int nout, std::vector<std::string> const &fwd, std::vector<std::string> const &rev,
             std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(astMathMap(nin, nout, fwd.size(), getCStrVec(fwd).data(),
-                                                                rev.size(), getCStrVec(rev).data(),
-                                                                "%s", options.c_str()))) {}
+                                                                rev.size(), getCStrVec(rev).data(), "%s",
+                                                                options.c_str()))) {}
 
     virtual ~MathMap() {}
 

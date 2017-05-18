@@ -57,8 +57,8 @@ public:
     explicit MatrixMap(ndarray::Array<double, 2, 2> const &matrix, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
                       // form 0 = full matrix, 1 = diagonal elements only
-                      astMatrixMap(matrix.getSize<1>(), matrix.getSize<0>(), 0, matrix.getData(),
-                                   "%s", options.c_str()))) {}
+                      astMatrixMap(matrix.getSize<1>(), matrix.getSize<0>(), 0, matrix.getData(), "%s",
+                                   options.c_str()))) {}
 
     /**
     Construct a MatrixMap from a 1-d vector of diagonal elements of a diagonal matrix

@@ -79,13 +79,15 @@ PYBIND11_PLUGIN(keyMap) {
             "key"_a, "vec"_a, "comment"_a = "");
     cls.def("putF", (void (KeyMap::*)(std::string const &, float, std::string const &)) & KeyMap::putF,
             "key"_a, "value"_a, "comment"_a = "");
-    cls.def("putF", (void (KeyMap::*)(std::string const &, std::vector<float> const &, std::string const &)) &
-                            KeyMap::putF,
+    cls.def("putF",
+            (void (KeyMap::*)(std::string const &, std::vector<float> const &, std::string const &)) &
+                    KeyMap::putF,
             "key"_a, "vec"_a, "comment"_a = "");
     cls.def("putI", (void (KeyMap::*)(std::string const &, int, std::string const &)) & KeyMap::putI, "key"_a,
             "value"_a, "comment"_a = "");
-    cls.def("putI", (void (KeyMap::*)(std::string const &, std::vector<int> const &, std::string const &)) &
-                            KeyMap::putI,
+    cls.def("putI",
+            (void (KeyMap::*)(std::string const &, std::vector<int> const &, std::string const &)) &
+                    KeyMap::putI,
             "key"_a, "vec"_a, "comment"_a = "");
     cls.def("putS", (void (KeyMap::*)(std::string const &, short int, std::string const &)) & KeyMap::putS,
             "key"_a, "value"_a, "comment"_a = "");
@@ -110,9 +112,10 @@ PYBIND11_PLUGIN(keyMap) {
     cls.def("putA",
             (void (KeyMap::*)(std::string const &, Object const &, std::string const &)) & KeyMap::putA,
             "key"_a, "value"_a, "comment"_a = "");
-    cls.def("putA", (void (KeyMap::*)(std::string const &, std::vector<std::shared_ptr<Object const>> const &,
-                                      std::string const &)) &
-                            KeyMap::putA,
+    cls.def("putA",
+            (void (KeyMap::*)(std::string const &, std::vector<std::shared_ptr<Object const>> const &,
+                              std::string const &)) &
+                    KeyMap::putA,
             "key"_a, "vec"_a, "comment"_a = "");
 
     cls.def("putU", (void (KeyMap::*)(std::string const &, std::string const &)) & KeyMap::putU, "key"_a,
@@ -147,5 +150,5 @@ PYBIND11_PLUGIN(keyMap) {
     return mod.ptr();
 }
 
-}  // <anonymous>
-}  // ast
+}  // namespace
+}  // namespace ast
