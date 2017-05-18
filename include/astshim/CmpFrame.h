@@ -84,7 +84,7 @@ public:
     CmpFrame &operator=(CmpFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<CmpFrame> copy() const { return std::static_pointer_cast<CmpFrame>(_copyPolymorphic()); }
+    std::shared_ptr<CmpFrame> copy() const { return std::static_pointer_cast<CmpFrame>(copyPolymorphic()); }
 
     /**
     Return a shallow copy of one of the two component frames.
@@ -92,11 +92,11 @@ public:
     @param[in] i  Index: 0 for the first frame, 1 for the second.
     @throws std::invalid_argument if `i` is not 0 or 1.
     */
-    std::shared_ptr<Frame> operator[](int i) const { return _decompose<Frame>(i, false); }
+    std::shared_ptr<Frame> operator[](int i) const { return decompose<Frame>(i, false); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<CmpFrame, AstCmpFrame>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<CmpFrame, AstCmpFrame>();
     }
 
     /// Construct a CmpFrame from a raw AST pointer

@@ -62,11 +62,11 @@ public:
     UnitMap &operator=(UnitMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<UnitMap> copy() const { return std::static_pointer_cast<UnitMap>(_copyPolymorphic()); }
+    std::shared_ptr<UnitMap> copy() const { return std::static_pointer_cast<UnitMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<UnitMap, AstUnitMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<UnitMap, AstUnitMap>();
     }
 
     /// Construct a UnitMap from a raw AST pointer

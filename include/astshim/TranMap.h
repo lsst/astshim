@@ -75,14 +75,14 @@ public:
     @param[in] i  Index: 0 for the forward mapping, 1 for the inverse.
     @throws std::invalid_argument if `i` is not 0 or 1.
     */
-    std::shared_ptr<Mapping> operator[](int i) const { return _decompose<Mapping>(i, false); };
+    std::shared_ptr<Mapping> operator[](int i) const { return decompose<Mapping>(i, false); };
 
     /// Return a deep copy of this object.
-    std::shared_ptr<TranMap> copy() const { return std::static_pointer_cast<TranMap>(_copyPolymorphic()); }
+    std::shared_ptr<TranMap> copy() const { return std::static_pointer_cast<TranMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<TranMap, AstTranMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<TranMap, AstTranMap>();
     }
 
     /// Construct a TranMap from a raw AST pointer

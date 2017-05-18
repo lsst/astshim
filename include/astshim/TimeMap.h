@@ -64,7 +64,7 @@ public:
     TimeMap &operator=(TimeMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<TimeMap> copy() const { return std::static_pointer_cast<TimeMap>(_copyPolymorphic()); }
+    std::shared_ptr<TimeMap> copy() const { return std::static_pointer_cast<TimeMap>(copyPolymorphic()); }
 
     /**
     Add one of the standard time coordinate system conversions listed below.
@@ -183,8 +183,8 @@ public:
     }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<TimeMap, AstTimeMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<TimeMap, AstTimeMap>();
     }
 
     /// Construct a TimeMap from a raw AST pointer

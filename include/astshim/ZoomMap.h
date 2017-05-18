@@ -69,14 +69,14 @@ public:
     ZoomMap &operator=(ZoomMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<ZoomMap> copy() const { return std::static_pointer_cast<ZoomMap>(_copyPolymorphic()); }
+    std::shared_ptr<ZoomMap> copy() const { return std::static_pointer_cast<ZoomMap>(copyPolymorphic()); }
 
     /// Get @ref ZoomMap_Zoom "Zoom": scale factor
     double getZoom() const { return getF("Zoom"); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<ZoomMap, AstZoomMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<ZoomMap, AstZoomMap>();
     }
 
     /// Construct a ZoomMap from a raw AST pointer

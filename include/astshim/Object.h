@@ -85,7 +85,7 @@ public:
     static std::shared_ptr<Class> fromAstObject(AstObject *rawObj, bool copy);
 
     /// Return a deep copy of this object.
-    std::shared_ptr<Object> copy() const { return std::static_pointer_cast<Object>(_copyPolymorphic()); }
+    std::shared_ptr<Object> copy() const { return std::static_pointer_cast<Object>(copyPolymorphic()); }
 
     /**
     Clear the values of a specified set of attributes for an Object.
@@ -288,10 +288,10 @@ protected:
     /**
     Implementation of deep copy
 
-    Should be called to implement _copyPolymorphic by all derived classes.
+    Should be called to implement copyPolymorphic by all derived classes.
     */
     template <typename T, typename AstT>
-    std::shared_ptr<T> _copyImpl() const {
+    std::shared_ptr<T> copyImpl() const {
         auto *rawptr = reinterpret_cast<AstT *>(astCopy(getRawPtr()));
         auto retptr = std::shared_ptr<T>(new T(rawptr));
         assertOK();
@@ -303,14 +303,14 @@ protected:
 
     Each subclass must override this method. The standard implementation is:
     ```
-        return _copyImpl<astshim_class, ast_class>();
+        return copyImpl<astshim_class, ast_class>();
     ```
     for example @ref Frame implements this as:
     ```
-        return _copyImpl<Frame, AstFrame>();
+        return copyImpl<Frame, AstFrame>();
     ```
     */
-    virtual std::shared_ptr<Object> _copyPolymorphic() const = 0;
+    virtual std::shared_ptr<Object> copyPolymorphic() const = 0;
 
     /**
     Get the value of an attribute as a bool

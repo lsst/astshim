@@ -98,7 +98,7 @@ public:
 
     /// Return a deep copy of this object.
     std::shared_ptr<TimeFrame> copy() const {
-        return std::static_pointer_cast<TimeFrame>(_copyPolymorphic());
+        return std::static_pointer_cast<TimeFrame>(copyPolymorphic());
     }
 
     /**
@@ -144,8 +144,8 @@ public:
     void setTimeScale(std::string const &scale) { return setC("TimeScale", scale); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<TimeFrame, AstTimeFrame>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<TimeFrame, AstTimeFrame>();
     }
 
     /// Construct a TimeFrame from a raw AST pointer

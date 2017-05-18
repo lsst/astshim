@@ -125,7 +125,7 @@ public:
 
     /// Return a deep copy of this object.
     std::shared_ptr<SpecFrame> copy() const {
-        return std::static_pointer_cast<SpecFrame>(_copyPolymorphic());
+        return std::static_pointer_cast<SpecFrame>(copyPolymorphic());
     }
 
     /**
@@ -270,8 +270,8 @@ public:
     void setStdOfRest(std::string const &stdOfRest) { setC("StdOfRest", stdOfRest); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<SpecFrame, AstSpecFrame>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<SpecFrame, AstSpecFrame>();
     }
 
     /// Construct a SpecFrame from a raw AST pointer

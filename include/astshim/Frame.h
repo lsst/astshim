@@ -176,7 +176,7 @@ public:
     Frame &operator=(Frame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<Frame> copy() const { return std::static_pointer_cast<Frame>(_copyPolymorphic()); }
+    std::shared_ptr<Frame> copy() const { return std::static_pointer_cast<Frame>(copyPolymorphic()); }
 
     /**
     Find the angle at point B between the line joining points A and B, and the line joining points C and B.
@@ -1513,7 +1513,7 @@ protected:
         }
     }
 
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override { return _copyImpl<Frame, AstFrame>(); }
+    virtual std::shared_ptr<Object> copyPolymorphic() const override { return copyImpl<Frame, AstFrame>(); }
 
 private:
     /**

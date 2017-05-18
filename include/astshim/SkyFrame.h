@@ -132,7 +132,7 @@ public:
     SkyFrame &operator=(SkyFrame &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SkyFrame> copy() const { return std::static_pointer_cast<SkyFrame>(_copyPolymorphic()); }
+    std::shared_ptr<SkyFrame> copy() const { return std::static_pointer_cast<SkyFrame>(copyPolymorphic()); }
 
     /// Get @ref SkyFrame_AlignOffset "AlignOffset": align SkyFrames using the offset coordinate system?
     bool getAlignOffset() const { return getB("AlignOffset"); }
@@ -238,8 +238,8 @@ public:
     }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<SkyFrame, AstSkyFrame>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<SkyFrame, AstSkyFrame>();
     }
 
     /// Construct a SkyFrame from a raw AST pointer

@@ -80,11 +80,11 @@ public:
     RateMap &operator=(RateMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<RateMap> copy() const { return std::static_pointer_cast<RateMap>(_copyPolymorphic()); }
+    std::shared_ptr<RateMap> copy() const { return std::static_pointer_cast<RateMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<RateMap, AstRateMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<RateMap, AstRateMap>();
     }
 
     /// Construct a RateMap from a raw AST pointer

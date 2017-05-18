@@ -95,7 +95,7 @@ public:
     PcdMap &operator=(PcdMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PcdMap> copy() const { return std::static_pointer_cast<PcdMap>(_copyPolymorphic()); }
+    std::shared_ptr<PcdMap> copy() const { return std::static_pointer_cast<PcdMap>(copyPolymorphic()); }
 
     /// Get @ref PcdMap_Disco "Disco": pincushion/barrel distortion coefficient
     double getDisco() const { return getD("Disco"); };
@@ -113,8 +113,8 @@ public:
     }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<PcdMap, AstPcdMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<PcdMap, AstPcdMap>();
     }
 
     /// Construct a PcdMap from a raw AST pointer

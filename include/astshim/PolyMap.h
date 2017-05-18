@@ -135,7 +135,7 @@ public:
     PolyMap &operator=(PolyMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PolyMap> copy() const { return std::static_pointer_cast<PolyMap>(_copyPolymorphic()); }
+    std::shared_ptr<PolyMap> copy() const { return std::static_pointer_cast<PolyMap>(copyPolymorphic()); }
 
     /// Get @ref PolyMap_IterInverse "IterInverse": does this provide an iterative inverse transformation?
     bool getIterInverse() const { return getB("IterInverse"); }
@@ -224,8 +224,8 @@ public:
                      std::vector<double> const &ubnd) const;
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<PolyMap, AstPolyMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<PolyMap, AstPolyMap>();
     }
 
     /// Construct a PolyMap from an raw AST pointer

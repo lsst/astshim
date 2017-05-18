@@ -86,11 +86,11 @@ public:
     PermMap &operator=(PermMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<PermMap> copy() const { return std::static_pointer_cast<PermMap>(_copyPolymorphic()); }
+    std::shared_ptr<PermMap> copy() const { return std::static_pointer_cast<PermMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<PermMap, AstPermMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<PermMap, AstPermMap>();
     }
 
     /// Construct a PermMap from a raw AST pointer

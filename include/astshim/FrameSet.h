@@ -141,7 +141,7 @@ public:
     FrameSet &operator=(FrameSet &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<FrameSet> copy() const { return std::static_pointer_cast<FrameSet>(_copyPolymorphic()); }
+    std::shared_ptr<FrameSet> copy() const { return std::static_pointer_cast<FrameSet>(copyPolymorphic()); }
 
     /**
     Append the axes from a specified @ref Frame to every existing @ref Frame in this FrameSet.
@@ -479,8 +479,8 @@ public:
     void setCurrent(int ind) { setI("Current", ind); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<FrameSet, AstFrameSet>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<FrameSet, AstFrameSet>();
     }
 
     /**
