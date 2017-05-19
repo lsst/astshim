@@ -162,14 +162,21 @@ protected:
     Construct a channel from an AST channel pointer and a @ref Stream
 
     This is the constructor most subclasses use for their high-level constructor.
+
+    @param[in] chan  AstChannel object
+    @param[in,out] stream  Stream to associate with the channel
+    @param[in] isFits  If true then read or write the stream as a FITS header
     */
-    explicit Channel(AstChannel *chan, Stream &stream);
+    explicit Channel(AstChannel *chan, Stream &stream, bool isFits=false);
 
     /**
     Construct a channel from an AST channel pointer that has its own stream
+
+    @param[in] chan  AstChannel object
     */
     explicit Channel(AstChannel *chan);
 
+private:
     Stream _stream;  ///< stream read and/or written read by the channel
 };
 
