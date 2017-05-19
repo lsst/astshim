@@ -2,7 +2,7 @@ namespace ast {
 /**
 @page mathmap_attributes MathMap Attributes
 
-@section MathMap_Attributes @ref MathMap Attributes
+@section MathMap_Attributes MathMap Attributes
 
 @subsection MathMap_Seed Seed
 

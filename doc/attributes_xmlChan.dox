@@ -1,8 +1,8 @@
 namespace ast {
 /**
-@page xmlchan_attributes @ref XmlChan Attributes
+@page xmlchan_attributes XmlChan Attributes
 
-@section XmlChan_Attributes @ref XmlChan Attributes
+@section XmlChan_Attributes XmlChan Attributes
 
 @subsection XmlChan_XmlFormat XmlFormat
 
