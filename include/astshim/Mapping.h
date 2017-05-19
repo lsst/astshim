@@ -68,7 +68,7 @@ public:
     Mapping &operator=(Mapping &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(_copyPolymorphic()); }
+    std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(copyPolymorphic()); }
 
     /**
     Get @ref Mapping_Nin "Nin": the number of input axes
@@ -397,8 +397,8 @@ protected:
     }
 
     // Protected implementation of deep-copy.
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return std::static_pointer_cast<Mapping>(_copyImpl<Mapping, AstMapping>());
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return std::static_pointer_cast<Mapping>(copyImpl<Mapping, AstMapping>());
     }
 
     /**
@@ -415,7 +415,7 @@ protected:
     @throws std::runtime_error if this mapping is not a compound mapping.
     */
     template <typename Class>
-    std::shared_ptr<Class> _decompose(int i, bool copy) const;
+    std::shared_ptr<Class> decompose(int i, bool copy) const;
 
 private:
     /**

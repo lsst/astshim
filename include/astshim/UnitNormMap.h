@@ -76,12 +76,12 @@ public:
 
     /// Return a deep copy of this object.
     std::shared_ptr<UnitNormMap> copy() const {
-        return std::static_pointer_cast<UnitNormMap>(_copyPolymorphic());
+        return std::static_pointer_cast<UnitNormMap>(copyPolymorphic());
     }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<UnitNormMap, AstUnitNormMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<UnitNormMap, AstUnitNormMap>();
     }
 
     /// Construct a UnitNormMap from a raw AST pointer

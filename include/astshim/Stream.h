@@ -33,7 +33,7 @@
 
 namespace ast {
 
-class FitsChan;  // forward declaration for friendship
+class Channel;  // forward declaration for friendship
 
 /**
 A stream for ast::Channel
@@ -119,7 +119,7 @@ public:
         }
     }
 
-    friend class FitsChan;
+    friend class Channel;
 
     /// get isfits
     bool getIsFits() const { return _isFits; }

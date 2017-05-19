@@ -75,12 +75,12 @@ public:
 
     /// Return a deep copy of this object.
     std::shared_ptr<ParallelMap> copy() const {
-        return std::static_pointer_cast<ParallelMap>(_copyPolymorphic());
+        return std::static_pointer_cast<ParallelMap>(copyPolymorphic());
     }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<ParallelMap, AstCmpMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<ParallelMap, AstCmpMap>();
     }
 
     /// Construct a ParallelMap from a raw AST pointer

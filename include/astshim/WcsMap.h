@@ -217,7 +217,7 @@ public:
     WcsMap &operator=(WcsMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<WcsMap> copy() const { return std::static_pointer_cast<WcsMap>(_copyPolymorphic()); }
+    std::shared_ptr<WcsMap> copy() const { return std::static_pointer_cast<WcsMap>(copyPolymorphic()); }
 
     /// get @ref WcsMap_NatLat "NatLat": native latitude of the reference point of a FITS-WCS projection.
     double getNatLat() const { return getD("NatLat"); }
@@ -247,8 +247,8 @@ public:
     WcsType getWcsType() const { return static_cast<WcsType>(getI("WcsType")); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<WcsMap, AstWcsMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<WcsMap, AstWcsMap>();
     }
 
     /// Construct a WcsMap from a raw AST pointer

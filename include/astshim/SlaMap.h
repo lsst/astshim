@@ -76,7 +76,7 @@ public:
     SlaMap &operator=(SlaMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SlaMap> copy() const { return std::static_pointer_cast<SlaMap>(_copyPolymorphic()); }
+    std::shared_ptr<SlaMap> copy() const { return std::static_pointer_cast<SlaMap>(copyPolymorphic()); }
 
     /**
     Add one of the standard celestial coordinate system conversions provided by the SLALIB
@@ -177,8 +177,8 @@ public:
     }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<SlaMap, AstSlaMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<SlaMap, AstSlaMap>();
     }
 
     /// Construct a SlaMap from a raw AST pointer

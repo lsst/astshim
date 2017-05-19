@@ -71,11 +71,11 @@ public:
     WinMap &operator=(WinMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<WinMap> copy() const { return std::static_pointer_cast<WinMap>(_copyPolymorphic()); }
+    std::shared_ptr<WinMap> copy() const { return std::static_pointer_cast<WinMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<WinMap, AstWinMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<WinMap, AstWinMap>();
     }
 
     /// Construct a WinMap from a raw AST pointer

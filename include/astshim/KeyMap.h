@@ -101,7 +101,7 @@ public:
 
     /// Return a deep copy of this object.
     std::shared_ptr<KeyMap> copy() const {
-        return std::static_pointer_cast<KeyMap>(_copyPolymorphic());
+        return std::static_pointer_cast<KeyMap>(copyPolymorphic());
         assertOK();
     }
 
@@ -577,8 +577,8 @@ public:
 
 protected:
     // Protected implementation of deep-copy.
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return std::static_pointer_cast<KeyMap>(_copyImpl<KeyMap, AstKeyMap>());
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return std::static_pointer_cast<KeyMap>(copyImpl<KeyMap, AstKeyMap>());
     }
 
     /**

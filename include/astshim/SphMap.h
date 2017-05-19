@@ -71,7 +71,7 @@ public:
     SphMap &operator=(SphMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<SphMap> copy() const { return std::static_pointer_cast<SphMap>(_copyPolymorphic()); }
+    std::shared_ptr<SphMap> copy() const { return std::static_pointer_cast<SphMap>(copyPolymorphic()); }
 
     /// Get @ref SphMap_UnitRadius "UnitRadius": input vectors lie on a unit sphere?
     bool getUnitRadius() const { return getB("UnitRadius"); }
@@ -80,8 +80,8 @@ public:
     double getPolarLong() const { return getD("PolarLong"); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<SphMap, AstSphMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<SphMap, AstSphMap>();
     }
 
     /// Construct a SphMap from a raw AST pointer

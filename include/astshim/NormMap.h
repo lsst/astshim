@@ -70,11 +70,11 @@ public:
     NormMap &operator=(NormMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<NormMap> copy() const { return std::static_pointer_cast<NormMap>(_copyPolymorphic()); }
+    std::shared_ptr<NormMap> copy() const { return std::static_pointer_cast<NormMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<NormMap, AstNormMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<NormMap, AstNormMap>();
     }
 
     /// Construct a NormMap from a raw AST pointer

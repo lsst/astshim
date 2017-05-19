@@ -83,7 +83,7 @@ public:
     CmpMap &operator=(CmpMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<CmpMap> copy() const { return std::static_pointer_cast<CmpMap>(_copyPolymorphic()); }
+    std::shared_ptr<CmpMap> copy() const { return std::static_pointer_cast<CmpMap>(copyPolymorphic()); }
 
     /**
     Return a shallow copy of one of the two component mappings.
@@ -91,7 +91,7 @@ public:
     @param[in] i  Index: 0 for the first mapping, 1 for the second.
     @throws std::invalid_argument if `i` is not 0 or 1.
     */
-    std::shared_ptr<Mapping> operator[](int i) const { return _decompose<Mapping>(i, false); };
+    std::shared_ptr<Mapping> operator[](int i) const { return decompose<Mapping>(i, false); };
 
     /// Return True if the map is in series
     bool getSeries() { return detail::isSeries(reinterpret_cast<AstCmpMap *>(getRawPtr())); }

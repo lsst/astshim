@@ -386,7 +386,7 @@ public:
     MathMap &operator=(MathMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<MathMap> copy() const { return std::static_pointer_cast<MathMap>(_copyPolymorphic()); }
+    std::shared_ptr<MathMap> copy() const { return std::static_pointer_cast<MathMap>(copyPolymorphic()); }
 
     /**
     Get @ref MathMap_Seed "Seed": random number seed
@@ -404,8 +404,8 @@ public:
     bool getSimpIF() const { return getB("SimpIF"); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<MathMap, AstMathMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<MathMap, AstMathMap>();
     }
 
     /// Construct a MathMap from a raw AST pointer

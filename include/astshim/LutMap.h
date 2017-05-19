@@ -86,7 +86,7 @@ public:
     LutMap &operator=(LutMap &&) = default;
 
     /// Return a deep copy of this object.
-    std::shared_ptr<LutMap> copy() const { return std::static_pointer_cast<LutMap>(_copyPolymorphic()); }
+    std::shared_ptr<LutMap> copy() const { return std::static_pointer_cast<LutMap>(copyPolymorphic()); }
 
     /**
     Get attribute @ref LutMap_LutEpsilon "LutEpsilon": the relative error of the values in the table.
@@ -99,8 +99,8 @@ public:
     int getLutInterp() const { return getI("LutInterp"); }
 
 protected:
-    virtual std::shared_ptr<Object> _copyPolymorphic() const override {
-        return _copyImpl<LutMap, AstLutMap>();
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<LutMap, AstLutMap>();
     }
 
     /// Construct an LutMap from a raw AST pointer

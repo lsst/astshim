@@ -61,7 +61,7 @@ Array2D Mapping::linearApprox(PointD const &lbnd, PointD const &ubnd, double tol
 }
 
 template <typename Class>
-std::shared_ptr<Class> Mapping::_decompose(int i, bool copy) const {
+std::shared_ptr<Class> Mapping::decompose(int i, bool copy) const {
     if ((i < 0) || (i > 1)) {
         std::ostringstream os;
         os << "i =" << i << "; must be 0 or 1";
@@ -135,7 +135,7 @@ void Mapping::_tranGrid(PointI const &lbnd, PointI const &ubnd, double tol, int 
 }
 
 // Explicit instantiations
-template std::shared_ptr<Frame> Mapping::_decompose(int i, bool) const;
-template std::shared_ptr<Mapping> Mapping::_decompose(int i, bool) const;
+template std::shared_ptr<Frame> Mapping::decompose(int i, bool) const;
+template std::shared_ptr<Mapping> Mapping::decompose(int i, bool) const;
 
 }  // namespace ast
