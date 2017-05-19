@@ -1,8 +1,8 @@
 namespace ast {
 /**
-@page specframe_attributes @ref SpecFrame Attributes
+@page specframe_attributes SpecFrame Attributes
 
-@section SpecFrame_Attributes @ref SpecFrame Attributes
+@section SpecFrame_Attributes SpecFrame Attributes
 
 @subsection SpecFrame_AlignSpecOffset AlignSpecOffset
 

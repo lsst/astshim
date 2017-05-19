@@ -1,8 +1,8 @@
 namespace ast {
 /**
-@page object_attributes @ref Object Attributes
+@page object_attributes Object Attributes
 
-@section Object_Attributes @ref Object Attributes
+@section Object_Attributes Object Attributes
 
 @subsection Object_Class Class
 

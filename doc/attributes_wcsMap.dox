@@ -1,8 +1,8 @@
 namespace ast {
 /**
-@page wcsmap_attributes @ref WcsMap Attributes
+@page wcsmap_attributes WcsMap Attributes
 
-@section WcsMap_Attributes @ref WcsMap Attributes
+@section WcsMap_Attributes WcsMap Attributes
 
 @subsection WcsMap_NatLat NatLat
 
