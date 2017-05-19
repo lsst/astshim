@@ -117,7 +117,7 @@ The default value of `Card` is 1. This means that clearing
 this attribute (using @ref FitsChan.clearCard) effectively "rewinds" the
 @ref FitsChan, so that the first card is accessed next.  If `Card` is
 set to a value which exceeds the total number of cards in the
-@ref FitsChan (as given by its @ref FitsChan_Ncard "Ncard" attribute), it is regarded as
+@ref FitsChan (as given by its @ref FitsChan_NCard "NCard" attribute), it is regarded as
 pointing at the "end-of-file". In this case, the value returned
 in response to an enquiry is always one more than the number of
 cards in the @ref FitsChan.
@@ -833,11 +833,11 @@ coordinates represent offsets in degrees from the reference point
 within the plane of projection.
 
 
-@subsection FitsChan_Ncard Ncard
+@subsection FitsChan_NCard NCard
 
 The total number of FITS header cards stored in a @ref FitsChan. (int)
 
-`Ncard` is updated as cards are added or deleted.
+`NCard` is updated as cards are added or deleted.
 
 
 @subsection FitsChan_Nkey Nkey
@@ -846,9 +846,9 @@ The total number of unique FITS keywords stored in a @ref FitsChan. (int)
 
 `Nkey` is updated as cards are added or deleted.
 If no keyword occurrs more than once in the @ref FitsChan,
-the @ref FitsChan_Ncard "Ncard" and @ref FitsChan_Nkey "Nkey" attributes will be equal.
+the @ref FitsChan_NCard "NCard" and @ref FitsChan_Nkey "Nkey" attributes will be equal.
 If any keyword occurrs more than once, the @ref FitsChan_Nkey "Nkey" attribute value
-will be smaller than the @ref FitsChan_Ncard "Ncard" attribute value.
+will be smaller than the @ref FitsChan_NCard "NCard" attribute value.
 
 
 @subsection FitsChan_TabOK TabOK

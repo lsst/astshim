@@ -52,8 +52,8 @@ PYBIND11_PLUGIN(mapping) {
     py::class_<Mapping, std::shared_ptr<Mapping>, Object> cls(mod, "Mapping");
 
     cls.def("copy", &Mapping::copy);
-    cls.def("getNin", &Mapping::getNin);
-    cls.def("getNout", &Mapping::getNout);
+    cls.def("getNIn", &Mapping::getNIn);
+    cls.def("getNOut", &Mapping::getNOut);
     cls.def("getIsSimple", &Mapping::getIsSimple);
     cls.def("isInverted", &Mapping::isInverted);
     cls.def("getIsLinear", &Mapping::getIsLinear);

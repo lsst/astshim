@@ -52,7 +52,7 @@ public:
     @param[in] map  Mapping to fit.
     @param[in] lbnd  The lower bounds of a box defined within the input
        coordinate system of the Mapping. The number of elements in this
-       vector should equal map.getNin(). This
+       vector should equal map.getNIn(). This
        box should specify the region over which the fit is to be
        performed.
     @param[in] ubnd  The upper bounds of the box specifying the region over
@@ -80,7 +80,7 @@ public:
     /**
     A vector of coefficients of the quadratic approximation to the specified transformation.
 
-    This vector will contain "6*Nout", elements:
+    This vector will contain "6*NOut", elements:
     the first 6 elements hold the fit to the first Mapping output,
     the next 6 elements hold the fit to the second Mapping output, etc.
     So if the Mapping has 2 inputs and 2 outputs the quadratic approximation

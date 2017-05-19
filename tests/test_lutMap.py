@@ -15,7 +15,7 @@ class TestLutMap(MappingTestCase):
         divisor = 0.5
         lutmap = astshim.LutMap([1, 2, 4, 8], offset, divisor)
         self.assertEqual(lutmap.getClass(), "LutMap")
-        self.assertEqual(lutmap.getNout(), 1)
+        self.assertEqual(lutmap.getNOut(), 1)
 
         self.checkBasicSimplify(lutmap)
         self.checkCopy(lutmap)

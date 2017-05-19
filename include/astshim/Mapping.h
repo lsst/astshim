@@ -50,8 +50,8 @@ Mapping also has the following attributes:
 - @ref Mapping_Invert "Invert": Is the mapping inverted?
 - @ref Mapping_IsLinear "IsLinear": Is the Mapping linear?
 - @ref Mapping_IsSimple "IsSimple": Has the Mapping been simplified?
-- @ref Mapping_Nin "Nin": Number of input coordinates for a Mapping
-- @ref Mapping_Nout "Nout": Number of output coordinates for a Mapping
+- @ref Mapping_NIn "NIn": Number of input coordinates for a Mapping
+- @ref Mapping_NOut "NOut": Number of output coordinates for a Mapping
 - @ref Mapping_Report "Report": Report transformed coordinates to stdout?
 - @ref Mapping_TranForward "TranForward": Is the forward transformation defined?
 - @ref Mapping_TranInverse "TranInverse": Is the inverse transformation defined?
@@ -71,14 +71,14 @@ public:
     std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(copyPolymorphic()); }
 
     /**
-    Get @ref Mapping_Nin "Nin": the number of input axes
+    Get @ref Mapping_NIn "NIn": the number of input axes
     */
-    int getNin() const { return getI("Nin"); }
+    int getNIn() const { return getI("NIn"); }
 
     /**
-    Get @ref Mapping_Nout "Nout": the number of output axes
+    Get @ref Mapping_NOut "NOut": the number of output axes
     */
-    int getNout() const { return getI("Nout"); }
+    int getNOut() const { return getI("NOut"); }
 
     /**
     Get @ref Mapping_IsSimple "IsSimple": has the mapping been simplified?
@@ -127,7 +127,7 @@ public:
     An inverse mapping is a deep copy of a mapping whose @ref Mapping_Invert "Invert" attribute
     has been toggled, as indicated by @ref isInverted. This swaps the meaning of "input" and "output",
     and of "forward" and "inverse". Thus it swaps the behavior of @ref tranForward and @ref tranInverse,
-    @ref getNin and @ref getNout, @ref hasForward and @ref hasInverse and so on.
+    @ref getNIn and @ref getNOut, @ref hasForward and @ref hasInverse and so on.
 
     Note that the inverse mapping contains exactly the same model coefficients as the original,
     but they are used by @ref tranInverse instead of @ref tranForward. Thus for example if a @ref ZoomMap
@@ -175,12 +175,12 @@ public:
     /**
     Return a parallel compound mapping
 
-    The resulting mapping has first.getNin() + this.getNin() inputs and next.getNout() + this.getNout()
-    outputs. The first getNin() axes of input are transformed by the `first` mapping, producing the
-    first getNout() axes of the output. The remaining axes of input are processed by this mapping,
+    The resulting mapping has first.getNIn() + this.getNIn() inputs and next.getNOut() + this.getNOut()
+    outputs. The first getNIn() axes of input are transformed by the `first` mapping, producing the
+    first getNOut() axes of the output. The remaining axes of input are processed by this mapping,
     resulting in the remaining axes of output.
 
-    @param[in] first  the mapping that processes axes 1 through `first.getNin()`
+    @param[in] first  the mapping that processes axes 1 through `first.getNIn()`
     */
     ParallelMap over(Mapping const &first) const;
 
@@ -203,7 +203,7 @@ public:
                     or `nan` if the value cannot be calculated.
     */
     double rate(PointD const &at, int ax1, int ax2) const {
-        detail::assertEqual(at.size(), "at.size", static_cast<std::size_t>(getNin()), "nIn");
+        detail::assertEqual(at.size(), "at.size", static_cast<std::size_t>(getNIn()), "nIn");
         double result = astRate(getRawPtr(), const_cast<double *>(at.data()), ax1, ax2);
         assertOK();
         return result;
@@ -256,7 +256,7 @@ public:
     @return the results as a new array with dimensions (nPts, nOut)
     */
     Array2D tranForward(ConstArray2D const &from) const {
-        Array2D to = ndarray::allocate(getNout(), from.getSize<1>());
+        Array2D to = ndarray::allocate(getNOut(), from.getSize<1>());
         _tran(from, true, to);
         return to;
     }
@@ -268,9 +268,9 @@ public:
     @return the results as a new vector
     */
     std::vector<double> tranForward(std::vector<double> const &from) const {
-        auto fromArr = arrayFromVector(from, getNin());
-        std::vector<double> to(fromArr.getSize<1>() * getNout());
-        auto toArr = arrayFromVector(to, getNout());
+        auto fromArr = arrayFromVector(from, getNIn());
+        std::vector<double> to(fromArr.getSize<1>() * getNOut());
+        auto toArr = arrayFromVector(to, getNOut());
         _tran(fromArr, true, toArr);
         return to;
     }
@@ -290,7 +290,7 @@ public:
     @return the results as a new array with dimensions (nPts, nIn)
     */
     Array2D tranInverse(ConstArray2D const &from) const {
-        Array2D to = ndarray::allocate(getNin(), from.getSize<1>());
+        Array2D to = ndarray::allocate(getNIn(), from.getSize<1>());
         _tran(from, false, to);
         return to;
     }
@@ -302,9 +302,9 @@ public:
     @return the results as a new vector
     */
     std::vector<double> tranInverse(std::vector<double> const &from) const {
-        auto fromArr = arrayFromVector(from, getNout());
-        std::vector<double> to(fromArr.getSize<1>() * getNin());
-        auto toArr = arrayFromVector(to, getNin());
+        auto fromArr = arrayFromVector(from, getNOut());
+        std::vector<double> to(fromArr.getSize<1>() * getNIn());
+        auto toArr = arrayFromVector(to, getNIn());
         _tran(fromArr, false, toArr);
         return to;
     }
@@ -357,7 +357,7 @@ public:
     for more information
     */
     Array2D tranGridForward(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix, int nPts) const {
-        Array2D to = ndarray::allocate(nPts, getNout());
+        Array2D to = ndarray::allocate(nPts, getNOut());
         _tranGrid(lbnd, ubnd, tol, maxpix, true, to);
         return to;
     }
@@ -378,7 +378,7 @@ public:
     See tranGridForward for the arguments, swapping nIn and nOut
     */
     Array2D tranGridInverse(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix, int nPts) const {
-        Array2D to = ndarray::allocate(nPts, getNin());
+        Array2D to = ndarray::allocate(nPts, getNIn());
         _tranGrid(lbnd, ubnd, tol, maxpix, false, to);
         return to;
     }

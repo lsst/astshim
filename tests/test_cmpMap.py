@@ -26,8 +26,8 @@ class TestCmpMap(MappingTestCase):
         self.assertEqual(self.shiftmap.getRefCount(), 2)
         # adding to a SeriesMap increases by 1
         self.assertEqual(self.zoommap.getRefCount(), 2)
-        self.assertEqual(sermap.getNin(), self.nin)
-        self.assertEqual(sermap.getNout(), self.nin)
+        self.assertEqual(sermap.getNIn(), self.nin)
+        self.assertEqual(sermap.getNOut(), self.nin)
         self.assertTrue(sermap.getSeries())
 
         self.checkBasicSimplify(sermap)
@@ -54,8 +54,8 @@ class TestCmpMap(MappingTestCase):
         self.assertEqual(self.shiftmap.getRefCount(), 2)
         # adding to a ParallelMap increases by 1
         self.assertEqual(self.zoommap.getRefCount(), 2)
-        self.assertEqual(parmap.getNin(), self.nin * 2)
-        self.assertEqual(parmap.getNout(), self.nin * 2)
+        self.assertEqual(parmap.getNIn(), self.nin * 2)
+        self.assertEqual(parmap.getNOut(), self.nin * 2)
         self.assertFalse(parmap.getSeries())
 
         self.checkBasicSimplify(parmap)

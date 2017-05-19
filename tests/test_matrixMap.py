@@ -15,8 +15,8 @@ class TestMatrixMap(MappingTestCase):
 
         mm = astshim.MatrixMap([-1.0, 2.0])
         self.assertEqual(mm.getClass(), "MatrixMap")
-        self.assertEqual(mm.getNin(), 2)
-        self.assertEqual(mm.getNout(), 2)
+        self.assertEqual(mm.getNIn(), 2)
+        self.assertEqual(mm.getNOut(), 2)
         self.assertTrue(mm.hasForward())
         self.assertTrue(mm.hasInverse())
 
@@ -51,8 +51,8 @@ class TestMatrixMap(MappingTestCase):
             [-1.0, -2.0]
         ], dtype=float)
         mm = astshim.MatrixMap(matrix)
-        self.assertEqual(mm.getNin(), 2)
-        self.assertEqual(mm.getNout(), 3)
+        self.assertEqual(mm.getNIn(), 2)
+        self.assertEqual(mm.getNOut(), 3)
         self.assertTrue(mm.hasForward())
         self.assertFalse(mm.hasInverse())
 

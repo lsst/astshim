@@ -44,7 +44,7 @@ Index of current @ref Frame, starting from 1. (int)
 This attribute gives the index of the @ref Frame which is to be
 regarded as the "current" @ref Frame within a @ref FrameSet. The default
 is the most recent @ref Frame added to the @ref FrameSet (this @ref Frame
-always has an index equal to the @ref FrameSet's Nframe attribute).
+always has an index equal to the @ref FrameSet's NFrame attribute).
 
 When setting a new value for this attribute, a string may be
 supplied instead of an integer index. In this case a search
@@ -58,7 +58,7 @@ Otherwise an error is reported.
 has the values of its @ref FrameSet_Base "Base" and @ref FrameSet_Current "Current" attributes interchanged.
 
 
-@subsection FrameSet_Nframe Nframe
+@subsection FrameSet_NFrame NFrame
 
 Number of @ref Frame "Frames" in a @ref FrameSet. (int, read only)
 

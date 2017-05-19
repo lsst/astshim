@@ -24,8 +24,8 @@ class TestMapping(MappingTestCase):
         self.assertFalse(self.zoommap.isInverted())
         self.assertTrue(self.zoommap.getIsLinear())
         self.assertFalse(self.zoommap.getIsSimple())
-        self.assertEqual(self.zoommap.getNin(), self.nin)
-        self.assertEqual(self.zoommap.getNout(), self.nin)
+        self.assertEqual(self.zoommap.getNIn(), self.nin)
+        self.assertEqual(self.zoommap.getNOut(), self.nin)
         self.assertFalse(self.zoommap.getReport())
         self.assertTrue(self.zoommap.hasForward())
         self.assertTrue(self.zoommap.hasInverse())
@@ -134,8 +134,8 @@ class TestMapping(MappingTestCase):
         self.assertEqual(simpmap.getClass(), "ZoomMap")
         self.assertFalse(simpmap.isInverted())
         self.assertTrue(simpmap.getIsSimple())
-        self.assertEqual(simpmap.getNin(), self.nin)
-        self.assertEqual(simpmap.getNout(), self.nin)
+        self.assertEqual(simpmap.getNIn(), self.nin)
+        self.assertEqual(simpmap.getNOut(), self.nin)
         self.assertTrue(simpmap.hasForward())
         self.assertTrue(simpmap.hasInverse())
 
@@ -144,8 +144,8 @@ class TestMapping(MappingTestCase):
         for i in range(self.nin):
             split = astshim.MapSplit(self.zoommap, [i + 1])
             self.assertEqual(split.splitMap.getClass(), "ZoomMap")
-            self.assertEqual(split.splitMap.getNin(), 1)
-            self.assertEqual(split.splitMap.getNout(), 1)
+            self.assertEqual(split.splitMap.getNIn(), 1)
+            self.assertEqual(split.splitMap.getNOut(), 1)
             self.assertEqual(split.origOut[0], i + 1)
 
 

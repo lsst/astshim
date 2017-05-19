@@ -50,7 +50,7 @@ std::shared_ptr<FrameSet> Frame::findFrame(Frame const &tmplt, std::string const
 std::vector<double> Frame::intersect(std::vector<double> const &a1, std::vector<double> const &a2,
                                      std::vector<double> const &b1, std::vector<double> const &b2) const {
     int const naxes = 2;
-    detail::assertEqual(getNaxes(), "# axes", naxes, "");
+    detail::assertEqual(getNAxes(), "# axes", naxes, "");
     detail::assertEqual(a1.size(), "a1.size()", static_cast<std::size_t>(naxes), "");
     detail::assertEqual(a2.size(), "a2.size()", static_cast<std::size_t>(naxes), "");
     detail::assertEqual(b1.size(), "b1.size()", static_cast<std::size_t>(naxes), "");
@@ -82,7 +82,7 @@ FrameMapping Frame::pickAxes(std::vector<int> const &axes) const {
 
 ResolvedPoint Frame::resolve(std::vector<double> const &point1, std::vector<double> const &point2,
                              std::vector<double> const &point3) const {
-    int const naxes = getNaxes();
+    int const naxes = getNAxes();
     detail::assertEqual(point1.size(), "a1.size()", static_cast<std::size_t>(naxes), "");
     detail::assertEqual(point2.size(), "a2.size()", static_cast<std::size_t>(naxes), "");
     detail::assertEqual(point3.size(), "b1.size()", static_cast<std::size_t>(naxes), "");

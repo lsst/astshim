@@ -16,8 +16,8 @@ class TestWcsMap(MappingTestCase):
         pred_shift = [1.0, -0.5]
         pred_zoom = 2.0
         self.assertIsInstance(winmap, astshim.WinMap)
-        self.assertEqual(winmap.getNin(), 2)
-        self.assertEqual(winmap.getNout(), 2)
+        self.assertEqual(winmap.getNIn(), 2)
+        self.assertEqual(winmap.getNOut(), 2)
 
         self.checkBasicSimplify(winmap)
         self.checkCopy(winmap)

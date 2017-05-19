@@ -49,7 +49,7 @@ PYBIND11_PLUGIN(object) {
     cls.def("getClass", &Object::getClass);
     cls.def("getID", &Object::getID);
     cls.def("getIdent", &Object::getIdent);
-    cls.def("getNobject", &Object::getNobject);
+    cls.def("getNObject", &Object::getNObject);
     cls.def("getObjSize", &Object::getObjSize);
     cls.def("getRefCount", &Object::getRefCount);
     cls.def("getUseDefs", &Object::getUseDefs);

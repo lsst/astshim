@@ -17,8 +17,8 @@ class TestMathMap(MappingTestCase):
                                   ["x = r * cos(theta)", "y = r * sin(theta)"],
                                   "SimpIF=1, SimpFI=1, Seed=-57")
         self.assertEqual(mathmap.getClass(), "MathMap")
-        self.assertEqual(mathmap.getNin(), 2)
-        self.assertEqual(mathmap.getNout(), 2)
+        self.assertEqual(mathmap.getNIn(), 2)
+        self.assertEqual(mathmap.getNOut(), 2)
 
         self.checkBasicSimplify(mathmap)
         self.checkCopy(mathmap)
@@ -49,8 +49,8 @@ class TestMathMap(MappingTestCase):
                                   ["r = sqrt(x * x + y * y)"],
                                   ["x = r", "y = 0"])
         self.assertEqual(mathmap.getClass(), "MathMap")
-        self.assertEqual(mathmap.getNin(), 2)
-        self.assertEqual(mathmap.getNout(), 1)
+        self.assertEqual(mathmap.getNIn(), 2)
+        self.assertEqual(mathmap.getNOut(), 1)
 
         self.checkPersistence(mathmap)
         with self.assertRaises(AssertionError):

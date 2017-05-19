@@ -15,8 +15,8 @@ class TestSlaMap(MappingTestCase):
         slamap = astshim.SlaMap()
         slamap.add("R2H", [last])
         self.assertEqual(slamap.getClass(), "SlaMap")
-        self.assertEqual(slamap.getNin(), 2)
-        self.assertEqual(slamap.getNout(), 2)
+        self.assertEqual(slamap.getNIn(), 2)
+        self.assertEqual(slamap.getNOut(), 2)
 
         self.checkBasicSimplify(slamap)
         self.checkCopy(slamap)

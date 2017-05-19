@@ -14,8 +14,8 @@ class TestShiftMap(MappingTestCase):
         offset = np.array([1.1, -2.2, 3.3])
         shiftmap = astshim.ShiftMap(offset)
         self.assertEqual(shiftmap.getClass(), "ShiftMap")
-        self.assertEqual(shiftmap.getNin(), 3)
-        self.assertEqual(shiftmap.getNout(), 3)
+        self.assertEqual(shiftmap.getNIn(), 3)
+        self.assertEqual(shiftmap.getNOut(), 3)
 
         self.checkBasicSimplify(shiftmap)
         self.checkCopy(shiftmap)

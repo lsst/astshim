@@ -56,15 +56,15 @@ with a fit based on the other direction.
                 the ChebyMap's input space (if `forward` is false)
                 or output space (if `forward` is true).
                 The new polynomial will be evaluated over this rectangle. The length
-                should equal getNin() or getNout(), depending on `forward`.
+                should equal getNIn() or getNOut(), depending on `forward`.
 @param[in] ubnd  A vector holding the upper bounds of a rectangular region within
                 the ChebyMap's input space (if `forward` is false)
                 or output space (if `forward` is true).
                 The new polynomial will be evaluated over this rectangle. The length
-                should equal getNin() or getNout(), depending on `forward`.
+                should equal getNIn() or getNOut(), depending on `forward`.
 
-@throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
-                or getNout() (if `forward` true).
+@throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNIn() (if `forward` false)
+                or getNOut() (if `forward` true).
 */
 template <class AstMapT, class MapT>
 AstMapT *polyTranImpl(MapT const &mapping, bool forward, double acc, double maxacc, int maxorder,

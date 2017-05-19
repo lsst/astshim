@@ -19,8 +19,8 @@ class TestWcsMap(MappingTestCase):
         wcsmap = astshim.WcsMap(2, astshim.WcsType.AIT, 1, 2)
         self.assertIsInstance(wcsmap, astshim.WcsMap)
         self.assertIsInstance(wcsmap, astshim.Mapping)
-        self.assertEqual(wcsmap.getNin(), 2)
-        self.assertEqual(wcsmap.getNout(), 2)
+        self.assertEqual(wcsmap.getNIn(), 2)
+        self.assertEqual(wcsmap.getNOut(), 2)
 
         self.assertEqual(wcsmap.getNatLon(), 0)
         self.assertEqual(wcsmap.getNatLat(), 0)

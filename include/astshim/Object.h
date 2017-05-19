@@ -41,7 +41,7 @@ Object provides the following attributes:
 - @ref Object_Class "Class": object class name (use @ref getClass)
 - @ref Object_ID "ID": object identification string that is not copied.
 - @ref Object_Ident "Ident": object identification string that is copied.
-- @ref Object_Nobject "Nobject": number of Objects in class
+- @ref Object_NObject "NObject": number of Objects in class
 - @ref Object_ObjSize "ObjSize": the in-memory size of the Object in bytes
 - @ref Object_RefCount "RefCount": count of active Object pointers
 - @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
@@ -123,8 +123,8 @@ public:
     /// Get @ref Object_Ident "Ident": object identification string that is copied.
     std::string getIdent() const { return getC("Ident"); }
 
-    /// Get @ref Object_Nobject "Nobject": number of Objects in class.
-    int getNobject() const { return getI("Nobject"); }
+    /// Get @ref Object_NObject "NObject": number of Objects in class.
+    int getNObject() const { return getI("NObject"); }
 
     /// Get @ref Object_ObjSize "ObjSize": the in-memory size of the Object in bytes.
     int getObjSize() const { return getI("ObjSize"); }

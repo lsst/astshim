@@ -78,7 +78,7 @@ public:
     A `MathMap`'s transformation functions are supplied as a set of expressions in an array
     of character strings.  Normally you would supply the same number of expressions for
     the forward transformation, via the `fwd` parameter, as there are output variables
-    (given by the `MathMap`'s Nout attribute).  For instance, if Nout is 2 you might use:
+    (given by the `MathMap`'s NOut attribute).  For instance, if NOut is 2 you might use:
     - "r = sqrt(x*x + y*y)"
     - "theta = atan2(y, x)"
     which defines a transformation from Cartesian to polar coordinates.  Here, the variables
@@ -88,7 +88,7 @@ public:
 
     To complement this, you must also supply expressions for the inverse transformation
     via the "inv" parameter.  In this case, the number of expressions given would normally
-    match the number of MathMap input coordinates (given by the Nin attribute). If Nin
+    match the number of MathMap input coordinates (given by the NIn attribute). If NIn
     is 2, you might use:
     - "x = r * cos(theta)"
     - "y = r * sin(theta)"
@@ -123,7 +123,7 @@ public:
     Here, we first calculate three intermediate results ("r" , " rout" and "theta" )
     and then use these to calculate the final results ("xout" and "yout" ).  The MathMap
     knows that only the final two results constitute values for the output variables because
-    its Nout attribute is set to 2.  You may define as many intermediate variables in this
+    its NOut attribute is set to 2.  You may define as many intermediate variables in this
     way as you choose.  Having defined a variable, you may then refer to it on the right
     of any subsequent expressions.
 

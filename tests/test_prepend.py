@@ -32,7 +32,7 @@ class TestFrameSetPrepend(unittest.TestCase):
                           Frame(1, "Ident=fork"))
 
         frameSet.setCurrent(3)
-        assert frameSet.getNframe() == 4
+        assert frameSet.getNFrame() == 4
         assert frameSet.getBase() == 1
         assert frameSet.getFrame(FrameSet.BASE).getIdent() == "base"
         assert frameSet.getFrame(2).getIdent() == "mid"
@@ -78,23 +78,23 @@ class TestFrameSetPrepend(unittest.TestCase):
         set2 = self.makeFrameSet(3, 2)
         set12 = prepend(set2, set1)
 
-        self.assertEquals(set1.getNframe() + set2.getNframe(),
-                          set12.getNframe())
-        for i in range(1, 1+set1.getNframe()):
+        self.assertEquals(set1.getNFrame() + set2.getNFrame(),
+                          set12.getNFrame())
+        for i in range(1, 1+set1.getNFrame()):
             oldFrame = set1.getFrame(i)
             newFrame = set12.getFrame(i)
             self.assertEquals(oldFrame.getIdent(), newFrame.getIdent())
-            self.assertEquals(oldFrame.getNaxes(), newFrame.getNaxes())
+            self.assertEquals(oldFrame.getNAxes(), newFrame.getNAxes())
             if i == set1.getBase():
                 self.assertTrue(i == set12.getBase())
             else:
                 self.assertFalse(i == set12.getBase())
-        for i in range(1, 1+set2.getNframe()):
-            offset = set1.getNframe()
+        for i in range(1, 1+set2.getNFrame()):
+            offset = set1.getNFrame()
             oldFrame = set2.getFrame(i)
             newFrame = set12.getFrame(offset + i)
             self.assertEquals(oldFrame.getIdent(), newFrame.getIdent())
-            self.assertEquals(oldFrame.getNaxes(), newFrame.getNaxes())
+            self.assertEquals(oldFrame.getNAxes(), newFrame.getNAxes())
             if i == set2.getCurrent():
                 self.assertTrue(offset + i == set12.getCurrent())
             else:
@@ -108,7 +108,7 @@ class TestFrameSetPrepend(unittest.TestCase):
         set2 = self.makeFrameSet(3, 3)
         set12 = prepend(set2, set1)
 
-        nTotal = set12.getNframe()
+        nTotal = set12.getNFrame()
         x = [1.2, 3.4, 5.6]
         y = set12.tranForward(x)
 
@@ -119,7 +119,7 @@ class TestFrameSetPrepend(unittest.TestCase):
         set2.setBase(2)
 
         # Use exact equality because nothing should change
-        self.assertEquals(set12.getNframe(), nTotal)
+        self.assertEquals(set12.getNFrame(), nTotal)
         self.assertEquals(set12.tranForward(x), y)
 
     def test_PrependMismatch(self):
@@ -137,7 +137,7 @@ class TestFrameSetPrepend(unittest.TestCase):
         assert_allclose(y_merged, y_separate)
 
         iFrom = set1.getCurrent()
-        iTo = set1.getNframe() + set2.getBase()
+        iTo = set1.getNFrame() + set2.getBase()
         self.assertIsInstance(set12.getFrame(iFrom), SkyFrame)
         self.assertNotIsInstance(set12.getFrame(iTo), SkyFrame)
         self.assertIsInstance(set12.getMapping(iFrom, iTo), UnitMap)

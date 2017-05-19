@@ -11,8 +11,8 @@ class TestTimeFrame(MappingTestCase):
     def test_TimeFrameBasics(self):
         frame = astshim.TimeFrame()
         self.assertEqual(frame.getClass(), "TimeFrame")
-        self.assertEqual(frame.getNin(), 1)
-        self.assertEqual(frame.getNaxes(), 1)
+        self.assertEqual(frame.getNIn(), 1)
+        self.assertEqual(frame.getNAxes(), 1)
         self.assertEqual(frame.getMaxAxes(), 1)
         self.assertEqual(frame.getMinAxes(), 1)
         self.assertEqual(frame.getAlignSystem(), "MJD")

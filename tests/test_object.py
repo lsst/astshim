@@ -43,7 +43,7 @@ class TestObject(ObjectTestCase):
         obj = astshim.ZoomMap(2, 1.3, "Ident=original")
 
         # there may be more than one object in existence if run with pytest
-        initialNumObj = obj.getNobject()
+        initialNumObj = obj.getNObject()
 
         self.checkCopy(obj)
         cp = obj.copy()
@@ -61,7 +61,7 @@ class TestObject(ObjectTestCase):
         self.assertEqual(obj.getIdent(), "original")
 
         del cp
-        self.assertEqual(obj.getNobject(), initialNumObj)
+        self.assertEqual(obj.getNObject(), initialNumObj)
         self.assertEqual(obj.getRefCount(), 1)
 
     def test_error_handling(self):

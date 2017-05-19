@@ -57,7 +57,7 @@ PYBIND11_PLUGIN(polyMap) {
 
     cls.def("copy", &PolyMap::copy);
     cls.def("getIterInverse", &PolyMap::getIterInverse);
-    cls.def("getNiterInverse", &PolyMap::getNiterInverse);
+    cls.def("getNIterInverse", &PolyMap::getNIterInverse);
     cls.def("getTolInverse", &PolyMap::getTolInverse);
     cls.def("polyTran", &PolyMap::polyTran, "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a,
             "ubnd"_a);

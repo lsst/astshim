@@ -48,7 +48,7 @@ and @ref Object_Ident "Ident" is that @ref Object_Ident "Ident"
 is transferred when an @ref Object is copied, but @ref Object_ID "ID" is not.
 
 
-@subsection Object_Nobject Nobject
+@subsection Object_NObject NObject
 
 Number of Objects in class. (int, read only)
 

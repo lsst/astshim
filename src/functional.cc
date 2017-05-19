@@ -30,11 +30,11 @@ std::shared_ptr<FrameSet> prepend(FrameSet const& second, FrameSet const& first)
     std::shared_ptr<FrameSet> const newFrames = second.copy();
 
     newFrames->setCurrent(FrameSet::BASE);
-    int const joinNaxes = first.getFrame(FrameSet::CURRENT)->getNaxes();
-    merged->addFrame(FrameSet::CURRENT, UnitMap(joinNaxes), *newFrames);
+    int const joinNAxes = first.getFrame(FrameSet::CURRENT)->getNAxes();
+    merged->addFrame(FrameSet::CURRENT, UnitMap(joinNAxes), *newFrames);
 
     // All frame numbers from `second` have been offset in `merged` by number of frames in `first`
-    int const mergedCurrent = first.getNframe() + second.getCurrent();
+    int const mergedCurrent = first.getNFrame() + second.getCurrent();
     merged->setCurrent(mergedCurrent);
 
     return merged;

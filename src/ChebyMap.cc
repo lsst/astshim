@@ -55,7 +55,7 @@ ChebyMap::ChebyMap(AstChebyMap *map) : Mapping(reinterpret_cast<AstMapping *>(ma
 }
 
 ChebyDomain ChebyMap::getDomain(bool forward) const {
-    int nElements = forward ? getNin() : getNout();
+    int nElements = forward ? getNIn() : getNOut();
     std::vector<double> lbnd(nElements, 0.0);
     std::vector<double> ubnd(nElements, 0.0);
     astChebyDomain(getRawPtr(), static_cast<int>(forward), lbnd.data(), ubnd.data());

@@ -29,7 +29,7 @@ class TestObject(ObjectTestCase):
         """
         ss = astshim.StringStream("".join(self.cards))
         fc = astshim.FitsChan(ss)
-        self.assertEqual(fc.getNcard(), len(self.cards))
+        self.assertEqual(fc.getNCard(), len(self.cards))
         self.assertEqual(fc.getClass(), "FitsChan")
         fv = fc.getFitsF("CRVAL1")
         self.assertTrue(fv.found)
@@ -50,7 +50,7 @@ class TestObject(ObjectTestCase):
         del fc1
 
         fc2 = astshim.FitsChan(astshim.FileStream(path, False))
-        self.assertEqual(fc2.getNcard(), len(self.cards))
+        self.assertEqual(fc2.getNCard(), len(self.cards))
         del fc2
         os.remove(path)
 
@@ -74,14 +74,14 @@ class TestObject(ObjectTestCase):
         fv = fc.getFitsS("FRED")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value, "99")
-        self.assertEqual(fc.getNcard(), 1)
+        self.assertEqual(fc.getNCard(), 1)
         self.assertEqual(fc.getAllCardNames(), ["FRED"])
         # replace this card
         fc.setFitsF("FRED1", 99.9, "Hello there", True)
         fv = fc.getFitsS("FRED1")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value, "99.9")
-        self.assertEqual(fc.getNcard(), 1)
+        self.assertEqual(fc.getNCard(), 1)
         self.assertEqual(fc.getAllCardNames(), ["FRED1"])
         fc.setFitsCF("FRED1", complex(99.9, 99.8), "Hello there", True)
         fv = fc.getFitsCF("FRED1")
@@ -92,15 +92,15 @@ class TestObject(ObjectTestCase):
         fv = fc.getFitsI("FRED1")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value, -12)
-        self.assertEqual(fc.getNcard(), 1)
+        self.assertEqual(fc.getNCard(), 1)
         self.assertEqual(fc.getAllCardNames(), ["FRED1"])
 
     def test_FitsChanEmptyFits(self):
         ss = astshim.StringStream("".join(self.cards))
         fc = astshim.FitsChan(ss)
-        self.assertEqual(fc.getNcard(), len(self.cards))
+        self.assertEqual(fc.getNCard(), len(self.cards))
         fc.emptyFits()
-        self.assertEqual(fc.getNcard(), 0)
+        self.assertEqual(fc.getNCard(), 0)
 
     def test_FitsChanPutCardsPutFits(self):
         ss = astshim.StringStream()
@@ -118,7 +118,7 @@ class TestObject(ObjectTestCase):
         # insert new cards at the beginning
         for card in self.cards[0:8]:
             fc.putFits(card, False)
-        self.assertEqual(fc.getNcard(), 10)
+        self.assertEqual(fc.getNCard(), 10)
         self.assertEqual(fc.getCard(), 9)
         predCardNames = [c.split()[0] for c in self.cards[0:8]] + ["CRVAL1", "CRVAL2"]
         self.assertEqual(fc.getAllCardNames(), predCardNames)
@@ -132,7 +132,7 @@ class TestObject(ObjectTestCase):
         self.assertEqual(fv.value,
                          "CRVAL1  =                    0                                                  ")
         fc.delFits()
-        self.assertEqual(fc.getNcard(), 9)
+        self.assertEqual(fc.getNCard(), 9)
         self.assertEqual(fc.getCard(), 9)
         fv = fc.findFits("%f", False)
         self.assertEqual(fc.getCard(), 9)
@@ -140,7 +140,7 @@ class TestObject(ObjectTestCase):
         self.assertEqual(fv.value,
                          "CRVAL2  =                    0                                                  ")
         fc.putFits("CRVAL1  = 0", False)
-        self.assertEqual(fc.getNcard(), 10)
+        self.assertEqual(fc.getNCard(), 10)
         self.assertEqual(fc.getCard(), 10)
         fv = fc.findFits("%f", False)
         self.assertTrue(fv.found)
@@ -167,7 +167,7 @@ class TestObject(ObjectTestCase):
         fc2 = astshim.FitsChan(ss2, "Encoding=FITS-WCS")
         n = fc2.write(obj1)
         self.assertEqual(n, 1)
-        self.assertEqual(fc2.getNcard(), 10)
+        self.assertEqual(fc2.getNCard(), 10)
         fc2.clearCard()
 
         fv = fc2.findFits("%f", True)
@@ -221,9 +221,9 @@ class TestObject(ObjectTestCase):
                          "RADESYS = 'ICRS    '           / Reference frame for RA/DEC values")
 
         self.assertEqual(ss2.getSinkData(), "")
-        self.assertEqual(fc2.getNcard(), 10)
+        self.assertEqual(fc2.getNCard(), 10)
         fc2.writeFits()
-        self.assertEqual(fc2.getNcard(), 0)
+        self.assertEqual(fc2.getNCard(), 0)
         a = ss2.getSinkData()
 
         ss3 = astshim.StringStream(ss2.getSinkData())
@@ -256,7 +256,7 @@ class TestObject(ObjectTestCase):
         fc.setFitsCN("ACN", "continue_value")
         fc.setFitsU("ANUNK")
 
-        self.assertEqual(fc.getNcard(), 14)
+        self.assertEqual(fc.getNCard(), 14)
 
         fv = fc.getFitsI("NAXIS1", 0)
         self.assertTrue(fv.found)

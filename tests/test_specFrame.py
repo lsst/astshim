@@ -11,8 +11,8 @@ class TestSpecFrame(MappingTestCase):
     def test_SpecFrameBasics(self):
         frame = astshim.SpecFrame()
         self.assertEqual(frame.getClass(), "SpecFrame")
-        self.assertEqual(frame.getNin(), 1)
-        self.assertEqual(frame.getNaxes(), 1)
+        self.assertEqual(frame.getNIn(), 1)
+        self.assertEqual(frame.getNAxes(), 1)
         self.assertEqual(frame.getMaxAxes(), 1)
         self.assertEqual(frame.getMinAxes(), 1)
         self.assertEqual(frame.getAlignSystem(), "WAVE")

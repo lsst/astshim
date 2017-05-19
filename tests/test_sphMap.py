@@ -14,8 +14,8 @@ class TestSphMap(MappingTestCase):
     def test_SphMapBasics(self):
         sphmap = astshim.SphMap()
         self.assertEqual(sphmap.getClass(), "SphMap")
-        self.assertEqual(sphmap.getNin(), 3)
-        self.assertEqual(sphmap.getNout(), 2)
+        self.assertEqual(sphmap.getNIn(), 3)
+        self.assertEqual(sphmap.getNOut(), 2)
         self.assertEqual(sphmap.getPolarLong(), 0)
         self.assertFalse(sphmap.getUnitRadius())
 

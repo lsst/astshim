@@ -17,8 +17,8 @@ class TestNormMap(MappingTestCase):
         """
         normmap = astshim.NormMap(astshim.Frame(2))
         self.assertEqual(normmap.getClass(), "NormMap")
-        self.assertEqual(normmap.getNin(), 2)
-        self.assertEqual(normmap.getNout(), 2)
+        self.assertEqual(normmap.getNIn(), 2)
+        self.assertEqual(normmap.getNOut(), 2)
 
         self.checkBasicSimplify(normmap)
         self.checkCopy(normmap)
@@ -50,8 +50,8 @@ class TestNormMap(MappingTestCase):
         """
         normmap = astshim.NormMap(astshim.SkyFrame())
         self.assertEqual(normmap.getClass(), "NormMap")
-        self.assertEqual(normmap.getNin(), 2)
-        self.assertEqual(normmap.getNout(), 2)
+        self.assertEqual(normmap.getNIn(), 2)
+        self.assertEqual(normmap.getNOut(), 2)
 
         self.checkBasicSimplify(normmap)
         self.checkPersistence(normmap)

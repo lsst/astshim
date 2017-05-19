@@ -141,7 +141,7 @@ if the Frame has only one axis:
 - @ref Frame_MatchEnd "MatchEnd": Match trailing axes?
 - @ref Frame_MaxAxes "MaxAxes": Maximum number of axes a frame found by @ref findFrame may have.
 - @ref Frame_MinAxes "MinAxes": Minimum number of axes a frame found by @ref findFrame may have.
-- @ref Frame_Naxes "Naxes": Number of Frame axes
+- @ref Frame_NAxes "NAxes": Number of Frame axes
 - @ref Frame_NormUnit "NormUnit(axis)": Normalised physical units for formatted axis values
 - @ref Frame_ObsAlt "ObsAlt": Geodetic altitude of observer (m)
 - @ref Frame_ObsLat "ObsLat": Geodetic latitude of observer
@@ -865,10 +865,10 @@ public:
     int getMinAxes() const { return getI("MinAxes"); }
 
     /**
-    Get @ref Frame_Naxes "Naxes": the number of axes in the frame
+    Get @ref Frame_NAxes "NAxes": the number of axes in the frame
     (i.e. the number of dimensions of the coordinate space which the Frame describes).
     */
-    int getNaxes() const { return getI("Naxes"); }
+    int getNAxes() const { return getI("NAxes"); }
 
     /**
     Get @ref Frame_NormUnit "NormUnit(axis)" read-only attribute for one frame:
@@ -978,7 +978,7 @@ public:
         For instance, `SkyFrame` axes will match even if they describe different celestial coordinate systems.
     */
     std::vector<int> matchAxes(Frame const &other) const {
-        std::vector<int> ret(other.getNin());
+        std::vector<int> ret(other.getNIn());
         astMatchAxes(getRawPtr(), other.getRawPtr(), ret.data());
         assertOK();
         return ret;
@@ -1006,7 +1006,7 @@ public:
     Thus input axis values corresponding to positions which are outside the
     Region will result in bad output axis values.
 
-    @param[in] first  The first frame in the compound frame (axes 1 - first.getNaxes())
+    @param[in] first  The first frame in the compound frame (axes 1 - first.getNAxes())
     @return a new CmpFrame
     */
     CmpFrame over(Frame const &first) const;
@@ -1064,7 +1064,7 @@ public:
     PointD offset(PointD point1, PointD point2, double offset) const {
         assertPointLength(point1, "point1");
         assertPointLength(point2, "point2");
-        PointD ret(getNin());
+        PointD ret(getNIn());
         astOffset(getRawPtr(), point1.data(), point2.data(), offset, ret.data());
         assertOK();
         detail::astBadToNan(ret);
@@ -1104,9 +1104,9 @@ public:
         as defined by the astDistance function
     */
     DirectionPoint offset2(PointD const &point1, double angle, double offset) const {
-        detail::assertEqual(getNin(), "naxes", 2, " cannot call offset2");
+        detail::assertEqual(getNIn(), "naxes", 2, " cannot call offset2");
         assertPointLength(point1, "point1");
-        PointD point2(getNin());
+        PointD point2(getNIn());
         double offsetAngle = astOffset2(getRawPtr(), point1.data(), angle, offset, point2.data());
         assertOK();
         detail::astBadToNan(point2);
@@ -1125,7 +1125,7 @@ public:
     axis order for output data).
     */
     void permAxes(std::vector<int> perm) {
-        detail::assertEqual(perm.size(), "perm.size()", static_cast<std::size_t>(getNaxes()), "naxes");
+        detail::assertEqual(perm.size(), "perm.size()", static_cast<std::size_t>(getNAxes()), "naxes");
         astPermAxes(getRawPtr(), perm.data());
         assertOK();
     }
@@ -1524,9 +1524,9 @@ private:
     */
     template <typename T>
     void assertPointLength(T const &p, char const *name) const {
-        if (static_cast<int>(p.size()) != getNin()) {
+        if (static_cast<int>(p.size()) != getNIn()) {
             std::ostringstream os;
-            os << "point " << name << " has " << p.size() << " axes, but " << getNin() << " required";
+            os << "point " << name << " has " << p.size() << " axes, but " << getNIn() << " required";
             throw std::invalid_argument(os.str());
         }
     }

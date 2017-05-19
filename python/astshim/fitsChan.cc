@@ -105,7 +105,7 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("getFitsAxisOrder", &FitsChan::getFitsAxisOrder);
     cls.def("getFitsDigits", &FitsChan::getFitsDigits);
     cls.def("getIwc", &FitsChan::getIwc);
-    cls.def("getNcard", &FitsChan::getNcard);
+    cls.def("getNCard", &FitsChan::getNCard);
     cls.def("getNKey", &FitsChan::getNKey);
     cls.def("getTabOK", &FitsChan::getTabOK);
     cls.def("getPolyTan", &FitsChan::getPolyTan);

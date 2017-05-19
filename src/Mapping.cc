@@ -47,8 +47,8 @@ std::shared_ptr<Mapping> Mapping::getInverse() const {
 }
 
 Array2D Mapping::linearApprox(PointD const &lbnd, PointD const &ubnd, double tol) const {
-    int const nIn = getNin();
-    int const nOut = getNout();
+    int const nIn = getNIn();
+    int const nOut = getNOut();
     detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nIn), "nIn");
     detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nIn), "nIn");
     Array2D fit = ndarray::allocate(ndarray::makeVector(1 + nIn, nOut));
@@ -107,8 +107,8 @@ std::shared_ptr<Class> Mapping::decompose(int i, bool copy) const {
 }
 
 void Mapping::_tran(ConstArray2D const &from, bool doForward, Array2D const &to) const {
-    int const nFromAxes = doForward ? getNin() : getNout();
-    int const nToAxes = doForward ? getNout() : getNin();
+    int const nFromAxes = doForward ? getNIn() : getNOut();
+    int const nToAxes = doForward ? getNOut() : getNIn();
     detail::assertEqual(from.getSize<0>(), "from.size[0]", static_cast<std::size_t>(nFromAxes),
                         "from coords");
     detail::assertEqual(to.getSize<0>(), "to.size[0]", static_cast<std::size_t>(nToAxes), "to coords");
@@ -122,8 +122,8 @@ void Mapping::_tran(ConstArray2D const &from, bool doForward, Array2D const &to)
 
 void Mapping::_tranGrid(PointI const &lbnd, PointI const &ubnd, double tol, int maxpix, bool doForward,
                         Array2D const &to) const {
-    int const nFromAxes = doForward ? getNin() : getNout();
-    int const nToAxes = doForward ? getNout() : getNin();
+    int const nFromAxes = doForward ? getNIn() : getNOut();
+    int const nToAxes = doForward ? getNOut() : getNIn();
     detail::assertEqual(lbnd.size(), "lbnd.size", static_cast<std::size_t>(nFromAxes), "from coords");
     detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nFromAxes), "from coords");
     detail::assertEqual(to.getSize<1>(), "to.size[1]", static_cast<std::size_t>(nToAxes), "to coords");

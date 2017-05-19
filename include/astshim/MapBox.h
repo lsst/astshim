@@ -63,8 +63,8 @@ public:
 
     @return A @ref MapBox containing the computed outputs and a copy of the inputs.
 
-    @throws std::invalid_argument if minOutCoord is not in the range [1, getNout()]
-        or maxOutCoord is neither 0 nor in the range [minOutCoord, getNout()].
+    @throws std::invalid_argument if minOutCoord is not in the range [1, getNOut()]
+        or maxOutCoord is neither 0 nor in the range [minOutCoord, getNOut()].
     @throws std::runtime_error if the required output bounds cannot be
         found. Typically, this might occur if all the input points which
         the function considers turn out to be invalid (see above). The

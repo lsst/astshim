@@ -34,7 +34,7 @@ namespace ast {
 
 MapSplit::MapSplit(Mapping const &map, std::vector<int> const &in) {
     std::vector<int> locOut;
-    locOut.reserve(map.getNout());  // the max # of elements astMapSplit may set
+    locOut.reserve(map.getNOut());  // the max # of elements astMapSplit may set
     AstMapping *rawSplitMap;
     astMapSplit(map.getRawPtr(), in.size(), in.data(), locOut.data(), &rawSplitMap);
     assertOK();
@@ -43,9 +43,9 @@ MapSplit::MapSplit(Mapping const &map, std::vector<int> const &in) {
     }
     splitMap = Object::fromAstObject<Mapping>(reinterpret_cast<AstObject *>(rawSplitMap), false);
     origIn = in;
-    // copy the splitMap->getNout() elements of `locOut` that contain data to `origOut`
-    const int newNout = splitMap->getNout();
-    for (int i = 0; i < newNout; ++i) {
+    // copy the splitMap->getNOut() elements of `locOut` that contain data to `origOut`
+    const int newNOut = splitMap->getNOut();
+    for (int i = 0; i < newNOut; ++i) {
         origOut.push_back(locOut[i]);
     }
 }

@@ -13,8 +13,8 @@ class TestSkyFrame(MappingTestCase):
     def test_FrameBasics(self):
         frame = astshim.SkyFrame()
         self.assertEqual(frame.getClass(), "SkyFrame")
-        self.assertEqual(frame.getNin(), 2)
-        self.assertEqual(frame.getNaxes(), 2)
+        self.assertEqual(frame.getNIn(), 2)
+        self.assertEqual(frame.getNAxes(), 2)
         self.assertEqual(frame.getMaxAxes(), 2)
         self.assertEqual(frame.getMinAxes(), 2)
 

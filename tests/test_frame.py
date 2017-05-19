@@ -14,8 +14,8 @@ class TestFrame(MappingTestCase):
     def test_FrameBasics(self):
         frame = astshim.Frame(2)
         self.assertEqual(frame.getClass(), "Frame")
-        self.assertEqual(frame.getNin(), 2)
-        self.assertEqual(frame.getNaxes(), 2)
+        self.assertEqual(frame.getNIn(), 2)
+        self.assertEqual(frame.getNAxes(), 2)
         self.assertEqual(frame.getMaxAxes(), 2)
         self.assertEqual(frame.getMinAxes(), 2)
         self.assertEqual(frame.getAlignSystem(), "Cartesian")
@@ -85,9 +85,9 @@ class TestFrame(MappingTestCase):
 
         # the conversion FrameSet should contain two frames
         # connected by a unit mapping with 2 axes
-        self.assertEqual(fset.getNframe(), 2)
-        self.assertEqual(fset.getNin(), 2)
-        self.assertEqual(fset.getNout(), 2)
+        self.assertEqual(fset.getNFrame(), 2)
+        self.assertEqual(fset.getNIn(), 2)
+        self.assertEqual(fset.getNOut(), 2)
         indata = np.array([
             [1.1, 2.2],
             [-43.5, 1309.31],
@@ -103,12 +103,12 @@ class TestFrame(MappingTestCase):
         nframe = astshim.Frame(2)
         fset = frame.findFrame(nframe)
         self.assertEqual(fset.getClass(), "FrameSet")
-        self.assertEqual(fset.getNframe(), 2)
+        self.assertEqual(fset.getNFrame(), 2)
 
         # the found FrameSet should contain two frames
         # connected by a unit mapping with 2 axes
-        self.assertEqual(fset.getNin(), 2)
-        self.assertEqual(fset.getNout(), 2)
+        self.assertEqual(fset.getNIn(), 2)
+        self.assertEqual(fset.getNOut(), 2)
         indata = np.array([
             [1.1, 2.2],
             [-43.5, 1309.31],
@@ -164,7 +164,7 @@ class TestFrame(MappingTestCase):
         frame1 = astshim.Frame(2, "label(1)=a, label(2)=b")
         frame2 = astshim.Frame(1, "label(1)=c")
         cf = frame2.over(frame1)
-        self.assertEqual(cf.getNaxes(), 3)
+        self.assertEqual(cf.getNAxes(), 3)
         self.assertEqual(cf.getLabel(1), "a")
         self.assertEqual(cf.getLabel(2), "b")
         self.assertEqual(cf.getLabel(3), "c")
@@ -174,10 +174,10 @@ class TestFrame(MappingTestCase):
         frame.permAxes([2, 1])
         fm = frame.pickAxes([2])
         self.assertEqual(fm.frame.getClass(), "Frame")
-        self.assertEqual(fm.frame.getNin(), 1)
+        self.assertEqual(fm.frame.getNIn(), 1)
         self.assertEqual(fm.mapping.getClass(), "PermMap")
-        self.assertEqual(fm.mapping.getNin(), 2)
-        self.assertEqual(fm.mapping.getNout(), 1)
+        self.assertEqual(fm.mapping.getNIn(), 2)
+        self.assertEqual(fm.mapping.getNOut(), 1)
 
     def test_FrameResolve(self):
         frame = astshim.Frame(2)

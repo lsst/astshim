@@ -55,7 +55,7 @@ PYBIND11_PLUGIN(frameSet) {
     cls.def("getCurrent", &FrameSet::getCurrent);
     cls.def("getFrame", &FrameSet::getFrame, "iframe"_a, "copy"_a = true);
     cls.def("getMapping", &FrameSet::getMapping, "ind1"_a = FrameSet::BASE, "ind2"_a = FrameSet::CURRENT);
-    cls.def("getNframe", &FrameSet::getNframe);
+    cls.def("getNFrame", &FrameSet::getNFrame);
     cls.def("getVariant", &FrameSet::getVariant);
     cls.def("mirrorVariants", &FrameSet::mirrorVariants, "iframe"_a);
     cls.def("remapFrame", &FrameSet::remapFrame, "iframe"_a, "map"_a);

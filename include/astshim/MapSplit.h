@@ -50,7 +50,7 @@ public:
 
     @param[in] map  Mapping to split.
     @param[in] in  Indices of inputs of `map` to pick.
-        Each element should have a value in the range [1, map.getNin()].
+        Each element should have a value in the range [1, map.getNIn()].
 
     @throws std::runtime_error if `map` cannot be split as specified.
     */
@@ -74,7 +74,7 @@ public:
     /**
     Indices of the outputs of the original mapping which are fed by the picked inputs.
 
-    This will contain splitMap->getNout() elements, each in the range [1, nout of the original mapping].
+    This will contain splitMap->getNOut() elements, each in the range [1, nout of the original mapping].
     The `i`th element holds the index within the original mapping which corresponds to
     the `i`th output of the split mapping. For example if the 1st output of the split mapping
     came from the 5th output of the original mapping, then origOut[0] = 5 (0 because

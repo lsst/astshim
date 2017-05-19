@@ -107,7 +107,7 @@ PYBIND11_PLUGIN(frame) {
     cls.def("getMatchEnd", &Frame::getMatchEnd);
     cls.def("getMaxAxes", &Frame::getMaxAxes);
     cls.def("getMinAxes", &Frame::getMinAxes);
-    cls.def("getNaxes", &Frame::getNaxes);
+    cls.def("getNAxes", &Frame::getNAxes);
     cls.def("getNormUnit", &Frame::getNormUnit, "axis"_a);
     cls.def("getObsAlt", &Frame::getObsAlt);
     cls.def("getObsLat", &Frame::getObsLat);
