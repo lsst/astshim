@@ -807,9 +807,14 @@ public:
     double getBottom(int axis) const { return getD(detail::formatAxisAttr("Bottom", axis)); }
 
     /**
-    Get @ref Frame_Digits "Digits" for one axis: the lowest axis value to display
+    Get @ref Frame_Digits "Digits": the default used if no specific value specified for an axis
     */
     int getDigits() const { return getI("Digits"); }
+
+    /**
+    Get @ref Frame_Digits "Digits" for one axis
+    */
+    int getDigits(int axis) const { return getI(detail::formatAxisAttr("Digits", axis)); }
 
     /**
     Get @ref Frame_Direction "Direction" for one axis: display axis in conventional direction?
@@ -1204,7 +1209,7 @@ public:
     /**
     Set @ref Frame_Digits "Digits" for one axis: number of digits of precision.
     */
-    void setDigits(int digits, int axis) { setD(detail::formatAxisAttr("Digits", axis), digits); }
+    void setDigits(int axis, int digits) { setD(detail::formatAxisAttr("Digits", axis), digits); }
 
     /**
     Set @ref Frame_Direction "Direction" for one axis: display axis in conventional direction?

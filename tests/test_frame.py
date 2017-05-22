@@ -28,12 +28,14 @@ class TestFrame(MappingTestCase):
         self.assertFalse(frame.getPreserveAxes())
         self.assertEqual(frame.getSystem(), "Cartesian")
         self.assertEqual(frame.getTitle(), "2-d coordinate system")
+        self.assertEqual(frame.getDigits(), 7)
 
         for axis in (1, 2):
             self.assertTrue(math.isinf(frame.getBottom(axis)))
             self.assertTrue(math.isinf(frame.getTop(axis)))
             self.assertGreater(frame.getTop(axis), frame.getBottom(axis))
             self.assertTrue(frame.getDirection(axis))
+            self.assertEqual(frame.getDigits(axis), 7)
             self.assertEqual(frame.getInternalUnit(axis), "")
             self.assertEqual(frame.getNormUnit(axis), "")
             self.assertEqual(frame.getSymbol(axis), "x{}".format(axis))
@@ -41,6 +43,22 @@ class TestFrame(MappingTestCase):
 
         self.checkCopy(frame)
         self.checkPersistence(frame)
+
+    def test_FrameSetDigits(self):
+        frame = astshim.Frame(2)
+        self.assertEqual(frame.getDigits(), 7)
+        for axis in (1, 2):
+            self.assertEqual(frame.getDigits(axis), 7)
+
+        frame.setDigits(1, 9)
+        self.assertEqual(frame.getDigits(), 7)
+        self.assertEqual(frame.getDigits(1), 9)
+        self.assertEqual(frame.getDigits(2), 7)
+
+        frame.setDigits(2, 4)
+        self.assertEqual(frame.getDigits(), 7)
+        self.assertEqual(frame.getDigits(1), 9)
+        self.assertEqual(frame.getDigits(2), 4)
 
     def test_FrameLabels(self):
         frame = astshim.Frame(2, "label(1)=a b,label(2)=c d")

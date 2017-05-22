@@ -96,12 +96,13 @@ PYBIND11_PLUGIN(frame) {
     cls.def("getActiveUnit", &Frame::getActiveUnit);
     cls.def("getAlignSystem", &Frame::getAlignSystem);
     cls.def("getBottom", &Frame::getBottom, "axis"_a);
-    cls.def("getDigits", &Frame::getDigits);
     cls.def("getDirection", &Frame::getDirection, "axis"_a);
     cls.def("getDomain", &Frame::getDomain);
     cls.def("getDut1", &Frame::getDut1);
     cls.def("getEpoch", &Frame::getEpoch);
     cls.def("getFormat", &Frame::getFormat);
+    cls.def("getDigits", (int (Frame::*)() const) & Frame::getDigits);
+    cls.def("getDigits", (int (Frame::*)(int) const) & Frame::getDigits, "axis"_a);
     cls.def("getInternalUnit", &Frame::getInternalUnit);
     cls.def("getLabel", &Frame::getLabel);
     cls.def("getMatchEnd", &Frame::getMatchEnd);
@@ -131,7 +132,7 @@ PYBIND11_PLUGIN(frame) {
     cls.def("setAlignSystem", &Frame::setAlignSystem, "system"_a);
     cls.def("setBottom", &Frame::setBottom, "axis"_a, "bottom"_a);
     cls.def("setDigits", (void (Frame::*)(int)) & Frame::setDigits, "digits"_a);
-    cls.def("setDigits", (void (Frame::*)(int, int)) & Frame::setDigits, "digits"_a, "axis"_a);
+    cls.def("setDigits", (void (Frame::*)(int, int)) & Frame::setDigits, "axis"_a, "digits"_a);
     cls.def("setDirection", &Frame::setDirection, "direction"_a, "axis"_a);
     cls.def("setDomain", &Frame::setDomain, "domain"_a);
     cls.def("setDut1", &Frame::setDut1, "dut1"_a);
