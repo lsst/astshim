@@ -31,8 +31,7 @@ class TestWcsMap(MappingTestCase):
         self.assertTrue(math.isinf(wcsmap.getPVi_m(1, 3)))
         self.assertTrue(math.isinf(wcsmap.getPVi_m(1, 4)))
         self.assertEqual(wcsmap.getPVMax(2), 0)
-        self.assertEqual(wcsmap.getWcsAxis(1), 1)
-        self.assertEqual(wcsmap.getWcsAxis(2), 2)
+        self.assertEqual(wcsmap.getWcsAxis(), (1, 2))
         self.assertEqual(wcsmap.getWcsType(), astshim.WcsType.AIT)
 
         self.checkBasicSimplify(wcsmap)
