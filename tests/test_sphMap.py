@@ -13,11 +13,11 @@ class TestSphMap(MappingTestCase):
 
     def test_SphMapBasics(self):
         sphmap = astshim.SphMap()
-        self.assertEqual(sphmap.getClassName(), "SphMap")
-        self.assertEqual(sphmap.getNIn(), 3)
-        self.assertEqual(sphmap.getNOut(), 2)
-        self.assertEqual(sphmap.getPolarLong(), 0)
-        self.assertFalse(sphmap.getUnitRadius())
+        self.assertEqual(sphmap.className, "SphMap")
+        self.assertEqual(sphmap.nIn, 3)
+        self.assertEqual(sphmap.nOut, 2)
+        self.assertEqual(sphmap.polarLong, 0)
+        self.assertFalse(sphmap.unitRadius)
 
         self.checkCopy(sphmap)
         self.checkPersistence(sphmap)
@@ -39,8 +39,8 @@ class TestSphMap(MappingTestCase):
 
     def test_SphMapAttributes(self):
         sphmap = astshim.SphMap("PolarLong=0.5, UnitRadius=1")
-        self.assertEqual(sphmap.getPolarLong(), 0.5)
-        self.assertTrue(sphmap.getUnitRadius())
+        self.assertEqual(sphmap.polarLong, 0.5)
+        self.assertTrue(sphmap.unitRadius)
 
 
 if __name__ == "__main__":

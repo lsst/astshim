@@ -13,9 +13,9 @@ class TestObject(ObjectTestCase):
     def test_XmlChanDefaultAttributes(self):
         sstream = astshim.StringStream()
         chan = astshim.XmlChan(sstream)
-        self.assertEqual(chan.getXmlFormat(), "NATIVE")
-        self.assertEqual(chan.getXmlLength(), 0)
-        self.assertEqual(chan.getXmlPrefix(), "")
+        self.assertEqual(chan.xmlFormat, "NATIVE")
+        self.assertEqual(chan.xmlLength, 0)
+        self.assertEqual(chan.xmlPrefix, "")
 
         zoommap = astshim.ZoomMap(3, 2.0)
         self.checkXmlPersistence(sstream=sstream, chan=chan, obj=zoommap)
@@ -24,21 +24,21 @@ class TestObject(ObjectTestCase):
         sstream = astshim.StringStream()
         chan = astshim.XmlChan(
             sstream, 'XmlFormat="QUOTED", XmlLength=2000, XmlPrefix="foo"')
-        self.assertEqual(chan.getXmlFormat(), "QUOTED")
-        self.assertEqual(chan.getXmlLength(), 2000)
-        self.assertEqual(chan.getXmlPrefix(), "foo")
+        self.assertEqual(chan.xmlFormat, "QUOTED")
+        self.assertEqual(chan.xmlLength, 2000)
+        self.assertEqual(chan.xmlPrefix, "foo")
         zoommap = astshim.ZoomMap(4, 1.5)
         self.checkXmlPersistence(sstream=sstream, chan=chan, obj=zoommap)
 
     def test_XmlChanSetAttributes(self):
         sstream = astshim.StringStream()
         chan = astshim.XmlChan(sstream)
-        chan.setXmlFormat("QUOTED")
-        chan.setXmlLength(1500)
-        chan.setXmlPrefix("test")
-        self.assertEqual(chan.getXmlFormat(), "QUOTED")
-        self.assertEqual(chan.getXmlLength(), 1500)
-        self.assertEqual(chan.getXmlPrefix(), "test")
+        chan.xmlFormat = "QUOTED"
+        chan.xmlLength = 1500
+        chan.xmlPrefix = "test"
+        self.assertEqual(chan.xmlFormat, "QUOTED")
+        self.assertEqual(chan.xmlLength, 1500)
+        self.assertEqual(chan.xmlPrefix, "test")
         zoommap = astshim.ZoomMap(1, 0.5)
         self.checkXmlPersistence(sstream=sstream, chan=chan, obj=zoommap)
 
@@ -48,7 +48,7 @@ class TestObject(ObjectTestCase):
         chan.write(obj)
         sstream.sinkToSource()
         obj_copy = chan.read()
-        self.assertEqual(obj.getClassName(), obj_copy.getClassName())
+        self.assertEqual(obj.className, obj_copy.className)
         self.assertEqual(obj.show(), obj_copy.show())
         self.assertEqual(str(obj), str(obj_copy))
         self.assertEqual(repr(obj), repr(obj_copy))

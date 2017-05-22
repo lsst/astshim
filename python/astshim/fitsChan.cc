@@ -82,6 +82,18 @@ PYBIND11_PLUGIN(fitsChan) {
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
+    cls.def_property("clean", &FitsChan::getClean, &FitsChan::setClean);
+    cls.def_property("defB1950", &FitsChan::getDefB1950, &FitsChan::setDefB1950);
+    cls.def_property("encoding", &FitsChan::getEncoding, &FitsChan::setEncoding);
+    cls.def_property("fitsAxisOrder", &FitsChan::getFitsAxisOrder, &FitsChan::setFitsAxisOrder);
+    cls.def_property("fitsDigits", &FitsChan::getFitsDigits, &FitsChan::setFitsDigits);
+    cls.def_property_readonly("nCard", &FitsChan::getNCard);
+    cls.def_property_readonly("nKey", &FitsChan::getNKey);
+    cls.def_property("iwc", &FitsChan::getIwc, &FitsChan::setIwc);
+    cls.def_property("tabOK", &FitsChan::getTabOK, &FitsChan::setTabOK);
+    cls.def_property("polyTan", &FitsChan::getPolyTan, &FitsChan::setPolyTan);
+    cls.def_property("warnings", &FitsChan::getWarnings, &FitsChan::setWarnings);
+
     cls.def("delFits", &FitsChan::delFits);
     cls.def("emptyFits", &FitsChan::emptyFits);
     cls.def("findFits", &FitsChan::findFits, "name"_a, "inc"_a);
@@ -99,17 +111,6 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("getCardType", &FitsChan::getCardType);
     cls.def("getCarLin", &FitsChan::getCarLin);
     cls.def("getCDMatrix", &FitsChan::getCDMatrix);
-    cls.def("getClean", &FitsChan::getClean);
-    cls.def("getDefB1950", &FitsChan::getDefB1950);
-    cls.def("getEncoding", &FitsChan::getEncoding);
-    cls.def("getFitsAxisOrder", &FitsChan::getFitsAxisOrder);
-    cls.def("getFitsDigits", &FitsChan::getFitsDigits);
-    cls.def("getIwc", &FitsChan::getIwc);
-    cls.def("getNCard", &FitsChan::getNCard);
-    cls.def("getNKey", &FitsChan::getNKey);
-    cls.def("getTabOK", &FitsChan::getTabOK);
-    cls.def("getPolyTan", &FitsChan::getPolyTan);
-    cls.def("getWarnings", &FitsChan::getWarnings);
     cls.def("purgeWcs", &FitsChan::purgeWcs);
     cls.def("putCards", &FitsChan::putCards, "cards"_a);
     cls.def("putFits", &FitsChan::putFits, "card"_a, "overwrite"_a);
@@ -124,15 +125,6 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("setFitsS", &FitsChan::setFitsS, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
     cls.def("setFitsU", &FitsChan::setFitsU, "name"_a, "comment"_a = "", "overwrite"_a = false);
     cls.def("setCDMatrix", &FitsChan::setCDMatrix, "cdmatrix"_a);
-    cls.def("setClean", &FitsChan::setClean, "clean"_a);
-    cls.def("setDefB1950", &FitsChan::setDefB1950, "defB1950"_a);
-    cls.def("setEncoding", &FitsChan::setEncoding, "encoding"_a);
-    cls.def("setFitsAxisOrder", &FitsChan::setFitsAxisOrder, "order"_a);
-    cls.def("setFitsDigits", &FitsChan::setFitsDigits, "digits"_a);
-    cls.def("setIwc", &FitsChan::setIwc, "iwcs"_a);
-    cls.def("setTabOK", &FitsChan::setTabOK, "tabOK"_a);
-    cls.def("setPolyTan", &FitsChan::setPolyTan, "polytan"_a);
-    cls.def("setWarnings", &FitsChan::setWarnings, "warnings"_a);
     cls.def("showFits", &FitsChan::showFits);
     cls.def("testFits", &FitsChan::testFits, "name"_a);
     cls.def("writeFits", &FitsChan::writeFits);

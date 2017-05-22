@@ -20,6 +20,7 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <stdexcept>
+#include <vector>
 
 #include "astshim/CmpFrame.h"
 #include "astshim/Frame.h"

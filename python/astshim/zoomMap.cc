@@ -41,8 +41,9 @@ PYBIND11_PLUGIN(zoomMap) {
 
     cls.def(py::init<int, double, std::string const &>(), "ncoord"_a, "zoom"_a, "options"_a = "");
 
+    cls.def_property_readonly("zoom", &ZoomMap::getZoom);
+
     cls.def("copy", &ZoomMap::copy);
-    cls.def("getZoom", &ZoomMap::getZoom);
 
     return mod.ptr();
 }

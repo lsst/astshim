@@ -46,30 +46,34 @@ PYBIND11_PLUGIN(skyFrame) {
 
     cls.def("copy", &SkyFrame::copy);
 
-    cls.def("getAlignOffset", &SkyFrame::getAlignOffset);
+    cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
+    cls.def_property("asTime", [](SkyFrame const &self) {
+        return std::make_pair(self.getAsTime(1), self.getAsTime(2));
+    },
+    [](SkyFrame &self, std::pair<bool, bool> asTime) {
+        self.setAsTime(1, asTime.first);
+        self.setAsTime(2, asTime.second);
+    });
+    cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
+    cls.def_property("equinox", &SkyFrame::getEquinox, &SkyFrame::setEquinox);
+    cls.def_property_readonly("latAxis", &SkyFrame::getLatAxis);
+    cls.def_property_readonly("lonAxis", &SkyFrame::getLonAxis);
+    cls.def_property("negLon", &SkyFrame::getNegLon, &SkyFrame::setNegLon);
+    cls.def_property("projection", &SkyFrame::getProjection, &SkyFrame::setProjection);
+    cls.def_property("skyRefIs", &SkyFrame::getSkyRefIs, &SkyFrame::setSkyRefIs);
+    cls.def_property("skyTol", &SkyFrame::getSkyTol, &SkyFrame::setSkyTol);
+
     cls.def("getAsTime", &SkyFrame::getAsTime, "axis"_a);
-    cls.def("getEquinox", &SkyFrame::getEquinox);
     cls.def("getIsLatAxis", &SkyFrame::getIsLatAxis, "axis"_a);
     cls.def("getIsLonAxis", &SkyFrame::getIsLonAxis, "axis"_a);
-    cls.def("getLatAxis", &SkyFrame::getLatAxis);
-    cls.def("getLonAxis", &SkyFrame::getLonAxis);
-    cls.def("getNegLon", &SkyFrame::getNegLon);
-    cls.def("getProjection", &SkyFrame::getProjection);
     cls.def("getSkyRef", &SkyFrame::getSkyRef);
-    cls.def("getSkyRefIs", &SkyFrame::getSkyRefIs);
     cls.def("getSkyRefP", &SkyFrame::getSkyRefP);
-    cls.def("getSkyTol", &SkyFrame::getSkyTol);
-
-    cls.def("setAlignOffset", &SkyFrame::setAlignOffset);
     cls.def("setAsTime", &SkyFrame::setAsTime, "axis"_a, "asTime"_a);
     cls.def("setEquinox", &SkyFrame::setEquinox);
     cls.def("setNegLon", &SkyFrame::setNegLon);
     cls.def("setProjection", &SkyFrame::setProjection);
     cls.def("setSkyRef", &SkyFrame::setSkyRef);
-    cls.def("setSkyRefIs", &SkyFrame::setSkyRefIs);
     cls.def("setSkyRefP", &SkyFrame::setSkyRefP);
-    cls.def("setSkyTol", &SkyFrame::setSkyTol);
-
     cls.def("skyOffsetMap", &SkyFrame::skyOffsetMap);
 
     return mod.ptr();

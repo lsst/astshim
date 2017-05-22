@@ -16,26 +16,26 @@ class TestObject(ObjectTestCase):
         zoom = 1.3
         obj = astshim.ZoomMap(nin, zoom)
 
-        self.assertEqual(obj.getClassName(), "ZoomMap")
+        self.assertEqual(obj.className, "ZoomMap")
 
         self.assertTrue(obj.hasAttribute("ID"))
         self.assertTrue(obj.hasAttribute("Ident"))
         self.assertTrue(obj.hasAttribute("UseDefs"))
 
-        self.assertEqual(obj.getID(), "")
-        self.assertEqual(obj.getIdent(), "")
-        self.assertEqual(obj.getUseDefs(), True)
+        self.assertEqual(obj.id, "")
+        self.assertEqual(obj.ident, "")
+        self.assertEqual(obj.useDefs, True)
 
     def test_clear_and_test(self):
         """Test Object.clear and Object.test"""
         obj = astshim.ZoomMap(2, 1.3)
 
         self.assertFalse(obj.test("ID"))
-        obj.setID("initial_id")
-        self.assertEqual(obj.getID(), "initial_id")
+        obj.id = "initial_id"
+        self.assertEqual(obj.id, "initial_id")
         self.assertTrue(obj.test("ID"))
         obj.clear("ID")
-        self.assertEqual(obj.getID(), "")
+        self.assertEqual(obj.id, "")
         self.assertFalse(obj.test("ID"))
 
     def test_copy_and_same(self):
@@ -56,9 +56,9 @@ class TestObject(ObjectTestCase):
         del seriesMap
         self.assertEqual(obj.getRefCount(), 1)
 
-        cp.setIdent("copy")
-        self.assertEqual(cp.getIdent(), "copy")
-        self.assertEqual(obj.getIdent(), "original")
+        cp.ident = "copy"
+        self.assertEqual(cp.ident, "copy")
+        self.assertEqual(obj.ident, "original")
 
         del cp
         self.assertEqual(obj.getNObject(), initialNumObj)
@@ -97,21 +97,21 @@ class TestObject(ObjectTestCase):
         """Test that ID is *not* transferred to copies"""
         obj = astshim.ZoomMap(2, 1.3)
 
-        self.assertEqual(obj.getID(), "")
-        obj.setID("initial_id")
-        self.assertEqual(obj.getID(), "initial_id")
+        self.assertEqual(obj.id, "")
+        obj.id = "initial_id"
+        self.assertEqual(obj.id, "initial_id")
         cp = obj.copy()
-        self.assertEqual(cp.getID(), "")
+        self.assertEqual(cp.id, "")
 
     def test_ident(self):
         """Test that Ident *is* transferred to copies"""
         obj = astshim.ZoomMap(2, 1.3)
 
-        self.assertEqual(obj.getIdent(), "")
-        obj.setIdent("initial_ident")
-        self.assertEqual(obj.getIdent(), "initial_ident")
+        self.assertEqual(obj.ident, "")
+        obj.ident = "initial_ident"
+        self.assertEqual(obj.ident, "initial_ident")
         cp = obj.copy()
-        self.assertEqual(cp.getIdent(), "initial_ident")
+        self.assertEqual(cp.ident, "initial_ident")
 
 
 if __name__ == "__main__":

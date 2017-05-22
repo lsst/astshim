@@ -15,7 +15,7 @@ class TestRateMap(MappingTestCase):
         ratemap = astshim.RateMap(astshim.ZoomMap(2, zoomfac), 2, 2)
         self.assertIsInstance(ratemap, astshim.RateMap)
         self.assertIsInstance(ratemap, astshim.Mapping)
-        self.assertEqual(ratemap.getNOut(), 1)
+        self.assertEqual(ratemap.nOut, 1)
 
         self.checkBasicSimplify(ratemap)
         self.checkCopy(ratemap)

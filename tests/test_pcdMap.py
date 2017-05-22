@@ -14,15 +14,13 @@ class TestPcdMap(MappingTestCase):
         coeff = 0.002
         ctr = [2, 3]
         pcdmap = astshim.PcdMap(coeff, ctr)
-        self.assertEqual(pcdmap.getClassName(), "PcdMap")
+        self.assertEqual(pcdmap.className, "PcdMap")
         self.assertIsInstance(pcdmap, astshim.PcdMap)
         self.assertIsInstance(pcdmap, astshim.Mapping)
-        self.assertEqual(pcdmap.getNIn(), 2)
-        self.assertEqual(pcdmap.getNOut(), 2)
-        self.assertEqual(pcdmap.getDisco(), coeff)
-        self.assertAlmostEqual(pcdmap.getPcdCen(1), ctr[0])
-        self.assertAlmostEqual(pcdmap.getPcdCen(2), ctr[1])
-        assert_allclose(pcdmap.getPcdCen(), ctr)
+        self.assertEqual(pcdmap.nIn, 2)
+        self.assertEqual(pcdmap.nOut, 2)
+        self.assertEqual(pcdmap.disco, coeff)
+        assert_allclose(pcdmap.pcdCen, ctr)
 
         self.checkBasicSimplify(pcdmap)
         self.checkCopy(pcdmap)

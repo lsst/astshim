@@ -40,7 +40,7 @@ class ObjectTestCase(unittest.TestCase):
         chan1.write(obj)
         ss1.sinkToSource()
         obj_copy1 = chan1.read()
-        self.assertEqual(obj.getClassName(), obj_copy1.getClassName())
+        self.assertEqual(obj.className, obj_copy1.className)
         self.assertEqual(obj.show(), obj_copy1.show())
         self.assertEqual(str(obj), str(obj_copy1))
         self.assertEqual(repr(obj), repr(obj_copy1))
@@ -51,7 +51,7 @@ class ObjectTestCase(unittest.TestCase):
         chan2.write(obj)
         ss2.sinkToSource()
         obj_copy2 = chan2.read()
-        self.assertEqual(obj.getClassName(), obj_copy2.getClassName())
+        self.assertEqual(obj.className, obj_copy2.className)
         self.assertEqual(obj.show(), obj_copy2.show())
         self.assertEqual(str(obj), str(obj_copy2))
         self.assertEqual(repr(obj), repr(obj_copy2))
@@ -110,19 +110,19 @@ class MappingTestCase(ObjectTestCase):
         amapinv = amap.getInverse()
         cmp1 = amapinv.of(amap)
         unit1 = cmp1.simplify()
-        self.assertEqual(unit1.getClassName(), "UnitMap")
-        self.assertEqual(amap.getNIn(), cmp1.getNIn())
-        self.assertEqual(amap.getNIn(), cmp1.getNOut())
-        self.assertEqual(cmp1.getNIn(), unit1.getNIn())
-        self.assertEqual(cmp1.getNOut(), unit1.getNOut())
+        self.assertEqual(unit1.className, "UnitMap")
+        self.assertEqual(amap.nIn, cmp1.nIn)
+        self.assertEqual(amap.nIn, cmp1.nOut)
+        self.assertEqual(cmp1.nIn, unit1.nIn)
+        self.assertEqual(cmp1.nOut, unit1.nOut)
 
         cmp2 = amap.of(amapinv)
         unit2 = cmp2.simplify()
-        self.assertEqual(unit2.getClassName(), "UnitMap")
-        self.assertEqual(amapinv.getNIn(), cmp2.getNIn())
-        self.assertEqual(amapinv.getNIn(), cmp2.getNOut())
-        self.assertEqual(cmp2.getNIn(), unit2.getNIn())
-        self.assertEqual(cmp2.getNOut(), unit2.getNOut())
+        self.assertEqual(unit2.className, "UnitMap")
+        self.assertEqual(amapinv.nIn, cmp2.nIn)
+        self.assertEqual(amapinv.nIn, cmp2.nOut)
+        self.assertEqual(cmp2.nIn, unit2.nIn)
+        self.assertEqual(cmp2.nOut, unit2.nOut)
 
         for ma, mb, desmap3 in (
             (unit1, amap, amap),
@@ -132,11 +132,11 @@ class MappingTestCase(ObjectTestCase):
         ):
             cmp3 = mb.of(ma)
             cmp3simp = cmp3.simplify()
-            self.assertEqual(cmp3simp.getClassName(), amap.simplify().getClassName())
-            self.assertEqual(ma.getNIn(), cmp3.getNIn())
-            self.assertEqual(mb.getNOut(), cmp3.getNOut())
-            self.assertEqual(cmp3.getNIn(), cmp3simp.getNIn())
-            self.assertEqual(cmp3.getNOut(), cmp3simp.getNOut())
+            self.assertEqual(cmp3simp.className, amap.simplify().className)
+            self.assertEqual(ma.nIn, cmp3.nIn)
+            self.assertEqual(mb.nOut, cmp3.nOut)
+            self.assertEqual(cmp3.nIn, cmp3simp.nIn)
+            self.assertEqual(cmp3.nOut, cmp3simp.nOut)
 
 
 def makePolyMapCoeffs(nIn, nOut):
@@ -176,10 +176,10 @@ def makeTwoWayPolyMap(nIn, nOut):
     forwardCoeffs = makePolyMapCoeffs(nIn, nOut)
     reverseCoeffs = makePolyMapCoeffs(nOut, nIn)
     polyMap = PolyMap(forwardCoeffs, reverseCoeffs)
-    assert polyMap.getNIn() == nIn
-    assert polyMap.getNOut() == nOut
-    assert polyMap.hasForward()
-    assert polyMap.hasInverse()
+    assert polyMap.nIn == nIn
+    assert polyMap.nOut == nOut
+    assert polyMap.hasForward
+    assert polyMap.hasInverse
     return polyMap
 
 
@@ -195,8 +195,8 @@ def makeForwardPolyMap(nIn, nOut):
     """
     forwardCoeffs = makePolyMapCoeffs(nIn, nOut)
     polyMap = PolyMap(forwardCoeffs, nOut, "IterInverse=0")
-    assert polyMap.getNIn() == nIn
-    assert polyMap.getNOut() == nOut
-    assert polyMap.hasForward()
-    assert not polyMap.hasInverse()
+    assert polyMap.nIn == nIn
+    assert polyMap.nOut == nOut
+    assert polyMap.hasForward
+    assert not polyMap.hasInverse
     return polyMap

@@ -22,6 +22,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <vector>
+
 #include "astshim/CmpFrame.h"
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
@@ -84,6 +86,23 @@ PYBIND11_PLUGIN(frame) {
 
     cls.def(py::init<int, std::string const &>(), "naxes"_a, "options"_a = "");
 
+    cls.def_property("activeUnit", &Frame::getActiveUnit, &Frame::setActiveUnit);
+    cls.def_property("alignSystem", &Frame::getAlignSystem, &Frame::setAlignSystem);
+    cls.def_property("domain", &Frame::getDomain, &Frame::setDomain);
+    cls.def_property("dut1", &Frame::getDut1, &Frame::setDut1);
+    cls.def_property("epoch", &Frame::getEpoch, (void (Frame::*)(double)) & Frame::setEpoch);
+    cls.def_property("matchEnd", &Frame::getMatchEnd, &Frame::setMatchEnd);
+    cls.def_property("maxAxes", &Frame::getMaxAxes, &Frame::setMaxAxes);
+    cls.def_property("minAxes", &Frame::getMinAxes, &Frame::setMinAxes);
+    cls.def_property_readonly("nAxes", &Frame::getNAxes);
+    cls.def_property("obsAlt", &Frame::getObsAlt, &Frame::setObsAlt);
+    cls.def_property("obsLat", &Frame::getObsLat, &Frame::setObsLat);
+    cls.def_property("obsLon", &Frame::getObsLon, &Frame::setObsLon);
+    cls.def_property("permute", &Frame::getPermute, &Frame::setPermute);
+    cls.def_property("preserveAxes", &Frame::getPreserveAxes, &Frame::setPreserveAxes);
+    cls.def_property("system", &Frame::getSystem, &Frame::setSystem);
+    cls.def_property("title", &Frame::getTitle, &Frame::setTitle);
+
     cls.def("copy", &Frame::copy);
     cls.def("angle", &Frame::angle, "a"_a, "b"_a, "c"_a);
     cls.def("axAngle", &Frame::axAngle, "a"_a, "b"_a, "axis"_a);
@@ -93,31 +112,16 @@ PYBIND11_PLUGIN(frame) {
     cls.def("distance", &Frame::distance, "point1"_a, "point2"_a);
     cls.def("findFrame", &Frame::findFrame, "template"_a, "domainlist"_a = "");
     cls.def("format", &Frame::format, "axis"_a, "value"_a);
-    cls.def("getActiveUnit", &Frame::getActiveUnit);
-    cls.def("getAlignSystem", &Frame::getAlignSystem);
     cls.def("getBottom", &Frame::getBottom, "axis"_a);
-    cls.def("getDirection", &Frame::getDirection, "axis"_a);
-    cls.def("getDomain", &Frame::getDomain);
-    cls.def("getDut1", &Frame::getDut1);
-    cls.def("getEpoch", &Frame::getEpoch);
-    cls.def("getFormat", &Frame::getFormat);
     cls.def("getDigits", (int (Frame::*)() const) & Frame::getDigits);
     cls.def("getDigits", (int (Frame::*)(int) const) & Frame::getDigits, "axis"_a);
+    cls.def("getDirection", &Frame::getDirection, "axis"_a);
+    cls.def("getFormat", &Frame::getFormat, "axis"_a);
     cls.def("getInternalUnit", &Frame::getInternalUnit);
     cls.def("getLabel", &Frame::getLabel);
-    cls.def("getMatchEnd", &Frame::getMatchEnd);
-    cls.def("getMaxAxes", &Frame::getMaxAxes);
-    cls.def("getMinAxes", &Frame::getMinAxes);
-    cls.def("getNAxes", &Frame::getNAxes);
-    cls.def("getNormUnit", &Frame::getNormUnit, "axis"_a);
-    cls.def("getObsAlt", &Frame::getObsAlt);
-    cls.def("getObsLat", &Frame::getObsLat);
-    cls.def("getObsLon", &Frame::getObsLon);
-    cls.def("getPermute", &Frame::getPermute);
-    cls.def("getPreserveAxes", &Frame::getPreserveAxes);
     cls.def("getSymbol", &Frame::getSymbol, "axis"_a);
-    cls.def("getSystem", &Frame::getSystem);
-    cls.def("getTitle", &Frame::getTitle);
+    cls.def("getNormUnit", &Frame::getNormUnit, "axis"_a);
+    cls.def("getSymbol", &Frame::getSymbol, "axis"_a);
     cls.def("getTop", &Frame::getTop, "axis"_a);
     cls.def("getUnit", &Frame::getUnit, "axis"_a);
     cls.def("intersect", &Frame::intersect, "a1"_a, "a2"_a, "b1"_a, "b2"_a);
@@ -129,29 +133,14 @@ PYBIND11_PLUGIN(frame) {
     cls.def("permAxes", &Frame::permAxes, "perm"_a);
     cls.def("pickAxes", &Frame::pickAxes, "axes"_a);
     cls.def("resolve", &Frame::resolve, "point1"_a, "point2"_a, "point3"_a);
-    cls.def("setAlignSystem", &Frame::setAlignSystem, "system"_a);
-    cls.def("setBottom", &Frame::setBottom, "axis"_a, "bottom"_a);
     cls.def("setDigits", (void (Frame::*)(int)) & Frame::setDigits, "digits"_a);
     cls.def("setDigits", (void (Frame::*)(int, int)) & Frame::setDigits, "axis"_a, "digits"_a);
     cls.def("setDirection", &Frame::setDirection, "direction"_a, "axis"_a);
-    cls.def("setDomain", &Frame::setDomain, "domain"_a);
-    cls.def("setDut1", &Frame::setDut1, "dut1"_a);
-    cls.def("setEpoch", (void (Frame::*)(double)) & Frame::setEpoch, "epoch"_a);
+    // keep setEpoch(string); use the epoch property to deal with it as a float
     cls.def("setEpoch", (void (Frame::*)(std::string const &)) & Frame::setEpoch, "epoch"_a);
-    cls.def("setFormat", &Frame::setFormat, "axis"_a, "format"_a);
+    cls.def("setFormat", &Frame::setFormat, "axis"_a, "format"_a"format");
     cls.def("setLabel", &Frame::setLabel, "axis"_a, "label"_a);
-    cls.def("setMatchEnd", &Frame::setMatchEnd, "match"_a);
-    cls.def("setMaxAxes", &Frame::setMaxAxes, "maxAxes"_a);
-    cls.def("setMinAxes", &Frame::setMinAxes, "minAxes"_a);
-    cls.def("setObsAlt", &Frame::setObsAlt, "altitude"_a);
-    cls.def("setObsLat", &Frame::setObsLat, "latitude"_a);
-    cls.def("setObsLon", &Frame::setObsLon, "longitutde"_a);
-    cls.def("setActiveUnit", &Frame::setActiveUnit, "enable"_a);
-    cls.def("setPermute", &Frame::setPermute, "permute"_a);
-    cls.def("setPreserveAxes", &Frame::setPreserveAxes, "preserve"_a);
     cls.def("setSymbol", &Frame::setSymbol, "axis"_a, "symbol"_a);
-    cls.def("setSystem", &Frame::setSystem, "system"_a);
-    cls.def("setTitle", &Frame::setTitle, "title"_a);
     cls.def("setTop", &Frame::setTop, "axis"_a, "top"_a);
     cls.def("setUnit", &Frame::setUnit, "axis"_a, "unit"_a);
     cls.def("unformat", &Frame::unformat, "axis"_a, "str"_a);

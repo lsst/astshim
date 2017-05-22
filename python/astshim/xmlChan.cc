@@ -41,12 +41,9 @@ PYBIND11_PLUGIN(xmlChan) {
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
-    cls.def("getXmlFormat", &XmlChan::getXmlFormat);
-    cls.def("getXmlLength", &XmlChan::getXmlLength);
-    cls.def("getXmlPrefix", &XmlChan::getXmlPrefix);
-    cls.def("setXmlFormat", &XmlChan::setXmlFormat, "format"_a);
-    cls.def("setXmlLength", &XmlChan::setXmlLength, "len"_a);
-    cls.def("setXmlPrefix", &XmlChan::setXmlPrefix, "prefix"_a);
+    cls.def_property("xmlFormat", &XmlChan::getXmlFormat, &XmlChan::setXmlFormat);
+    cls.def_property("xmlLength", &XmlChan::getXmlLength, &XmlChan::setXmlLength);
+    cls.def_property("xmlPrefix", &XmlChan::getXmlPrefix, &XmlChan::setXmlPrefix);
 
     return mod.ptr();
 }

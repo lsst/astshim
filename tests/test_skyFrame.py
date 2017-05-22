@@ -12,24 +12,24 @@ class TestSkyFrame(MappingTestCase):
 
     def test_FrameBasics(self):
         frame = astshim.SkyFrame()
-        self.assertEqual(frame.getClassName(), "SkyFrame")
-        self.assertEqual(frame.getNIn(), 2)
-        self.assertEqual(frame.getNAxes(), 2)
-        self.assertEqual(frame.getMaxAxes(), 2)
-        self.assertEqual(frame.getMinAxes(), 2)
+        self.assertEqual(frame.className, "SkyFrame")
+        self.assertEqual(frame.nIn, 2)
+        self.assertEqual(frame.nAxes, 2)
+        self.assertEqual(frame.maxAxes, 2)
+        self.assertEqual(frame.minAxes, 2)
 
         # default values for Frame properties (methods below test
         # setters and getters of SkyFrame properties)
-        self.assertEqual(frame.getAlignSystem(), "ICRS")
-        self.assertEqual(frame.getDut1(), 0.0)
-        self.assertEqual(frame.getEpoch(), 2000.0)
-        self.assertEqual(frame.getObsAlt(), 0.0)
-        self.assertEqual(frame.getObsLat(), "N0:00:00.00")
-        self.assertEqual(frame.getObsLon(), "E0:00:00.00")
-        self.assertTrue(frame.getPermute())
-        self.assertFalse(frame.getPreserveAxes())
-        self.assertEqual(frame.getSystem(), "ICRS")
-        self.assertEqual(frame.getTitle(), "ICRS coordinates")
+        self.assertEqual(frame.alignSystem, "ICRS")
+        self.assertEqual(frame.dut1, 0.0)
+        self.assertEqual(frame.epoch, 2000.0)
+        self.assertEqual(frame.obsAlt, 0.0)
+        self.assertEqual(frame.obsLat, "N0:00:00.00")
+        self.assertEqual(frame.obsLon, "E0:00:00.00")
+        self.assertTrue(frame.permute)
+        self.assertFalse(frame.preserveAxes)
+        self.assertEqual(frame.system, "ICRS")
+        self.assertEqual(frame.title, "ICRS coordinates")
 
         self.assertTrue(math.isinf(frame.getBottom(1)))
         self.assertTrue(math.isinf(frame.getTop(1)))
@@ -55,8 +55,8 @@ class TestSkyFrame(MappingTestCase):
 
         frame = astshim.SkyFrame()
 
-        self.assertEqual(frame.getLonAxis(), 1)
-        self.assertEqual(frame.getLatAxis(), 2)
+        self.assertEqual(frame.lonAxis, 1)
+        self.assertEqual(frame.latAxis, 2)
         self.assertTrue(frame.getIsLonAxis(1))
         self.assertTrue(frame.getIsLatAxis(2))
         self.assertFalse(frame.getIsLonAxis(2))
@@ -64,8 +64,8 @@ class TestSkyFrame(MappingTestCase):
 
         # permute axes
         frame.permAxes([2, 1])
-        self.assertEqual(frame.getLonAxis(), 2)
-        self.assertEqual(frame.getLatAxis(), 1)
+        self.assertEqual(frame.lonAxis, 2)
+        self.assertEqual(frame.latAxis, 1)
         self.assertTrue(frame.getIsLonAxis(2))
         self.assertTrue(frame.getIsLatAxis(1))
         self.assertFalse(frame.getIsLonAxis(1))
@@ -73,8 +73,8 @@ class TestSkyFrame(MappingTestCase):
 
         # permute again to restore original state
         frame.permAxes([2, 1])
-        self.assertEqual(frame.getLonAxis(), 1)
-        self.assertEqual(frame.getLatAxis(), 2)
+        self.assertEqual(frame.lonAxis, 1)
+        self.assertEqual(frame.latAxis, 2)
         self.assertTrue(frame.getIsLonAxis(1))
         self.assertTrue(frame.getIsLatAxis(2))
         self.assertFalse(frame.getIsLonAxis(2))
@@ -83,9 +83,9 @@ class TestSkyFrame(MappingTestCase):
     def test_SkyFrameAlignOffset(self):
         frame = astshim.SkyFrame()
 
-        self.assertFalse(frame.getAlignOffset())
-        frame.setAlignOffset(True)
-        self.assertTrue(frame.getAlignOffset())
+        self.assertFalse(frame.alignOffset)
+        frame.alignOffset = True
+        self.assertTrue(frame.alignOffset)
 
     def test_SkyFrameAsTime(self):
         frame = astshim.SkyFrame()
@@ -98,25 +98,25 @@ class TestSkyFrame(MappingTestCase):
     def test_SkyFrameEquinox(self):
         frame = astshim.SkyFrame()
 
-        self.assertAlmostEqual(frame.getEquinox(), 2000)
+        self.assertAlmostEqual(frame.equinox, 2000)
         newEquinox = 2345.6
-        frame.setEquinox(newEquinox)
-        self.assertAlmostEqual(frame.getEquinox(), newEquinox)
+        frame.equinox = newEquinox
+        self.assertAlmostEqual(frame.equinox, newEquinox)
 
     def test_SkyFrameNegLon(self):
         frame = astshim.SkyFrame()
 
-        self.assertFalse(frame.getNegLon())
-        frame.setNegLon(True)
-        self.assertTrue(frame.getNegLon())
+        self.assertFalse(frame.negLon)
+        frame.negLon = True
+        self.assertTrue(frame.negLon)
 
     def test_SkyFrameProjection(self):
         frame = astshim.SkyFrame()
 
-        self.assertEqual(frame.getProjection(), "")
+        self.assertEqual(frame.projection, "")
         newProjection = "Arbitrary description"
-        frame.setProjection(newProjection)
-        self.assertEqual(frame.getProjection(), newProjection)
+        frame.projection = newProjection
+        self.assertEqual(frame.projection, newProjection)
 
     def test_SkyFrameSkyRef(self):
         frame = astshim.SkyFrame()
@@ -129,10 +129,10 @@ class TestSkyFrame(MappingTestCase):
     def test_SkyFrameSkyRefIs(self):
         frame = astshim.SkyFrame()
 
-        self.assertEqual(frame.getSkyRefIs(), "Ignored")
+        self.assertEqual(frame.skyRefIs, "Ignored")
         for newSkyRefIs in ("Origin", "Pole", "Ignored"):
-            frame.setSkyRefIs(newSkyRefIs)
-            self.assertEqual(frame.getSkyRefIs(), newSkyRefIs)
+            frame.skyRefIs = newSkyRefIs
+            self.assertEqual(frame.skyRefIs, newSkyRefIs)
 
     def test_SkyFrameSkyRefP(self):
         frame = astshim.SkyFrame()
@@ -147,16 +147,16 @@ class TestSkyFrame(MappingTestCase):
         frame = astshim.SkyFrame()
 
         # the default is arbitrary so do not to assume a specific value
-        defSkyTol = frame.getSkyTol()
+        defSkyTol = frame.skyTol
         newSkyTol = defSkyTol*1.2345
-        frame.setSkyTol(newSkyTol)
-        self.assertAlmostEqual(frame.getSkyTol(), newSkyTol)
+        frame.skyTol = newSkyTol
+        self.assertAlmostEqual(frame.skyTol, newSkyTol)
 
     def test_SkyFrameSkyOffsetMap(self):
         frame = astshim.SkyFrame()
 
         mapping = frame.skyOffsetMap()
-        self.assertEqual(mapping.getClassName(), "UnitMap")
+        self.assertEqual(mapping.className, "UnitMap")
 
 
 if __name__ == "__main__":

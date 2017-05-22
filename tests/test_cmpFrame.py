@@ -16,7 +16,7 @@ class TestCmpFrame(MappingTestCase):
         # adding to a CmpFrame increases by 1
         self.assertEqual(frame2.getRefCount(), 2)
 
-        self.assertEqual(cmpframe.getNAxes(), 3)
+        self.assertEqual(cmpframe.nAxes, 3)
         self.assertEqual(cmpframe.getLabel(1), "a")
         self.assertEqual(cmpframe.getLabel(2), "b")
         self.assertEqual(cmpframe.getLabel(3), "c")

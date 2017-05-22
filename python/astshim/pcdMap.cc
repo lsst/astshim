@@ -44,10 +44,10 @@ PYBIND11_PLUGIN(pcdMap) {
     cls.def(py::init<double, std::vector<double> const &, std::string const &>(), "disco"_a, "pcdcen"_a,
             "options"_a = "");
 
+    cls.def_property_readonly("disco", &PcdMap::getDisco);
+    cls.def_property_readonly("pcdCen", (std::vector<double>(PcdMap::*)() const) & PcdMap::getPcdCen);
+
     cls.def("copy", &PcdMap::copy);
-    cls.def("getDisco", &PcdMap::getDisco);
-    cls.def("getPcdCen", (double (PcdMap::*)(int) const) & PcdMap::getPcdCen, "axis"_a);
-    cls.def("getPcdCen", (std::vector<double>(PcdMap::*)() const) & PcdMap::getPcdCen);
 
     return mod.ptr();
 }

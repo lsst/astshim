@@ -23,12 +23,13 @@ class TestPolyMap(MappingTestCase):
         self.assertIsInstance(pm, astshim.Object)
         self.assertIsInstance(pm, astshim.Mapping)
         self.assertIsInstance(pm, astshim.PolyMap)
-        self.assertEqual(pm.getNIn(), 2)
-        self.assertEqual(pm.getNOut(), 2)
-        self.assertEqual(pm.getNIterInverse(), 4)
-        self.assertAlmostEqual(pm.getTolInverse(), 1.0E-6)
-        self.assertTrue(pm.hasForward())
-        self.assertTrue(pm.hasInverse())
+        self.assertEqual(pm.nIn, 2)
+        self.assertEqual(pm.nOut, 2)
+        self.assertTrue(pm.iterInverse)
+        self.assertEqual(pm.nIterInverse, 4)
+        self.assertAlmostEqual(pm.tolInverse, 1.0E-6)
+        self.assertTrue(pm.hasForward)
+        self.assertTrue(pm.hasInverse)
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
@@ -59,12 +60,13 @@ class TestPolyMap(MappingTestCase):
         self.assertIsInstance(pm, astshim.Object)
         self.assertIsInstance(pm, astshim.Mapping)
         self.assertIsInstance(pm, astshim.PolyMap)
-        self.assertEqual(pm.getNIn(), 2)
-        self.assertEqual(pm.getNOut(), 2)
-        self.assertEqual(pm.getNIterInverse(), 6)
-        self.assertAlmostEqual(pm.getTolInverse(), 1.2E-7)
-        self.assertTrue(pm.hasForward())
-        self.assertTrue(pm.hasInverse())
+        self.assertEqual(pm.nIn, 2)
+        self.assertEqual(pm.nOut, 2)
+        self.assertTrue(pm.iterInverse)
+        self.assertEqual(pm.nIterInverse, 6)
+        self.assertAlmostEqual(pm.tolInverse, 1.2E-7)
+        self.assertTrue(pm.hasForward)
+        self.assertTrue(pm.hasInverse)
 
         indata = np.array([
             [1.0, 2.0, 3.0],
@@ -91,10 +93,11 @@ class TestPolyMap(MappingTestCase):
         ])
         pm = astshim.PolyMap(coeff_f, 2)
         self.assertIsInstance(pm, astshim.PolyMap)
-        self.assertEqual(pm.getNIn(), 2)
-        self.assertEqual(pm.getNOut(), 2)
-        self.assertTrue(pm.hasForward())
-        self.assertFalse(pm.hasInverse())
+        self.assertEqual(pm.nIn, 2)
+        self.assertEqual(pm.nOut, 2)
+        self.assertTrue(pm.hasForward)
+        self.assertFalse(pm.hasInverse)
+        self.assertFalse(pm.iterInverse)
 
         indata = np.array([
             [1.0, 2.0, 3.0],
@@ -105,9 +108,10 @@ class TestPolyMap(MappingTestCase):
             pm.tranInverse(indata)
 
         pminv = pm.getInverse()
-        self.assertFalse(pminv.hasForward())
-        self.assertTrue(pminv.hasInverse())
-        self.assertTrue(pminv.isInverted())
+        self.assertFalse(pminv.hasForward)
+        self.assertTrue(pminv.hasInverse)
+        self.assertTrue(pminv.isInverted)
+        self.assertFalse(pm.iterInverse)
 
         outdata2 = pminv.tranInverse(indata)
         # outdata and outdata2 should be identical because inverting
@@ -130,8 +134,8 @@ class TestPolyMap(MappingTestCase):
             [-0.5, 2, 0, 1],
         ])
         pm = astshim.PolyMap(coeff_f, coeff_i)
-        self.assertEqual(pm.getNIn(), 2)
-        self.assertEqual(pm.getNOut(), 2)
+        self.assertEqual(pm.nIn, 2)
+        self.assertEqual(pm.nOut, 2)
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
@@ -156,15 +160,16 @@ class TestPolyMap(MappingTestCase):
             [-0.5, 2, 0, 1],
         ])
         pm = astshim.PolyMap(coeff_f, coeff_i)
-        self.assertEqual(pm.getNIn(), 2)
-        self.assertEqual(pm.getNOut(), 2)
+        self.assertEqual(pm.nIn, 2)
+        self.assertEqual(pm.nOut, 2)
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
         self.checkPersistence(pm)
 
-        self.assertFalse(pm.hasForward())
-        self.assertTrue(pm.hasInverse())
+        self.assertFalse(pm.hasForward)
+        self.assertTrue(pm.hasInverse)
+        self.assertFalse(pm.iterInverse)
 
     def test_PolyMapEmptyInverseCoeffs(self):
         """Test constructing a PolyMap with empty inverse coefficients
@@ -178,15 +183,16 @@ class TestPolyMap(MappingTestCase):
         coeff_i = np.array([], dtype=float)
         coeff_i.shape = (0, 4)
         pm = astshim.PolyMap(coeff_f, coeff_i)
-        self.assertEqual(pm.getNIn(), 2)
-        self.assertEqual(pm.getNOut(), 2)
+        self.assertEqual(pm.nIn, 2)
+        self.assertEqual(pm.nOut, 2)
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
         self.checkPersistence(pm)
 
-        self.assertTrue(pm.hasForward())
-        self.assertFalse(pm.hasInverse())
+        self.assertTrue(pm.hasForward)
+        self.assertFalse(pm.hasInverse)
+        self.assertFalse(pm.iterInverse)
 
     def test_PolyMapNoTransform(self):
         """Test constructing a PolyMap with neither forward nor inverse

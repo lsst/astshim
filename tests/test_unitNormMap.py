@@ -16,10 +16,10 @@ class TestUnitNormMap(MappingTestCase):
         for nin in (1, 2, 3):
             center = np.array([-1, 1, 2][0:nin], dtype=float)
             unitnormmap = astshim.UnitNormMap(center)
-            self.assertEqual(unitnormmap.getClassName(), "UnitNormMap")
-            self.assertEqual(unitnormmap.getNIn(), nin)
-            self.assertEqual(unitnormmap.getNOut(), nin + 1)
-            self.assertFalse(unitnormmap.getIsLinear())
+            self.assertEqual(unitnormmap.className, "UnitNormMap")
+            self.assertEqual(unitnormmap.nIn, nin)
+            self.assertEqual(unitnormmap.nOut, nin + 1)
+            self.assertFalse(unitnormmap.isLinear)
 
             self.checkBasicSimplify(unitnormmap)
             self.checkCopy(unitnormmap)
@@ -86,13 +86,13 @@ class TestUnitNormMap(MappingTestCase):
             (unm1inv, winmap_notunitscale, "SeriesMap"),
         ):
             cmpmap = map2.of(map1)
-            self.assertEqual(map1.getNIn(), cmpmap.getNIn())
-            self.assertEqual(map2.getNOut(), cmpmap.getNOut())
+            self.assertEqual(map1.nIn, cmpmap.nIn)
+            self.assertEqual(map2.nOut, cmpmap.nOut)
             cmpmap_simp = cmpmap.simplify()
-            self.assertEqual(cmpmap_simp.getClassName(), pred_simplified_class_name)
-            self.assertEqual(cmpmap.getNIn(), cmpmap_simp.getNIn())
-            self.assertEqual(cmpmap.getNOut(), cmpmap_simp.getNOut())
-            testptview = np.array(testpoints[0:cmpmap.getNIn()])
+            self.assertEqual(cmpmap_simp.className, pred_simplified_class_name)
+            self.assertEqual(cmpmap.nIn, cmpmap_simp.nIn)
+            self.assertEqual(cmpmap.nOut, cmpmap_simp.nOut)
+            testptview = np.array(testpoints[0:cmpmap.nIn])
             assert_allclose(cmpmap.tranForward(
                 testptview), cmpmap_simp.tranForward(testptview))
 

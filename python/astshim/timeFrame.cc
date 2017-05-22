@@ -43,18 +43,13 @@ PYBIND11_PLUGIN(timeFrame) {
 
     cls.def(py::init<std::string const &>(), "options"_a = "");
 
+    cls.def_property("alignTimeScale", &TimeFrame::getAlignTimeScale, &TimeFrame::setAlignTimeScale);
+    cls.def_property("ltOffset", &TimeFrame::getLTOffset, &TimeFrame::setLTOffset);
+    cls.def_property("timeOrigin", &TimeFrame::getTimeOrigin, &TimeFrame::setTimeOrigin);
+    cls.def_property("timeScale", &TimeFrame::getTimeScale, &TimeFrame::setTimeScale);
+
     cls.def("copy", &TimeFrame::copy);
     cls.def("currentTime", &TimeFrame::currentTime);
-
-    cls.def("getAlignTimeScale", &TimeFrame::getAlignTimeScale);
-    cls.def("getLTOffset", &TimeFrame::getLTOffset);
-    cls.def("getTimeOrigin", &TimeFrame::getTimeOrigin);
-    cls.def("getTimeScale", &TimeFrame::getTimeScale);
-
-    cls.def("setAlignTimeScale", &TimeFrame::setAlignTimeScale, "scale"_a);
-    cls.def("setLTOffset", &TimeFrame::setLTOffset, "offset"_a);
-    cls.def("setTimeOrigin", &TimeFrame::setTimeOrigin, "origin"_a);
-    cls.def("setTimeScale", &TimeFrame::setTimeScale, "scale"_a);
 
     return mod.ptr();
 }

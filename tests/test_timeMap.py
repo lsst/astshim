@@ -16,9 +16,9 @@ class TestTimeMap(MappingTestCase):
         """Test a TimeMap with no conversions added
         """
         timemap = astshim.TimeMap()
-        self.assertEqual(timemap.getClassName(), "TimeMap")
-        self.assertEqual(timemap.getNIn(), 1)
-        self.assertEqual(timemap.getNOut(), 1)
+        self.assertEqual(timemap.className, "TimeMap")
+        self.assertEqual(timemap.nIn, 1)
+        self.assertEqual(timemap.nOut, 1)
 
         self.checkCopy(timemap)
         self.checkPersistence(timemap)

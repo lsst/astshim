@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include "astshim/Mapping.h"
 #include "astshim/WcsMap.h"
@@ -77,13 +78,14 @@ PYBIND11_PLUGIN(wcsMap) {
     cls.def(py::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,
             "latax"_a, "options"_a = "");
 
+    cls.def_property_readonly("natLat", &WcsMap::getNatLat);
+    cls.def_property_readonly("natLon", &WcsMap::getNatLon);
+    cls.def_property_readonly("wcsType", &WcsMap::getWcsType);
+    cls.def_property_readonly("wcsAxis", &WcsMap::getWcsAxis);
+
     cls.def("copy", &WcsMap::copy);
-    cls.def("getNatLat", &WcsMap::getNatLat);
-    cls.def("getNatLon", &WcsMap::getNatLon);
     cls.def("getPVi_m", &WcsMap::getPVi_m, "i"_a, "m"_a);
     cls.def("getPVMax", &WcsMap::getPVMax);
-    cls.def("getWcsAxis", &WcsMap::getWcsAxis);
-    cls.def("getWcsType", &WcsMap::getWcsType);
 
     return mod.ptr();
 }

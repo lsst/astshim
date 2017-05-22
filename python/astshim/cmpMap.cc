@@ -45,7 +45,7 @@ PYBIND11_PLUGIN(cmpMap) {
     cls.def("__len__", [](CmpMap const &) { return 2; });
 
     cls.def("copy", &CmpMap::copy);
-    cls.def("getSeries", &CmpMap::getSeries);
+    cls.def_property_readonly("series", &CmpMap::getSeries);
 
     return mod.ptr();
 }

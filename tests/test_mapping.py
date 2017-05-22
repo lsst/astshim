@@ -20,25 +20,25 @@ class TestMapping(MappingTestCase):
         self.zoommap = astshim.ZoomMap(self.nin, self.zoom)
 
     def test_MappingAttributes(self):
-        self.assertEqual(self.zoommap.getClassName(), "ZoomMap")
-        self.assertFalse(self.zoommap.isInverted())
-        self.assertTrue(self.zoommap.getIsLinear())
-        self.assertFalse(self.zoommap.getIsSimple())
-        self.assertEqual(self.zoommap.getNIn(), self.nin)
-        self.assertEqual(self.zoommap.getNOut(), self.nin)
-        self.assertFalse(self.zoommap.getReport())
-        self.assertTrue(self.zoommap.hasForward())
-        self.assertTrue(self.zoommap.hasInverse())
+        self.assertEqual(self.zoommap.className, "ZoomMap")
+        self.assertFalse(self.zoommap.isInverted)
+        self.assertTrue(self.zoommap.isLinear)
+        self.assertFalse(self.zoommap.isSimple)
+        self.assertEqual(self.zoommap.nIn, self.nin)
+        self.assertEqual(self.zoommap.nOut, self.nin)
+        self.assertFalse(self.zoommap.report)
+        self.assertTrue(self.zoommap.hasForward)
+        self.assertTrue(self.zoommap.hasInverse)
 
     def test_MappingInvert(self):
         invmap = self.zoommap.getInverse()
 
-        self.assertEqual(invmap.getClassName(), "ZoomMap")
-        self.assertTrue(invmap.isInverted())
-        self.assertTrue(invmap.getIsLinear())
-        self.assertFalse(invmap.getIsSimple())
-        self.assertTrue(invmap.hasForward())
-        self.assertTrue(invmap.hasInverse())
+        self.assertEqual(invmap.className, "ZoomMap")
+        self.assertTrue(invmap.isInverted)
+        self.assertTrue(invmap.isLinear)
+        self.assertFalse(invmap.isSimple)
+        self.assertTrue(invmap.hasForward)
+        self.assertTrue(invmap.hasInverse)
 
         indata = np.array([
             [1.0, 2.0, -6.0, 30.0, 0.0],
@@ -116,36 +116,36 @@ class TestMapping(MappingTestCase):
                             [x, y], xaxis, yaxis), desrate)
 
     def test_MappingSetReport(self):
-        self.assertFalse(self.zoommap.getReport())
+        self.assertFalse(self.zoommap.report)
         self.assertFalse(self.zoommap.test("Report"))
-        self.zoommap.setReport(False)
-        self.assertFalse(self.zoommap.getReport())
+        self.zoommap.report = False
+        self.assertFalse(self.zoommap.report)
         self.assertTrue(self.zoommap.test("Report"))
-        self.zoommap.setReport(True)
-        self.assertTrue(self.zoommap.getReport())
+        self.zoommap.report = True
+        self.assertTrue(self.zoommap.report)
         self.assertTrue(self.zoommap.test("Report"))
         self.zoommap.clear("Report")
-        self.assertFalse(self.zoommap.getReport())
+        self.assertFalse(self.zoommap.report)
         self.assertFalse(self.zoommap.test("Report"))
 
     def test_MappingSimplify(self):
         simpmap = self.zoommap.simplify()
 
-        self.assertEqual(simpmap.getClassName(), "ZoomMap")
-        self.assertFalse(simpmap.isInverted())
-        self.assertTrue(simpmap.getIsSimple())
-        self.assertEqual(simpmap.getNIn(), self.nin)
-        self.assertEqual(simpmap.getNOut(), self.nin)
-        self.assertTrue(simpmap.hasForward())
-        self.assertTrue(simpmap.hasInverse())
+        self.assertEqual(simpmap.className, "ZoomMap")
+        self.assertFalse(simpmap.isInverted)
+        self.assertTrue(simpmap.isSimple)
+        self.assertEqual(simpmap.nIn, self.nin)
+        self.assertEqual(simpmap.nOut, self.nin)
+        self.assertTrue(simpmap.hasForward)
+        self.assertTrue(simpmap.hasInverse)
 
     def test_MapSplit(self):
         """Test MapSplit for a simple case"""
         for i in range(self.nin):
             split = astshim.MapSplit(self.zoommap, [i + 1])
-            self.assertEqual(split.splitMap.getClassName(), "ZoomMap")
-            self.assertEqual(split.splitMap.getNIn(), 1)
-            self.assertEqual(split.splitMap.getNOut(), 1)
+            self.assertEqual(split.splitMap.className, "ZoomMap")
+            self.assertEqual(split.splitMap.nIn, 1)
+            self.assertEqual(split.splitMap.nOut, 1)
             self.assertEqual(split.origOut[0], i + 1)
 
 

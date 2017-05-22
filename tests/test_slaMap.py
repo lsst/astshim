@@ -14,9 +14,9 @@ class TestSlaMap(MappingTestCase):
         last = 0.1  # an arbitrary value small enough to avoid wrap
         slamap = astshim.SlaMap()
         slamap.add("R2H", [last])
-        self.assertEqual(slamap.getClassName(), "SlaMap")
-        self.assertEqual(slamap.getNIn(), 2)
-        self.assertEqual(slamap.getNOut(), 2)
+        self.assertEqual(slamap.className, "SlaMap")
+        self.assertEqual(slamap.nIn, 2)
+        self.assertEqual(slamap.nOut, 2)
 
         self.checkBasicSimplify(slamap)
         self.checkCopy(slamap)
