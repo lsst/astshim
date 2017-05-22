@@ -391,7 +391,7 @@ protected:
         assertOK();
         if (!astIsAMapping(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a Mapping";
+            os << "this is a " << getClassName() << ", which is not a Mapping";
             throw std::invalid_argument(os.str());
         }
     }

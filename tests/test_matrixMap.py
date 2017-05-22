@@ -14,7 +14,7 @@ class TestMatrixMap(MappingTestCase):
         """Test MatrixMap constructed with a diagonal vector"""
 
         mm = astshim.MatrixMap([-1.0, 2.0])
-        self.assertEqual(mm.getClass(), "MatrixMap")
+        self.assertEqual(mm.getClassName(), "MatrixMap")
         self.assertEqual(mm.getNIn(), 2)
         self.assertEqual(mm.getNOut(), 2)
         self.assertTrue(mm.hasForward())

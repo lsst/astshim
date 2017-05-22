@@ -30,7 +30,7 @@ class TestObject(ObjectTestCase):
         ss = astshim.StringStream("".join(self.cards))
         fc = astshim.FitsChan(ss)
         self.assertEqual(fc.getNCard(), len(self.cards))
-        self.assertEqual(fc.getClass(), "FitsChan")
+        self.assertEqual(fc.getClassName(), "FitsChan")
         fv = fc.getFitsF("CRVAL1")
         self.assertTrue(fv.found)
         self.assertEqual(fv.value, 0.0)
@@ -66,7 +66,7 @@ class TestObject(ObjectTestCase):
 
     def test_FitsChanGetFits(self):
         fc = astshim.FitsChan(astshim.StringStream())
-        self.assertEqual(fc.getClass(), "FitsChan")
+        self.assertEqual(fc.getClassName(), "FitsChan")
         fc.setFitsI("FRED", 99, "Hello there", True)
         fv = fc.getFitsI("FRED")
         self.assertTrue(fv.found)
@@ -161,7 +161,7 @@ class TestObject(ObjectTestCase):
         ss = astshim.StringStream("".join(self.cards))
         fc1 = astshim.FitsChan(ss)
         obj1 = fc1.read()
-        self.assertEqual(obj1.getClass(), "FrameSet")
+        self.assertEqual(obj1.getClassName(), "FrameSet")
 
         ss2 = astshim.StringStream()
         fc2 = astshim.FitsChan(ss2, "Encoding=FITS-WCS")

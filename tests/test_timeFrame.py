@@ -10,7 +10,7 @@ class TestTimeFrame(MappingTestCase):
 
     def test_TimeFrameBasics(self):
         frame = astshim.TimeFrame()
-        self.assertEqual(frame.getClass(), "TimeFrame")
+        self.assertEqual(frame.getClassName(), "TimeFrame")
         self.assertEqual(frame.getNIn(), 1)
         self.assertEqual(frame.getNAxes(), 1)
         self.assertEqual(frame.getMaxAxes(), 1)

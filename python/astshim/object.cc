@@ -40,13 +40,13 @@ PYBIND11_PLUGIN(object) {
     cls.def_static("fromString", &Object::fromString);
     // do not wrap fromAstObject because it uses a bare AST pointer
 
-    cls.def("__str__", &Object::getClass);
-    cls.def("__repr__", (std::string(Object::*)() const) & Object::show);
+    cls.def("__str__", &Object::getClassName);
+    cls.def("__repr__", [](Object const &self) { return "astshim." + self.getClassName(); });
 
     cls.def("copy", &Object::copy);
     cls.def("clear", &Object::clear, "attrib"_a);
     cls.def("hasAttribute", &Object::hasAttribute, "attrib"_a);
-    cls.def("getClass", &Object::getClass);
+    cls.def("getClassName", &Object::getClassName);
     cls.def("getID", &Object::getID);
     cls.def("getIdent", &Object::getIdent);
     cls.def("getNObject", &Object::getNObject);

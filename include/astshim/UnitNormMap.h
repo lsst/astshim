@@ -88,7 +88,7 @@ protected:
     explicit UnitNormMap(AstUnitNormMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAUnitNormMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a UnitNormMap";
+            os << "this is a " << getClassName() << ", which is not a UnitNormMap";
             throw std::invalid_argument(os.str());
         }
     }

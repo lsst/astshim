@@ -16,7 +16,7 @@ class TestMathMap(MappingTestCase):
                                    "theta = atan2(y, x)"],
                                   ["x = r * cos(theta)", "y = r * sin(theta)"],
                                   "SimpIF=1, SimpFI=1, Seed=-57")
-        self.assertEqual(mathmap.getClass(), "MathMap")
+        self.assertEqual(mathmap.getClassName(), "MathMap")
         self.assertEqual(mathmap.getNIn(), 2)
         self.assertEqual(mathmap.getNOut(), 2)
 
@@ -48,7 +48,7 @@ class TestMathMap(MappingTestCase):
         mathmap = astshim.MathMap(2, 1,
                                   ["r = sqrt(x * x + y * y)"],
                                   ["x = r", "y = 0"])
-        self.assertEqual(mathmap.getClass(), "MathMap")
+        self.assertEqual(mathmap.getClassName(), "MathMap")
         self.assertEqual(mathmap.getNIn(), 2)
         self.assertEqual(mathmap.getNOut(), 1)
 

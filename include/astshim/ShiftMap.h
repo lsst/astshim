@@ -69,7 +69,7 @@ protected:
     explicit ShiftMap(AstShiftMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAShiftMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a ShiftMap";
+            os << "this is a " << getClassName() << ", which is not a ShiftMap";
             throw std::invalid_argument(os.str());
         }
     }

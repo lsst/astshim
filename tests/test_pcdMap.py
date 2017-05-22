@@ -14,7 +14,7 @@ class TestPcdMap(MappingTestCase):
         coeff = 0.002
         ctr = [2, 3]
         pcdmap = astshim.PcdMap(coeff, ctr)
-        self.assertEqual(pcdmap.getClass(), "PcdMap")
+        self.assertEqual(pcdmap.getClassName(), "PcdMap")
         self.assertIsInstance(pcdmap, astshim.PcdMap)
         self.assertIsInstance(pcdmap, astshim.Mapping)
         self.assertEqual(pcdmap.getNIn(), 2)

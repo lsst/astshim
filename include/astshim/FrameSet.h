@@ -493,7 +493,7 @@ protected:
     explicit FrameSet(AstFrameSet *rawPtr) : Frame(reinterpret_cast<AstFrame *>(rawPtr)) {
         if (!astIsAFrameSet(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a FrameSet";
+            os << "this is a " << getClassName() << ", which is not a FrameSet";
             throw std::invalid_argument(os.str());
         }
     }

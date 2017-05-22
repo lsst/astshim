@@ -13,7 +13,7 @@ class TestFrame(MappingTestCase):
 
     def test_FrameBasics(self):
         frame = astshim.Frame(2)
-        self.assertEqual(frame.getClass(), "Frame")
+        self.assertEqual(frame.getClassName(), "Frame")
         self.assertEqual(frame.getNIn(), 2)
         self.assertEqual(frame.getNAxes(), 2)
         self.assertEqual(frame.getMaxAxes(), 2)
@@ -81,7 +81,7 @@ class TestFrame(MappingTestCase):
         frame = astshim.Frame(2)
         nframe = astshim.Frame(2)
         fset = frame.convert(nframe)
-        self.assertEqual(fset.getClass(), "FrameSet")
+        self.assertEqual(fset.getClassName(), "FrameSet")
 
         # the conversion FrameSet should contain two frames
         # connected by a unit mapping with 2 axes
@@ -102,7 +102,7 @@ class TestFrame(MappingTestCase):
         frame = astshim.Frame(2)
         nframe = astshim.Frame(2)
         fset = frame.findFrame(nframe)
-        self.assertEqual(fset.getClass(), "FrameSet")
+        self.assertEqual(fset.getClassName(), "FrameSet")
         self.assertEqual(fset.getNFrame(), 2)
 
         # the found FrameSet should contain two frames
@@ -173,9 +173,9 @@ class TestFrame(MappingTestCase):
         frame = astshim.Frame(2)
         frame.permAxes([2, 1])
         fm = frame.pickAxes([2])
-        self.assertEqual(fm.frame.getClass(), "Frame")
+        self.assertEqual(fm.frame.getClassName(), "Frame")
         self.assertEqual(fm.frame.getNIn(), 1)
-        self.assertEqual(fm.mapping.getClass(), "PermMap")
+        self.assertEqual(fm.mapping.getClassName(), "PermMap")
         self.assertEqual(fm.mapping.getNIn(), 2)
         self.assertEqual(fm.mapping.getNOut(), 1)
 

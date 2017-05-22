@@ -278,7 +278,7 @@ protected:
     explicit SpecFrame(AstSpecFrame *rawptr) : Frame(reinterpret_cast<AstFrame *>(rawptr)) {
         if (!astIsASpecFrame(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a SpecFrame";
+            os << "this is a " << getClassName() << ", which is not a SpecFrame";
             throw std::invalid_argument(os.str());
         }
     }

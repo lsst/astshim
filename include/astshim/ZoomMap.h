@@ -83,7 +83,7 @@ protected:
     explicit ZoomMap(AstZoomMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAZoomMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a ZoomMap";
+            os << "this is a " << getClassName() << ", which is not a ZoomMap";
             throw std::invalid_argument(os.str());
         }
     }

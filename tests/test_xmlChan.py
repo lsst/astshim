@@ -48,7 +48,7 @@ class TestObject(ObjectTestCase):
         chan.write(obj)
         sstream.sinkToSource()
         obj_copy = chan.read()
-        self.assertEqual(obj.getClass(), obj_copy.getClass())
+        self.assertEqual(obj.getClassName(), obj_copy.getClassName())
         self.assertEqual(obj.show(), obj_copy.show())
         self.assertEqual(str(obj), str(obj_copy))
         self.assertEqual(repr(obj), repr(obj_copy))

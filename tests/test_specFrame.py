@@ -10,7 +10,7 @@ class TestSpecFrame(MappingTestCase):
 
     def test_SpecFrameBasics(self):
         frame = astshim.SpecFrame()
-        self.assertEqual(frame.getClass(), "SpecFrame")
+        self.assertEqual(frame.getClassName(), "SpecFrame")
         self.assertEqual(frame.getNIn(), 1)
         self.assertEqual(frame.getNAxes(), 1)
         self.assertEqual(frame.getMaxAxes(), 1)
@@ -40,7 +40,7 @@ class TestSpecFrame(MappingTestCase):
 
     def test_SpecFrameSetGetRefPos(self):
         frame = astshim.SpecFrame()
-        self.assertEqual(frame.getClass(), "SpecFrame")
+        self.assertEqual(frame.getClassName(), "SpecFrame")
         sky = astshim.SkyFrame()
         frame.setRefPos(sky, 0, 1)
 

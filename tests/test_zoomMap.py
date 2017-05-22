@@ -16,7 +16,7 @@ class TestZoomMap(MappingTestCase):
         for nin in (1, 2, 3):
             for zoom in (1.0, -1.1, 359.3):
                 zoommap = astshim.ZoomMap(nin, zoom)
-                self.assertEqual(zoommap.getClass(), "ZoomMap")
+                self.assertEqual(zoommap.getClassName(), "ZoomMap")
                 self.assertEqual(zoommap.getNIn(), nin)
                 self.assertEqual(zoommap.getNOut(), nin)
                 self.assertTrue(zoommap.getIsLinear())

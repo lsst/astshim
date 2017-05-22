@@ -16,7 +16,7 @@ class TestUnitNormMap(MappingTestCase):
         for nin in (1, 2, 3):
             center = np.array([-1, 1, 2][0:nin], dtype=float)
             unitnormmap = astshim.UnitNormMap(center)
-            self.assertEqual(unitnormmap.getClass(), "UnitNormMap")
+            self.assertEqual(unitnormmap.getClassName(), "UnitNormMap")
             self.assertEqual(unitnormmap.getNIn(), nin)
             self.assertEqual(unitnormmap.getNOut(), nin + 1)
             self.assertFalse(unitnormmap.getIsLinear())
@@ -89,7 +89,7 @@ class TestUnitNormMap(MappingTestCase):
             self.assertEqual(map1.getNIn(), cmpmap.getNIn())
             self.assertEqual(map2.getNOut(), cmpmap.getNOut())
             cmpmap_simp = cmpmap.simplify()
-            self.assertEqual(cmpmap_simp.getClass(), pred_simplified_class_name)
+            self.assertEqual(cmpmap_simp.getClassName(), pred_simplified_class_name)
             self.assertEqual(cmpmap.getNIn(), cmpmap_simp.getNIn())
             self.assertEqual(cmpmap.getNOut(), cmpmap_simp.getNOut())
             testptview = np.array(testpoints[0:cmpmap.getNIn()])

@@ -587,7 +587,7 @@ protected:
     explicit KeyMap(AstKeyMap *rawKeyMap) : Object(reinterpret_cast<AstObject *>(rawKeyMap)) {
         if (!astIsAKeyMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a KeyMap";
+            os << "this is a " << getClassName() << ", which is not a KeyMap";
             throw std::invalid_argument(os.str());
         }
         assertOK();

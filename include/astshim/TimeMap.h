@@ -191,7 +191,7 @@ protected:
     explicit TimeMap(AstTimeMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsATimeMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a TimeMap";
+            os << "this is a " << getClassName() << ", which is not a TimeMap";
             throw std::invalid_argument(os.str());
         }
     }

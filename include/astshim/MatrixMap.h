@@ -96,7 +96,7 @@ protected:
     explicit MatrixMap(AstMatrixMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAMatrixMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a MatrixMap";
+            os << "this is a " << getClassName() << ", which is not a MatrixMap";
             throw std::invalid_argument(os.str());
         }
     }

@@ -412,7 +412,7 @@ protected:
     explicit MathMap(AstMathMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAMathMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a MathMap";
+            os << "this is a " << getClassName() << ", which is not a MathMap";
             throw std::invalid_argument(os.str());
         }
     }

@@ -88,7 +88,7 @@ protected:
     explicit SphMap(AstSphMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsASphMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a SphMap";
+            os << "this is a " << getClassName() << ", which is not a SphMap";
             throw std::invalid_argument(os.str());
         }
     }

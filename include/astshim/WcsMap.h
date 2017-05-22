@@ -255,7 +255,7 @@ protected:
     explicit WcsMap(AstWcsMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAWcsMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a WcsMap";
+            os << "this is a " << getClassName() << ", which is not a WcsMap";
             throw std::invalid_argument(os.str());
         }
     }

@@ -12,7 +12,7 @@ class TestUnitMap(MappingTestCase):
 
     def test_UnitMapBasics(self):
         unitmap = astshim.UnitMap(3)
-        self.assertEqual(unitmap.getClass(), "UnitMap")
+        self.assertEqual(unitmap.getClassName(), "UnitMap")
         self.assertEqual(unitmap.getNIn(), 3)
         self.assertEqual(unitmap.getNOut(), 3)
 

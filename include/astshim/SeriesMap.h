@@ -41,7 +41,7 @@ Since a SeriesMap is itself a Mapping, it can be used as a
 component in forming further @ref SeriesMap "SeriesMaps". @ref Mapping "Mappings" of arbitrary
 complexity may be built from simple individual @ref Mapping "Mappings" in this way.
 
-@warning This wraps AST's AstCmpMap, so getClass() returns "CmpMap".
+@warning This wraps AST's AstCmpMap, so getClassName() returns "CmpMap".
 
 ### Attributes
 

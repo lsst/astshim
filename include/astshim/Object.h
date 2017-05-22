@@ -38,7 +38,7 @@ Abstract base class for all AST objects
 
 Object provides the following attributes:
 
-- @ref Object_Class "Class": object class name (use @ref getClass)
+- @ref Object_Class "Class": object class name (use @ref getClassName)
 - @ref Object_ID "ID": object identification string that is not copied.
 - @ref Object_Ident "Ident": object identification string that is copied.
 - @ref Object_NObject "NObject": number of Objects in class
@@ -115,7 +115,7 @@ public:
     Note: if AST returns "CmpMap" then the name will be changed
     to "SeriesMap" or "ParallelMap", as appropriate.
     */
-    std::string getClass() const { return detail::getClassName(getRawPtr()); }
+    std::string getClassName() const { return detail::getClassName(getRawPtr()); }
 
     /// Get @ref Object_ID "ID": object identification string that is not copied.
     std::string getID() const { return getC("ID"); }

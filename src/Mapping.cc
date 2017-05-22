@@ -79,7 +79,7 @@ std::shared_ptr<Class> Mapping::decompose(int i, bool copy) const {
         // Not a compound object; free rawMap1 (rawMap2 is null, so no need to free it) and throw an exception
         astAnnul(reinterpret_cast<AstObject *>(rawMap1));
         std::ostringstream os;
-        os << "This " << getClass() << " is not a compound object";
+        os << "This " << getClassName() << " is not a compound object";
         throw std::runtime_error(os.str());
     }
 

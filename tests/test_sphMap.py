@@ -13,7 +13,7 @@ class TestSphMap(MappingTestCase):
 
     def test_SphMapBasics(self):
         sphmap = astshim.SphMap()
-        self.assertEqual(sphmap.getClass(), "SphMap")
+        self.assertEqual(sphmap.getClassName(), "SphMap")
         self.assertEqual(sphmap.getNIn(), 3)
         self.assertEqual(sphmap.getNOut(), 2)
         self.assertEqual(sphmap.getPolarLong(), 0)

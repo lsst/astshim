@@ -107,7 +107,7 @@ protected:
     explicit LutMap(AstLutMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsALutMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a LutMap";
+            os << "this is a " << getClassName() << ", which is not a LutMap";
             throw std::invalid_argument(os.str());
         }
     }

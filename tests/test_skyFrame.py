@@ -12,7 +12,7 @@ class TestSkyFrame(MappingTestCase):
 
     def test_FrameBasics(self):
         frame = astshim.SkyFrame()
-        self.assertEqual(frame.getClass(), "SkyFrame")
+        self.assertEqual(frame.getClassName(), "SkyFrame")
         self.assertEqual(frame.getNIn(), 2)
         self.assertEqual(frame.getNAxes(), 2)
         self.assertEqual(frame.getMaxAxes(), 2)
@@ -156,7 +156,7 @@ class TestSkyFrame(MappingTestCase):
         frame = astshim.SkyFrame()
 
         mapping = frame.skyOffsetMap()
-        self.assertEqual(mapping.getClass(), "UnitMap")
+        self.assertEqual(mapping.getClassName(), "UnitMap")
 
 
 if __name__ == "__main__":

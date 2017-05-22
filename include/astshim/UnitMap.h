@@ -73,7 +73,7 @@ protected:
     explicit UnitMap(AstUnitMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAUnitMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a UnitMap";
+            os << "this is a " << getClassName() << ", which is not a UnitMap";
             throw std::invalid_argument(os.str());
         }
     }

@@ -39,7 +39,7 @@ class TestFrameSet(MappingTestCase):
         self.assertEqual(frameSet.getCurrent(), 2)
 
         mapping = frameSet.getMapping(1, 2)
-        self.assertEqual(mapping.getClass(), "UnitMap")
+        self.assertEqual(mapping.getClassName(), "UnitMap")
         frameSet.remapFrame(1, astshim.UnitMap(2))
         frameSet.removeFrame(1)
         self.assertEqual(frameSet.getNFrame(), 1)

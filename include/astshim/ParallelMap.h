@@ -41,7 +41,7 @@ component in forming further @ref ParallelMap "ParallelMaps".
 @ref Mapping "Mappings" of arbitrary complexity may be built from simple
 individual @ref Mapping "Mappings" in this way.
 
-@warning This wraps AST's AstCmpMap, so getClass() returns "CmpMap".
+@warning This wraps AST's AstCmpMap, so getClassName() returns "CmpMap".
 
 ### Attributes
 

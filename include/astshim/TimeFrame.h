@@ -152,7 +152,7 @@ protected:
     explicit TimeFrame(AstTimeFrame *rawptr) : Frame(reinterpret_cast<AstFrame *>(rawptr)) {
         if (!astIsATimeFrame(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a TimeFrame";
+            os << "this is a " << getClassName() << ", which is not a TimeFrame";
             throw std::invalid_argument(os.str());
         }
     }

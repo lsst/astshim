@@ -1508,7 +1508,7 @@ protected:
     explicit Frame(AstFrame *rawPtr) : Mapping(reinterpret_cast<AstMapping *>(rawPtr)) {
         if (!astIsAFrame(getRawPtr())) {
             std::ostringstream os;
-            os << "This is a " << getClass() << ", which is not a Frame";
+            os << "This is a " << getClassName() << ", which is not a Frame";
             throw std::invalid_argument(os.str());
         }
     }

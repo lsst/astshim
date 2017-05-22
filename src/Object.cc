@@ -132,7 +132,7 @@ std::shared_ptr<Class> Object::fromAstObject(AstObject *rawObj, bool copy) {
     auto retObject = std::dynamic_pointer_cast<Class>(retObjectBeforeCast);
     if (!retObject) {
         std::ostringstream os;
-        os << "The component is of type " << retObject->getClass()
+        os << "The component is of type " << retObject->getClassName()
            << ", which could not be cast to the desired type " << typeid(Class).name();
         throw std::runtime_error(os.str());
     }

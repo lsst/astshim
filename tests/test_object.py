@@ -16,7 +16,7 @@ class TestObject(ObjectTestCase):
         zoom = 1.3
         obj = astshim.ZoomMap(nin, zoom)
 
-        self.assertEqual(obj.getClass(), "ZoomMap")
+        self.assertEqual(obj.getClassName(), "ZoomMap")
 
         self.assertTrue(obj.hasAttribute("ID"))
         self.assertTrue(obj.hasAttribute("Ident"))

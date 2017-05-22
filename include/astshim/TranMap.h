@@ -89,7 +89,7 @@ protected:
     explicit TranMap(AstTranMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsATranMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a TranMap";
+            os << "this is a " << getClassName() << ", which is not a TranMap";
             throw std::invalid_argument(os.str());
         }
     }

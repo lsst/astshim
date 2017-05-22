@@ -82,7 +82,7 @@ protected:
     explicit WinMap(AstWinMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAWinMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a WinMap";
+            os << "this is a " << getClassName() << ", which is not a WinMap";
             throw std::invalid_argument(os.str());
         }
     }

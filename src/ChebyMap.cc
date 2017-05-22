@@ -49,7 +49,7 @@ ChebyMap ChebyMap::polyTran(bool forward, double acc, double maxacc, int maxorde
 ChebyMap::ChebyMap(AstChebyMap *map) : Mapping(reinterpret_cast<AstMapping *>(map)) {
     if (!astIsAChebyMap(getRawPtr())) {
         std::ostringstream os;
-        os << "this is a " << getClass() << ", which is not a ChebyMap";
+        os << "this is a " << getClassName() << ", which is not a ChebyMap";
         throw std::invalid_argument(os.str());
     }
 }
