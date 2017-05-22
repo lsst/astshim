@@ -55,11 +55,9 @@ PYBIND11_PLUGIN(skyFrame) {
     cls.def("getLonAxis", &SkyFrame::getLonAxis);
     cls.def("getNegLon", &SkyFrame::getNegLon);
     cls.def("getProjection", &SkyFrame::getProjection);
-    cls.def("getSkyRef", (double (SkyFrame::*)(int) const) & SkyFrame::getSkyRef, "axis"_a);
-    cls.def("getSkyRef", (std::vector<double>(SkyFrame::*)() const) & SkyFrame::getSkyRef);
+    cls.def("getSkyRef", &SkyFrame::getSkyRef);
     cls.def("getSkyRefIs", &SkyFrame::getSkyRefIs);
-    cls.def("getSkyRefP", (double (SkyFrame::*)(int) const) & SkyFrame::getSkyRefP, "axis"_a);
-    cls.def("getSkyRefP", (std::vector<double>(SkyFrame::*)() const) & SkyFrame::getSkyRefP);
+    cls.def("getSkyRefP", &SkyFrame::getSkyRefP);
     cls.def("getSkyTol", &SkyFrame::getSkyTol);
 
     cls.def("setAlignOffset", &SkyFrame::setAlignOffset);
