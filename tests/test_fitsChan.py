@@ -8,21 +8,27 @@ from astshim.test import ObjectTestCase
 DataDir = os.path.join(os.path.dirname(__file__))
 
 
+def pad(card):
+    """Pad a string withs paces to length 80 characters"""
+    return "%-80s" % (card,)
+
+
 class TestObject(ObjectTestCase):
 
     def setUp(self):
-        self.cards = (
-            "NAXIS1  =                  200                                                  ",
-            "NAXIS2  =                  200                                                  ",
-            "CTYPE1  = 'RA--TAN '                                                            ",
-            "CTYPE2  = 'DEC-TAN '                                                            ",
-            "CRPIX1  =                  100                                                  ",
-            "CRPIX2  =                  100                                                  ",
-            "CDELT1  =                0.001                                                  ",
-            "CDELT2  =                0.001                                                  ",
-            "CRVAL1  =                    0                                                  ",
-            "CRVAL2  =                    0                                                  ",
+        shortCards = (
+            "NAXIS1  =                  200",
+            "NAXIS2  =                  200",
+            "CTYPE1  = 'RA--TAN '",
+            "CTYPE2  = 'DEC-TAN '",
+            "CRPIX1  =                  100",
+            "CRPIX2  =                  100",
+            "CDELT1  =                0.001",
+            "CDELT2  =                0.001",
+            "CRVAL1  =                    0",
+            "CRVAL2  =                    0",
         )
+        self.cards = [pad(card) for card in shortCards]
 
     def test_FitsChanPreloaded(self):
         """Test a FitsChan that starts out loaded with data
@@ -129,23 +135,20 @@ class TestObject(ObjectTestCase):
         fc.setCard(9)
         fv = fc.findFits("%f", False)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value,
-                         "CRVAL1  =                    0                                                  ")
+        self.assertEqual(fv.value, pad("CRVAL1  =                    0"))
         fc.delFits()
-        self.assertEqual(fc.getNCard(), 9)
+        self.assertEqual(fc.getNCard(), len(self.cards) - 1)
         self.assertEqual(fc.getCard(), 9)
         fv = fc.findFits("%f", False)
         self.assertEqual(fc.getCard(), 9)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value,
-                         "CRVAL2  =                    0                                                  ")
+        self.assertEqual(fv.value, pad("CRVAL2  =                    0"))
         fc.putFits("CRVAL1  = 0", False)
-        self.assertEqual(fc.getNCard(), 10)
+        self.assertEqual(fc.getNCard(), len(self.cards))
         self.assertEqual(fc.getCard(), 10)
         fv = fc.findFits("%f", False)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value,
-                         "CRVAL2  =                    0                                                  ")
+        self.assertEqual(fv.value, pad("CRVAL2  =                    0"))
 
         fv = fc.findFits("CTYPE2", False)
         self.assertFalse(fv.found)
@@ -153,8 +156,7 @@ class TestObject(ObjectTestCase):
         fc.clearCard()
         fv = fc.findFits("CTYPE2", False)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value,
-                         "CTYPE2  = 'DEC-TAN '                                                            ")
+        self.assertEqual(fv.value, pad("CTYPE2  = 'DEC-TAN '"))
         self.assertEqual(fc.getCard(), 4)
 
     def test_FitsChanReadWrite(self):
@@ -172,53 +174,43 @@ class TestObject(ObjectTestCase):
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value.rstrip(),
-                         "WCSAXES =                    2 / Number of WCS axes")
+        self.assertEqual(fv.value, pad("WCSAXES =                    2 / Number of WCS axes"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(
-            fv.value.rstrip(), "CRPIX1  =                100.0 / Reference pixel on axis 1")
+        self.assertEqual(fv.value, pad("CRPIX1  =                100.0 / Reference pixel on axis 1"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(
-            fv.value.rstrip(), "CRPIX2  =                100.0 / Reference pixel on axis 2")
+        self.assertEqual(fv.value, pad("CRPIX2  =                100.0 / Reference pixel on axis 2"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value.rstrip(
-        ), "CRVAL1  =                  0.0 / Value at ref. pixel on axis 1")
+        self.assertEqual(fv.value, pad("CRVAL1  =                  0.0 / Value at ref. pixel on axis 1"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value.rstrip(
-        ), "CRVAL2  =                  0.0 / Value at ref. pixel on axis 2")
+        self.assertEqual(fv.value, pad("CRVAL2  =                  0.0 / Value at ref. pixel on axis 2"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value.rstrip(
-        ), "CTYPE1  = 'RA---TAN'           / Type of co-ordinate on axis 1")
+        self.assertEqual(fv.value, pad("CTYPE1  = 'RA---TAN'           / Type of co-ordinate on axis 1"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value.rstrip(
-        ), "CTYPE2  = 'DEC--TAN'           / Type of co-ordinate on axis 2")
+        self.assertEqual(fv.value, pad("CTYPE2  = 'DEC--TAN'           / Type of co-ordinate on axis 2"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(
-            fv.value.rstrip(), "CDELT1  =                0.001 / Pixel size on axis 1")
+        self.assertEqual(fv.value, pad("CDELT1  =                0.001 / Pixel size on axis 1"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(
-            fv.value.rstrip(), "CDELT2  =                0.001 / Pixel size on axis 2")
+        self.assertEqual(fv.value, pad("CDELT2  =                0.001 / Pixel size on axis 2"))
 
         fv = fc2.findFits("%f", True)
         self.assertTrue(fv.found)
-        self.assertEqual(fv.value.rstrip(),
-                         "RADESYS = 'ICRS    '           / Reference frame for RA/DEC values")
+        self.assertEqual(fv.value, pad("RADESYS = 'ICRS    '           / Reference frame for RA/DEC values"))
 
         self.assertEqual(ss2.getSinkData(), "")
         self.assertEqual(fc2.getNCard(), 10)
