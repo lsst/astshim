@@ -27,6 +27,11 @@ class TestObject(ObjectTestCase):
             "CDELT2  =                0.001",
             "CRVAL1  =                    0",
             "CRVAL2  =                    0",
+            "COMMENT  one of two comments",
+            "COMMENT  another of two comments",
+            "HISTORY  one of two history fields",
+            "HISTORY  second of three history fields",
+            "HISTORY  third of three history fields",
         )
         self.cards = [pad(card) for card in shortCards]
 
@@ -36,6 +41,8 @@ class TestObject(ObjectTestCase):
         ss = astshim.StringStream("".join(self.cards))
         fc = astshim.FitsChan(ss)
         self.assertEqual(fc.getNCard(), len(self.cards))
+        # there are 2 COMMENT and 3 HISTORY cards, so 3 fewer unique keys
+        self.assertEqual(fc.getNKey(), len(self.cards) - 3)
         self.assertEqual(fc.getClassName(), "FitsChan")
         fv = fc.getFitsF("CRVAL1")
         self.assertTrue(fv.found)
