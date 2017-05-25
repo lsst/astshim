@@ -123,13 +123,22 @@ public:
     /// Get @ref Object_Ident "Ident": object identification string that is copied.
     std::string getIdent() const { return getC("Ident"); }
 
-    /// Get @ref Object_NObject "NObject": number of Objects in class.
+    /**
+    Get @ref Object_NObject "NObject": number of AST objects in existence of the same type
+    as the underlying AST class.
+
+    @warning Intended only for debugging astshim.
+    */
     int getNObject() const { return getI("NObject"); }
 
-    /// Get @ref Object_ObjSize "ObjSize": the in-memory size of the Object in bytes.
+    /// Get @ref Object_ObjSize "ObjSize": the in-memory size of the AST object in bytes.
     int getObjSize() const { return getI("ObjSize"); }
 
-    /// Get @ref Object_RefCount "RefCount": count of active Object pointers
+    /**
+    Get @ref Object_RefCount "RefCount": number of active pointers to the underlying AST object
+
+    @warning Intended only for debugging astshim.
+    */
     int getRefCount() const { return getI("RefCount"); }
 
     /// Get @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
