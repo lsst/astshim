@@ -43,20 +43,15 @@ PYBIND11_PLUGIN(channel) {
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
+    cls.def_property("comment", &Channel::getComment, &Channel::setComment);
+    cls.def_property("full", &Channel::getFull, &Channel::setFull);
+    cls.def_property("indent", &Channel::getIndent, &Channel::setIndent);
+    cls.def_property("reportLevel", &Channel::getReportLevel, &Channel::setReportLevel);
+    cls.def_property("skip", &Channel::getSkip, &Channel::setSkip);
+    cls.def_property("strict", &Channel::getStrict, &Channel::setStrict);
+
     cls.def("copy", &Channel::copy);
-    cls.def("getComment", &Channel::getComment);
-    cls.def("getFull", &Channel::getFull);
-    cls.def("getIndent", &Channel::getIndent);
-    cls.def("getReportLevel", &Channel::getReportLevel);
-    cls.def("getSkip", &Channel::getSkip);
-    cls.def("getStrict", &Channel::getStrict);
     cls.def("read", &Channel::read);
-    cls.def("setComment", &Channel::setComment, "skip"_a);
-    cls.def("setFull", &Channel::setFull, "full"_a);
-    cls.def("setIndent", &Channel::setIndent, "indent"_a);
-    cls.def("setReportLevel", &Channel::setReportLevel, "level"_a);
-    cls.def("setSkip", &Channel::setSkip, "skip"_a);
-    cls.def("setStrict", &Channel::setStrict, "strict"_a);
     cls.def("write", &Channel::write, "object"_a);
     cls.def("warnings", &Channel::warnings);
 

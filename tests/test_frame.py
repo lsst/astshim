@@ -13,27 +13,29 @@ class TestFrame(MappingTestCase):
 
     def test_FrameBasics(self):
         frame = astshim.Frame(2)
-        self.assertEqual(frame.getClass(), "Frame")
-        self.assertEqual(frame.getNin(), 2)
-        self.assertEqual(frame.getNaxes(), 2)
-        self.assertEqual(frame.getMaxAxes(), 2)
-        self.assertEqual(frame.getMinAxes(), 2)
-        self.assertEqual(frame.getAlignSystem(), "Cartesian")
-        self.assertEqual(frame.getDut1(), 0.0)
-        self.assertEqual(frame.getEpoch(), 2000.0)
-        self.assertEqual(frame.getObsAlt(), 0.0)
-        self.assertEqual(frame.getObsLat(), "N0:00:00.00")
-        self.assertEqual(frame.getObsLon(), "E0:00:00.00")
-        self.assertTrue(frame.getPermute())
-        self.assertFalse(frame.getPreserveAxes())
-        self.assertEqual(frame.getSystem(), "Cartesian")
-        self.assertEqual(frame.getTitle(), "2-d coordinate system")
+        self.assertEqual(frame.className, "Frame")
+        self.assertEqual(frame.nIn, 2)
+        self.assertEqual(frame.nAxes, 2)
+        self.assertEqual(frame.maxAxes, 2)
+        self.assertEqual(frame.minAxes, 2)
+        self.assertEqual(frame.alignSystem, "Cartesian")
+        self.assertEqual(frame.dut1, 0.0)
+        self.assertEqual(frame.epoch, 2000.0)
+        self.assertEqual(frame.obsAlt, 0.0)
+        self.assertEqual(frame.obsLat, "N0:00:00.00")
+        self.assertEqual(frame.obsLon, "E0:00:00.00")
+        self.assertTrue(frame.permute)
+        self.assertFalse(frame.preserveAxes)
+        self.assertEqual(frame.system, "Cartesian")
+        self.assertEqual(frame.title, "2-d coordinate system")
+        self.assertEqual(frame.getDigits(), 7)
 
         for axis in (1, 2):
             self.assertTrue(math.isinf(frame.getBottom(axis)))
             self.assertTrue(math.isinf(frame.getTop(axis)))
             self.assertGreater(frame.getTop(axis), frame.getBottom(axis))
             self.assertTrue(frame.getDirection(axis))
+            self.assertEqual(frame.getDigits(axis), 7)
             self.assertEqual(frame.getInternalUnit(axis), "")
             self.assertEqual(frame.getNormUnit(axis), "")
             self.assertEqual(frame.getSymbol(axis), "x{}".format(axis))
@@ -41,6 +43,22 @@ class TestFrame(MappingTestCase):
 
         self.checkCopy(frame)
         self.checkPersistence(frame)
+
+    def test_FrameSetDigits(self):
+        frame = astshim.Frame(2)
+        self.assertEqual(frame.getDigits(), 7)
+        for axis in (1, 2):
+            self.assertEqual(frame.getDigits(axis), 7)
+
+        frame.setDigits(1, 9)
+        self.assertEqual(frame.getDigits(), 7)
+        self.assertEqual(frame.getDigits(1), 9)
+        self.assertEqual(frame.getDigits(2), 7)
+
+        frame.setDigits(2, 4)
+        self.assertEqual(frame.getDigits(), 7)
+        self.assertEqual(frame.getDigits(1), 9)
+        self.assertEqual(frame.getDigits(2), 4)
 
     def test_FrameLabels(self):
         frame = astshim.Frame(2, "label(1)=a b,label(2)=c d")
@@ -55,11 +73,11 @@ class TestFrame(MappingTestCase):
     def test_FrameTitle(self):
         frame = astshim.Frame(3, "Title=A Title")
 
-        self.assertEqual(frame.getTitle(), "A Title")
+        self.assertEqual(frame.title, "A Title")
         testtitle = "Test Frame"
-        frame.setTitle(testtitle)
+        frame.title = testtitle
         frame.clear("Title")
-        self.assertEqual(frame.getTitle(), "3-d coordinate system")
+        self.assertEqual(frame.title, "3-d coordinate system")
 
     def test_FrameAngle(self):
         """Test Frame.angle"""
@@ -81,13 +99,13 @@ class TestFrame(MappingTestCase):
         frame = astshim.Frame(2)
         nframe = astshim.Frame(2)
         fset = frame.convert(nframe)
-        self.assertEqual(fset.getClass(), "FrameSet")
+        self.assertEqual(fset.className, "FrameSet")
 
         # the conversion FrameSet should contain two frames
         # connected by a unit mapping with 2 axes
-        self.assertEqual(fset.getNframe(), 2)
-        self.assertEqual(fset.getNin(), 2)
-        self.assertEqual(fset.getNout(), 2)
+        self.assertEqual(fset.nFrame, 2)
+        self.assertEqual(fset.nIn, 2)
+        self.assertEqual(fset.nOut, 2)
         indata = np.array([
             [1.1, 2.2],
             [-43.5, 1309.31],
@@ -102,13 +120,13 @@ class TestFrame(MappingTestCase):
         frame = astshim.Frame(2)
         nframe = astshim.Frame(2)
         fset = frame.findFrame(nframe)
-        self.assertEqual(fset.getClass(), "FrameSet")
-        self.assertEqual(fset.getNframe(), 2)
+        self.assertEqual(fset.className, "FrameSet")
+        self.assertEqual(fset.nFrame, 2)
 
         # the found FrameSet should contain two frames
         # connected by a unit mapping with 2 axes
-        self.assertEqual(fset.getNin(), 2)
-        self.assertEqual(fset.getNout(), 2)
+        self.assertEqual(fset.nIn, 2)
+        self.assertEqual(fset.nOut, 2)
         indata = np.array([
             [1.1, 2.2],
             [-43.5, 1309.31],
@@ -164,7 +182,7 @@ class TestFrame(MappingTestCase):
         frame1 = astshim.Frame(2, "label(1)=a, label(2)=b")
         frame2 = astshim.Frame(1, "label(1)=c")
         cf = frame2.over(frame1)
-        self.assertEqual(cf.getNaxes(), 3)
+        self.assertEqual(cf.nAxes, 3)
         self.assertEqual(cf.getLabel(1), "a")
         self.assertEqual(cf.getLabel(2), "b")
         self.assertEqual(cf.getLabel(3), "c")
@@ -173,11 +191,11 @@ class TestFrame(MappingTestCase):
         frame = astshim.Frame(2)
         frame.permAxes([2, 1])
         fm = frame.pickAxes([2])
-        self.assertEqual(fm.frame.getClass(), "Frame")
-        self.assertEqual(fm.frame.getNin(), 1)
-        self.assertEqual(fm.mapping.getClass(), "PermMap")
-        self.assertEqual(fm.mapping.getNin(), 2)
-        self.assertEqual(fm.mapping.getNout(), 1)
+        self.assertEqual(fm.frame.className, "Frame")
+        self.assertEqual(fm.frame.nIn, 1)
+        self.assertEqual(fm.mapping.className, "PermMap")
+        self.assertEqual(fm.mapping.nIn, 2)
+        self.assertEqual(fm.mapping.nOut, 1)
 
     def test_FrameResolve(self):
         frame = astshim.Frame(2)
@@ -202,9 +220,9 @@ class TestFrame(MappingTestCase):
     def test_FrameActiveUnit(self):
         """Test the ActiveUnit property"""
         frame = astshim.Frame(2)
-        self.assertFalse(frame.getActiveUnit())
-        frame.setActiveUnit(True)
-        self.assertTrue(frame.getActiveUnit())
+        self.assertFalse(frame.activeUnit)
+        frame.activeUnit = True
+        self.assertTrue(frame.activeUnit)
 
 
 if __name__ == "__main__":

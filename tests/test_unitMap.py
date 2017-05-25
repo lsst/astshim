@@ -12,9 +12,9 @@ class TestUnitMap(MappingTestCase):
 
     def test_UnitMapBasics(self):
         unitmap = astshim.UnitMap(3)
-        self.assertEqual(unitmap.getClass(), "UnitMap")
-        self.assertEqual(unitmap.getNin(), 3)
-        self.assertEqual(unitmap.getNout(), 3)
+        self.assertEqual(unitmap.className, "UnitMap")
+        self.assertEqual(unitmap.nIn, 3)
+        self.assertEqual(unitmap.nOut, 3)
 
         self.checkBasicSimplify(unitmap)
         self.checkCopy(unitmap)

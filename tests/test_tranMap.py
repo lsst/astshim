@@ -22,8 +22,8 @@ class TestTranMap(MappingTestCase):
 
         self.assertIsInstance(tranmap, astshim.TranMap)
         self.assertIsInstance(tranmap, astshim.Mapping)
-        self.assertEqual(tranmap.getNin(), 2)
-        self.assertEqual(tranmap.getNout(), 2)
+        self.assertEqual(tranmap.nIn, 2)
+        self.assertEqual(tranmap.nOut, 2)
 
         self.checkCopy(tranmap)
         self.checkPersistence(tranmap)
@@ -46,8 +46,8 @@ class TestTranMap(MappingTestCase):
             2, zoomfac), astshim.ZoomMap(2, zoomfac))
         self.assertIsInstance(tranmap, astshim.TranMap)
         self.assertIsInstance(tranmap, astshim.Mapping)
-        self.assertEqual(tranmap.getNin(), 2)
-        self.assertEqual(tranmap.getNout(), 2)
+        self.assertEqual(tranmap.nIn, 2)
+        self.assertEqual(tranmap.nOut, 2)
 
         self.checkCopy(tranmap)
         self.checkPersistence(tranmap)

@@ -41,17 +41,18 @@ PYBIND11_PLUGIN(stream) {
     clsStream.def(py::init<std::istream *, std::ostream *>(), "istream"_a, "ostream"_a);
     clsStream.def(py::init<>());
 
-    clsStream.def("hasStdStream", &Stream::hasStdStream);
+    clsStream.def_property_readonly("isFits", &Stream::getIsFits);
+    clsStream.def_property_readonly("hasStdStream", &Stream::hasStdStream);
+
     clsStream.def("source", &Stream::source);
     clsStream.def("sink", &Stream::sink, "str"_a);
-    clsStream.def("getIsFits", &Stream::getIsFits);
 
     // FileStream
     py::class_<FileStream, std::shared_ptr<FileStream>, Stream> clsFileStream(mod, "FileStream");
 
     clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a = false);
 
-    clsFileStream.def("getPath", &FileStream::getPath);
+    clsFileStream.def_property_readonly("path", &FileStream::getPath);
 
     // StringStream
     py::class_<StringStream, std::shared_ptr<StringStream>, Stream> clsStringStream(mod, "StringStream");

@@ -30,7 +30,7 @@ with its @ref Mapping_Invert Invert property set)
     Inverting a @ref FrameSet will cause its base and current Frames (and its
     @ref FrameSet_Base Base and FrameSet_Current Current attributes) to be interchanged.
     This, in turn, may affect other properties and attributes of the @ref FrameSet
-    (such as @ref Mapping_Nin "Nin", @ref Mapping_Nout "Nout", @ref Frame_Naxes "Naxes",
+    (such as @ref Mapping_NIn "NIn", @ref Mapping_NOut "NOut", @ref Frame_NAxes "NAxes",
     @ref Mapping_TranForward "TranForward", @ref Mapping_TranInverse "TranInverse", etc.).
     The Invert attribute of a @ref FrameSet is not itself affected by selecting a new
     base or current Frame.
@@ -93,7 +93,7 @@ will immediately return the Mapping unchanged if @ref Mapping_IsSimple "IsSimple
     are immutable and so when they are simplified it is certain that they will remain in a simple state.
 
 
-@subsection Mapping_Nin Nin
+@subsection Mapping_NIn NIn
 
 The number of coordinate values for an input point for a @ref Mapping
 (i.e. the number of dimensions of the space in which the @ref Mapping's input points reside).
@@ -107,32 +107,32 @@ The number of coordinate values for an input point for a @ref Mapping
 - @ref CmpMap
 
     If a @ref CmpMap's component Mappings are joined in series
-     then its @ref Mapping_Nin "Nin" attribute is equal to
-     the @ref Mapping_Nin "Nin" attribute of the first component
-     (or to the @ref Mapping_Nout "Nout" attribute of the second component
+     then its @ref Mapping_NIn "NIn" attribute is equal to
+     the @ref Mapping_NIn "NIn" attribute of the first component
+     (or to the @ref Mapping_NOut "NOut" attribute of the second component
      if the the @ref CmpMap is inverted).
 
     If a @ref CmpMap's component @ref Mapping "Mappings" are joined in parallel,
-    then its @ref Mapping_Nin "Nin" attribute is given by the sum of
-    the @ref Mapping_Nin "Nin" attributes of each component
-    (or the sum of their @ref Mapping_Nout "Nout" attributes if the
+    then its @ref Mapping_NIn "NIn" attribute is given by the sum of
+    the @ref Mapping_NIn "NIn" attributes of each component
+    (or the sum of their @ref Mapping_NOut "NOut" attributes if the
     @ref CmpMap is inverted).
 
 - @ref Frame
 
-    The @ref Mapping_Nin "Nin" attribute for a Frame is always equal to
-    the number of @ref Frame axes (@ref Frame_Naxes "Naxes" attribute).
+    The @ref Mapping_NIn "NIn" attribute for a Frame is always equal to
+    the number of @ref Frame axes (@ref Frame_NAxes "NAxes" attribute).
 
 - @ref FrameSet
 
-    The @ref Mapping_Nin "Nin" attribute of a @ref FrameSet is equal to the number of axes
-    (@ref Frame_Naxes "Naxes" attribute) of its base Frame
+    The @ref Mapping_NIn "NIn" attribute of a @ref FrameSet is equal to the number of axes
+    (@ref Frame_NAxes "NAxes" attribute) of its base Frame
     (or the current frame if the @ref FrameSet is inverted).
-    The @ref Mapping_Nin "Nin" attribute value may therefore change
+    The @ref Mapping_NIn "NIn" attribute value may therefore change
     if a new base Frame or current frame is selected.
 
 
-@subsection Mapping_Nout Nout
+@subsection Mapping_NOut NOut
 
 The number of coordinate values for an output point for a @ref Mapping
 (i.e. the number of dimensions of the space in which the @ref Mapping's output points reside).
@@ -146,28 +146,28 @@ The number of coordinate values for an output point for a @ref Mapping
 - @ref CmpMap
 
     If a @ref CmpMap's component Mappings are joined in series
-     then its @ref Mapping_Nout "Nout" attribute is equal to
-     the @ref Mapping_Nout "Nout" attribute of the last component
-     (or to the @ref Mapping_Nin "Nin" attribute of the first component
+     then its @ref Mapping_NOut "NOut" attribute is equal to
+     the @ref Mapping_NOut "NOut" attribute of the last component
+     (or to the @ref Mapping_NIn "NIn" attribute of the first component
      if the the @ref CmpMap is inverted).
 
     If a @ref CmpMap's component @ref Mapping "Mappings" are joined in parallel,
-    then its @ref Mapping_Nout "Nout" attribute is given by the sum of
-    the @ref Mapping_Nout "Nout" attributes of each component
-    (or the sum of their @ref Mapping_Nin "Nin" attributes if the
+    then its @ref Mapping_NOut "NOut" attribute is given by the sum of
+    the @ref Mapping_NOut "NOut" attributes of each component
+    (or the sum of their @ref Mapping_NIn "NIn" attributes if the
     @ref CmpMap is inverted).
 
 - @ref Frame
 
-    The @ref Mapping_Nout "Nout" attribute for a Frame is always equal to
-    the number of @ref Frame axes (@ref Frame_Naxes "Naxes" attribute).
+    The @ref Mapping_NOut "NOut" attribute for a Frame is always equal to
+    the number of @ref Frame axes (@ref Frame_NAxes "NAxes" attribute).
 
 - @ref FrameSet
 
-    The @ref Mapping_Nout "Nout" attribute of a @ref FrameSet is equal to the number of axes
-    (@ref Frame_Naxes "Naxes" attribute) of its current Frame
+    The @ref Mapping_NOut "NOut" attribute of a @ref FrameSet is equal to the number of axes
+    (@ref Frame_NAxes "NAxes" attribute) of its current Frame
     (or the base frame if the @ref FrameSet is inverted).
-    The @ref Mapping_Nout "Nout" attribute value may therefore change
+    The @ref Mapping_NOut "NOut" attribute value may therefore change
     if a new current frame or base frame is selected.
 
 

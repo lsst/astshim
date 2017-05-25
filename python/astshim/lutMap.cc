@@ -44,9 +44,10 @@ PYBIND11_PLUGIN(lutMap) {
     cls.def(py::init<std::vector<double> const &, double, double, std::string const &>(), "lut"_a, "start"_a,
             "inc"_a, "options"_a = "");
 
+    cls.def_property_readonly("lutEpsilon", &LutMap::getLutEpsilon);
+    cls.def_property_readonly("lutInterp", &LutMap::getLutInterp);
+
     cls.def("copy", &LutMap::copy);
-    cls.def("getLutEpsilon", &LutMap::getLutEpsilon);
-    cls.def("getLutInterp", &LutMap::getLutInterp);
 
     return mod.ptr();
 }

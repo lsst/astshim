@@ -93,7 +93,7 @@ FoundValue<std::string> FitsChan::getFitsS(std::string const &name, std::string 
 
 std::vector<std::string> FitsChan::getAllCardNames() {
     int const initialIndex = getCard();
-    int const numCards = getNcard();
+    int const numCards = getNCard();
     std::vector<std::string> nameList;
     nameList.reserve(numCards);
     try {

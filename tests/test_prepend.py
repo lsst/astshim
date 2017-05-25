@@ -31,14 +31,14 @@ class TestFrameSetPrepend(unittest.TestCase):
                           makeTwoWayPolyMap(nIn, 1),
                           Frame(1, "Ident=fork"))
 
-        frameSet.setCurrent(3)
-        assert frameSet.getNframe() == 4
-        assert frameSet.getBase() == 1
-        assert frameSet.getFrame(FrameSet.BASE).getIdent() == "base"
-        assert frameSet.getFrame(2).getIdent() == "mid"
-        assert frameSet.getCurrent() == 3
-        assert frameSet.getFrame(FrameSet.CURRENT).getIdent() == "current"
-        assert frameSet.getFrame(4).getIdent() == "fork"
+        frameSet.current = 3
+        assert frameSet.nFrame == 4
+        assert frameSet.base == 1
+        assert frameSet.getFrame(FrameSet.BASE).ident == "base"
+        assert frameSet.getFrame(2).ident == "mid"
+        assert frameSet.current == 3
+        assert frameSet.getFrame(FrameSet.CURRENT).ident == "current"
+        assert frameSet.getFrame(4).ident == "fork"
         return frameSet
 
     def test_PrependEffect(self):
@@ -63,10 +63,10 @@ class TestFrameSetPrepend(unittest.TestCase):
         assert_allclose(x_merged, x_separate)
 
         # No side effects
-        self.assertEqual(set1.getBase(), 1)
-        self.assertEqual(set1.getCurrent(), 3)
-        self.assertEqual(set2.getBase(), 1)
-        self.assertEqual(set2.getCurrent(), 3)
+        self.assertEqual(set1.base, 1)
+        self.assertEqual(set1.current, 3)
+        self.assertEqual(set2.base, 1)
+        self.assertEqual(set2.current, 3)
 
     def test_PrependFrames(self):
         """Check that a concatenated FrameSet preserves all Frames.
@@ -78,27 +78,27 @@ class TestFrameSetPrepend(unittest.TestCase):
         set2 = self.makeFrameSet(3, 2)
         set12 = prepend(set2, set1)
 
-        self.assertEquals(set1.getNframe() + set2.getNframe(),
-                          set12.getNframe())
-        for i in range(1, 1+set1.getNframe()):
+        self.assertEquals(set1.nFrame + set2.nFrame,
+                          set12.nFrame)
+        for i in range(1, 1+set1.nFrame):
             oldFrame = set1.getFrame(i)
             newFrame = set12.getFrame(i)
-            self.assertEquals(oldFrame.getIdent(), newFrame.getIdent())
-            self.assertEquals(oldFrame.getNaxes(), newFrame.getNaxes())
-            if i == set1.getBase():
-                self.assertTrue(i == set12.getBase())
+            self.assertEquals(oldFrame.ident, newFrame.ident)
+            self.assertEquals(oldFrame.nAxes, newFrame.nAxes)
+            if i == set1.base:
+                self.assertTrue(i == set12.base)
             else:
-                self.assertFalse(i == set12.getBase())
-        for i in range(1, 1+set2.getNframe()):
-            offset = set1.getNframe()
+                self.assertFalse(i == set12.base)
+        for i in range(1, 1+set2.nFrame):
+            offset = set1.nFrame
             oldFrame = set2.getFrame(i)
             newFrame = set12.getFrame(offset + i)
-            self.assertEquals(oldFrame.getIdent(), newFrame.getIdent())
-            self.assertEquals(oldFrame.getNaxes(), newFrame.getNaxes())
-            if i == set2.getCurrent():
-                self.assertTrue(offset + i == set12.getCurrent())
+            self.assertEquals(oldFrame.ident, newFrame.ident)
+            self.assertEquals(oldFrame.nAxes, newFrame.nAxes)
+            if i == set2.current:
+                self.assertTrue(offset + i == set12.current)
             else:
-                self.assertFalse(offset + i == set12.getCurrent())
+                self.assertFalse(offset + i == set12.current)
 
     def test_PrependIndependent(self):
         """Check that a concatenated FrameSet is not affected by changes
@@ -108,7 +108,7 @@ class TestFrameSetPrepend(unittest.TestCase):
         set2 = self.makeFrameSet(3, 3)
         set12 = prepend(set2, set1)
 
-        nTotal = set12.getNframe()
+        nTotal = set12.nFrame
         x = [1.2, 3.4, 5.6]
         y = set12.tranForward(x)
 
@@ -116,10 +116,10 @@ class TestFrameSetPrepend(unittest.TestCase):
         set1.addFrame(1, makeTwoWayPolyMap(3, 3), Frame(3, "Ident=legume"))
         set1.removeFrame(3)
         set2.addFrame(4, makeForwardPolyMap(1, 4), Frame(4, "Ident=extra"))
-        set2.setBase(2)
+        set2.base = 2
 
         # Use exact equality because nothing should change
-        self.assertEquals(set12.getNframe(), nTotal)
+        self.assertEquals(set12.nFrame, nTotal)
         self.assertEquals(set12.tranForward(x), y)
 
     def test_PrependMismatch(self):
@@ -136,8 +136,8 @@ class TestFrameSetPrepend(unittest.TestCase):
         y_separate = set2.tranForward(set1.tranForward(x))
         assert_allclose(y_merged, y_separate)
 
-        iFrom = set1.getCurrent()
-        iTo = set1.getNframe() + set2.getBase()
+        iFrom = set1.current
+        iTo = set1.nFrame + set2.base
         self.assertIsInstance(set12.getFrame(iFrom), SkyFrame)
         self.assertNotIsInstance(set12.getFrame(iTo), SkyFrame)
         self.assertIsInstance(set12.getMapping(iFrom, iTo), UnitMap)

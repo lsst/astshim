@@ -121,7 +121,7 @@ protected:
     explicit PcdMap(AstPcdMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAPcdMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a PcdMap";
+            os << "this is a " << getClassName() << ", which is not a PcdMap";
             throw std::invalid_argument(os.str());
         }
     }

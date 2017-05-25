@@ -46,23 +46,22 @@ PYBIND11_PLUGIN(frameSet) {
     cls.attr("CURRENT") = py::cast(AST__CURRENT);
     cls.attr("NOFRAME") = py::cast(AST__NOFRAME);
 
+    cls.def_property("base", &FrameSet::getBase, &FrameSet::setBase);
+    cls.def_property("current", &FrameSet::getCurrent, &FrameSet::setCurrent);
+    cls.def_property_readonly("nFrame", &FrameSet::getNFrame);
+
     cls.def("copy", &FrameSet::copy);
     cls.def("addAxes", &FrameSet::addAxes);
     cls.def("addFrame", &FrameSet::addFrame, "iframe"_a, "map"_a, "frame"_a);
     cls.def("addVariant", &FrameSet::addVariant, "map"_a, "name"_a);
     cls.def("getAllVariants", &FrameSet::getAllVariants);
-    cls.def("getBase", &FrameSet::getBase);
-    cls.def("getCurrent", &FrameSet::getCurrent);
     cls.def("getFrame", &FrameSet::getFrame, "iframe"_a, "copy"_a = true);
     cls.def("getMapping", &FrameSet::getMapping, "ind1"_a = FrameSet::BASE, "ind2"_a = FrameSet::CURRENT);
-    cls.def("getNframe", &FrameSet::getNframe);
     cls.def("getVariant", &FrameSet::getVariant);
     cls.def("mirrorVariants", &FrameSet::mirrorVariants, "iframe"_a);
     cls.def("remapFrame", &FrameSet::remapFrame, "iframe"_a, "map"_a);
     cls.def("removeFrame", &FrameSet::removeFrame, "iframe"_a);
     cls.def("renameVariant", &FrameSet::renameVariant, "name"_a);
-    cls.def("setBase", &FrameSet::setBase, "ind"_a);
-    cls.def("setCurrent", &FrameSet::setCurrent, "ind"_a);
 
     return mod.ptr();
 }

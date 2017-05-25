@@ -81,7 +81,7 @@ protected:
     explicit NormMap(AstNormMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsANormMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a NormMap";
+            os << "this is a " << getClassName() << ", which is not a NormMap";
             throw std::invalid_argument(os.str());
         }
     }

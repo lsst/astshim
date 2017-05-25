@@ -27,7 +27,7 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
 - Compound mappings and frames have a few minor changes:
     - New classes @ref SeriesMap and @ref ParallelMap are subclasses of @ref CmpMap
         and any compound mapping will always be an instance of one or the other of these subclasses.
-        Thus `Object.getClass` returns "SeriesMap" or "ParallelMap" for all compound maps.
+        Thus `Object.getClassName` returns "SeriesMap" or "ParallelMap" for all compound maps.
     - Added @ref Mapping.of as a convenient way to make a @ref SeriesMap
         and @ref Mapping.over as a convient way to make a @ref ParallelMap.
     - Added @ref Frame.over as a convenient way to make a @ref CmpFrame.
@@ -59,6 +59,8 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
     printf formatting and extra arguments (and this may cause warnings in some compilers).
 - @ref Object.show prints its output to a provided output stream or returns a string,
     rather than printing to stdout.
+- Get the class name using @ref Object.getClassName() instead of `getClass()` because the latter
+    sounds like a class, not a string, and Python doesn't allow `class` as a property name.
 - @ref FrameSet.addAxes and @ref FrameSet.addFrame implement AST's `astAddFrame(AST__ALLFRAMES, map, frame)`
     function, because the AST function does two very different things.
 - @ref FitsChan does not offer methods for getting or setting complex integers
@@ -84,7 +86,7 @@ Many portions of AST have not yet been wrapped. Here are some highlights:
 - @anchor StcsChan `astStcsChan`
 - @anchor Table `astTable` and other table support
 - @anchor astIsA "astIsA<Class>". I don't think we need these (one can always use rtti or
-    call @ref Object.getClass) but if they are needed then it probably makes sense
+    call @ref Object.getClassName) but if they are needed then it probably makes sense
     to wrap these as `isInstance(Object const & obj)` static methods on all classes.
 - @anchor astTune and astTuneC.
 

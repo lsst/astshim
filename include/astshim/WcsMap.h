@@ -24,6 +24,7 @@
 
 #include <memory>
 #include <sstream>
+#include <utility>
 
 #include "astshim/base.h"
 #include "astshim/detail/utils.h"
@@ -240,8 +241,13 @@ public:
     /// Get @ref WcsMap_PVMax "PVMax(axis)" for one axis: maximum number of FITS-WCS projection parameters.
     int getPVMax(int axis) const { return getI(detail::formatAxisAttr("PVMax", axis)); }
 
-    /// Get @ref WcsMap_WcsAxis "WcsAxis(lonlat)" for lon or lat: FITS-WCS projection axis.
-    int getWcsAxis(int lonlat) const { return getI(detail::formatAxisAttr("WcsAxis", lonlat)); }
+    /**
+    Get @ref WcsMap_WcsAxis FITS-WCS projection axis for longitude, latitude.
+    */
+    std::pair<int, int> getWcsAxis() const {
+        return std::make_pair(getI(detail::formatAxisAttr("WcsAxis", 1)),
+                              getI(detail::formatAxisAttr("WcsAxis", 2)));
+    }
 
     /// Get @ref WcsMap_WcsType "WcsType": FITS-WCS projection type.
     WcsType getWcsType() const { return static_cast<WcsType>(getI("WcsType")); }
@@ -255,7 +261,7 @@ protected:
     explicit WcsMap(AstWcsMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAWcsMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a WcsMap";
+            os << "this is a " << getClassName() << ", which is not a WcsMap";
             throw std::invalid_argument(os.str());
         }
     }

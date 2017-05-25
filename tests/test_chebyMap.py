@@ -142,10 +142,10 @@ class TestChebyMap(MappingTestCase):
         self.assertIsInstance(chebyMap1, astshim.Object)
         self.assertIsInstance(chebyMap1, astshim.Mapping)
         self.assertIsInstance(chebyMap1, astshim.ChebyMap)
-        self.assertEqual(chebyMap1.getNin(), nin)
-        self.assertEqual(chebyMap1.getNout(), nout)
-        self.assertTrue(chebyMap1.hasForward())
-        self.assertFalse(chebyMap1.hasInverse())
+        self.assertEqual(chebyMap1.nIn, nin)
+        self.assertEqual(chebyMap1.nOut, nout)
+        self.assertTrue(chebyMap1.hasForward)
+        self.assertFalse(chebyMap1.hasInverse)
         self.checkBasicSimplify(chebyMap1)
         self.checkCopy(chebyMap1)
         self.checkPersistence(chebyMap1)
@@ -166,10 +166,10 @@ class TestChebyMap(MappingTestCase):
         self.assertIsInstance(chebyMap2, astshim.Object)
         self.assertIsInstance(chebyMap2, astshim.Mapping)
         self.assertIsInstance(chebyMap2, astshim.ChebyMap)
-        self.assertEqual(chebyMap2.getNin(), nin)
-        self.assertEqual(chebyMap2.getNout(), nout)
-        self.assertTrue(chebyMap2.hasForward())
-        self.assertFalse(chebyMap2.hasInverse())
+        self.assertEqual(chebyMap2.nIn, nin)
+        self.assertEqual(chebyMap2.nOut, nout)
+        self.assertTrue(chebyMap2.hasForward)
+        self.assertFalse(chebyMap2.hasInverse)
         self.checkBasicSimplify(chebyMap2)
         self.checkCopy(chebyMap2)
         self.checkPersistence(chebyMap2)
@@ -188,10 +188,10 @@ class TestChebyMap(MappingTestCase):
         self.assertIsInstance(chebyMap3, astshim.Object)
         self.assertIsInstance(chebyMap3, astshim.Mapping)
         self.assertIsInstance(chebyMap3, astshim.ChebyMap)
-        self.assertEqual(chebyMap3.getNin(), nin)
-        self.assertEqual(chebyMap3.getNout(), nout)
-        self.assertFalse(chebyMap3.hasForward())
-        self.assertTrue(chebyMap3.hasInverse())
+        self.assertEqual(chebyMap3.nIn, nin)
+        self.assertEqual(chebyMap3.nOut, nout)
+        self.assertFalse(chebyMap3.hasForward)
+        self.assertTrue(chebyMap3.hasInverse)
         domain3 = chebyMap3.getDomain(forward=False)
         npt.assert_allclose(domain3.lbnd, lbnd_f)
         npt.assert_allclose(domain3.ubnd, ubnd_f)
@@ -268,8 +268,8 @@ class TestChebyMap(MappingTestCase):
         refCheby_i = ReferenceCheby(referenceFunc_i, lbnd_i, ubnd_i)
 
         chebyMap = astshim.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
-        self.assertEqual(chebyMap.getNin(), 2)
-        self.assertEqual(chebyMap.getNout(), 1)
+        self.assertEqual(chebyMap.nIn, 2)
+        self.assertEqual(chebyMap.nOut, 1)
 
         self.checkBasicSimplify(chebyMap)
         self.checkCopy(chebyMap)
@@ -333,8 +333,8 @@ class TestChebyMap(MappingTestCase):
 
         chebyMap1 = astshim.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
         self.checkBasicSimplify(chebyMap1)
-        self.assertTrue(chebyMap1.hasForward())
-        self.assertFalse(chebyMap1.hasInverse())
+        self.assertTrue(chebyMap1.hasForward)
+        self.assertFalse(chebyMap1.hasInverse)
 
         outdata = chebyMap1.tranForward(indata)
 
@@ -346,8 +346,8 @@ class TestChebyMap(MappingTestCase):
         # fit an inverse transform
         chebyMap2 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
                                        lbnd = lbnd_f, ubnd=ubnd_f)
-        self.assertTrue(chebyMap2.hasForward())
-        self.assertTrue(chebyMap2.hasInverse())
+        self.assertTrue(chebyMap2.hasForward)
+        self.assertTrue(chebyMap2.hasInverse)
         # forward should be identical to the original
         npt.assert_equal(chebyMap2.tranForward(indata), outdata)
         roundTripIn2 = chebyMap2.tranInverse(outdata)
@@ -356,8 +356,8 @@ class TestChebyMap(MappingTestCase):
         # fit an inverse transform with default bounds (which are the same bounds
         # used for fitting chebyMap2, so the results should be identical)
         chebyMap3 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6)
-        self.assertTrue(chebyMap2.hasForward())
-        self.assertTrue(chebyMap2.hasInverse())
+        self.assertTrue(chebyMap2.hasForward)
+        self.assertTrue(chebyMap2.hasInverse)
         # forward should be identical to the original
         npt.assert_equal(chebyMap3.tranForward(indata), outdata)
         roundTripIn3 = chebyMap3.tranInverse(outdata)
@@ -405,8 +405,8 @@ class TestChebyMap(MappingTestCase):
 
         chebyMap1 = astshim.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
         self.checkBasicSimplify(chebyMap1)
-        self.assertTrue(chebyMap1.hasForward())
-        self.assertFalse(chebyMap1.hasInverse())
+        self.assertTrue(chebyMap1.hasForward)
+        self.assertFalse(chebyMap1.hasInverse)
 
         outdata = chebyMap1.tranForward(indata)
 

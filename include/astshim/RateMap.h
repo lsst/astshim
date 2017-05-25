@@ -91,7 +91,7 @@ protected:
     explicit RateMap(AstRateMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsARateMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a RateMap";
+            os << "this is a " << getClassName() << ", which is not a RateMap";
             throw std::invalid_argument(os.str());
         }
     }

@@ -51,21 +51,21 @@ PYBIND11_PLUGIN(mapping) {
 
     py::class_<Mapping, std::shared_ptr<Mapping>, Object> cls(mod, "Mapping");
 
+    cls.def_property_readonly("nIn", &Mapping::getNIn);
+    cls.def_property_readonly("nOut", &Mapping::getNOut);
+    cls.def_property_readonly("isSimple", &Mapping::getIsSimple);
+    cls.def_property_readonly("hasForward", &Mapping::hasForward);
+    cls.def_property_readonly("hasInverse", &Mapping::hasInverse);
+    cls.def_property_readonly("isInverted", &Mapping::isInverted);
+    cls.def_property_readonly("isLinear", &Mapping::getIsLinear);
+    cls.def_property("report", &Mapping::getReport, &Mapping::setReport);
+
     cls.def("copy", &Mapping::copy);
-    cls.def("getNin", &Mapping::getNin);
-    cls.def("getNout", &Mapping::getNout);
-    cls.def("getIsSimple", &Mapping::getIsSimple);
-    cls.def("isInverted", &Mapping::isInverted);
-    cls.def("getIsLinear", &Mapping::getIsLinear);
-    cls.def("getReport", &Mapping::getReport);
-    cls.def("hasForward", &Mapping::hasForward);
-    cls.def("hasInverse", &Mapping::hasInverse);
     cls.def("getInverse", &Mapping::getInverse);
     cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
     cls.def("of", &Mapping::of, "first"_a);
     cls.def("over", &Mapping::over, "first"_a);
     cls.def("rate", &Mapping::rate, "at"_a, "ax1"_a, "ax2"_a);
-    cls.def("setReport", &Mapping::setReport, "report"_a);
     cls.def("simplify", &Mapping::simplify);
     // wrap the overloads of tranForward, tranInverse, tranGridForward and tranGridInverse that return a new
     // result

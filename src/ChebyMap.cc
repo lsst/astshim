@@ -49,13 +49,13 @@ ChebyMap ChebyMap::polyTran(bool forward, double acc, double maxacc, int maxorde
 ChebyMap::ChebyMap(AstChebyMap *map) : Mapping(reinterpret_cast<AstMapping *>(map)) {
     if (!astIsAChebyMap(getRawPtr())) {
         std::ostringstream os;
-        os << "this is a " << getClass() << ", which is not a ChebyMap";
+        os << "this is a " << getClassName() << ", which is not a ChebyMap";
         throw std::invalid_argument(os.str());
     }
 }
 
 ChebyDomain ChebyMap::getDomain(bool forward) const {
-    int nElements = forward ? getNin() : getNout();
+    int nElements = forward ? getNIn() : getNOut();
     std::vector<double> lbnd(nElements, 0.0);
     std::vector<double> ubnd(nElements, 0.0);
     astChebyDomain(getRawPtr(), static_cast<int>(forward), lbnd.data(), ubnd.data());

@@ -14,8 +14,8 @@ class TestLutMap(MappingTestCase):
         offset = 1.0
         divisor = 0.5
         lutmap = astshim.LutMap([1, 2, 4, 8], offset, divisor)
-        self.assertEqual(lutmap.getClass(), "LutMap")
-        self.assertEqual(lutmap.getNout(), 1)
+        self.assertEqual(lutmap.className, "LutMap")
+        self.assertEqual(lutmap.nOut, 1)
 
         self.checkBasicSimplify(lutmap)
         self.checkCopy(lutmap)
@@ -32,8 +32,8 @@ class TestLutMap(MappingTestCase):
         assert_allclose(outdata, pred_outdata)
         self.checkRoundTrip(lutmap, indata)
 
-        self.assertEqual(lutmap.getLutInterp(), 0)
-        self.assertAlmostEqual(lutmap.getLutEpsilon(),
+        self.assertEqual(lutmap.lutInterp, 0)
+        self.assertAlmostEqual(lutmap.lutEpsilon,
                                sys.float_info.epsilon, delta=1e-18)
 
 

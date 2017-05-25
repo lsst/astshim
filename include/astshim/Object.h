@@ -38,10 +38,10 @@ Abstract base class for all AST objects
 
 Object provides the following attributes:
 
-- @ref Object_Class "Class": object class name (use @ref getClass)
+- @ref Object_Class "Class": object class name (use @ref getClassName)
 - @ref Object_ID "ID": object identification string that is not copied.
 - @ref Object_Ident "Ident": object identification string that is copied.
-- @ref Object_Nobject "Nobject": number of Objects in class
+- @ref Object_NObject "NObject": number of Objects in class
 - @ref Object_ObjSize "ObjSize": the in-memory size of the Object in bytes
 - @ref Object_RefCount "RefCount": count of active Object pointers
 - @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?
@@ -115,7 +115,7 @@ public:
     Note: if AST returns "CmpMap" then the name will be changed
     to "SeriesMap" or "ParallelMap", as appropriate.
     */
-    std::string getClass() const { return detail::getClassName(getRawPtr()); }
+    std::string getClassName() const { return detail::getClassName(getRawPtr()); }
 
     /// Get @ref Object_ID "ID": object identification string that is not copied.
     std::string getID() const { return getC("ID"); }
@@ -123,13 +123,22 @@ public:
     /// Get @ref Object_Ident "Ident": object identification string that is copied.
     std::string getIdent() const { return getC("Ident"); }
 
-    /// Get @ref Object_Nobject "Nobject": number of Objects in class.
-    int getNobject() const { return getI("Nobject"); }
+    /**
+    Get @ref Object_NObject "NObject": number of AST objects in existence of the same type
+    as the underlying AST class.
 
-    /// Get @ref Object_ObjSize "ObjSize": the in-memory size of the Object in bytes.
+    @warning Intended only for debugging astshim.
+    */
+    int getNObject() const { return getI("NObject"); }
+
+    /// Get @ref Object_ObjSize "ObjSize": the in-memory size of the AST object in bytes.
     int getObjSize() const { return getI("ObjSize"); }
 
-    /// Get @ref Object_RefCount "RefCount": count of active Object pointers
+    /**
+    Get @ref Object_RefCount "RefCount": number of active pointers to the underlying AST object
+
+    @warning Intended only for debugging astshim.
+    */
     int getRefCount() const { return getI("RefCount"); }
 
     /// Get @ref Object_UseDefs "UseDefs": allow use of default values for Object attributes?

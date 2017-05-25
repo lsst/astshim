@@ -246,7 +246,7 @@ protected:
     explicit SkyFrame(AstSkyFrame *rawptr) : Frame(reinterpret_cast<AstFrame *>(rawptr)) {
         if (!astIsASkyFrame(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a SkyFrame";
+            os << "this is a " << getClassName() << ", which is not a SkyFrame";
             throw std::invalid_argument(os.str());
         }
     }

@@ -30,18 +30,18 @@ template <class AstMapT, class MapT>
 AstMapT *polyTranImpl(MapT const &mapping, bool forward, double acc, double maxacc, int maxorder,
                       std::vector<double> const &lbnd, std::vector<double> const &ubnd) {
     // desired size of lbnd and ubnd
-    auto const bndSize = static_cast<unsigned int>(forward ? mapping.getNout() : mapping.getNin());
+    auto const bndSize = static_cast<unsigned int>(forward ? mapping.getNOut() : mapping.getNIn());
 
     if (lbnd.size() != bndSize) {
         std::ostringstream os;
         os << "lbnd.size() = " << lbnd.size() << " != " << bndSize << " = "
-           << (forward ? "getNout()" : "getNin()");
+           << (forward ? "getNOut()" : "getNIn()");
         throw std::invalid_argument(os.str());
     }
     if (ubnd.size() != bndSize) {
         std::ostringstream os;
         os << "ubnd.size() = " << ubnd.size() << " != " << bndSize << " = "
-           << (forward ? "getNout()" : "getNin()");
+           << (forward ? "getNOut()" : "getNIn()");
         throw std::invalid_argument(os.str());
     }
 

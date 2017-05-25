@@ -14,9 +14,9 @@ class TestPermMap(MappingTestCase):
         """Test a PermMap whose inverse is the inverse of its forward
         """
         permmap = astshim.PermMap([2, 3, 1], [3, 1, 2])
-        self.assertEqual(permmap.getClass(), "PermMap")
-        self.assertEqual(permmap.getNin(), 3)
-        self.assertEqual(permmap.getNout(), 3)
+        self.assertEqual(permmap.className, "PermMap")
+        self.assertEqual(permmap.nIn, 3)
+        self.assertEqual(permmap.nOut, 3)
 
         self.checkBasicSimplify(permmap)
         self.checkCopy(permmap)
@@ -41,9 +41,9 @@ class TestPermMap(MappingTestCase):
         """Test PermMap with different number of inputs and outputs
         """
         permmap = astshim.PermMap([2, 1, 3], [3, 1])
-        self.assertEqual(permmap.getClass(), "PermMap")
-        self.assertEqual(permmap.getNin(), 3)
-        self.assertEqual(permmap.getNout(), 2)
+        self.assertEqual(permmap.className, "PermMap")
+        self.assertEqual(permmap.nIn, 3)
+        self.assertEqual(permmap.nOut, 2)
 
         self.checkPersistence(permmap)
 
@@ -59,9 +59,9 @@ class TestPermMap(MappingTestCase):
         """Test a PermMap with constant values
         """
         permmap = astshim.PermMap([-2, 1, 3], [2, 1, -1], [75.3, -126.5])
-        self.assertEqual(permmap.getClass(), "PermMap")
-        self.assertEqual(permmap.getNin(), 3)
-        self.assertEqual(permmap.getNout(), 3)
+        self.assertEqual(permmap.className, "PermMap")
+        self.assertEqual(permmap.nIn, 3)
+        self.assertEqual(permmap.nOut, 3)
 
         indata = np.array([1.1, 2.2, 3.3])
         outdata = permmap.tranForward(indata)

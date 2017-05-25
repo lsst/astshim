@@ -97,7 +97,7 @@ protected:
     explicit PermMap(AstPermMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAPermMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a PermMap";
+            os << "this is a " << getClassName() << ", which is not a PermMap";
             throw std::invalid_argument(os.str());
         }
     }

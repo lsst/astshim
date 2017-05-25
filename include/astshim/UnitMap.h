@@ -34,7 +34,7 @@ A UnitMap is a unit (null) Mapping that has no effect on the coordinates supplie
 They are simply copied. This can be useful if a Mapping is required (e.g. to pass to another function)
 but you do not want it to have any effect.
 
-The @ref Mapping_Nin "Nin" and @ref Mapping_Nout "Nout" attributes of a @ref UnitMap
+The @ref Mapping_NIn "NIn" and @ref Mapping_NOut "NOut" attributes of a @ref UnitMap
 are always equal and are specified when it is created.
 
 ### Attributes
@@ -73,7 +73,7 @@ protected:
     explicit UnitMap(AstUnitMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAUnitMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a UnitMap";
+            os << "this is a " << getClassName() << ", which is not a UnitMap";
             throw std::invalid_argument(os.str());
         }
     }

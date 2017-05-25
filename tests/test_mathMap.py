@@ -16,9 +16,9 @@ class TestMathMap(MappingTestCase):
                                    "theta = atan2(y, x)"],
                                   ["x = r * cos(theta)", "y = r * sin(theta)"],
                                   "SimpIF=1, SimpFI=1, Seed=-57")
-        self.assertEqual(mathmap.getClass(), "MathMap")
-        self.assertEqual(mathmap.getNin(), 2)
-        self.assertEqual(mathmap.getNout(), 2)
+        self.assertEqual(mathmap.className, "MathMap")
+        self.assertEqual(mathmap.nIn, 2)
+        self.assertEqual(mathmap.nOut, 2)
 
         self.checkBasicSimplify(mathmap)
         self.checkCopy(mathmap)
@@ -40,24 +40,24 @@ class TestMathMap(MappingTestCase):
 
         self.checkRoundTrip(mathmap, indata)
 
-        self.assertEqual(mathmap.getSeed(), -57)
-        self.assertTrue(mathmap.getSimpFI())
-        self.assertTrue(mathmap.getSimpIF())
+        self.assertEqual(mathmap.seed, -57)
+        self.assertTrue(mathmap.simpFI)
+        self.assertTrue(mathmap.simpIF)
 
     def test_MathMapNonInvertible(self):
         mathmap = astshim.MathMap(2, 1,
                                   ["r = sqrt(x * x + y * y)"],
                                   ["x = r", "y = 0"])
-        self.assertEqual(mathmap.getClass(), "MathMap")
-        self.assertEqual(mathmap.getNin(), 2)
-        self.assertEqual(mathmap.getNout(), 1)
+        self.assertEqual(mathmap.className, "MathMap")
+        self.assertEqual(mathmap.nIn, 2)
+        self.assertEqual(mathmap.nOut, 1)
 
         self.checkPersistence(mathmap)
         with self.assertRaises(AssertionError):
             self.checkBasicSimplify(mathmap)
 
-        self.assertFalse(mathmap.getSimpFI())
-        self.assertFalse(mathmap.getSimpIF())
+        self.assertFalse(mathmap.simpFI)
+        self.assertFalse(mathmap.simpIF)
 
 
 if __name__ == "__main__":

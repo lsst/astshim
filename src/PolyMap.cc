@@ -35,7 +35,7 @@ PolyMap PolyMap::polyTran(bool forward, double acc, double maxacc, int maxorder,
 PolyMap::PolyMap(AstPolyMap *map) : Mapping(reinterpret_cast<AstMapping *>(map)) {
     if (!astIsAPolyMap(getRawPtr())) {
         std::ostringstream os;
-        os << "this is a " << getClass() << ", which is not a PolyMap";
+        os << "this is a " << getClassName() << ", which is not a PolyMap";
         throw std::invalid_argument(os.str());
     }
 }

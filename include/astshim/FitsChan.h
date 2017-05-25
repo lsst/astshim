@@ -128,7 +128,7 @@ provided by @ref Channel and @ref Object
 - @ref FitsChan_FitsAxisOrder "FitsAxisOrder": Sets the order of WCS axes within new FITS-WCS headers
 - @ref FitsChan_FitsDigits "FitsDigits": Digits of precision for floating-point FITS values
 - @ref FitsChan_Iwc "Iwc": Add a Frame describing Intermediate World Coords?
-- @ref FitsChan_Ncard "Ncard": Number of FITS header cards in a FitsChan
+- @ref FitsChan_NCard "NCard": Number of FITS header cards in a FitsChan
 - @ref FitsChan_Nkey "Nkey": Number of unique keywords in a FitsChan
 - @ref FitsChan_TabOK "TabOK": Should the FITS "-TAB" algorithm be recognised?
 - @ref FitsChan_PolyTan "PolyTan": Use PVi_m keywords to define distorted TAN projection?
@@ -540,9 +540,9 @@ public:
     bool getIwc() const { return getB("Iwc"); }
 
     /**
-    Get @ref FitsChan_Ncard "NCard": the number of cards
+    Get @ref FitsChan_NCard "NCard": the number of cards
     */
-    int getNcard() const { return getI("Ncard"); }
+    int getNCard() const { return getI("NCard"); }
 
     /**
     Get @ref FitsChan_Nkey "Nkey": the number of *unique* keywords

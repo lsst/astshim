@@ -782,9 +782,9 @@ with specified numbers of axes.
    its current @ref Frame (as specified by the Current attribute).
 
 
-@subsection  Frame_Naxes Naxes
+@subsection  Frame_NAxes NAxes
 
-@ref Frame_Naxes "Naxes" is the number of axes in the frame
+@ref Frame_NAxes "NAxes" is the number of axes in the frame
 (i.e. the number of dimensions of the coordinate space which the Frame describes).
 
 This value is determined when the Frame is created.
@@ -793,13 +793,13 @@ This value is determined when the Frame is created.
 
 - @ref FrameSet
 
-    The @ref Frame_Naxes "Naxes" attribute of a @ref FrameSet is the same as that of its
+    The @ref Frame_NAxes "NAxes" attribute of a @ref FrameSet is the same as that of its
     @ref FrameSet.getCurrent "current frame".
 
 @ref CmpFrame
 
-    The @ref Frame_Naxes "Naxes" attribute of a @ref CmpFrame is equal to the sum of the
-    @ref Frame_Naxes "Naxes" values of its two component @ref Frame "Frames".
+    The @ref Frame_NAxes "NAxes" attribute of a @ref CmpFrame is equal to the sum of the
+    @ref Frame_NAxes "NAxes" values of its two component @ref Frame "Frames".
 
 
 @subsection Frame_NormUnit NormUnit(axis)
@@ -1275,14 +1275,14 @@ readers and not by software.
 @ref Frame
 
    The default supplied by the @ref Frame class is "<n>-d coordinate
-   system", where `<n>` is the number of @ref Frame axes (Naxes
+   system", where `<n>` is the number of @ref Frame axes (NAxes
    attribute).
 
 @ref CmpFrame
 
    The @ref CmpFrame class re-defines the default @ref Frame_Title "Title" value to be
    "<n>-d compound coordinate system", where `<n>` is the number
-   of @ref CmpFrame axes (`Naxes` attribute).
+   of @ref CmpFrame axes (`NAxes` attribute).
 
 @ref FrameSet
 

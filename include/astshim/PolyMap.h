@@ -43,7 +43,7 @@ an iterative method can be used to evaluate the inverse based only on the forwar
 All those of @ref Mapping plus:
 
 - @ref PolyMap_IterInverse "IterInverse": provide an iterative inverse transformation?
-- @ref PolyMap_NiterInverse "NiterInverse": maximum number of iterations for iterative inverse.
+- @ref PolyMap_NIterInverse "NIterInverse": maximum number of iterations for iterative inverse.
 - @ref PolyMap_TolInverse "TolInverse": target relative error for iterative inverse.
 */
 class PolyMap : public Mapping {
@@ -118,7 +118,7 @@ public:
         is provided.
     @param[in] nout  Number of output coordinates.
     @param[in] options  Comma-separated list of attribute assignments. Useful attributes include:
-        @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NiterInverse "NiterInverse" and
+        @ref PolyMap_IterInverse "IterInverse", @ref PolyMap_NIterInverse "NIterInverse" and
         @ref PolyMap_TolInverse "TolInverse".
 
     @throws std::invalid_argument if the forward transform is not specified (coeff_f is empty)
@@ -140,8 +140,8 @@ public:
     /// Get @ref PolyMap_IterInverse "IterInverse": does this provide an iterative inverse transformation?
     bool getIterInverse() const { return getB("IterInverse"); }
 
-    /// Get @ref PolyMap_NiterInverse "NiterInverse": maximum number of iterations for iterative inverse.
-    int getNiterInverse() const { return getI("NiterInverse"); }
+    /// Get @ref PolyMap_NIterInverse "NIterInverse": maximum number of iterations for iterative inverse.
+    int getNIterInverse() const { return getI("NIterInverse"); }
 
     /// Get @ref PolyMap_TolInverse "TolInverse": target relative error for iterative inverse.
     double getTolInverse() const { return getD("TolInverse"); }
@@ -210,15 +210,15 @@ public:
                     the PolyMap's input space (if `forward` is false)
                     or output space (if `forward` is true).
                     The new polynomial will be evaluated over this rectangle. The length
-                    should equal getNin() or getNout(), depending on `forward`.
+                    should equal getNIn() or getNOut(), depending on `forward`.
     @param[in] ubnd  A vector holding the upper bounds of a rectangular region within
                     the PolyMap's input space (if `forward` is false)
                     or output space (if `forward` is true).
                     The new polynomial will be evaluated over this rectangle. The length
-                    should equal getNin() or getNout(), depending on `forward`.
+                    should equal getNIn() or getNOut(), depending on `forward`.
 
-    @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
-                    or getNout() (if `forward` true).
+    @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNIn() (if `forward` false)
+                    or getNOut() (if `forward` true).
     */
     PolyMap polyTran(bool forward, double acc, double maxacc, int maxorder, std::vector<double> const &lbnd,
                      std::vector<double> const &ubnd) const;

@@ -246,16 +246,16 @@ public:
                     or output space (if `forward` is true).
                     If both lbnd and ubnd are empty (the default) then they will be estimated.
                     The new polynomial will be evaluated over this rectangle. The length
-                    should equal getNin() or getNout(), depending on `forward`.
+                    should equal getNIn() or getNOut(), depending on `forward`.
     @param[in] ubnd  A vector holding the upper bounds of a rectangular region within
                     the ChebyMap's input space (if `forward` is false)
                     or output space (if `forward` is true).
                     If both lbnd and ubnd are empty (the default) then they will be estimated.
                     The new polynomial will be evaluated over this rectangle. The length
-                    should equal getNin() or getNout(), depending on `forward`.
+                    should equal getNIn() or getNOut(), depending on `forward`.
 
-    @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNin() (if `forward` false)
-                    or getNout() (if `forward` true).
+    @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNIn() (if `forward` false)
+                    or getNOut() (if `forward` true).
 
     The variant that takes omits the `lbnd` and `ubnd` arguments
     uses the full domain of the polynomial whose inverse is being fit.

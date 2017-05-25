@@ -40,24 +40,22 @@ PYBIND11_PLUGIN(object) {
     cls.def_static("fromString", &Object::fromString);
     // do not wrap fromAstObject because it uses a bare AST pointer
 
-    cls.def("__str__", &Object::getClass);
-    cls.def("__repr__", (std::string(Object::*)() const) & Object::show);
+    cls.def("__str__", &Object::getClassName);
+    cls.def("__repr__", [](Object const &self) { return "astshim." + self.getClassName(); });
+
+    cls.def_property_readonly("className", &Object::getClassName);
+    cls.def_property("id", &Object::getID, &Object::setID);
+    cls.def_property("ident", &Object::getIdent, &Object::setIdent);
+    cls.def_property_readonly("objSize", &Object::getObjSize);
+    cls.def_property("useDefs", &Object::getUseDefs, &Object::setUseDefs);
 
     cls.def("copy", &Object::copy);
     cls.def("clear", &Object::clear, "attrib"_a);
     cls.def("hasAttribute", &Object::hasAttribute, "attrib"_a);
-    cls.def("getClass", &Object::getClass);
-    cls.def("getID", &Object::getID);
-    cls.def("getIdent", &Object::getIdent);
-    cls.def("getNobject", &Object::getNobject);
-    cls.def("getObjSize", &Object::getObjSize);
+    cls.def("getNObject", &Object::getNObject);
     cls.def("getRefCount", &Object::getRefCount);
-    cls.def("getUseDefs", &Object::getUseDefs);
     cls.def("lock", &Object::lock, "wait"_a);
     cls.def("same", &Object::same, "other"_a);
-    cls.def("setID", &Object::setID, "id"_a);
-    cls.def("setIdent", &Object::setIdent, "ident"_a);
-    cls.def("setUseDefs", &Object::setUseDefs, "usedefs"_a);
     cls.def("show", (std::string(Object::*)() const) & Object::show);
     cls.def("test", &Object::test, "attrib"_a);
     cls.def("unlock", &Object::unlock, "report"_a = false);

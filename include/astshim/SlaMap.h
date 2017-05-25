@@ -185,7 +185,7 @@ protected:
     explicit SlaMap(AstSlaMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsASlaMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a SlaMap";
+            os << "this is a " << getClassName() << ", which is not a SlaMap";
             throw std::invalid_argument(os.str());
         }
     }

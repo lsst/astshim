@@ -16,11 +16,11 @@ is close to the required output position. By default, an iterative
 inverse is provided if, and only if, no inverse polynomial was supplied
 when the PolyMap was constructed.
 
-The @ref PolyMap_NiterInverse "NiterInverse" and @ref PolyMap_TolInverse "TolInverse"
+The @ref PolyMap_NIterInverse "NIterInverse" and @ref PolyMap_TolInverse "TolInverse"
 attributes provide parameters that control the behaviour of the inverse approcimation method.
 
 
-@subsection PolyMap_NiterInverse NiterInverse
+@subsection PolyMap_NIterInverse NIterInverse
 
 Maximum number of iterations for the iterative inverse transformation. (int)
 
@@ -42,7 +42,7 @@ used if the @ref PolyMap_IterInverse "IterInverse" attribute is non-zero.
 Its value gives the target relative error in teh axis values of
 each transformed position. Further iterations will be performed
 until the target relative error is reached, or the maximum number
-of iterations given by attribute @ref PolyMap_NiterInverse "NiterInverse" is reached.
+of iterations given by attribute @ref PolyMap_NIterInverse "NIterInverse" is reached.
 
 The default value is 1.0E-6.
 

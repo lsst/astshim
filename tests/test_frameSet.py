@@ -11,38 +11,38 @@ class TestFrameSet(MappingTestCase):
         frame = astshim.Frame(2, "Ident=base")
         frameSet = astshim.FrameSet(frame)
         self.assertIsInstance(frameSet, astshim.FrameSet)
-        self.assertEqual(frameSet.getNframe(), 1)
+        self.assertEqual(frameSet.nFrame, 1)
 
         # Make sure the frame is deep copied
-        frame.setIdent("newIdent")
-        self.assertEqual(frameSet.getFrame(frameSet.BASE).getIdent(), "base")
+        frame.ident = "newIdent"
+        self.assertEqual(frameSet.getFrame(frameSet.BASE).ident, "base")
 
         newFrame = astshim.Frame(2, "Ident=current")
         mapping = astshim.UnitMap(2, "Ident=mapping")
         frameSet.addFrame(1, mapping, newFrame)
-        self.assertEqual(frameSet.getNframe(), 2)
+        self.assertEqual(frameSet.nFrame, 2)
 
         # Make sure new frame and mapping are deep copied
-        newFrame.setIdent("newFrameIdent")
-        mapping.setIdent("newMappingIdent")
-        self.assertEqual(frameSet.getFrame(frameSet.CURRENT).getIdent(), "current")
-        self.assertEqual(frameSet.getMapping().getIdent(), "mapping")
+        newFrame.ident = "newFrameIdent"
+        mapping.ident = "newMappingIdent"
+        self.assertEqual(frameSet.getFrame(frameSet.CURRENT).ident, "current")
+        self.assertEqual(frameSet.getMapping().ident, "mapping")
 
         # make sure BASE is available on the class and instance
         self.assertEqual(astshim.FrameSet.BASE, frameSet.BASE)
 
         baseframe = frameSet.getFrame(frameSet.BASE)
-        self.assertEqual(baseframe.getIdent(), "base")
-        self.assertEqual(frameSet.getBase(), 1)
+        self.assertEqual(baseframe.ident, "base")
+        self.assertEqual(frameSet.base, 1)
         currframe = frameSet.getFrame(frameSet.CURRENT)
-        self.assertEqual(currframe.getIdent(), "current")
-        self.assertEqual(frameSet.getCurrent(), 2)
+        self.assertEqual(currframe.ident, "current")
+        self.assertEqual(frameSet.current, 2)
 
         mapping = frameSet.getMapping(1, 2)
-        self.assertEqual(mapping.getClass(), "UnitMap")
+        self.assertEqual(mapping.className, "UnitMap")
         frameSet.remapFrame(1, astshim.UnitMap(2))
         frameSet.removeFrame(1)
-        self.assertEqual(frameSet.getNframe(), 1)
+        self.assertEqual(frameSet.nFrame, 1)
 
         self.checkCopy(frameSet)
         self.checkPersistence(frameSet)
@@ -52,31 +52,31 @@ class TestFrameSet(MappingTestCase):
         mapping = astshim.UnitMap(2, "Ident=mapping")
         currFrame = astshim.Frame(2, "Ident=current")
         frameSet = astshim.FrameSet(baseFrame, mapping, currFrame)
-        self.assertEqual(frameSet.getNframe(), 2)
-        self.assertEqual(frameSet.getBase(), 1)
-        self.assertEqual(frameSet.getCurrent(), 2)
+        self.assertEqual(frameSet.nFrame, 2)
+        self.assertEqual(frameSet.base, 1)
+        self.assertEqual(frameSet.current, 2)
 
         # make sure all objects were deep copied
-        baseFrame.setIdent("newBase")
-        mapping.setIdent("newMapping")
-        currFrame.setIdent("newCurrent")
-        self.assertEqual(frameSet.getFrame(frameSet.BASE).getIdent(), "base")
-        self.assertEqual(frameSet.getFrame(frameSet.CURRENT).getIdent(), "current")
-        self.assertEqual(frameSet.getMapping().getIdent(), "mapping")
+        baseFrame.ident = "newBase"
+        mapping.ident = "newMapping"
+        currFrame.ident = "newCurrent"
+        self.assertEqual(frameSet.getFrame(frameSet.BASE).ident, "base")
+        self.assertEqual(frameSet.getFrame(frameSet.CURRENT).ident, "current")
+        self.assertEqual(frameSet.getMapping().ident, "mapping")
 
     def test_FrameSetGetFrame(self):
         frame = astshim.Frame(2, "Ident=base")
         frameSet = astshim.FrameSet(frame)
         self.assertIsInstance(frameSet, astshim.FrameSet)
-        self.assertEqual(frameSet.getNframe(), 1)
+        self.assertEqual(frameSet.nFrame, 1)
 
         newFrame = astshim.Frame(2, "Ident=current")
         frameSet.addFrame(1, astshim.UnitMap(2), newFrame)
-        self.assertEqual(frameSet.getNframe(), 2)
+        self.assertEqual(frameSet.nFrame, 2)
 
         baseFrameDeep = frameSet.getFrame(astshim.FrameSet.BASE)
-        baseFrameDeep.setIdent("modifiedBase")
-        self.assertEqual(frameSet.getFrame(astshim.FrameSet.BASE).getIdent(), "base")
+        baseFrameDeep.ident = "modifiedBase"
+        self.assertEqual(frameSet.getFrame(astshim.FrameSet.BASE).ident, "base")
 
     def test_FrameSetPermutationSkyFrame(self):
         """Test permuting FrameSet axes using a SkyFrame

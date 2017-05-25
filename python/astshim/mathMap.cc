@@ -46,10 +46,11 @@ PYBIND11_PLUGIN(mathMap) {
                      std::string const &>(),
             "nin"_a, "nout"_a, "fwd"_a, "ref"_a, "options"_a = "");
 
+    cls.def_property_readonly("seed", &MathMap::getSeed);
+    cls.def_property_readonly("simpFI", &MathMap::getSimpFI);
+    cls.def_property_readonly("simpIF", &MathMap::getSimpIF);
+
     cls.def("copy", &MathMap::copy);
-    cls.def("getSeed", &MathMap::getSeed);
-    cls.def("getSimpFI", &MathMap::getSimpFI);
-    cls.def("getSimpIF", &MathMap::getSimpIF);
 
     return mod.ptr();
 }

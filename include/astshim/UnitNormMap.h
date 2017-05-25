@@ -33,12 +33,12 @@ namespace ast {
 /**
 The forward transformation of a UnitNormMap subtracts the specified centre
 and then transforms the resulting vector to a unit vector and the vector norm.
-The output contains one more coordinate than the input: the initial Nin outputs
+The output contains one more coordinate than the input: the initial NIn outputs
 are in the same order as the input; the final output is the norm.
 
 The inverse transformation of a UnitNormMap multiplies each component
 of the provided vector by the provided norm and adds the specified centre.
-The output contains one fewer coordinate than the input: the initial Nin inputs
+The output contains one fewer coordinate than the input: the initial NIn inputs
 are in the same order as the output; the final input is the norm.
 
 UnitNormMap enables radially symmetric transformations, as follows:
@@ -88,7 +88,7 @@ protected:
     explicit UnitNormMap(AstUnitNormMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsAUnitNormMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a UnitNormMap";
+            os << "this is a " << getClassName() << ", which is not a UnitNormMap";
             throw std::invalid_argument(os.str());
         }
     }

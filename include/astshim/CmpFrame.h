@@ -104,7 +104,7 @@ protected:
     explicit CmpFrame(AstCmpFrame *rawptr) : Frame(reinterpret_cast<AstFrame *>(rawptr)) {
         if (!astIsACmpFrame(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a CmpFrame";
+            os << "this is a " << getClassName() << ", which is not a CmpFrame";
             throw std::invalid_argument(os.str());
         }
     }

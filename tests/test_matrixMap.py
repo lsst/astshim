@@ -14,11 +14,11 @@ class TestMatrixMap(MappingTestCase):
         """Test MatrixMap constructed with a diagonal vector"""
 
         mm = astshim.MatrixMap([-1.0, 2.0])
-        self.assertEqual(mm.getClass(), "MatrixMap")
-        self.assertEqual(mm.getNin(), 2)
-        self.assertEqual(mm.getNout(), 2)
-        self.assertTrue(mm.hasForward())
-        self.assertTrue(mm.hasInverse())
+        self.assertEqual(mm.className, "MatrixMap")
+        self.assertEqual(mm.nIn, 2)
+        self.assertEqual(mm.nOut, 2)
+        self.assertTrue(mm.hasForward)
+        self.assertTrue(mm.hasInverse)
 
         self.checkBasicSimplify(mm)
         self.checkCopy(mm)
@@ -51,10 +51,10 @@ class TestMatrixMap(MappingTestCase):
             [-1.0, -2.0]
         ], dtype=float)
         mm = astshim.MatrixMap(matrix)
-        self.assertEqual(mm.getNin(), 2)
-        self.assertEqual(mm.getNout(), 3)
-        self.assertTrue(mm.hasForward())
-        self.assertFalse(mm.hasInverse())
+        self.assertEqual(mm.nIn, 2)
+        self.assertEqual(mm.nOut, 3)
+        self.assertTrue(mm.hasForward)
+        self.assertFalse(mm.hasInverse)
 
         indata = np.array([
             [1.0, 2.0, 3.0],

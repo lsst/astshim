@@ -102,7 +102,7 @@ protected:
     explicit CmpMap(AstCmpMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
         if (!astIsACmpMap(getRawPtr())) {
             std::ostringstream os;
-            os << "this is a " << getClass() << ", which is not a CmpMap";
+            os << "this is a " << getClassName() << ", which is not a CmpMap";
             throw std::invalid_argument(os.str());
         }
     }
