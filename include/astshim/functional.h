@@ -48,17 +48,15 @@ namespace ast {
  * original FrameSets (in particular, reassignments of their base or current
  * frames) shall not affect it.
  *
- * @param second, first the FrameSets to concatenate. The operations are given
- *                      in right-to-left order for consistency with, e.g.,
- *                      Mapping::of.
+ * @param first, second the FrameSets to concatenate.
  * @return a pointer to a combined FrameSet as described above
  *
  * Example: if `first` has 3 frames and `second `has 4, then the result shall
  *          contain 7 frames, of which frames 1-3 are the same as frames 1-3 of
- *          `first`, in order, and merged frames `4-7` are the same as frames
+ *          `first`, in order, and frames 4-7 are the same as frames
  *          1-4 of `second`, in order.
  */
-std::shared_ptr<FrameSet> prepend(FrameSet const& second, FrameSet const& first);
+std::shared_ptr<FrameSet> append(FrameSet const& first, FrameSet const& second);
 
 }  // namespace ast
 

@@ -2,11 +2,11 @@ from __future__ import absolute_import, division, print_function
 import unittest
 from numpy.testing import assert_allclose
 
-from astshim import Frame, SkyFrame, UnitMap, FrameSet, prepend
+from astshim import Frame, SkyFrame, UnitMap, FrameSet, append
 from astshim.test import makeForwardPolyMap, makeTwoWayPolyMap
 
 
-class TestFrameSetPrepend(unittest.TestCase):
+class TestFrameSetAppend(unittest.TestCase):
 
     def makeFrameSet(self, nIn, nOut):
         """Create a FrameSet with the specified dimensions.
@@ -41,16 +41,16 @@ class TestFrameSetPrepend(unittest.TestCase):
         assert frameSet.getFrame(4).ident == "fork"
         return frameSet
 
-    def test_PrependEffect(self):
+    def test_AppendEffect(self):
         """Check that a concatenated FrameSet transforms correctly.
         """
         set1 = self.makeFrameSet(2, 3)
         set2 = self.makeFrameSet(3, 1)
-        set12 = prepend(set2, set1)
+        set12 = append(set1, set2)
 
         # Can't match 1D output to 2D input
         with self.assertRaises(RuntimeError):
-            prepend(set1, set2)
+            append(set2, set1)
 
         x = [1.2, 3.4]
         y_merged = set12.tranForward(x)
@@ -68,7 +68,7 @@ class TestFrameSetPrepend(unittest.TestCase):
         self.assertEqual(set2.base, 1)
         self.assertEqual(set2.current, 3)
 
-    def test_PrependFrames(self):
+    def test_AppendFrames(self):
         """Check that a concatenated FrameSet preserves all Frames.
         """
         set1 = self.makeFrameSet(1, 3)
@@ -76,7 +76,7 @@ class TestFrameSetPrepend(unittest.TestCase):
         # but let's make sure
         set1.removeFrame(2)
         set2 = self.makeFrameSet(3, 2)
-        set12 = prepend(set2, set1)
+        set12 = append(set1, set2)
 
         self.assertEquals(set1.nFrame + set2.nFrame,
                           set12.nFrame)
@@ -100,13 +100,13 @@ class TestFrameSetPrepend(unittest.TestCase):
             else:
                 self.assertFalse(offset + i == set12.current)
 
-    def test_PrependIndependent(self):
+    def test_AppendIndependent(self):
         """Check that a concatenated FrameSet is not affected by changes
         to its constituents.
         """
         set1 = self.makeFrameSet(3, 3)
         set2 = self.makeFrameSet(3, 3)
-        set12 = prepend(set2, set1)
+        set12 = append(set1, set2)
 
         nTotal = set12.nFrame
         x = [1.2, 3.4, 5.6]
@@ -122,14 +122,14 @@ class TestFrameSetPrepend(unittest.TestCase):
         self.assertEquals(set12.nFrame, nTotal)
         self.assertEquals(set12.tranForward(x), y)
 
-    def test_PrependMismatch(self):
-        """Check that prepend behaves as expected when joining non-identical frames.
+    def test_AppendMismatch(self):
+        """Check that append behaves as expected when joining non-identical frames.
         """
         set1 = self.makeFrameSet(3, 2)
         set2 = self.makeFrameSet(2, 3)
         set1.addFrame(FrameSet.CURRENT, makeForwardPolyMap(2, 2),
                       SkyFrame("Ident=sky"))
-        set12 = prepend(set2, set1)
+        set12 = append(set1, set2)
 
         x = [1.2, 3.4, 5.6]
         y_merged = set12.tranForward(x)
