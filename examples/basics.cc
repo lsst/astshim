@@ -54,7 +54,7 @@ int main() {
     std::vector<double> shift = {1.5, -0.1};
     auto shiftMap = ast::ShiftMap(shift);
 
-    auto seriesMap = zoomMap.of(shiftMap);
+    auto seriesMap = shiftMap.then(zoomMap);
     seriesMap.tranForward(from, to);
     std::cout << "\n\nx =" << from << std::endl;
     shiftMap.tranForward(from, to);

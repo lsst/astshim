@@ -85,7 +85,7 @@ class TestUnitNormMap(MappingTestCase):
             (unm1inv, winmap_unitscale, "UnitNormMap"),
             (unm1inv, winmap_notunitscale, "SeriesMap"),
         ):
-            cmpmap = map2.of(map1)
+            cmpmap = map1.then(map2)
             self.assertEqual(map1.nIn, cmpmap.nIn)
             self.assertEqual(map2.nOut, cmpmap.nOut)
             cmpmap_simp = cmpmap.simplify()

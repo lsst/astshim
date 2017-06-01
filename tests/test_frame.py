@@ -181,7 +181,7 @@ class TestFrame(MappingTestCase):
     def test_FrameOver(self):
         frame1 = astshim.Frame(2, "label(1)=a, label(2)=b")
         frame2 = astshim.Frame(1, "label(1)=c")
-        cf = frame2.over(frame1)
+        cf = frame1.under(frame2)
         self.assertEqual(cf.nAxes, 3)
         self.assertEqual(cf.getLabel(1), "a")
         self.assertEqual(cf.getLabel(2), "b")

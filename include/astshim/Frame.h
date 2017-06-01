@@ -990,13 +990,13 @@ public:
     }
 
     /**
-    Combine this frame with another to form a compound frame (CmpFrame)
+    Combine this frame with another to form a compound frame (CmpFrame),
+    with the axes of this frame followed by the axes of the `next` frame.
 
     A compound frame allows two component Frames
     (of any class) to be merged together to form a more complex
     Frame. The axes of the two component Frames then appear together
-    in the resulting CmpFrame (those of the first Frame, followed by
-    those of the this Frame).
+    in the resulting CmpFrame (those of this Frame, followed by those of `next`).
 
     Since a CmpFrame is itself a Frame, it can be used as a
     component in forming further CmpFrames. Frames of arbitrary
@@ -1011,10 +1011,13 @@ public:
     Thus input axis values corresponding to positions which are outside the
     Region will result in bad output axis values.
 
-    @param[in] first  The first frame in the compound frame (axes 1 - first.getNAxes())
+    The name comes the way vectors are sometimes shown for matrix multiplication:
+    vertically, with the first axis at the bottom and the last axis at the top.
+
+    @param[in]  next  The next frame in the compound frame (the final next.getNAxes() axes)
     @return a new CmpFrame
     */
-    CmpFrame over(Frame const &first) const;
+    CmpFrame under(Frame const &next) const;
 
     /**
     Normalise a set of Frame coordinate values which might be unsuitable for display

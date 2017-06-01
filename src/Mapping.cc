@@ -34,9 +34,9 @@
 
 namespace ast {
 
-SeriesMap Mapping::of(Mapping const &first) const { return SeriesMap(first, *this); }
+SeriesMap Mapping::then(Mapping const &next) const { return SeriesMap(*this, next); }
 
-ParallelMap Mapping::over(Mapping const &first) const { return ParallelMap(first, *this); }
+ParallelMap Mapping::under(Mapping const &next) const { return ParallelMap(*this, next); }
 
 std::shared_ptr<Mapping> Mapping::getInverse() const {
     auto rawCopy = reinterpret_cast<AstMapping *>(astCopy(getRawPtr()));

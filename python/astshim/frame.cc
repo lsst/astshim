@@ -126,7 +126,7 @@ PYBIND11_PLUGIN(frame) {
     cls.def("getUnit", &Frame::getUnit, "axis"_a);
     cls.def("intersect", &Frame::intersect, "a1"_a, "a2"_a, "b1"_a, "b2"_a);
     cls.def("matchAxes", &Frame::matchAxes, "other"_a);
-    cls.def("over", &Frame::over, "first"_a);
+    cls.def("under", &Frame::under, "next"_a);
     cls.def("norm", &Frame::norm, "value"_a);
     cls.def("offset", &Frame::offset, "point1"_a, "point2"_a, "offset"_a);
     cls.def("offset2", &Frame::offset2, "point1"_a, "angle"_a, "offset"_a);

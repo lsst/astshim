@@ -11,7 +11,7 @@ from astshim.test import MappingTestCase
 class TestMapping(MappingTestCase):
     """Test basics of Mapping
 
-    Note that Mapping.of and Mapping.over are tested by test_cmpMap.py
+    Note that Mapping.then and Mapping.under are tested by test_cmpMap.py
     """
 
     def setUp(self):
