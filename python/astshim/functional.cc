@@ -34,7 +34,7 @@ PYBIND11_PLUGIN(functional) {
 
     py::module::import("astshim.frameSet");
 
-    mod.def("prepend", &prepend, "second"_a, "first"_a);
+    mod.def("append", &append, "first"_a, "second"_a);
 
     return mod.ptr();
 }

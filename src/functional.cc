@@ -25,7 +25,7 @@
 
 namespace ast {
 
-std::shared_ptr<FrameSet> prepend(FrameSet const& second, FrameSet const& first) {
+std::shared_ptr<FrameSet> append(FrameSet const& first, FrameSet const& second) {
     std::shared_ptr<FrameSet> const merged = first.copy();
     std::shared_ptr<FrameSet> const newFrames = second.copy();
 

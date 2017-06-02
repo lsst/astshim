@@ -500,7 +500,7 @@ class TestChebyMap(MappingTestCase):
         for i in range(1000):
             amap = astshim.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
             amapinv = amap.getInverse()
-            cmp2 = amap.of(amapinv)
+            cmp2 = amapinv.then(amap)
             result = cmp2.simplify()
             self.assertIsInstance(result, astshim.UnitMap)
 

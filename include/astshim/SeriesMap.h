@@ -54,7 +54,7 @@ public:
     /**
     Construct a SeriesMap.
 
-    It may be clearer to construct a @ref SeriesMap using @ref Mapping.of.
+    It may be clearer to construct a @ref SeriesMap using @ref Mapping.then.
 
     @param[in] map1  The first mapping, which transforms input points.
     @param[in] map2  The second mapping, which transforms the output of the first mapping.

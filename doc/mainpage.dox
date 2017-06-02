@@ -28,9 +28,9 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
     - New classes @ref SeriesMap and @ref ParallelMap are subclasses of @ref CmpMap
         and any compound mapping will always be an instance of one or the other of these subclasses.
         Thus `Object.getClassName` returns "SeriesMap" or "ParallelMap" for all compound maps.
-    - Added @ref Mapping.of as a convenient way to make a @ref SeriesMap
-        and @ref Mapping.over as a convient way to make a @ref ParallelMap.
-    - Added @ref Frame.over as a convenient way to make a @ref CmpFrame.
+    - Added @ref Mapping.then as a convenient way to make a @ref SeriesMap
+        and @ref Mapping.under as a convenient way to make a @ref ParallelMap.
+    - Added @ref Frame.under as a convenient way to make a @ref CmpFrame.
     - Instead of wrapping `astDecompose`:
         - Call CmpMap.operator[] to retrieve a mapping from a compound mapping.
         - Call @ref CmpMap.getSeries to find out if a compound mapping is in series.

@@ -50,7 +50,7 @@ class TestObject(ObjectTestCase):
         # a deep copy does not increment
         self.assertEqual(obj.getRefCount(), 1)
 
-        seriesMap = obj.of(obj)
+        seriesMap = obj.then(obj)
         # obj itself plus two copies in the SeriesMap
         self.assertEqual(obj.getRefCount(), 3)
         del seriesMap

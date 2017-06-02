@@ -63,8 +63,8 @@ PYBIND11_PLUGIN(mapping) {
     cls.def("copy", &Mapping::copy);
     cls.def("getInverse", &Mapping::getInverse);
     cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
-    cls.def("of", &Mapping::of, "first"_a);
-    cls.def("over", &Mapping::over, "first"_a);
+    cls.def("then", &Mapping::then, "next"_a);
+    cls.def("under", &Mapping::under, "next"_a);
     cls.def("rate", &Mapping::rate, "at"_a, "ax1"_a, "ax2"_a);
     cls.def("simplify", &Mapping::simplify);
     // wrap the overloads of tranForward, tranInverse, tranGridForward and tranGridInverse that return a new

@@ -63,7 +63,7 @@ std::vector<double> Frame::intersect(std::vector<double> const &a1, std::vector<
     return ret;
 }
 
-CmpFrame Frame::over(Frame const &first) const { return CmpFrame(first, *this); }
+CmpFrame Frame::under(Frame const &next) const { return CmpFrame(*this, next); }
 
 FrameMapping Frame::pickAxes(std::vector<int> const &axes) const {
     AstMapping *rawMap;

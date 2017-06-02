@@ -54,7 +54,7 @@ public:
     /**
     Construct a ParallelMap
 
-    It may be clearer to constuct a @ref ParallelMap using @ref Mapping.over.
+    It may be clearer to constuct a @ref ParallelMap using @ref Mapping.under.
 
     @param[in] map1  The first mapping, which transforms the lower numbered coordinates/
     @param[in] map2  The second mapping.

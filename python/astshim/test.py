@@ -86,8 +86,8 @@ class MappingTestCase(ObjectTestCase):
         rt2_poslist = amapinv.tranForward(to_poslist)
         assert_allclose(poslist, rt2_poslist, rtol=rtol, atol=atol)
 
-        # forward and inverse with a compound map of amap.getInverse().of(amap)
-        acmp = amapinv.of(amap)
+        # forward and inverse with a compound map of amap.then(amap.getInverse())
+        acmp = amap.then(amapinv)
         assert_allclose(poslist, acmp.tranForward(poslist), rtol=rtol, atol=atol)
 
         # test vector versions of forward and inverse
@@ -108,7 +108,7 @@ class MappingTestCase(ObjectTestCase):
         - A compound mapping of a amap and a unit amap simplifies to the original amap
         """
         amapinv = amap.getInverse()
-        cmp1 = amapinv.of(amap)
+        cmp1 = amap.then(amapinv)
         unit1 = cmp1.simplify()
         self.assertEqual(unit1.className, "UnitMap")
         self.assertEqual(amap.nIn, cmp1.nIn)
@@ -116,7 +116,7 @@ class MappingTestCase(ObjectTestCase):
         self.assertEqual(cmp1.nIn, unit1.nIn)
         self.assertEqual(cmp1.nOut, unit1.nOut)
 
-        cmp2 = amap.of(amapinv)
+        cmp2 = amapinv.then(amap)
         unit2 = cmp2.simplify()
         self.assertEqual(unit2.className, "UnitMap")
         self.assertEqual(amapinv.nIn, cmp2.nIn)
@@ -130,7 +130,7 @@ class MappingTestCase(ObjectTestCase):
             (unit2, amapinv, amapinv),
             (amapinv, unit1, amapinv),
         ):
-            cmp3 = mb.of(ma)
+            cmp3 = ma.then(mb)
             cmp3simp = cmp3.simplify()
             self.assertEqual(cmp3simp.className, amap.simplify().className)
             self.assertEqual(ma.nIn, cmp3.nIn)

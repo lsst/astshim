@@ -165,24 +165,27 @@ public:
     /**
     Return a series compound mapping this(first(input)).
 
-    @param[in] first  the mapping whose output is the input of this mapping
+    @param[in] next  the mapping whose input is the output of this mapping
 
-    @throws std::invalid_argument if the number of output axes of `first` does not match
-        the number of input axes of this mapping.
+    @throws std::invalid_argument if the number of input axes of `next` does not match
+        the number of output axes of this mapping.
     */
-    SeriesMap of(Mapping const &first) const;
+    SeriesMap then(Mapping const &next) const;
 
     /**
     Return a parallel compound mapping
 
-    The resulting mapping has first.getNIn() + this.getNIn() inputs and next.getNOut() + this.getNOut()
-    outputs. The first getNIn() axes of input are transformed by the `first` mapping, producing the
-    first getNOut() axes of the output. The remaining axes of input are processed by this mapping,
-    resulting in the remaining axes of output.
+    The resulting mapping has `getNIn() + next.getNIn()` inputs and `getNOut() + next.getNOut()` outputs.
+    The first `getNIn()` axes of input are transformed by this mapping, producing the first `getNOut()` axes
+    of output. The remaining axes of input are processed by `next`, resulting in the remaining axes of output.
 
-    @param[in] first  the mapping that processes axes 1 through `first.getNIn()`
+    The name comes the way vectors are sometimes shown for matrix multiplication:
+    vertically, with the first axis at the bottom and the last axis at the top.
+
+    @param[in] next  the mapping that processes the final `next.getNin()` axes of input to produce
+    the final `next.getNout()` axes of output.
     */
-    ParallelMap over(Mapping const &first) const;
+    ParallelMap under(Mapping const &next) const;
 
     /**
     Evaluate the rate of change of the Mapping with respect to a specified input, at a specified position.
