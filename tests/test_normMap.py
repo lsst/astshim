@@ -28,7 +28,7 @@ class TestNormMap(MappingTestCase):
             [100.0, 2000.0, 3000.0],
             [-100.0, -1000.0, -2000.0],
         ], dtype=float)
-        outdata = normmap.tranForward(indata)
+        outdata = normmap.applyForward(indata)
         assert_allclose(outdata, indata)
 
     def testNormMapMap(self):
@@ -68,7 +68,7 @@ class TestNormMap(MappingTestCase):
             [0, -pi / 2 - eps],  # lat too small; offset lat by pi
             [0, pi / 2 - eps],
             [0, pi / 2 + eps],  # lat too big; offset lat by pi
-        ], dtype=float)).T.copy()  # tranForward can't accept a view
+        ], dtype=float)).T.copy()  # applyForward can't accept a view
         pred_outdata = np.array([
             [0, 0],
             [2 * pi - eps, 0],
@@ -79,7 +79,7 @@ class TestNormMap(MappingTestCase):
             [0, pi / 2 - eps],
             [pi, pi / 2 - eps],
         ]).T
-        outdata = normmap.tranForward(indata)
+        outdata = normmap.applyForward(indata)
         assert_allclose(outdata, pred_outdata)
 
 

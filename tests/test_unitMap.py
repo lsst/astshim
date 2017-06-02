@@ -25,7 +25,7 @@ class TestUnitMap(MappingTestCase):
             [-43.5, 1309.31, 0.005, -36.5],
             [0.0, -2.3, 44.4, 3.14],
         ])
-        outdata = unitmap.tranForward(indata)
+        outdata = unitmap.applyForward(indata)
         assert_allclose(outdata, indata)
         self.checkRoundTrip(unitmap, indata)
 

@@ -28,7 +28,7 @@ class TestMathMap(MappingTestCase):
             [1.0, 2.0, 3.0],
             [0.0, 1.0, 2.0],
         ])
-        outdata = mathmap.tranForward(indata)
+        outdata = mathmap.applyForward(indata)
         x = indata[0]
         y = indata[1]
         r = outdata[0]

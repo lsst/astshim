@@ -82,14 +82,14 @@ class TestObject(ObjectTestCase):
 
         # make sure the error string contains "Error"
         try:
-            pm.tranInverse(indata)
+            pm.applyInverse(indata)
         except RuntimeError as e:
             self.assertEqual(e.args[0].count("Error"), 1)
             print(e)
 
         # cause another error and make sure the first error message was purged
         try:
-            pm.tranInverse(indata)
+            pm.applyInverse(indata)
         except RuntimeError as e:
             self.assertEqual(e.args[0].count("Error"), 1)
 

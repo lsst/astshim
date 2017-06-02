@@ -39,7 +39,7 @@ int main() {
     std::vector<double> fromVec = {0, 1000, 0, 1000, 0, 0, 1000, 1000};
     ast::Array2D from = ast::arrayFromVector(fromVec, 2);
     ast::Array2D to = ndarray::allocate(ndarray::makeVector(4, 2));
-    frameSetPtr->tranForward(from, to);
+    frameSetPtr->applyForward(from, to);
     std::cout << "\n\npixels =" << from << std::endl;
     std::cout << "sky =" << to << std::endl;
 }

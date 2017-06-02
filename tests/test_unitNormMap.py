@@ -11,7 +11,7 @@ from astshim.test import MappingTestCase
 class TestUnitNormMap(MappingTestCase):
 
     def test_UnitNormMapBasics(self):
-        """Test basics of UnitNormMap including tranForward
+        """Test basics of UnitNormMap including applyForward
         """
         for nin in (1, 2, 3):
             center = np.array([-1, 1, 2][0:nin], dtype=float)
@@ -33,7 +33,7 @@ class TestUnitNormMap(MappingTestCase):
             ], dtype=float)[0:nin]
             self.checkRoundTrip(unitnormmap, indata)
 
-            outdata = unitnormmap.tranForward(indata)
+            outdata = unitnormmap.applyForward(indata)
             norm = outdata[-1]
 
             relindata = (indata.T - center).T
@@ -93,8 +93,8 @@ class TestUnitNormMap(MappingTestCase):
             self.assertEqual(cmpmap.nIn, cmpmap_simp.nIn)
             self.assertEqual(cmpmap.nOut, cmpmap_simp.nOut)
             testptview = np.array(testpoints[0:cmpmap.nIn])
-            assert_allclose(cmpmap.tranForward(
-                testptview), cmpmap_simp.tranForward(testptview))
+            assert_allclose(cmpmap.applyForward(
+                testptview), cmpmap_simp.applyForward(testptview))
 
 
 if __name__ == "__main__":

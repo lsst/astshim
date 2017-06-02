@@ -42,11 +42,11 @@ int main() {
               << std::endl;
 
     ast::Array2D to = ndarray::allocate(ndarray::makeVector(3, 2));
-    zoomMap.tranForward(from, to);
+    zoomMap.applyForward(from, to);
 
     auto invZoomPtr = zoomMap.getInverse();
     ast::Array2D rndTrip = ndarray::allocate(ndarray::makeVector(3, 2));
-    invZoomPtr->tranForward(to, rndTrip);
+    invZoomPtr->applyForward(to, rndTrip);
     std::cout << "x =" << from << std::endl;
     std::cout << "zoom(x) =" << to << std::endl;
     std::cout << "round trip =" << rndTrip << std::endl;
@@ -55,15 +55,15 @@ int main() {
     auto shiftMap = ast::ShiftMap(shift);
 
     auto seriesMap = shiftMap.then(zoomMap);
-    seriesMap.tranForward(from, to);
+    seriesMap.applyForward(from, to);
     std::cout << "\n\nx =" << from << std::endl;
-    shiftMap.tranForward(from, to);
+    shiftMap.applyForward(from, to);
     std::cout << "shift(x) =" << to << std::endl;
-    seriesMap.tranForward(from, to);
+    seriesMap.applyForward(from, to);
     std::cout << "zoom(shift(x) =" << to << std::endl;
 
     auto shiftMapCopy = seriesMap[0];
     std::cout << "\n\nx =" << from << std::endl;
-    shiftMapCopy->tranForward(from, to);
+    shiftMapCopy->applyForward(from, to);
     std::cout << "shiftCopy(x) =" << to << std::endl;
 }

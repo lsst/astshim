@@ -28,7 +28,7 @@ class TestWcsMap(MappingTestCase):
             [-3.0, 1.5, 0.13],
         ], dtype=float)
         pred_outdata = (indata.T * pred_zoom + pred_shift).T
-        outdata = winmap.tranForward(indata)
+        outdata = winmap.applyForward(indata)
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(winmap, indata)

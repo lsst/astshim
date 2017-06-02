@@ -14,7 +14,7 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
 ## Differences between this and Starlink AST
 
 - Most functions in AST are classes or methods in this shim.
-- `Mapping::tranForward` and `Mapping::tranInverse` methods transform single points or lists of points.
+- `Mapping::applyForward` and `Mapping::applyInverse` methods transform single points or lists of points.
     These replace AST's `astTran<X>` functions and no `invert` flag is supported.
     There are three versions of each method:
     - Accept a std::vector<double> and return a new std::vector<double>.

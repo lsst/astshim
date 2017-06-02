@@ -76,28 +76,28 @@ class MappingTestCase(ObjectTestCase):
         if len(poslist.shape) == 1:
             # supplied data was a single list of points
             poslist.shape = (1, len(poslist))
-        # forward with tranForward, inverse with tranInverse
-        to_poslist = amap.tranForward(poslist)
-        rt_poslist = amap.tranInverse(to_poslist)
+        # forward with applyForward, inverse with applyInverse
+        to_poslist = amap.applyForward(poslist)
+        rt_poslist = amap.applyInverse(to_poslist)
         assert_allclose(poslist, rt_poslist, rtol=rtol, atol=atol)
 
-        # forward with tranForward, inverse with getInverse().tranForward
+        # forward with applyForward, inverse with getInverse().applyForward
         amapinv = amap.getInverse()
-        rt2_poslist = amapinv.tranForward(to_poslist)
+        rt2_poslist = amapinv.applyForward(to_poslist)
         assert_allclose(poslist, rt2_poslist, rtol=rtol, atol=atol)
 
         # forward and inverse with a compound map of amap.then(amap.getInverse())
         acmp = amap.then(amapinv)
-        assert_allclose(poslist, acmp.tranForward(poslist), rtol=rtol, atol=atol)
+        assert_allclose(poslist, acmp.applyForward(poslist), rtol=rtol, atol=atol)
 
         # test vector versions of forward and inverse
         posvec = list(poslist.flat)
-        to_posvec = amap.tranForward(posvec)
+        to_posvec = amap.applyForward(posvec)
         # cast to_poslist to np.array because if poslist has 1 axis then
         # a list is returned, which has no `flat` attribute
         assert_allclose(to_posvec, list(to_poslist.flat), rtol=rtol, atol=atol)
 
-        rt_posvec = amap.tranInverse(to_posvec)
+        rt_posvec = amap.applyInverse(to_posvec)
         assert_allclose(posvec, rt_posvec, rtol=rtol, atol=atol)
 
     def checkBasicSimplify(self, amap):
