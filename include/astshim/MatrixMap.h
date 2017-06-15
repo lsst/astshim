@@ -46,8 +46,7 @@ public:
     /**
     Construct a MatrixMap from a 2-d matrix
 
-    @note The inverse transformation (`TranInverse` attribute) will only be available if `matrix`
-    is square and non-singular.
+    @note The inverse transformation will only be available if `matrix` is square and non-singular.
 
     @param[in] matrix  The transformation matrix, where:
                         - The number of input coordinates is the number of columns.
@@ -63,8 +62,7 @@ public:
     /**
     Construct a MatrixMap from a 1-d vector of diagonal elements of a diagonal matrix
 
-    @note The inverse transformation (`TranInverse` attribute) will always be available
-        when constructed from a diagonal matrix.
+    @note The inverse transformation will always be available when constructed from a diagonal matrix.
 
     @param[in] diag  The diagonal elements of a diagonal matrix as a vector;
                         the number of input and output coordinates is the length of the vector.

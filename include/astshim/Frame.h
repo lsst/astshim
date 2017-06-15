@@ -336,8 +336,7 @@ public:
         system found is used. However, the overall Mapping between
         the source and destination coordinate systems is also
         examined.  Preference is given to cases where both the
-        forward and inverse transformations are defined (as indicated
-        by the TranForward and TranInverse attributes). If only one
+        forward and inverse transformations are defined. If only one
         transformation is defined, the forward one is preferred.
         - If the domain of the intermediate coordinate system matches
         the current "domainlist" field, the conversion path is
@@ -558,8 +557,7 @@ public:
             Mapping between the target coordinate system and the
             resulting Frame is also examined. Preference is given to
             cases where both the forward and inverse transformations are
-            defined (as indicated by the TranForward and TranInverse
-            attributes). If only one transformation is defined, the
+            defined. If only one transformation is defined, the
             forward one is preferred.
         - If a match is found and the domain of the resulting Frame also
             matches the current "domainlist" field, it is
