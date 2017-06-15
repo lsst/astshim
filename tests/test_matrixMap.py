@@ -68,6 +68,28 @@ class TestMatrixMap(MappingTestCase):
         ], dtype=float)
         assert_allclose(outdata, pred_outdata)
 
+    def test_MatrixMapWithZeros(self):
+        """Test that a MatrixMap all coefficients 0 can be simplified
+
+        This is ticket DM-10942
+        """
+        mm = astshim.MatrixMap([0.0, 0.0])
+
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
+        ], dtype=float)
+        outdata = mm.applyForward(indata)
+        pred_outdata = np.array([
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+        ], dtype=float)
+        assert_allclose(outdata, pred_outdata)
+
+        simplifiedMM = mm.simplify()
+        outdata2 = simplifiedMM.applyForward(indata)
+        assert_allclose(outdata2, pred_outdata)
+
 
 if __name__ == "__main__":
     unittest.main()
