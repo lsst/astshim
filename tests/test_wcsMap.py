@@ -46,7 +46,7 @@ class TestWcsMap(MappingTestCase):
             [0.0, 0.001, 0.0, 0.0],
             [0.0, 0.0, 0.001, 0.95885108],
         ])
-        outdata = wcsmap.tranForward(indata)
+        outdata = wcsmap.applyForward(indata)
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(wcsmap, indata)

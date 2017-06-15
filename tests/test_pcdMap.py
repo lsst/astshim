@@ -27,7 +27,7 @@ class TestPcdMap(MappingTestCase):
         self.checkPersistence(pcdmap)
 
         # the center maps to itself
-        assert_allclose(pcdmap.tranForward(ctr), ctr)
+        assert_allclose(pcdmap.applyForward(ctr), ctr)
 
         indata = np.array([
             [0.0, -1.0, 4.2],
@@ -36,7 +36,7 @@ class TestPcdMap(MappingTestCase):
         # inverse uses a fit so don't expect too much
         self.checkRoundTrip(pcdmap, indata, atol=1e-4)
 
-        outdata = pcdmap.tranForward(indata)
+        outdata = pcdmap.applyForward(indata)
 
         # the mapping is:
         #   outrad = inrad*(1 + coeff*inrad^2)

@@ -25,7 +25,7 @@ class TestRateMap(MappingTestCase):
             [1.1, -43.5, -5.54],
             [2.2, 1309.31, 35.2],
         ])
-        outdata = ratemap.tranForward(indata)
+        outdata = ratemap.applyForward(indata)
         assert_allclose(outdata, zoomfac)
 
     def test_RateMap2(self):
@@ -36,7 +36,7 @@ class TestRateMap(MappingTestCase):
             [1.1, -43.5, -5.54],
             [2.2, 1309.31, 35.2],
         ])
-        outdata = ratemap.tranForward(indata)
+        outdata = ratemap.applyForward(indata)
         assert_allclose(outdata, 0)
 
 

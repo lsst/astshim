@@ -92,18 +92,18 @@ class TestFrameSet(MappingTestCase):
         unitMap = astshim.UnitMap(2)
         frame2 = astshim.SkyFrame()
         frameSet = astshim.FrameSet(frame1, unitMap, frame2)
-        self.assertAlmostEqual(frameSet.tranForward([x, y]), [x, y])
-        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y])
+        self.assertAlmostEqual(frameSet.applyForward([x, y]), [x, y])
+        self.assertAlmostEqual(frameSet.applyInverse([x, y]), [x, y])
 
         # permuting the axes of the current frame also permutes the mapping
         frameSet.permAxes([2, 1])
-        self.assertAlmostEqual(frameSet.tranForward([x, y]), [y, x])
-        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [y, x])
+        self.assertAlmostEqual(frameSet.applyForward([x, y]), [y, x])
+        self.assertAlmostEqual(frameSet.applyInverse([x, y]), [y, x])
 
         # permuting again puts things back
         frameSet.permAxes([2, 1])
-        self.assertAlmostEqual(frameSet.tranForward([x, y]), [x, y])
-        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y])
+        self.assertAlmostEqual(frameSet.applyForward([x, y]), [x, y])
+        self.assertAlmostEqual(frameSet.applyInverse([x, y]), [x, y])
 
     def test_FrameSetPermutationUnequal(self):
         """Test that permuting FrameSet axes with nIn != nOut
@@ -124,18 +124,18 @@ class TestFrameSet(MappingTestCase):
         permMap = astshim.PermMap([1, 2, -1], [1, 2], [z])
         frame2 = astshim.Frame(2)
         frameSet = astshim.FrameSet(frame1, permMap, frame2)
-        self.assertAlmostEqual(frameSet.tranForward([x, y, z]), [x, y])
-        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y, z])
+        self.assertAlmostEqual(frameSet.applyForward([x, y, z]), [x, y])
+        self.assertAlmostEqual(frameSet.applyInverse([x, y]), [x, y, z])
 
         # permuting the axes of the current frame also permutes the mapping
         frameSet.permAxes([2, 1])
-        self.assertAlmostEqual(frameSet.tranForward([x, y, z]), [y, x])
-        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [y, x, z])
+        self.assertAlmostEqual(frameSet.applyForward([x, y, z]), [y, x])
+        self.assertAlmostEqual(frameSet.applyInverse([x, y]), [y, x, z])
 
         # permuting again puts things back
         frameSet.permAxes([2, 1])
-        self.assertAlmostEqual(frameSet.tranForward([x, y, z]), [x, y])
-        self.assertAlmostEqual(frameSet.tranInverse([x, y]), [x, y, z])
+        self.assertAlmostEqual(frameSet.applyForward([x, y, z]), [x, y])
+        self.assertAlmostEqual(frameSet.applyInverse([x, y]), [x, y, z])
 
 
 if __name__ == "__main__":

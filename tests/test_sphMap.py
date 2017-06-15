@@ -32,7 +32,7 @@ class TestSphMap(MappingTestCase):
             [0.0, halfpi, 0.0, math.pi, -halfpi, 0.0, math.pi / 4.0],
             [0.0, 0.0, halfpi, 0.0, 0.0, -halfpi, math.atan(1.0 / math.sqrt(2.0))],
         ], dtype=float)
-        outdata = sphmap.tranForward(indata)
+        outdata = sphmap.applyForward(indata)
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(sphmap, indata)

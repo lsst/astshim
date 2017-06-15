@@ -11,7 +11,7 @@ from astshim.test import MappingTestCase
 class TestZoomMap(MappingTestCase):
 
     def test_basics(self):
-        """Test basics of ZoomMap including tranForward
+        """Test basics of ZoomMap including applyForward
         """
         for nin in (1, 2, 3):
             for zoom in (1.0, -1.1, 359.3):
@@ -33,7 +33,7 @@ class TestZoomMap(MappingTestCase):
                 ], dtype=float)[0:nin]
                 self.checkRoundTrip(zoommap, indata)
 
-                topos = zoommap.tranForward(indata)
+                topos = zoommap.applyForward(indata)
                 assert_allclose(indata * zoom, topos)
 
 

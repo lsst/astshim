@@ -20,7 +20,7 @@ def normalize(inArray, lbnd, ubnd):
     ----------
     inArray : `numpy.array` of float
         Value(s) to normalize; a list of nAxes x nPoints values
-        (the form used by astshim.Mapping.tranForward)
+        (the form used by astshim.Mapping.applyForward)
     lbnd : sequence of `float`
         Lower bounds (one element per axis)
     ubnd : sequence of `float`
@@ -48,8 +48,8 @@ class ReferenceCheby(object):
         referenceCheby : callable
             A function that takes a normalized point (as a list of floats)
             that has been normalized to the range [-1, 1]
-            and returns the expected results from ChebyPoly.tranForward
-            or tranInverse for the corresponding un-normalized point
+            and returns the expected results from ChebyPoly.applyForward
+            or applyInverse for the corresponding un-normalized point
         lbnd : list of float
             Lower bounds of inputs (for normalization)
         ubnd : list of float
@@ -65,8 +65,8 @@ class ReferenceCheby(object):
         Parameters
         ----------
         inArray : `numpy.array`
-            Input array of points in the form used by ChebyMap.tranForward
-            or tranInverse.
+            Input array of points in the form used by ChebyMap.applyForward
+            or applyInverse.
 
         Returns
         -------
@@ -153,10 +153,10 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(domain1.lbnd, lbnd_f)
         npt.assert_allclose(domain1.ubnd, ubnd_f)
 
-        outdata = chebyMap1.tranForward(indata)
+        outdata = chebyMap1.applyForward(indata)
 
         with self.assertRaises(RuntimeError):
-            chebyMap1.tranInverse(indata)
+            chebyMap1.applyInverse(indata)
 
         pred_outdata = refCheby.transform(indata)
         npt.assert_allclose(outdata, pred_outdata)
@@ -177,11 +177,11 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(domain2.lbnd, lbnd_f)
         npt.assert_allclose(domain2.ubnd, ubnd_f)
 
-        outdata2 = chebyMap2.tranForward(indata)
+        outdata2 = chebyMap2.applyForward(indata)
         npt.assert_allclose(outdata2, outdata)
 
         with self.assertRaises(RuntimeError):
-            chebyMap2.tranInverse(indata)
+            chebyMap2.applyInverse(indata)
 
         # bidirectional constructor, inverse only specified
         chebyMap3 = astshim.ChebyMap(null_coeff, coeff_f, [], [], lbnd_f, ubnd_f)
@@ -196,11 +196,11 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(domain3.lbnd, lbnd_f)
         npt.assert_allclose(domain3.ubnd, ubnd_f)
 
-        outdata3 = chebyMap3.tranInverse(indata)
+        outdata3 = chebyMap3.applyInverse(indata)
         npt.assert_allclose(outdata3, outdata)
 
         with self.assertRaises(RuntimeError):
-            chebyMap3.tranForward(indata)
+            chebyMap3.applyForward(indata)
 
     def test_ChebyMapBidirectional(self):
         """Test a ChebyMap with separate forward and inverse mappings
@@ -275,12 +275,12 @@ class TestChebyMap(MappingTestCase):
         self.checkCopy(chebyMap)
         self.checkPersistence(chebyMap)
 
-        outdata_f = chebyMap.tranForward(indata_f)
+        outdata_f = chebyMap.applyForward(indata_f)
         des_outdata_f = refCheby_f.transform(indata_f)
 
         npt.assert_allclose(outdata_f, des_outdata_f)
 
-        outdata_i = chebyMap.tranInverse(indata_i)
+        outdata_i = chebyMap.applyInverse(indata_i)
         des_outdata_i = refCheby_i.transform(indata_i)
 
         npt.assert_allclose(outdata_i, des_outdata_i)
@@ -336,7 +336,7 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap1.hasForward)
         self.assertFalse(chebyMap1.hasInverse)
 
-        outdata = chebyMap1.tranForward(indata)
+        outdata = chebyMap1.applyForward(indata)
 
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
         des_outdata = referenceCheby.transform(indata)
@@ -349,8 +349,8 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap2.hasForward)
         self.assertTrue(chebyMap2.hasInverse)
         # forward should be identical to the original
-        npt.assert_equal(chebyMap2.tranForward(indata), outdata)
-        roundTripIn2 = chebyMap2.tranInverse(outdata)
+        npt.assert_equal(chebyMap2.applyForward(indata), outdata)
+        roundTripIn2 = chebyMap2.applyInverse(outdata)
         npt.assert_allclose(roundTripIn2, indata, atol=0.0002)
 
         # fit an inverse transform with default bounds (which are the same bounds
@@ -359,8 +359,8 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap2.hasForward)
         self.assertTrue(chebyMap2.hasInverse)
         # forward should be identical to the original
-        npt.assert_equal(chebyMap3.tranForward(indata), outdata)
-        roundTripIn3 = chebyMap3.tranInverse(outdata)
+        npt.assert_equal(chebyMap3.applyForward(indata), outdata)
+        roundTripIn3 = chebyMap3.applyInverse(outdata)
         npt.assert_equal(roundTripIn3, roundTripIn2)
 
     def test_ChebyMapChebyMapUnivertible(self):
@@ -408,7 +408,7 @@ class TestChebyMap(MappingTestCase):
         self.assertTrue(chebyMap1.hasForward)
         self.assertFalse(chebyMap1.hasInverse)
 
-        outdata = chebyMap1.tranForward(indata)
+        outdata = chebyMap1.applyForward(indata)
 
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
         des_outdata = referenceCheby.transform(indata)
@@ -446,7 +446,7 @@ class TestChebyMap(MappingTestCase):
         x1Grid, x2Grid = np.meshgrid(x1Edge, x2Edge)
         indata = np.array([x1Grid.ravel(), x2Grid.ravel()])
 
-        outdata = chebyMap1.tranForward(indata)
+        outdata = chebyMap1.applyForward(indata)
         pred_lbnd = outdata.min(1)
         pred_ubnd = outdata.max(1)
 

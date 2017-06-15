@@ -126,11 +126,11 @@ public:
 
     An inverse mapping is a deep copy of a mapping whose @ref Mapping_Invert "Invert" attribute
     has been toggled, as indicated by @ref isInverted. This swaps the meaning of "input" and "output",
-    and of "forward" and "inverse". Thus it swaps the behavior of @ref tranForward and @ref tranInverse,
+    and of "forward" and "inverse". Thus it swaps the behavior of @ref applyForward and @ref applyInverse,
     @ref getNIn and @ref getNOut, @ref hasForward and @ref hasInverse and so on.
 
     Note that the inverse mapping contains exactly the same model coefficients as the original,
-    but they are used by @ref tranInverse instead of @ref tranForward. Thus for example if a @ref ZoomMap
+    but they are used by @ref applyInverse instead of @ref applyForward. Thus for example if a @ref ZoomMap
     has a zoom factor of 4.0 then its inverse also reports a zoom factor of 4.0 (despite behaving
     like an uninverted @ref ZoomMap with zoom factor of 0.25).
     */
@@ -250,7 +250,7 @@ public:
     @param[in] from  input coordinates, with dimensions (nPts, nIn)
     @param[out] to  transformed coordinates, with dimensions (nPts, nOut)
     */
-    void tranForward(ConstArray2D const &from, Array2D const &to) const { _tran(from, true, to); }
+    void applyForward(ConstArray2D const &from, Array2D const &to) const { _tran(from, true, to); }
 
     /**
     Perform a forward transformation on a 2-D array, returning the results as a new array
@@ -258,7 +258,7 @@ public:
     @param[in] from  input coordinates, with dimensions (nPts, nIn)
     @return the results as a new array with dimensions (nPts, nOut)
     */
-    Array2D tranForward(ConstArray2D const &from) const {
+    Array2D applyForward(ConstArray2D const &from) const {
         Array2D to = ndarray::allocate(getNOut(), from.getSize<1>());
         _tran(from, true, to);
         return to;
@@ -270,7 +270,7 @@ public:
     @param[in] from  input coordinates as a vector, with axes adjacent, e.g. x0, y0, x1, y1...xn, yn
     @return the results as a new vector
     */
-    std::vector<double> tranForward(std::vector<double> const &from) const {
+    std::vector<double> applyForward(std::vector<double> const &from) const {
         auto fromArr = arrayFromVector(from, getNIn());
         std::vector<double> to(fromArr.getSize<1>() * getNOut());
         auto toArr = arrayFromVector(to, getNOut());
@@ -284,7 +284,7 @@ public:
     @param[in] from  input coordinates, with dimensions (nPts, nOut)
     @param[out] to  transformed coordinates, with dimensions (nPts, nIn)
     */
-    void tranInverse(ConstArray2D const &from, Array2D const &to) const { _tran(from, false, to); }
+    void applyInverse(ConstArray2D const &from, Array2D const &to) const { _tran(from, false, to); }
 
     /**
     Perform an inverse transformation on a 2-D array, returning the results as a new 2-D array
@@ -292,7 +292,7 @@ public:
     @param[in] from  output coordinates, with dimensions (nPts, nOut)
     @return the results as a new array with dimensions (nPts, nIn)
     */
-    Array2D tranInverse(ConstArray2D const &from) const {
+    Array2D applyInverse(ConstArray2D const &from) const {
         Array2D to = ndarray::allocate(getNIn(), from.getSize<1>());
         _tran(from, false, to);
         return to;
@@ -304,7 +304,7 @@ public:
     @param[in] from  input coordinates as a vector, with axes adjacent, e.g. x0, y0, x1, y1...xn, yn
     @return the results as a new vector
     */
-    std::vector<double> tranInverse(std::vector<double> const &from) const {
+    std::vector<double> applyInverse(std::vector<double> const &from) const {
         auto fromArr = arrayFromVector(from, getNOut());
         std::vector<double> to(fromArr.getSize<1>() * getNIn());
         auto toArr = arrayFromVector(to, getNIn());
@@ -422,7 +422,7 @@ protected:
 
 private:
     /**
-    Implement tranForward and tranInverse, putting the results into a pre-allocated 2-D array.
+    Implement applyForward and applyInverse, putting the results into a pre-allocated 2-D array.
 
     @param[in] from  input coordinates, with dimensions (nPts, nIn)
     @param[in] doForward  if true then perform a forward transform, else inverse

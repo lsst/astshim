@@ -39,13 +39,13 @@ class TestCmpMap(MappingTestCase):
             [3.0, 99.9, -5.1, 21.0, 0.0],
         ], dtype=float)
         pred_outdata = ((indata.T + self.shift) * self.zoom).T
-        topos = sermap.tranForward(indata)
+        topos = sermap.applyForward(indata)
         assert_allclose(topos, pred_outdata)
 
         self.checkRoundTrip(sermap, indata)
 
         cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, True)
-        cmtopos = cmpmap.tranForward(indata)
+        cmtopos = cmpmap.applyForward(indata)
         assert_allclose(cmtopos, pred_outdata)
 
     def test_ParallelMap(self):
@@ -71,13 +71,13 @@ class TestCmpMap(MappingTestCase):
         pred_outdata = indata.copy()
         pred_outdata.T[:, 0:2] += self.shift
         pred_outdata.T[:, 2:4] *= self.zoom
-        topos = parmap.tranForward(indata)
+        topos = parmap.applyForward(indata)
         assert_allclose(topos, pred_outdata)
 
         self.checkRoundTrip(parmap, indata)
 
         cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, False)
-        cmtopos = cmpmap.tranForward(indata)
+        cmtopos = cmpmap.applyForward(indata)
         assert_allclose(cmtopos, pred_outdata)
 
 

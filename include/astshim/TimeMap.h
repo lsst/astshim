@@ -162,9 +162,9 @@ public:
     - Julian Dates and offsets: days
 
     The arguments used in the above conversions are the zero-points
-    used by the @ref Mapping.tranForward function.
+    used by the @ref Mapping.applyForward function.
     The axis values supplied and returned by
-    @ref Mapping.tranForward are offsets away from these zero-points:
+    @ref Mapping.applyForward are offsets away from these zero-points:
 
     - `MJDOFF`: The zero-point being used with MJD values.
     - `JDOFF`: The zero-point being used with Julian Date values.

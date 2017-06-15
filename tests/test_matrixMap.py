@@ -28,7 +28,7 @@ class TestMatrixMap(MappingTestCase):
             [1.0, 2.0, 3.0],
             [0.0, 1.0, 2.0],
         ], dtype=float)
-        outdata = mm.tranForward(indata)
+        outdata = mm.applyForward(indata)
         pred_outdata = np.array([
             [-1.0, -2.0, -3.0],
             [0.0, 2.0, 4.0],
@@ -60,7 +60,7 @@ class TestMatrixMap(MappingTestCase):
             [1.0, 2.0, 3.0],
             [0.0, 1.0, 2.0],
         ], dtype=float)
-        outdata = mm.tranForward(indata)
+        outdata = mm.applyForward(indata)
         pred_outdata = np.array([
             [0.0, 1.0, 2.0],
             [2.0, 7.0, 12.0],

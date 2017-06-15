@@ -26,7 +26,7 @@ class TestSlaMap(MappingTestCase):
             [0.0, 1.0, 3.0],
             [-0.5, 0.9, 0.1],
         ])
-        outdata = slamap.tranForward(indata)
+        outdata = slamap.applyForward(indata)
         pred_outdata = indata
         pred_outdata[0] = last - indata[0]
         assert_allclose(outdata, pred_outdata)

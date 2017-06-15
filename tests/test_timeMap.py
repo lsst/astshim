@@ -25,7 +25,7 @@ class TestTimeMap(MappingTestCase):
         self.checkBasicSimplify(timemap)
 
         indata = np.array([0.0, 1.0], dtype=float)
-        outdata = timemap.tranForward(indata)
+        outdata = timemap.applyForward(indata)
         assert_allclose(outdata, indata)
 
         self.checkRoundTrip(timemap, indata)
@@ -35,7 +35,7 @@ class TestTimeMap(MappingTestCase):
         dut1 = 0.35
         timemap.add("UTTOUTC", [dut1])
         indata = np.array([512345.0, 512346.0], dtype=float)
-        outdata = timemap.tranForward(indata)
+        outdata = timemap.applyForward(indata)
         pred_outdata = (indata.T - dut1 / SecPerDay).T
         assert_allclose(outdata, pred_outdata, atol=1e-15, rtol=0)
 

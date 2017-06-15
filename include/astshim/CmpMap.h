@@ -60,7 +60,7 @@ public:
     /**
     Construct a @ref CmpMap
 
-    @param[in] map1  First mapping. When calling @ref Mapping.tranForward
+    @param[in] map1  First mapping. When calling @ref Mapping.applyForward
         the first mapping is applied to the input points in a series mapping,
         and to the lower numbered coordinates in a parallel mapping.
     @param[in] map2  Second mapping.

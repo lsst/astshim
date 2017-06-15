@@ -110,7 +110,7 @@ class TestFrame(MappingTestCase):
             [1.1, 2.2],
             [-43.5, 1309.31],
         ])
-        outdata = fset.tranForward(indata)
+        outdata = fset.applyForward(indata)
         assert_allclose(outdata, indata)
         self.checkRoundTrip(fset, indata)
 
@@ -131,7 +131,7 @@ class TestFrame(MappingTestCase):
             [1.1, 2.2],
             [-43.5, 1309.31],
         ])
-        outdata = fset.tranForward(indata)
+        outdata = fset.applyForward(indata)
         assert_allclose(outdata, indata)
         self.checkRoundTrip(fset, indata)
 

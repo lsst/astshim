@@ -39,7 +39,7 @@ class TestPolyMap(MappingTestCase):
             [1.0, 2.0, 3.0],
             [0.0, 1.0, 2.0],
         ])
-        outdata = pm.tranForward(indata)
+        outdata = pm.applyForward(indata)
         xin, yin = indata
         pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
         pred_yout = yin
@@ -47,7 +47,7 @@ class TestPolyMap(MappingTestCase):
         npt.assert_allclose(xout, pred_xout)
         npt.assert_allclose(yout, pred_yout)
 
-        indata_roundtrip = pm.tranInverse(outdata)
+        indata_roundtrip = pm.applyInverse(outdata)
         npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-4)
 
     def test_polyMapAtributes(self):
@@ -72,7 +72,7 @@ class TestPolyMap(MappingTestCase):
             [1.0, 2.0, 3.0],
             [0.0, 1.0, 2.0],
         ])
-        outdata = pm.tranForward(indata)
+        outdata = pm.applyForward(indata)
         xin, yin = indata
         pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
         pred_yout = yin
@@ -80,7 +80,7 @@ class TestPolyMap(MappingTestCase):
         npt.assert_allclose(xout, pred_xout)
         npt.assert_allclose(yout, pred_yout)
 
-        indata_roundtrip = pm.tranInverse(outdata)
+        indata_roundtrip = pm.applyInverse(outdata)
         npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-6)
 
     def test_polyMapNoInverse(self):
@@ -103,9 +103,9 @@ class TestPolyMap(MappingTestCase):
             [1.0, 2.0, 3.0],
             [0.0, 1.0, 2.0],
         ])
-        outdata = pm.tranForward(indata)
+        outdata = pm.applyForward(indata)
         with self.assertRaises(RuntimeError):
-            pm.tranInverse(indata)
+            pm.applyInverse(indata)
 
         pminv = pm.getInverse()
         self.assertFalse(pminv.hasForward)
@@ -113,12 +113,12 @@ class TestPolyMap(MappingTestCase):
         self.assertTrue(pminv.isInverted)
         self.assertFalse(pm.iterInverse)
 
-        outdata2 = pminv.tranInverse(indata)
+        outdata2 = pminv.applyInverse(indata)
         # outdata and outdata2 should be identical because inverting
-        # swaps the behavior of tranForward and tranInverse
+        # swaps the behavior of applyForward and applyInverse
         npt.assert_equal(outdata, outdata2)
         with self.assertRaises(RuntimeError):
-            pminv.tranForward(indata)
+            pminv.applyForward(indata)
 
     def test_PolyMapBidirectional(self):
         coeff_f = np.array([
@@ -229,14 +229,14 @@ class TestPolyMap(MappingTestCase):
             [0.0, 1.0, 2.0],
         ])
 
-        outdata = pm.tranForward(indata)
+        outdata = pm.applyForward(indata)
 
         # create a PolyMap with an identical forward transform and a fit inverse
         forward = False
         pm2 = pm.polyTran(forward, 1.0E-10, 1.0E-10, 4, [-1.0, -1.0], [1.0, 1.0])
-        outdata2 = pm2.tranForward(indata)
+        outdata2 = pm2.applyForward(indata)
         npt.assert_equal(outdata, outdata2)
-        indata2 = pm2.tranInverse(outdata)
+        indata2 = pm2.applyInverse(outdata)
         npt.assert_allclose(indata, indata2, atol=1.0e-10)
 
     def test_PolyMapPolyMapUnivertible(self):
@@ -257,12 +257,12 @@ class TestPolyMap(MappingTestCase):
 
         indata = np.array([-0.5, 0.5, 1.1, 1.8])
         pred_outdata = (2.0*indata.T**2 - indata.T**3).T
-        outdata = pm.tranForward(indata)
+        outdata = pm.applyForward(indata)
         npt.assert_allclose(outdata, pred_outdata)
 
         # the iterative inverse should give valid values
-        indata_iterative = pm.tranInverse(outdata)
-        outdata_roundtrip = pm.tranForward(indata_iterative)
+        indata_iterative = pm.applyInverse(outdata)
+        outdata_roundtrip = pm.applyForward(indata_iterative)
         npt.assert_allclose(outdata, outdata_roundtrip)
 
         with self.assertRaises(RuntimeError):

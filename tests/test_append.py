@@ -53,13 +53,13 @@ class TestFrameSetAppend(unittest.TestCase):
             append(set2, set1)
 
         x = [1.2, 3.4]
-        y_merged = set12.tranForward(x)
-        y_separate = set2.tranForward(set1.tranForward(x))
+        y_merged = set12.applyForward(x)
+        y_separate = set2.applyForward(set1.applyForward(x))
         assert_allclose(y_merged, y_separate)
 
         y = [-0.3]
-        x_merged = set12.tranInverse(y)
-        x_separate = set1.tranInverse(set2.tranInverse(y))
+        x_merged = set12.applyInverse(y)
+        x_separate = set1.applyInverse(set2.applyInverse(y))
         assert_allclose(x_merged, x_separate)
 
         # No side effects
@@ -110,7 +110,7 @@ class TestFrameSetAppend(unittest.TestCase):
 
         nTotal = set12.nFrame
         x = [1.2, 3.4, 5.6]
-        y = set12.tranForward(x)
+        y = set12.applyForward(x)
 
         set1.addFrame(2, makeTwoWayPolyMap(4, 2), Frame(2, "Ident=extra"))
         set1.addFrame(1, makeTwoWayPolyMap(3, 3), Frame(3, "Ident=legume"))
@@ -120,7 +120,7 @@ class TestFrameSetAppend(unittest.TestCase):
 
         # Use exact equality because nothing should change
         self.assertEquals(set12.nFrame, nTotal)
-        self.assertEquals(set12.tranForward(x), y)
+        self.assertEquals(set12.applyForward(x), y)
 
     def test_AppendMismatch(self):
         """Check that append behaves as expected when joining non-identical frames.
@@ -132,8 +132,8 @@ class TestFrameSetAppend(unittest.TestCase):
         set12 = append(set1, set2)
 
         x = [1.2, 3.4, 5.6]
-        y_merged = set12.tranForward(x)
-        y_separate = set2.tranForward(set1.tranForward(x))
+        y_merged = set12.applyForward(x)
+        y_separate = set2.applyForward(set1.applyForward(x))
         assert_allclose(y_merged, y_separate)
 
         iFrom = set1.current
