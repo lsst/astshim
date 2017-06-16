@@ -34,6 +34,10 @@ class TestCmpMap(MappingTestCase):
         self.checkCopy(sermap)
         self.checkPersistence(sermap)
 
+        sermap2 = self.shiftmap.then(self.zoommap)
+
+        sermap3 = astshim.CmpMap(self.shiftmap, self.zoommap, True)
+
         indata = np.array([
             [1.0, 2.0, -6.0, 30.0, 0.2],
             [3.0, 99.9, -5.1, 21.0, 0.0],
@@ -42,11 +46,15 @@ class TestCmpMap(MappingTestCase):
         topos = sermap.applyForward(indata)
         assert_allclose(topos, pred_outdata)
 
-        self.checkRoundTrip(sermap, indata)
+        topos2 = sermap2.applyForward(indata)
+        assert_allclose(topos2, pred_outdata)
 
-        cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, True)
-        cmtopos = cmpmap.applyForward(indata)
-        assert_allclose(cmtopos, pred_outdata)
+        topos3 = sermap3.applyForward(indata)
+        assert_allclose(topos3, pred_outdata)
+
+        self.checkRoundTrip(sermap, indata)
+        self.checkRoundTrip(sermap2, indata)
+        self.checkRoundTrip(sermap3, indata)
 
     def test_ParallelMap(self):
         parmap = astshim.ParallelMap(self.shiftmap, self.zoommap)
@@ -62,6 +70,8 @@ class TestCmpMap(MappingTestCase):
         self.checkCopy(parmap)
         self.checkPersistence(parmap)
 
+        parmap2 = self.shiftmap.under(self.zoommap)
+
         indata = np.array([
             [3.0, 1.0, -6.0],
             [2.2, 3.0, -5.1],
@@ -74,11 +84,44 @@ class TestCmpMap(MappingTestCase):
         topos = parmap.applyForward(indata)
         assert_allclose(topos, pred_outdata)
 
-        self.checkRoundTrip(parmap, indata)
+        topos2 = parmap2.applyForward(indata)
+        assert_allclose(topos2, pred_outdata)
 
-        cmpmap = astshim.CmpMap(self.shiftmap, self.zoommap, False)
-        cmtopos = cmpmap.applyForward(indata)
-        assert_allclose(cmtopos, pred_outdata)
+        parmap3 = astshim.CmpMap(self.shiftmap, self.zoommap, False)
+        topos3 = parmap3.applyForward(indata)
+        assert_allclose(topos3, pred_outdata)
+
+        self.checkRoundTrip(parmap, indata)
+        self.checkRoundTrip(parmap2, indata)
+        self.checkRoundTrip(parmap3, indata)
+
+    def test_SeriesMapMatrixShiftSimplify(self):
+        """Test that a non-square matrix map followed by a shift map can be simplified
+
+        This is ticket DM-10946
+        """
+        m1 = 1.0
+        m2 = 2.0
+        shift = 3.0
+        matrixMap = astshim.MatrixMap(np.array([[m1, m2]]))
+        self.assertEqual(matrixMap.nIn, 2)
+        self.assertEqual(matrixMap.nOut, 1)
+        shiftMap = astshim.ShiftMap([shift])
+        seriesMap = matrixMap.then(shiftMap)
+
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
+        ], dtype=float)
+        pred_outdata = m1 * indata[0] + m2 * indata[1] + shift
+        pred_outdata.shape = (1, len(pred_outdata))
+
+        outdata = seriesMap.applyForward(indata)
+        assert_allclose(outdata, pred_outdata)
+
+        simplifiedMap = seriesMap.simplify()
+        outdata2 = simplifiedMap.applyForward(indata)
+        assert_allclose(outdata2, pred_outdata)
 
 
 if __name__ == "__main__":
