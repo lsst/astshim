@@ -301,8 +301,8 @@ public:
         between the two supplied @ref Frame "Frames", including the specified end frames.
     - It should always be possible to generate the @ref Mapping requested, but this does not
         necessarily guarantee that it will be able to perform the required coordinate conversion.
-        If necessary, the `TranForward` and `TranInverse` attributes of the returned @ref Mapping
-        should be inspected to determine if the required transformation is available.
+        If necessary, call `hasForward` or `hasInverse` on the returned @ref Mapping
+        to determine if the required transformation is available.
     */
     std::shared_ptr<Mapping> getMapping(int ind1 = BASE, int ind2 = CURRENT) const {
         AstObject *rawMap = reinterpret_cast<AstObject *>(astGetMapping(getRawPtr(), ind1, ind2));

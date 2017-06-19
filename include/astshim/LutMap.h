@@ -54,10 +54,8 @@ In addition to those attributes provided by @ref Mapping and @ref Object,
 
 ### Notes
 
-- If the entries in the lookup table either increase or decrease monotonically, then the `LutMap`'s
-    `TranInverse` attribute will have a value of one, indicating that the inverse transformation
-    can be performed. Otherwise, it will have a value of zero, so that any attempt to use
-    the inverse transformation will result in an error.
+- If the entries in the lookup table increase or decrease monotonically, then the LutMap
+    will have an inverse transformation; otherwise it will not.
 */
 class LutMap : public Mapping {
     friend class Object;

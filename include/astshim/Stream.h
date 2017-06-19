@@ -164,6 +164,7 @@ public:
 
     virtual ~FileStream() {}
 
+    /// Get the path to the file, as a string
     std::string getPath() const { return _path; }
 
 private:
