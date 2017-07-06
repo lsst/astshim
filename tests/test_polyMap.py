@@ -50,7 +50,7 @@ class TestPolyMap(MappingTestCase):
         indata_roundtrip = pm.applyInverse(outdata)
         npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-4)
 
-    def test_polyMapAtributes(self):
+    def test_polyMapAttributes(self):
         coeff_f = np.array([
             [1.2, 1, 2, 0],
             [-0.5, 1, 1, 1],
