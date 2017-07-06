@@ -139,8 +139,8 @@ std::shared_ptr<Class> Object::fromAstObject(AstObject *rawObj, bool copy) {
     return retObject;
 }
 
-void Object::show(std::ostream &os) const {
-    auto ch = astChannel(nullptr, sinkToOstream, "%s", "");
+void Object::show(std::ostream &os, bool showComments) const {
+    auto ch = astChannel(nullptr, sinkToOstream, "%s", showComments ? "" : "Comment=0");
 
     // Store a poiner to the ostream in the channel, as required by sinkToOstream
     astPutChannelData(ch, &os);
@@ -149,9 +149,9 @@ void Object::show(std::ostream &os) const {
     assertOK();
 }
 
-std::string Object::show() const {
+std::string Object::show(bool showComments) const {
     std::ostringstream os;
-    show(os);
+    show(os, showComments);
     return os.str();
 }
 

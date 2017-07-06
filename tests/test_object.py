@@ -113,6 +113,28 @@ class TestObject(ObjectTestCase):
         cp = obj.copy()
         self.assertEqual(cp.ident, "initial_ident")
 
+    def test_show(self):
+        obj = astshim.ZoomMap(2, 1.3)
+        desShowLines = [
+            " Begin ZoomMap \t# Zoom about the origin",
+            "    Nin = 2 \t# Number of input coordinates",
+            " IsA Mapping \t# Mapping between coordinate systems",
+            "    Zoom = 1.3 \t# Zoom factor",
+            " End ZoomMap",
+            "",
+        ]
+        desShowLinesNoComments = [
+            " Begin ZoomMap",
+            "    Nin = 2",
+            " IsA Mapping",
+            "    Zoom = 1.3",
+            " End ZoomMap",
+            "",
+        ]
+        self.assertEqual(obj.show(), "\n".join(desShowLines))
+        self.assertEqual(obj.show(True), "\n".join(desShowLines))
+        self.assertEqual(obj.show(False), "\n".join(desShowLinesNoComments))
+
 
 if __name__ == "__main__":
     unittest.main()

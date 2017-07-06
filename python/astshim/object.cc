@@ -56,7 +56,8 @@ PYBIND11_PLUGIN(object) {
     cls.def("getRefCount", &Object::getRefCount);
     cls.def("lock", &Object::lock, "wait"_a);
     cls.def("same", &Object::same, "other"_a);
-    cls.def("show", (std::string(Object::*)() const) & Object::show);
+    // do not wrap the ostream version of show, since there is no obvious Python equivalent to ostream
+    cls.def("show", (std::string(Object::*)(bool) const) & Object::show, "showComments"_a = true);
     cls.def("test", &Object::test, "attrib"_a);
     cls.def("unlock", &Object::unlock, "report"_a = false);
     // do not wrap getRawPtr, since it returns a bare AST pointer
