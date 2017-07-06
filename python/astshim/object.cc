@@ -42,6 +42,8 @@ PYBIND11_PLUGIN(object) {
 
     cls.def("__str__", &Object::getClassName);
     cls.def("__repr__", [](Object const &self) { return "astshim." + self.getClassName(); });
+    cls.def("__eq__", &Object::operator==, py::is_operator());
+    cls.def("__ne__", &Object::operator!=, py::is_operator());
 
     cls.def_property_readonly("className", &Object::getClassName);
     cls.def_property("id", &Object::getID, &Object::setID);

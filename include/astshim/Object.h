@@ -63,6 +63,21 @@ public:
     Object &operator=(Object &&) = default;
 
     /**
+    Return True if this and `rhs` are the equal
+
+    For two objects be equal, they both must have the same attributes and all contained objects
+    must be equal.
+    */
+    bool operator==(Object const &rhs) const;
+
+    /**
+    Return True if this and `rhs` are not equal
+
+    See operator== for details
+    */
+    bool operator!=(Object const &rhs) const { return !(*this == rhs); };
+
+    /**
     Construct an @ref Object from a string, using astFromString
     */
     static std::shared_ptr<Object> fromString(std::string const &str) {
@@ -202,16 +217,17 @@ public:
     /**
     Print a textual description the object to an ostream.
 
-    It is provided primarily as an aid to debugging
+    @param[in, out] os  The stream to which to write the string representation.
+    @param[in] showComments  Show comments?
     */
-    void show(std::ostream &os) const;
+    void show(std::ostream &os, bool showComments = true) const;
 
     /**
     Return a textual description the object as a string.
 
-    It is provided primarily as an aid to debugging
+    @param[in] showComments  Show comments?
     */
-    std::string show() const;
+    std::string show(bool showComments = true) const;
 
     /**
     Has this attribute been explicitly set (and not subsequently cleared)?

@@ -19,6 +19,7 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
+#include <algorithm>
 #include <functional>
 #include <ostream>
 #include <sstream>
@@ -75,6 +76,12 @@ extern "C" void sinkToOstream(const char *text) {
 }
 
 }  // anonymous namespace
+
+bool Object::operator==(Object const &rhs) const {
+    auto thisStr = this->show(false);
+    auto rhsStr = rhs.show(false);
+    return rhsStr == thisStr;
+}
 
 std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
     static std::unordered_map<std::string, std::function<std::shared_ptr<Object>(AstObject *)>>
