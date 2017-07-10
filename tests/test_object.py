@@ -93,6 +93,38 @@ class TestObject(ObjectTestCase):
         except RuntimeError as e:
             self.assertEqual(e.args[0].count("Error"), 1)
 
+    def test_equality(self):
+        """Test __eq__ and __ne__
+        """
+        frame = astshim.Frame(2)
+        zoomMap = astshim.ZoomMap(2, 1.5)
+        frameSet1 = astshim.FrameSet(frame, zoomMap, frame)
+        frameSet2 = astshim.FrameSet(frame, zoomMap, frame)
+        self.assertTrue(frameSet1 == frameSet2)
+        self.assertFalse(frameSet1 != frameSet2)
+        self.assertEqual(frameSet1, frameSet2)
+
+        # the base attribute of frameSet1 is not set; set the base attribute
+        # of framesSet2 and make sure the frame sets are now not equal
+        self.assertFalse(frameSet1.test("Base"))
+        frameSet2.base = 1
+        self.assertTrue(frameSet2.test("Base"))
+        self.assertFalse(frameSet1 == frameSet2)
+        self.assertTrue(frameSet1 != frameSet2)
+        self.assertNotEqual(frameSet1, frameSet2)
+
+        # make sure base is unset in the inverse of the inverse of frameSet1,
+        # else the equality test will fail for hard-to-understand reasons
+        self.assertFalse(frameSet1.getInverse().getInverse().test("Base"))
+        self.assertNotEqual(frameSet1, frameSet1.getInverse())
+        self.assertEqual(frameSet1, frameSet1.getInverse().getInverse())
+        self.assertFalse(frameSet1.getInverse().getInverse().test("Base"))
+
+        frame3 = astshim.Frame(2)
+        frame3.title = "Frame 3"
+        frameSet3 = astshim.FrameSet(frame3)
+        self.assertNotEqual(frameSet1, frameSet3)
+
     def test_id(self):
         """Test that ID is *not* transferred to copies"""
         obj = astshim.ZoomMap(2, 1.3)
@@ -112,6 +144,28 @@ class TestObject(ObjectTestCase):
         self.assertEqual(obj.ident, "initial_ident")
         cp = obj.copy()
         self.assertEqual(cp.ident, "initial_ident")
+
+    def test_show(self):
+        obj = astshim.ZoomMap(2, 1.3)
+        desShowLines = [
+            " Begin ZoomMap \t# Zoom about the origin",
+            "    Nin = 2 \t# Number of input coordinates",
+            " IsA Mapping \t# Mapping between coordinate systems",
+            "    Zoom = 1.3 \t# Zoom factor",
+            " End ZoomMap",
+            "",
+        ]
+        desShowLinesNoComments = [
+            " Begin ZoomMap",
+            "    Nin = 2",
+            " IsA Mapping",
+            "    Zoom = 1.3",
+            " End ZoomMap",
+            "",
+        ]
+        self.assertEqual(obj.show(), "\n".join(desShowLines))
+        self.assertEqual(obj.show(True), "\n".join(desShowLines))
+        self.assertEqual(obj.show(False), "\n".join(desShowLinesNoComments))
 
 
 if __name__ == "__main__":

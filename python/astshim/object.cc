@@ -42,6 +42,8 @@ PYBIND11_PLUGIN(object) {
 
     cls.def("__str__", &Object::getClassName);
     cls.def("__repr__", [](Object const &self) { return "astshim." + self.getClassName(); });
+    cls.def("__eq__", &Object::operator==, py::is_operator());
+    cls.def("__ne__", &Object::operator!=, py::is_operator());
 
     cls.def_property_readonly("className", &Object::getClassName);
     cls.def_property("id", &Object::getID, &Object::setID);
@@ -56,7 +58,8 @@ PYBIND11_PLUGIN(object) {
     cls.def("getRefCount", &Object::getRefCount);
     cls.def("lock", &Object::lock, "wait"_a);
     cls.def("same", &Object::same, "other"_a);
-    cls.def("show", (std::string(Object::*)() const) & Object::show);
+    // do not wrap the ostream version of show, since there is no obvious Python equivalent to ostream
+    cls.def("show", (std::string(Object::*)(bool) const) & Object::show, "showComments"_a = true);
     cls.def("test", &Object::test, "attrib"_a);
     cls.def("unlock", &Object::unlock, "report"_a = false);
     // do not wrap getRawPtr, since it returns a bare AST pointer

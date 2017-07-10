@@ -19,6 +19,7 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
+#include <algorithm>
 #include <functional>
 #include <ostream>
 #include <sstream>
@@ -75,6 +76,12 @@ extern "C" void sinkToOstream(const char *text) {
 }
 
 }  // anonymous namespace
+
+bool Object::operator==(Object const &rhs) const {
+    auto thisStr = this->show(false);
+    auto rhsStr = rhs.show(false);
+    return rhsStr == thisStr;
+}
 
 std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
     static std::unordered_map<std::string, std::function<std::shared_ptr<Object>(AstObject *)>>
@@ -139,8 +146,8 @@ std::shared_ptr<Class> Object::fromAstObject(AstObject *rawObj, bool copy) {
     return retObject;
 }
 
-void Object::show(std::ostream &os) const {
-    auto ch = astChannel(nullptr, sinkToOstream, "%s", "");
+void Object::show(std::ostream &os, bool showComments) const {
+    auto ch = astChannel(nullptr, sinkToOstream, "%s", showComments ? "" : "Comment=0");
 
     // Store a poiner to the ostream in the channel, as required by sinkToOstream
     astPutChannelData(ch, &os);
@@ -149,9 +156,9 @@ void Object::show(std::ostream &os) const {
     assertOK();
 }
 
-std::string Object::show() const {
+std::string Object::show(bool showComments) const {
     std::ostringstream os;
-    show(os);
+    show(os, showComments);
     return os.str();
 }
 
