@@ -354,14 +354,15 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(roundTripIn2, indata, atol=0.0002)
 
         # fit an inverse transform with default bounds (which are the same bounds
-        # used for fitting chebyMap2, so the results should be identical)
+        # used for fitting chebyMap2, so the results should be the same)
         chebyMap3 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6)
         self.assertTrue(chebyMap2.hasForward)
         self.assertTrue(chebyMap2.hasInverse)
         # forward should be identical to the original
         npt.assert_equal(chebyMap3.applyForward(indata), outdata)
+        # inverse should be basically the same
         roundTripIn3 = chebyMap3.applyInverse(outdata)
-        npt.assert_equal(roundTripIn3, roundTripIn2)
+        npt.assert_allclose(roundTripIn3, roundTripIn2)
 
     def test_ChebyMapChebyMapUnivertible(self):
         """Test polyTran on a ChebyMap without a single-valued inverse
