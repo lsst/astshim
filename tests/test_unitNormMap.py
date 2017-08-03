@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_equal
 
 import astshim
 from astshim.test import MappingTestCase
@@ -13,8 +13,17 @@ class TestUnitNormMap(MappingTestCase):
     def test_UnitNormMapBasics(self):
         """Test basics of UnitNormMap including applyForward
         """
+        # `full_` variables contain data for 3 axes; the variables without the `full_` prefix
+        # are a subset containing the number of axes being tested
+        full_center = np.array([-1, 1, 2], dtype=float)
+        full_indata = np.array([
+            [full_center[0], 1.0, 2.0, -6.0, 30.0, 1.0],
+            [full_center[1], 3.0, 99.0, -5.0, 21.0, 0.0],
+            [full_center[2], -5.0, 3.0, -7.0, 37.0, 0.0],
+        ], dtype=float)
         for nin in (1, 2, 3):
-            center = np.array([-1, 1, 2][0:nin], dtype=float)
+            center = full_center[0:nin]
+            indata = full_indata[0:nin]
             unitnormmap = astshim.UnitNormMap(center)
             self.assertEqual(unitnormmap.className, "UnitNormMap")
             self.assertEqual(unitnormmap.nIn, nin)
@@ -25,23 +34,26 @@ class TestUnitNormMap(MappingTestCase):
             self.checkCopy(unitnormmap)
             self.checkPersistence(unitnormmap)
 
-            indata = np.array([
-                [1.0, 2.0, -6.0, 30.0, 1.0],
-                [3.0, 99.0, -5.0, 21.0, 0.0],
-                [-5.0, 3.0, -7.0, 37.0, 0.0],
-                [7.0, -23.0, -3.0, 45.0, 0.0],
-            ], dtype=float)[0:nin]
             self.checkRoundTrip(unitnormmap, indata)
 
             outdata = unitnormmap.applyForward(indata)
             norm = outdata[-1]
 
-            relindata = (indata.T - center).T
-            pred_norm = np.linalg.norm(relindata, axis=0)
+            # the first input point is at the center, so the expected output is
+            # [Nan, Nan, ..., Nan, 0]
+            pred_out_at_center = [np.nan]*nin + [0]
+            assert_equal(outdata[:, 0], pred_out_at_center)
+
+            relative_indata = (indata.T - center).T
+            pred_norm = np.linalg.norm(relative_indata, axis=0)
             assert_allclose(norm, pred_norm)
 
-            pred_relindata = outdata[0:nin] * norm
-            assert_allclose(relindata, pred_relindata)
+            pred_relative_indata = outdata[0:nin] * norm
+            # the first input point is at the center, so the output is
+            # [NaN, NaN, ..., NaN, 0], (as checked above),
+            # but the expected value after scaling by the norm is 0s, so...
+            pred_relative_indata[:, 0] = [0]*nin
+            assert_allclose(relative_indata, pred_relative_indata)
 
         # UnitNormMap must have at least one input
         with self.assertRaises(Exception):
