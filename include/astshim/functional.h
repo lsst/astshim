@@ -22,7 +22,11 @@
 #ifndef ASTSHIM_FUNCTIONAL_H
 #define ASTSHIM_FUNCTIONAL_H
 
+#include <memory>
+#include <vector>
+
 #include "astshim/FrameSet.h"
+#include "astshim/Mapping.h"
 
 /*
  * This header declares operations that treat ast objects (particularly Mapping
@@ -57,6 +61,26 @@ namespace ast {
  *          1-4 of `second`, in order.
  */
 std::shared_ptr<FrameSet> append(FrameSet const& first, FrameSet const& second);
+
+/**
+ * Construct a radially symmetric mapping from a 1-dimensional mapping
+ *
+ * The transform will be symmetrical about the specified center.
+ * The forward transform is as follows:
+ * input -> unitNormMap -> input norm -> mapping1d -> output norm -> unitNormMap inverse -> output
+ *                      -> unit vector ---------------------------->
+ * where unitNormMap is UnitNormMap(center)
+ *
+ * The returned mapping will support forward and/or inverse transformation as `mapping1d` does.
+ *
+ * @param[in] center  Center of radial symmetry
+ * @param[in] mapping1d  1-dimensional mapping
+ * @returns a mapping that is radially symmetric about the center and has nIn = nOut = center.size()
+ *
+ * @throws std::invalid_argument if mapping1d has nIn or nOut != 1
+ * @throws std::runtime_error if center is empty
+ */
+std::shared_ptr<Mapping> makeRadialMapping(std::vector<double> const& center, Mapping const& mapping1d);
 
 }  // namespace ast
 
