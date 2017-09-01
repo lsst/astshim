@@ -24,6 +24,7 @@
 """
 from __future__ import absolute_import
 from .base import *
+from .utils import *
 from .object import *
 from .stream import *
 from .channel import *
