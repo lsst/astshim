@@ -19,9 +19,14 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
+#include <stdexcept>
+#include <string>
 
 #include "astshim/functional.h"
 #include "astshim/UnitMap.h"
+#include "astshim/UnitNormMap.h"
+#include "astshim/ParallelMap.h"
+#include "astshim/SeriesMap.h"
 
 namespace ast {
 
@@ -38,6 +43,21 @@ std::shared_ptr<FrameSet> append(FrameSet const& first, FrameSet const& second) 
     merged->setCurrent(mergedCurrent);
 
     return merged;
+}
+
+std::shared_ptr<Mapping> makeRadialMapping(std::vector<double> const& center, Mapping const& mapping1d) {
+    auto naxes = center.size();
+    if (mapping1d.getNIn() != 1) {
+        throw std::invalid_argument("mapping1d has " + std::to_string(mapping1d.getNIn()) +
+                                    " inputs, instead of 1");
+    }
+    if (mapping1d.getNOut() != 1) {
+        throw std::invalid_argument("mapping1d has " + std::to_string(mapping1d.getNOut()) +
+                                    " outputs, instead of 1");
+    }
+    auto unitNormMap = UnitNormMap(center);
+    return std::make_shared<Mapping>(
+            unitNormMap.then(UnitMap(naxes).under(mapping1d)).then(*unitNormMap.getInverse()));
 }
 
 }  // namespace ast
