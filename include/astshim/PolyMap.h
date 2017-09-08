@@ -56,11 +56,10 @@ public:
     The two sets of coefficients are independent of each other: the inverse transform
     need not undo the forward transform.
 
-    @param[in] coeff_f  A `(2 + nin) x ncoeff_f` @ref PolyMap_CoefficientMatrices "matrix of coefficients"
-        describing the forward transformation. If `coeff_f` is empty then no forward transformation
-        is provided.
-    @param[in] coeff_i  A (2 + nout) x ncoeff_i` matrix of coefficients
-        for the inverse transformation. If coeff_i is empty then no inverse transformation is provided
+    @param[in] coeff_f  A @ref PolyMap_CoefficientMatrices "matrix of coefficients" describing the
+        forward transformation. If `coeff_f` is empty then no forward transformation is provided.
+    @param[in] coeff_i  A @ref PolyMap_CoefficientMatrices "matrix of coefficients" describing the
+        inverse transformation. If coeff_i is empty then no inverse transformation is provided,
         unless you specify suitable options to request an iterative inverse; see the
         @ref PolyMap(ndarray::Array<double, 2, 2> const &, int, std::string const &) "other constructor"
         for details.
@@ -70,9 +69,8 @@ public:
 
     @anchor PolyMap_CoefficientMatrices Coefficient Matrices
 
-    The coefficients describing a forward transformation are specified as an `ncoeff_f x (2 + nin)`
-    matrix, where `ncoeff_f` is the number of coefficients for the forward
-    direction, and each coefficient is described by `2 + nin` contiguous values, as follows:
+    The coefficients describing a forward transformation are specified as 2-dimensional ndarray,
+    with one row per coefficient. Each row contains the following consecutive `(2 + nin)` values:
     - The first element is the coefficient value.
     - The next element is the integer index of the @ref PolyMap output
         which uses the coefficient within its defining polynomial
@@ -81,20 +79,22 @@ public:
         value, or 0 to ignore that input coordinate. Powers must not be negative and floating point
         values are rounded to the nearest integer.
 
-    For instance, if the @ref PolyMap has 3 inputs and 2 outputs, each row consisting
-    of 5 elements, and the row `(1.2, 2, 6, 3, 0)` describes a coefficient
-    that increments output 2 as follows:
-        `out2 += 1.2 * in1^6 * in2^3 * in3^0`
-    and the row `(-1.5, 1, 0, 0, 0)` describes a coefficient that increments
-    output 2 with a constant value of -1.5 (since all powers are 0):
-        `out1 += -1.5 * in1^0 * in2^0 * in3^0`
-    Each final output coordinate value is the sum of the terms described
-    by the `ncoeff_f` columns in the supplied array. If no coefficients increment
-    a given output then it will be set to 0.
+    For example, suppose you want to make a @ref PolyMap with 3 inputs and 2 outputs.
+    Then each row of `coeff_f` must have 5 = 2 + nin elements.
+    A row with values `(1.2, 2, 6, 3, 0)` describes a coefficient that increments output 2 as follows:
 
-    The coefficients describing the inverse transformation work the same way,
-    but of course the matrix is of size `ncoeff_i x (2 + nout)`, where `ncoeff_i` is the
-    number of coefficients for the inverse transformation.
+        `out2 += 1.2 * in1^6 * in2^3 * in3^0`
+
+    and a row with values `(-1.5, 1, 0, 0, 0)` describes a coefficient that increments output 2
+    with a constant value of -1.5 (since all powers are 0):
+
+        `out1 += -1.5 * in1^0 * in2^0 * in3^0`
+
+    The final value of each output coordinate is the sum of all values specified by coefficients
+    which increment that output coordinate, or 0 if there are no such coefficients.
+
+    The coefficients describing the inverse transformation work the same way, of course,
+    but each coefficient is described by `(2 + nout)` values.
     */
     explicit PolyMap(ndarray::Array<double, 2, 2> const &coeff_f, ndarray::Array<double, 2, 2> const &coeff_i,
                      std::string const &options = "IterInverse=0")
