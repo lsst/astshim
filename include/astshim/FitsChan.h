@@ -46,16 +46,16 @@ enum class FitsKeyState {
 Enums describing the FITS card type
 */
 enum class CardType {
-    NOTYPE = AST__NOTYPE,       ///< card does not exist (card number invalid)
-    COMMENT = AST__COMMENT,     ///< card is a comment-style card with no "=" (COMMENT, HISTORY, ...)
-    INT = AST__INT,             ///< integer
-    FLOAT = AST__FLOAT,         ///< float
-    STRING = AST__STRING,       ///< string
-    COMPLEXF = AST__COMPLEXF,   ///< complex floating point
-    COMPLEXI = AST__COMPLEXI,   ///< complex integer
-    LOGICAL = AST__LOGICAL,     ///< boolean
-    CONTINUE = AST__CONTINUE,   ///< CONTINUE card
-    UNDEF = AST__UNDEF,         ///< card has no value
+    NOTYPE = AST__NOTYPE,      ///< card does not exist (card number invalid)
+    COMMENT = AST__COMMENT,    ///< card is a comment-style card with no "=" (COMMENT, HISTORY, ...)
+    INT = AST__INT,            ///< integer
+    FLOAT = AST__FLOAT,        ///< float
+    STRING = AST__STRING,      ///< string
+    COMPLEXF = AST__COMPLEXF,  ///< complex floating point
+    COMPLEXI = AST__COMPLEXI,  ///< complex integer
+    LOGICAL = AST__LOGICAL,    ///< boolean
+    CONTINUE = AST__CONTINUE,  ///< CONTINUE card
+    UNDEF = AST__UNDEF,        ///< card has no value
 };
 
 /**
@@ -341,9 +341,9 @@ public:
     FoundValue<std::string> findFits(std::string const &name, bool inc);
 
     /**
-    Get the value of a complex double card by key name
+    Get the value of a complex double card
 
-    @param[in] name  Name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a @ref FoundValue, where found is false if the keyword was not found
 
@@ -357,15 +357,15 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::complex<double>> getFitsCF(std::string const &name,
+    FoundValue<std::complex<double>> getFitsCF(std::string const &name = "",
                                                std::complex<double> defval = {0, 0}) const;
 
     /**
-    Get the value of a CONTINUE card by key name
+    Get the value of a CONTINUE card
 
     CONTINUE cards are treated like string values, but are encoded without an equals sign.
 
-    @param[in] name  name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -379,12 +379,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsCN(std::string const &name, std::string defval = "") const;
+    FoundValue<std::string> getFitsCN(std::string const &name = "", std::string defval = "") const;
 
     /**
-    Get the value of a double card by key name
+    Get the value of a double card
 
-    @param[in] name  name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -398,12 +398,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<double> getFitsF(std::string const &name, double defval = 0) const;
+    FoundValue<double> getFitsF(std::string const &name = "", double defval = 0) const;
 
     /**
-    Get the value of a int card by key name
+    Get the value of a int card
 
-    @param[in] name  name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -417,12 +417,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<int> getFitsI(std::string const &name, int defval = 0) const;
+    FoundValue<int> getFitsI(std::string const &name = "", int defval = 0) const;
 
     /**
-    Get the value of a bool card by key name
+    Get the value of a bool card
 
-    @param[in] name  Name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -436,12 +436,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<bool> getFitsL(std::string const &name, bool defval = false) const;
+    FoundValue<bool> getFitsL(std::string const &name = "", bool defval = false) const;
 
     /**
-    Get the value of a string card by key name
+    Get the value of a string card
 
-    @param[in] name  Name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -459,7 +459,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsS(std::string const &name, std::string defval = "") const;
+    FoundValue<std::string> getFitsS(std::string const &name = "", std::string defval = "") const;
 
     /**
     Get the name of all cards, in order, starting from the first card
@@ -978,18 +978,21 @@ public:
     }
 
     /**
-    Determine if a named keyword is present, and if so, whether it has a value.
+    Determine if a card is present, and if so, whether it has a value.
+
+    @param[in] name  Name of keyword, or empty for the current card
 
     ### Notes
 
     - This function does not change the current card.
-    - The card following the current card is checked first. If this is not the required card,
-      then the rest of the @ref FitsChan is searched, starting with the first card added to the @ref FitsChan.
+    - If name is not empty then the card following the current card is checked first.
+      If this is not the required card, then the rest of the @ref FitsChan is searched,
+      starting with the first card added to the @ref FitsChan.
       Therefore cards should be accessed in the order they are stored in the @ref FitsChan (if possible)
       as this will minimise the time spent searching for cards.
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    FitsKeyState testFits(std::string const &name) const;
+    FitsKeyState testFits(std::string const &name = "") const;
 
     /**
     Write out all cards currently in the channel and clear the channel.

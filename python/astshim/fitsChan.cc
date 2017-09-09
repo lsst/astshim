@@ -97,12 +97,12 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("delFits", &FitsChan::delFits);
     cls.def("emptyFits", &FitsChan::emptyFits);
     cls.def("findFits", &FitsChan::findFits, "name"_a, "inc"_a);
-    cls.def("getFitsCF", &FitsChan::getFitsCF, "name"_a, "defval"_a = std::complex<double>(0, 0));
-    cls.def("getFitsCN", &FitsChan::getFitsCN, "name"_a, "defval"_a = "");
-    cls.def("getFitsF", &FitsChan::getFitsF, "name"_a, "defval"_a = 0);
-    cls.def("getFitsI", &FitsChan::getFitsI, "name"_a, "defval"_a = 0);
-    cls.def("getFitsL", &FitsChan::getFitsL, "name"_a, "defval"_a = false);
-    cls.def("getFitsS", &FitsChan::getFitsS, "name"_a, "defval"_a = "");
+    cls.def("getFitsCF", &FitsChan::getFitsCF, "name"_a = "", "defval"_a = std::complex<double>(0, 0));
+    cls.def("getFitsCN", &FitsChan::getFitsCN, "name"_a = "", "defval"_a = "");
+    cls.def("getFitsF", &FitsChan::getFitsF, "name"_a = "", "defval"_a = 0);
+    cls.def("getFitsI", &FitsChan::getFitsI, "name"_a = "", "defval"_a = 0);
+    cls.def("getFitsL", &FitsChan::getFitsL, "name"_a = "", "defval"_a = false);
+    cls.def("getFitsS", &FitsChan::getFitsS, "name"_a = "", "defval"_a = "");
     cls.def("getAllCardNames", &FitsChan::getAllCardNames);
     cls.def("getAllWarnings", &FitsChan::getAllWarnings);
     cls.def("getCard", &FitsChan::getCard);
@@ -126,7 +126,7 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("setFitsU", &FitsChan::setFitsU, "name"_a, "comment"_a = "", "overwrite"_a = false);
     cls.def("setCDMatrix", &FitsChan::setCDMatrix, "cdmatrix"_a);
     cls.def("showFits", &FitsChan::showFits);
-    cls.def("testFits", &FitsChan::testFits, "name"_a);
+    cls.def("testFits", &FitsChan::testFits, "name"_a = "");
     cls.def("writeFits", &FitsChan::writeFits);
     cls.def("clearCard", &FitsChan::clearCard);
     cls.def("setCard", &FitsChan::setCard, "i"_a);
