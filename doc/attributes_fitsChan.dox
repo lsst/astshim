@@ -127,12 +127,17 @@ cards in the @ref FitsChan.
 
 The comment for the current card of the FitsChan. (string)
 
-A zero-length string is returned if the card has no comment.
+A zero-length string is returned if the card has no comment
+or the card does not exist (@ref FitsChan_Card "Card" points
+to a non-existent card).
 
 
 @subsection FitsChan_CardName CardName
 
 The name of the keyword for the current card of the FitsChan. (string)
+
+A zero-length string is returned if the card does not exist
+(@ref FitsChan_Card "Card" points to a non-existent card).
 
 
 @subsection FitsChan_CardType CardType

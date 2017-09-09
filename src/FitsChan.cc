@@ -32,6 +32,15 @@
 
 namespace ast {
 
+namespace {
+
+/**
+ * Return a C string, or nullptr if str is empty
+ */
+char const *cstrOrNull(std::string const &str) { return str.empty() ? nullptr : str.c_str(); }
+
+}  // namespace
+
 FitsChan::FitsChan(Stream &stream, std::string const &options)
         : Channel(reinterpret_cast<AstChannel *>(
                           astFitsChan(detail::source, detail::sink, "%s", options.c_str())),
@@ -49,14 +58,14 @@ FoundValue<std::complex<double>> FitsChan::getFitsCF(std::string const &name,
     std::complex<double> val = defval;
     // this use of reinterpret_cast is explicitly permitted, for C compatibility
     double *rawval = reinterpret_cast<double(&)[2]>(val);
-    bool found = astGetFitsCF(getRawPtr(), name.c_str(), rawval);
+    bool found = astGetFitsCF(getRawPtr(), cstrOrNull(name), rawval);
     assertOK();
     return FoundValue<std::complex<double>>(found, val);
 }
 
 FoundValue<std::string> FitsChan::getFitsCN(std::string const &name, std::string defval) const {
     char *rawval;  // astGetFitsCN has its own static buffer for the value
-    bool found = astGetFitsCN(getRawPtr(), name.c_str(), &rawval);
+    bool found = astGetFitsCN(getRawPtr(), cstrOrNull(name), &rawval);
     assertOK();
     std::string val = found ? rawval : defval;
     return FoundValue<std::string>(found, val);
@@ -64,28 +73,28 @@ FoundValue<std::string> FitsChan::getFitsCN(std::string const &name, std::string
 
 FoundValue<double> FitsChan::getFitsF(std::string const &name, double defval) const {
     double val = defval;
-    bool found = astGetFitsF(getRawPtr(), name.c_str(), &val);
+    bool found = astGetFitsF(getRawPtr(), cstrOrNull(name), &val);
     assertOK();
     return FoundValue<double>(found, val);
 }
 
 FoundValue<int> FitsChan::getFitsI(std::string const &name, int defval) const {
     int val = defval;
-    bool found = astGetFitsI(getRawPtr(), name.c_str(), &val);
+    bool found = astGetFitsI(getRawPtr(), cstrOrNull(name), &val);
     assertOK();
     return FoundValue<int>(found, val);
 }
 
 FoundValue<bool> FitsChan::getFitsL(std::string const &name, bool defval) const {
     int val = static_cast<int>(defval);
-    bool found = astGetFitsL(getRawPtr(), name.c_str(), &val);
+    bool found = astGetFitsL(getRawPtr(), cstrOrNull(name), &val);
     assertOK();
     return FoundValue<bool>(found, static_cast<bool>(val));
 }
 
 FoundValue<std::string> FitsChan::getFitsS(std::string const &name, std::string defval) const {
-    char *rawval;  // astGetFitsCN has its own static buffer for the value
-    bool found = astGetFitsS(getRawPtr(), name.c_str(), &rawval);
+    char *rawval;  // astGetFitsS has its own static buffer for the value
+    bool found = astGetFitsS(getRawPtr(), cstrOrNull(name), &rawval);
     assertOK();
     std::string val = found ? rawval : defval;
     return FoundValue<std::string>(found, val);
@@ -119,7 +128,7 @@ FoundValue<std::string> FitsChan::findFits(std::string const &name, bool inc) {
 
 FitsKeyState FitsChan::testFits(std::string const &name) const {
     int there;
-    int hasvalue = astTestFits(getRawPtr(), name.c_str(), &there);
+    int hasvalue = astTestFits(getRawPtr(), cstrOrNull(name), &there);
     assertOK();
     if (hasvalue) {
         return FitsKeyState::PRESENT;
