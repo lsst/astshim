@@ -663,7 +663,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -685,10 +685,7 @@ public:
 
     A comment card is a card with no keyword name and no equals sign
 
-    @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
-            contains no comment, then any existing comment in the card being over-written
-            is retained. Otherwise, no comment is stored with the card.
+    @param[in] comment  Comment to associated with the keyword.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
             to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
@@ -717,7 +714,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -747,7 +744,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -777,7 +774,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -807,7 +804,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -837,7 +834,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -874,7 +871,7 @@ public:
             This may be a complete FITS header card, in which case the keyword to use
             is extracted from it.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
