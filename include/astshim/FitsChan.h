@@ -683,7 +683,9 @@ public:
     /**
     Create a new comment card, possibly overwriting the current card
 
-    A comment card is a card with no keyword name and no equals sign
+    The card will have a name of "        " (eight spaces) and no equals sign.
+    There is presently no way to generate a card with name HISTORY or COMMENT,
+    but FITS treats those essentially the same as cards with blank names.
 
     @param[in] comment  Comment to associated with the keyword.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
