@@ -37,25 +37,25 @@ namespace ast {
 Enums describing the presence or absence of a FITS keyword
 */
 enum class FitsKeyState {
-    ABSENT = 0,  // keyword is not present
-    NOVALUE,     // keyword is present, but has no value
-    PRESENT      // keyword is present and has a value
+    ABSENT = 0,  ///< keyword is not present
+    NOVALUE,     ///< keyword is present, but has no value
+    PRESENT      ///< keyword is present and has a value
 };
 
 /**
 Enums describing the FITS card type
 */
 enum class CardType {
-    NOTYPE = AST__NOTYPE,
-    COMMENT = AST__COMMENT,
-    INT = AST__INT,
-    FLOAT = AST__FLOAT,
-    STRING = AST__STRING,
-    COMPLEXF = AST__COMPLEXF,
-    COMPLEXI = AST__COMPLEXI,
-    LOGICAL = AST__LOGICAL,
-    CONTINUE = AST__CONTINUE,
-    UNDEF = AST__UNDEF,
+    NOTYPE = AST__NOTYPE,       ///< card does not exist (card number invalid)
+    COMMENT = AST__COMMENT,     ///< card is a comment-style card with no "=" (COMMENT, HISTORY, ...)
+    INT = AST__INT,             ///< integer
+    FLOAT = AST__FLOAT,         ///< float
+    STRING = AST__STRING,       ///< string
+    COMPLEXF = AST__COMPLEXF,   ///< complex floating point
+    COMPLEXI = AST__COMPLEXI,   ///< complex integer
+    LOGICAL = AST__LOGICAL,     ///< boolean
+    CONTINUE = AST__CONTINUE,   ///< CONTINUE card
+    UNDEF = AST__UNDEF,         ///< card has no value
 };
 
 /**
