@@ -343,7 +343,7 @@ public:
     /**
     Get the value of a complex double card
 
-    @param[in] name  Name of keyword, or empty for the current card
+    @param[in] namePtr  Pointer to name of keyword, or nullptr for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a @ref FoundValue, where found is false if the keyword was not found
 
@@ -357,7 +357,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::complex<double>> getFitsCF(std::string const &name = "",
+    FoundValue<std::complex<double>> getFitsCF(std::string const *namePtr = nullptr,
                                                std::complex<double> defval = {0, 0}) const;
 
     /**
@@ -365,7 +365,7 @@ public:
 
     CONTINUE cards are treated like string values, but are encoded without an equals sign.
 
-    @param[in] name  Name of keyword, or empty for the current card
+    @param[in] namePtr  Pointer to name of keyword, or nullptr for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -379,12 +379,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsCN(std::string const &name = "", std::string defval = "") const;
+    FoundValue<std::string> getFitsCN(std::string const *namePtr = nullptr, std::string defval = "") const;
 
     /**
     Get the value of a double card
 
-    @param[in] name  Name of keyword, or empty for the current card
+    @param[in] namePtr  Pointer to name of keyword, or nullptr for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -398,12 +398,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<double> getFitsF(std::string const &name = "", double defval = 0) const;
+    FoundValue<double> getFitsF(std::string const *namePtr = nullptr, double defval = 0) const;
 
     /**
     Get the value of a int card
 
-    @param[in] name  Name of keyword, or empty for the current card
+    @param[in] namePtr  Pointer to name of keyword, or nullptr for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -417,12 +417,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<int> getFitsI(std::string const &name = "", int defval = 0) const;
+    FoundValue<int> getFitsI(std::string const *namePtr = nullptr, int defval = 0) const;
 
     /**
     Get the value of a bool card
 
-    @param[in] name  Name of keyword, or empty for the current card
+    @param[in] namePtr  Pointer to name of keyword, or nullptr for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -436,12 +436,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<bool> getFitsL(std::string const &name = "", bool defval = false) const;
+    FoundValue<bool> getFitsL(std::string const *namePtr = nullptr, bool defval = false) const;
 
     /**
     Get the value of a string card
 
-    @param[in] name  Name of keyword, or empty for the current card
+    @param[in] namePtr  Pointer to name of keyword, or nullptr for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -459,7 +459,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsS(std::string const &name = "", std::string defval = "") const;
+    FoundValue<std::string> getFitsS(std::string const *namePtr = nullptr, std::string defval = "") const;
 
     /**
     Get the name of all cards, in order, starting from the first card
@@ -979,7 +979,7 @@ public:
     /**
     Determine if a card is present, and if so, whether it has a value.
 
-    @param[in] name  Name of keyword, or empty for the current card
+    @param[in] namePtr  Pointer to name of keyword, or nullptr for the current card
 
     ### Notes
 
@@ -991,7 +991,7 @@ public:
       as this will minimise the time spent searching for cards.
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    FitsKeyState testFits(std::string const &name = "") const;
+    FitsKeyState testFits(std::string const *namePtr = nullptr) const;
 
     /**
     Write out all cards currently in the channel and clear the channel.

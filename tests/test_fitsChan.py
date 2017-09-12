@@ -239,8 +239,7 @@ class TestObject(ObjectTestCase):
         fc.setFitsS("ASTRING", "string value")
         fc.setCard(fc.nCard + 1)
         self.assertEqual(fc.getCardType(), astshim.NOTYPE)
-        # TODO uncomment this; it presently returns PRESENT; bug reported
-#        self.assertEqual(fc.testFits(), astshim.ABSENT)
+        self.assertEqual(fc.testFits(), astshim.ABSENT)
         with self.assertRaises(RuntimeError):
             fc.getFitsCN()
         with self.assertRaises(RuntimeError):
@@ -254,8 +253,7 @@ class TestObject(ObjectTestCase):
         with self.assertRaises(RuntimeError):
             fc.getFitsCF()
         # TODO determine the desired behavior and document it
-        # TODO uncomment this; it presently segfaults; bug reported
-#        self.assertEqual(fc.getCardName(), "")
+        self.assertEqual(fc.getCardName(), "")
         self.assertEqual(fc.getCardComm(), "")
 
     def test_FitsChanGetFitsMissing(self):
