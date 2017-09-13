@@ -3,7 +3,7 @@ import unittest
 
 import numpy as np
 
-import astshim
+import astshim as ast
 from astshim.test import ObjectTestCase
 
 
@@ -14,7 +14,7 @@ class TestObject(ObjectTestCase):
         """
         nin = 2
         zoom = 1.3
-        obj = astshim.ZoomMap(nin, zoom)
+        obj = ast.ZoomMap(nin, zoom)
 
         self.assertEqual(obj.className, "ZoomMap")
 
@@ -28,7 +28,7 @@ class TestObject(ObjectTestCase):
 
     def test_clear_and_test(self):
         """Test Object.clear and Object.test"""
-        obj = astshim.ZoomMap(2, 1.3)
+        obj = ast.ZoomMap(2, 1.3)
 
         self.assertFalse(obj.test("ID"))
         obj.id = "initial_id"
@@ -40,7 +40,7 @@ class TestObject(ObjectTestCase):
 
     def test_copy_and_same(self):
         """Test Object.copy and Object.same"""
-        obj = astshim.ZoomMap(2, 1.3, "Ident=original")
+        obj = ast.ZoomMap(2, 1.3, "Ident=original")
 
         # there may be more than one object in existence if run with pytest
         initialNumObj = obj.getNObject()
@@ -74,7 +74,7 @@ class TestObject(ObjectTestCase):
             [-0.5, 1, 1, 1],
             [1.0, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, 2, "IterInverse=0")
+        pm = ast.PolyMap(coeff_f, 2, "IterInverse=0")
         indata = np.array([
             [1.0, 2.0, 3.0],
             [0.0, 1.0, 2.0],
@@ -96,10 +96,10 @@ class TestObject(ObjectTestCase):
     def test_equality(self):
         """Test __eq__ and __ne__
         """
-        frame = astshim.Frame(2)
-        zoomMap = astshim.ZoomMap(2, 1.5)
-        frameSet1 = astshim.FrameSet(frame, zoomMap, frame)
-        frameSet2 = astshim.FrameSet(frame, zoomMap, frame)
+        frame = ast.Frame(2)
+        zoomMap = ast.ZoomMap(2, 1.5)
+        frameSet1 = ast.FrameSet(frame, zoomMap, frame)
+        frameSet2 = ast.FrameSet(frame, zoomMap, frame)
         self.assertTrue(frameSet1 == frameSet2)
         self.assertFalse(frameSet1 != frameSet2)
         self.assertEqual(frameSet1, frameSet2)
@@ -120,14 +120,14 @@ class TestObject(ObjectTestCase):
         self.assertEqual(frameSet1, frameSet1.getInverse().getInverse())
         self.assertFalse(frameSet1.getInverse().getInverse().test("Base"))
 
-        frame3 = astshim.Frame(2)
+        frame3 = ast.Frame(2)
         frame3.title = "Frame 3"
-        frameSet3 = astshim.FrameSet(frame3)
+        frameSet3 = ast.FrameSet(frame3)
         self.assertNotEqual(frameSet1, frameSet3)
 
     def test_id(self):
         """Test that ID is *not* transferred to copies"""
-        obj = astshim.ZoomMap(2, 1.3)
+        obj = ast.ZoomMap(2, 1.3)
 
         self.assertEqual(obj.id, "")
         obj.id = "initial_id"
@@ -137,7 +137,7 @@ class TestObject(ObjectTestCase):
 
     def test_ident(self):
         """Test that Ident *is* transferred to copies"""
-        obj = astshim.ZoomMap(2, 1.3)
+        obj = ast.ZoomMap(2, 1.3)
 
         self.assertEqual(obj.ident, "")
         obj.ident = "initial_ident"
@@ -146,7 +146,7 @@ class TestObject(ObjectTestCase):
         self.assertEqual(cp.ident, "initial_ident")
 
     def test_show(self):
-        obj = astshim.ZoomMap(2, 1.3)
+        obj = ast.ZoomMap(2, 1.3)
         desShowLines = [
             " Begin ZoomMap \t# Zoom about the origin",
             "    Nin = 2 \t# Number of input coordinates",

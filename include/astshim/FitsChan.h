@@ -37,25 +37,25 @@ namespace ast {
 Enums describing the presence or absence of a FITS keyword
 */
 enum class FitsKeyState {
-    ABSENT = 0,  // keyword is not present
-    NOVALUE,     // keyword is present, but has no value
-    PRESENT      // keyword is present and has a value
+    ABSENT = 0,  ///< keyword is not present
+    NOVALUE,     ///< keyword is present, but has no value
+    PRESENT      ///< keyword is present and has a value
 };
 
 /**
 Enums describing the FITS card type
 */
 enum class CardType {
-    NOTYPE = AST__NOTYPE,
-    COMMENT = AST__COMMENT,
-    INT = AST__INT,
-    FLOAT = AST__FLOAT,
-    STRING = AST__STRING,
-    COMPLEXF = AST__COMPLEXF,
-    COMPLEXI = AST__COMPLEXI,
-    LOGICAL = AST__LOGICAL,
-    CONTINUE = AST__CONTINUE,
-    UNDEF = AST__UNDEF,
+    NOTYPE = AST__NOTYPE,      ///< card does not exist (card number invalid)
+    COMMENT = AST__COMMENT,    ///< card is a comment-style card with no "=" (COMMENT, HISTORY, ...)
+    INT = AST__INT,            ///< integer
+    FLOAT = AST__FLOAT,        ///< float
+    STRING = AST__STRING,      ///< string
+    COMPLEXF = AST__COMPLEXF,  ///< complex floating point
+    COMPLEXI = AST__COMPLEXI,  ///< complex integer
+    LOGICAL = AST__LOGICAL,    ///< boolean
+    CONTINUE = AST__CONTINUE,  ///< CONTINUE card
+    UNDEF = AST__UNDEF,        ///< card has no value
 };
 
 /**
@@ -341,9 +341,9 @@ public:
     FoundValue<std::string> findFits(std::string const &name, bool inc);
 
     /**
-    Get the value of a complex double card by key name
+    Get the value of a complex double card
 
-    @param[in] name  Name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a @ref FoundValue, where found is false if the keyword was not found
 
@@ -357,15 +357,15 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::complex<double>> getFitsCF(std::string const &name,
+    FoundValue<std::complex<double>> getFitsCF(std::string const &name = "",
                                                std::complex<double> defval = {0, 0}) const;
 
     /**
-    Get the value of a CONTINUE card by key name
+    Get the value of a CONTINUE card
 
     CONTINUE cards are treated like string values, but are encoded without an equals sign.
 
-    @param[in] name  name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -379,12 +379,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsCN(std::string const &name, std::string defval = "") const;
+    FoundValue<std::string> getFitsCN(std::string const &name = "", std::string defval = "") const;
 
     /**
-    Get the value of a double card by key name
+    Get the value of a double card
 
-    @param[in] name  name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -398,12 +398,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<double> getFitsF(std::string const &name, double defval = 0) const;
+    FoundValue<double> getFitsF(std::string const &name = "", double defval = 0) const;
 
     /**
-    Get the value of a int card by key name
+    Get the value of a int card
 
-    @param[in] name  name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -417,12 +417,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<int> getFitsI(std::string const &name, int defval = 0) const;
+    FoundValue<int> getFitsI(std::string const &name = "", int defval = 0) const;
 
     /**
-    Get the value of a bool card by key name
+    Get the value of a bool card
 
-    @param[in] name  Name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -436,12 +436,12 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<bool> getFitsL(std::string const &name, bool defval = false) const;
+    FoundValue<bool> getFitsL(std::string const &name = "", bool defval = false) const;
 
     /**
-    Get the value of a string card by key name
+    Get the value of a string card
 
-    @param[in] name  Name of keyword
+    @param[in] name  Name of keyword, or empty for the current card
     @param[in] defval  Value to return if keyword not found
     @return value as a FoundValue, where found is false if the keyword was not found
 
@@ -459,7 +459,7 @@ public:
     If necessary, the testFits function can be used to determine if the keyword
     has a defined value, prior to calling this function.
     */
-    FoundValue<std::string> getFitsS(std::string const &name, std::string defval = "") const;
+    FoundValue<std::string> getFitsS(std::string const &name = "", std::string defval = "") const;
 
     /**
     Get the name of all cards, in order, starting from the first card
@@ -663,7 +663,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -683,12 +683,11 @@ public:
     /**
     Create a new comment card, possibly overwriting the current card
 
-    A comment card is a card with no keyword name and no equals sign
+    The card will have a name of "        " (eight spaces) and no equals sign.
+    There is presently no way to generate a card with name HISTORY or COMMENT,
+    but FITS treats those essentially the same as cards with blank names.
 
-    @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
-            contains no comment, then any existing comment in the card being over-written
-            is retained. Otherwise, no comment is stored with the card.
+    @param[in] comment  Comment to associated with the keyword.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
             value and comment over-writes the current card, and the current card is incremented to refer
             to the next card (see the @ref FitsChan_Card "Card" attribute).  If `false`, the new card is
@@ -717,7 +716,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -747,7 +746,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -777,7 +776,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -807,7 +806,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -837,7 +836,7 @@ public:
             is extracted from it.
     @param[in] value  the value of the card.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -874,7 +873,7 @@ public:
             This may be a complete FITS header card, in which case the keyword to use
             is extracted from it.
     @param[in] comment  Comment to associated with the keyword. If blank, then any comment included
-            in the string supplied for the " name" parameter is used instead. If "name"
+            in the string supplied for the `name` parameter is used instead. If `name`
             contains no comment, then any existing comment in the card being over-written
             is retained. Otherwise, no comment is stored with the card.
     @param[in] overwrite  if `true` the new card formed from the supplied keyword name,
@@ -978,18 +977,21 @@ public:
     }
 
     /**
-    Determine if a named keyword is present, and if so, whether it has a value.
+    Determine if a card is present, and if so, whether it has a value.
+
+    @param[in] name  Name of keyword, or empty for the current card
 
     ### Notes
 
     - This function does not change the current card.
-    - The card following the current card is checked first. If this is not the required card,
-      then the rest of the @ref FitsChan is searched, starting with the first card added to the @ref FitsChan.
+    - If name is not empty then the card following the current card is checked first.
+      If this is not the required card, then the rest of the @ref FitsChan is searched,
+      starting with the first card added to the @ref FitsChan.
       Therefore cards should be accessed in the order they are stored in the @ref FitsChan (if possible)
       as this will minimise the time spent searching for cards.
     - An error will be reported if the keyword name does not conform to FITS requirements.
     */
-    FitsKeyState testFits(std::string const &name) const;
+    FitsKeyState testFits(std::string const &name = "") const;
 
     /**
     Write out all cards currently in the channel and clear the channel.

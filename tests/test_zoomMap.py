@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -15,7 +15,7 @@ class TestZoomMap(MappingTestCase):
         """
         for nin in (1, 2, 3):
             for zoom in (1.0, -1.1, 359.3):
-                zoommap = astshim.ZoomMap(nin, zoom)
+                zoommap = ast.ZoomMap(nin, zoom)
                 self.assertEqual(zoommap.className, "ZoomMap")
                 self.assertEqual(zoommap.nIn, nin)
                 self.assertEqual(zoommap.nOut, nin)

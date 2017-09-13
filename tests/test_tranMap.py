@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -12,16 +12,16 @@ class TestTranMap(MappingTestCase):
 
     def test_TranMapNotSymmetric(self):
         zoomfac = 0.5
-        unitMap = astshim.UnitMap(2)
-        zoomMap = astshim.ZoomMap(2, zoomfac)
-        tranmap = astshim.TranMap(unitMap, zoomMap)
+        unitMap = ast.UnitMap(2)
+        zoomMap = ast.ZoomMap(2, zoomfac)
+        tranmap = ast.TranMap(unitMap, zoomMap)
         # adding to a TranMap increases by 1
         self.assertEqual(unitMap.getRefCount(), 2)
         # adding to a TranMap increases by 1
         self.assertEqual(zoomMap.getRefCount(), 2)
 
-        self.assertIsInstance(tranmap, astshim.TranMap)
-        self.assertIsInstance(tranmap, astshim.Mapping)
+        self.assertIsInstance(tranmap, ast.TranMap)
+        self.assertIsInstance(tranmap, ast.Mapping)
         self.assertEqual(tranmap.nIn, 2)
         self.assertEqual(tranmap.nOut, 2)
 
@@ -42,10 +42,10 @@ class TestTranMap(MappingTestCase):
 
     def test_TranMapSymmetric(self):
         zoomfac = 0.53
-        tranmap = astshim.TranMap(astshim.ZoomMap(
-            2, zoomfac), astshim.ZoomMap(2, zoomfac))
-        self.assertIsInstance(tranmap, astshim.TranMap)
-        self.assertIsInstance(tranmap, astshim.Mapping)
+        tranmap = ast.TranMap(ast.ZoomMap(
+            2, zoomfac), ast.ZoomMap(2, zoomfac))
+        self.assertIsInstance(tranmap, ast.TranMap)
+        self.assertIsInstance(tranmap, ast.Mapping)
         self.assertEqual(tranmap.nIn, 2)
         self.assertEqual(tranmap.nOut, 2)
 

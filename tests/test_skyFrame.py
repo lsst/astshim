@@ -4,14 +4,14 @@ import unittest
 
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestSkyFrame(MappingTestCase):
 
     def test_FrameBasics(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
         self.assertEqual(frame.className, "SkyFrame")
         self.assertEqual(frame.nIn, 2)
         self.assertEqual(frame.nAxes, 2)
@@ -53,7 +53,7 @@ class TestSkyFrame(MappingTestCase):
 
     def test_SkyFrameLonLat(self):
 
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         self.assertEqual(frame.lonAxis, 1)
         self.assertEqual(frame.latAxis, 2)
@@ -81,14 +81,14 @@ class TestSkyFrame(MappingTestCase):
         self.assertFalse(frame.getIsLatAxis(1))
 
     def test_SkyFrameAlignOffset(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         self.assertFalse(frame.alignOffset)
         frame.alignOffset = True
         self.assertTrue(frame.alignOffset)
 
     def test_SkyFrameAsTime(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         for axis, defAsTime in ((1, True), (2, False)):
             self.assertEqual(frame.getAsTime(axis), defAsTime)
@@ -96,7 +96,7 @@ class TestSkyFrame(MappingTestCase):
             self.assertEqual(frame.getAsTime(axis), not defAsTime)
 
     def test_SkyFrameEquinox(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         self.assertAlmostEqual(frame.equinox, 2000)
         newEquinox = 2345.6
@@ -104,14 +104,14 @@ class TestSkyFrame(MappingTestCase):
         self.assertAlmostEqual(frame.equinox, newEquinox)
 
     def test_SkyFrameNegLon(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         self.assertFalse(frame.negLon)
         frame.negLon = True
         self.assertTrue(frame.negLon)
 
     def test_SkyFrameProjection(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         self.assertEqual(frame.projection, "")
         newProjection = "Arbitrary description"
@@ -119,7 +119,7 @@ class TestSkyFrame(MappingTestCase):
         self.assertEqual(frame.projection, newProjection)
 
     def test_SkyFrameSkyRef(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         assert_allclose(frame.getSkyRef(), [0, 0])
         newSkyRef = [-4.5, 1.23]
@@ -127,7 +127,7 @@ class TestSkyFrame(MappingTestCase):
         assert_allclose(frame.getSkyRef(), newSkyRef)
 
     def test_SkyFrameSkyRefIs(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         self.assertEqual(frame.skyRefIs, "Ignored")
         for newSkyRefIs in ("Origin", "Pole", "Ignored"):
@@ -135,7 +135,7 @@ class TestSkyFrame(MappingTestCase):
             self.assertEqual(frame.skyRefIs, newSkyRefIs)
 
     def test_SkyFrameSkyRefP(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         defSkyRefP = [0.0, math.pi/2]
         assert_allclose(frame.getSkyRefP(), defSkyRefP)
@@ -144,7 +144,7 @@ class TestSkyFrame(MappingTestCase):
         assert_allclose(frame.getSkyRefP(), newSkyRefP)
 
     def test_SkyFrameSkyTol(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         # the default is arbitrary so do not to assume a specific value
         defSkyTol = frame.skyTol
@@ -153,7 +153,7 @@ class TestSkyFrame(MappingTestCase):
         self.assertAlmostEqual(frame.skyTol, newSkyTol)
 
     def test_SkyFrameSkyOffsetMap(self):
-        frame = astshim.SkyFrame()
+        frame = ast.SkyFrame()
 
         mapping = frame.skyOffsetMap()
         self.assertEqual(mapping.className, "UnitMap")

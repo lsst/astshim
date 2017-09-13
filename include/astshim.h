@@ -24,6 +24,7 @@
 #include "astshim/TimeFrame.h"
 
 // mappings
+#include "astshim/ChebyMap.h"
 #include "astshim/CmpMap.h"
 #include "astshim/KeyMap.h"
 #include "astshim/LutMap.h"

@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 import numpy.testing as npt
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -19,10 +19,10 @@ class TestPolyMap(MappingTestCase):
             [-0.5, 1, 1, 1],
             [1.0, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, 2, "IterInverse=1")
-        self.assertIsInstance(pm, astshim.Object)
-        self.assertIsInstance(pm, astshim.Mapping)
-        self.assertIsInstance(pm, astshim.PolyMap)
+        pm = ast.PolyMap(coeff_f, 2, "IterInverse=1")
+        self.assertIsInstance(pm, ast.Object)
+        self.assertIsInstance(pm, ast.Mapping)
+        self.assertIsInstance(pm, ast.PolyMap)
         self.assertEqual(pm.nIn, 2)
         self.assertEqual(pm.nOut, 2)
         self.assertTrue(pm.iterInverse)
@@ -56,10 +56,10 @@ class TestPolyMap(MappingTestCase):
             [-0.5, 1, 1, 1],
             [1.0, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, 2, "IterInverse=1, NIterInverse=6, TolInverse=1.2e-7")
-        self.assertIsInstance(pm, astshim.Object)
-        self.assertIsInstance(pm, astshim.Mapping)
-        self.assertIsInstance(pm, astshim.PolyMap)
+        pm = ast.PolyMap(coeff_f, 2, "IterInverse=1, NIterInverse=6, TolInverse=1.2e-7")
+        self.assertIsInstance(pm, ast.Object)
+        self.assertIsInstance(pm, ast.Mapping)
+        self.assertIsInstance(pm, ast.PolyMap)
         self.assertEqual(pm.nIn, 2)
         self.assertEqual(pm.nOut, 2)
         self.assertTrue(pm.iterInverse)
@@ -91,8 +91,8 @@ class TestPolyMap(MappingTestCase):
             [-0.5, 1, 1, 1],
             [1.0, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, 2)
-        self.assertIsInstance(pm, astshim.PolyMap)
+        pm = ast.PolyMap(coeff_f, 2)
+        self.assertIsInstance(pm, ast.PolyMap)
         self.assertEqual(pm.nIn, 2)
         self.assertEqual(pm.nOut, 2)
         self.assertTrue(pm.hasForward)
@@ -133,7 +133,7 @@ class TestPolyMap(MappingTestCase):
             [0.5, 2, 1, 0],
             [-0.5, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, coeff_i)
+        pm = ast.PolyMap(coeff_f, coeff_i)
         self.assertEqual(pm.nIn, 2)
         self.assertEqual(pm.nOut, 2)
 
@@ -159,7 +159,7 @@ class TestPolyMap(MappingTestCase):
             [0.5, 2, 1, 0],
             [-0.5, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, coeff_i)
+        pm = ast.PolyMap(coeff_f, coeff_i)
         self.assertEqual(pm.nIn, 2)
         self.assertEqual(pm.nOut, 2)
 
@@ -182,7 +182,7 @@ class TestPolyMap(MappingTestCase):
         ])
         coeff_i = np.array([], dtype=float)
         coeff_i.shape = (0, 4)
-        pm = astshim.PolyMap(coeff_f, coeff_i)
+        pm = ast.PolyMap(coeff_f, coeff_i)
         self.assertEqual(pm.nIn, 2)
         self.assertEqual(pm.nOut, 2)
 
@@ -204,10 +204,10 @@ class TestPolyMap(MappingTestCase):
         coeff_i.shape = (0, 3)
 
         with self.assertRaises(ValueError):
-            astshim.PolyMap(coeff_f, coeff_i)
+            ast.PolyMap(coeff_f, coeff_i)
 
         with self.assertRaises(ValueError):
-            astshim.PolyMap(coeff_f, 3)
+            ast.PolyMap(coeff_f, 3)
 
     def test_PolyMapPolyTran(self):
         coeff_f = np.array([
@@ -222,7 +222,7 @@ class TestPolyMap(MappingTestCase):
             [0.5, 2, 1, 0],
             [-0.5, 2, 0, 1],
         ])
-        pm = astshim.PolyMap(coeff_f, coeff_i)
+        pm = ast.PolyMap(coeff_f, coeff_i)
 
         indata = np.array([
             [1.0, 2.0, 3.0],
@@ -249,7 +249,7 @@ class TestPolyMap(MappingTestCase):
             [2.0, 1, 2],
             [-1.0, 1, 3],
         ])
-        pm = astshim.PolyMap(coeff_f, 1, "IterInverse=1")
+        pm = ast.PolyMap(coeff_f, 1, "IterInverse=1")
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
@@ -293,11 +293,11 @@ class TestPolyMap(MappingTestCase):
 
         # execute many times to increase the odds of a segfault
         for i in range(1000):
-            amap = astshim.PolyMap(coeff_f, coeff_i)
+            amap = ast.PolyMap(coeff_f, coeff_i)
             amapinv = amap.getInverse()
             cmp2 = amapinv.then(amap)
             result = cmp2.simplify()
-            self.assertIsInstance(result, astshim.UnitMap)
+            self.assertIsInstance(result, ast.UnitMap)
 
 
 if __name__ == "__main__":

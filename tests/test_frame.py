@@ -5,14 +5,14 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestFrame(MappingTestCase):
 
     def test_FrameBasics(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         self.assertEqual(frame.className, "Frame")
         self.assertEqual(frame.nIn, 2)
         self.assertEqual(frame.nAxes, 2)
@@ -45,7 +45,7 @@ class TestFrame(MappingTestCase):
         self.checkPersistence(frame)
 
     def test_FrameSetDigits(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         self.assertEqual(frame.getDigits(), 7)
         for axis in (1, 2):
             self.assertEqual(frame.getDigits(axis), 7)
@@ -61,7 +61,7 @@ class TestFrame(MappingTestCase):
         self.assertEqual(frame.getDigits(2), 4)
 
     def test_FrameLabels(self):
-        frame = astshim.Frame(2, "label(1)=a b,label(2)=c d")
+        frame = ast.Frame(2, "label(1)=a b,label(2)=c d")
 
         self.assertEqual(frame.getLabel(1), "a b")
         self.assertEqual(frame.getLabel(2), "c d")
@@ -71,7 +71,7 @@ class TestFrame(MappingTestCase):
         self.assertEqual(frame.getLabel(2), "Axis 2")
 
     def test_FrameTitle(self):
-        frame = astshim.Frame(3, "Title=A Title")
+        frame = ast.Frame(3, "Title=A Title")
 
         self.assertEqual(frame.title, "A Title")
         testtitle = "Test Frame"
@@ -81,13 +81,13 @@ class TestFrame(MappingTestCase):
 
     def test_FrameAngle(self):
         """Test Frame.angle"""
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         angle = frame.angle([4, 3], [0, 0], [4, 0])
         self.assertEqual(angle, math.atan2(3, 4))
 
     def test_FrameAxis(self):
         """Test Frame.axAngle, axDistance and axOffset"""
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         angle = frame.axAngle([0, 0], [4, 3], 1)
         self.assertEqual(angle, -math.atan2(3, 4))
         distance = frame.axDistance(1, 0, 4)
@@ -96,8 +96,8 @@ class TestFrame(MappingTestCase):
         self.assertEqual(axoffset, 5)
 
     def test_FrameConvert(self):
-        frame = astshim.Frame(2)
-        nframe = astshim.Frame(2)
+        frame = ast.Frame(2)
+        nframe = ast.Frame(2)
         fset = frame.convert(nframe)
         self.assertEqual(fset.className, "FrameSet")
 
@@ -114,11 +114,11 @@ class TestFrame(MappingTestCase):
         assert_allclose(outdata, indata)
         self.checkRoundTrip(fset, indata)
 
-        self.assertIsNone(frame.convert(astshim.Frame(3)))
+        self.assertIsNone(frame.convert(ast.Frame(3)))
 
     def test_FrameFindFrame(self):
-        frame = astshim.Frame(2)
-        nframe = astshim.Frame(2)
+        frame = ast.Frame(2)
+        nframe = ast.Frame(2)
         fset = frame.findFrame(nframe)
         self.assertEqual(fset.className, "FrameSet")
         self.assertEqual(fset.nFrame, 2)
@@ -135,34 +135,34 @@ class TestFrame(MappingTestCase):
         assert_allclose(outdata, indata)
         self.checkRoundTrip(fset, indata)
 
-        self.assertIsNone(frame.findFrame(astshim.Frame(3)))
+        self.assertIsNone(frame.findFrame(ast.Frame(3)))
 
     def test_FrameDistance(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         distance = frame.distance([0, 0], [4, 3])
         self.assertEqual(distance, 5)
 
     def test_FrameFormat(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         fmt = frame.format(1, 55.270)
         self.assertEqual(fmt, "55.27")
 
     def test_FrameIntersect(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         cross = frame.intersect([-1, 1], [1, 1], [0, 0], [2, 2])
         self.assertAlmostEqual(cross[0], 1.0)
         self.assertAlmostEqual(cross[1], 1.0)
 
     def test_FrameMatchAxes(self):
-        frame = astshim.Frame(2)
-        frame2 = astshim.Frame(3)
+        frame = ast.Frame(2)
+        frame2 = ast.Frame(3)
         axes = frame.matchAxes(frame2)
         self.assertEqual(axes[0], 1)
         self.assertEqual(axes[1], 2)
         self.assertEqual(axes[2], 0)
 
     def test_FrameNorm(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         # arbitrary, but large enough to wrap if applied to an SphFrame
         coords = [33.5, 223.4]
         ncoords = frame.norm(coords)
@@ -170,7 +170,7 @@ class TestFrame(MappingTestCase):
 
     def test_FrameOffset(self):
         """Test Frame.offset and Frame.offset2"""
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         point = frame.offset([0, 0], [4, 3], 10)
         self.assertEqual(point[0], 8)
         self.assertEqual(point[1], 6)
@@ -179,8 +179,8 @@ class TestFrame(MappingTestCase):
         self.assertAlmostEqual(dp.point[1], 6)
 
     def test_FrameOver(self):
-        frame1 = astshim.Frame(2, "label(1)=a, label(2)=b")
-        frame2 = astshim.Frame(1, "label(1)=c")
+        frame1 = ast.Frame(2, "label(1)=a, label(2)=b")
+        frame2 = ast.Frame(1, "label(1)=c")
         cf = frame1.under(frame2)
         self.assertEqual(cf.nAxes, 3)
         self.assertEqual(cf.getLabel(1), "a")
@@ -188,7 +188,7 @@ class TestFrame(MappingTestCase):
         self.assertEqual(cf.getLabel(3), "c")
 
     def test_FramePerm(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         frame.permAxes([2, 1])
         fm = frame.pickAxes([2])
         self.assertEqual(fm.frame.className, "Frame")
@@ -198,7 +198,7 @@ class TestFrame(MappingTestCase):
         self.assertEqual(fm.mapping.nOut, 1)
 
     def test_FrameResolve(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         res = frame.resolve([0, 0], [2, 1], [0, 4])
         theta = math.atan2(1, 2)
         d1pred = 4 * math.sin(theta)
@@ -212,14 +212,14 @@ class TestFrame(MappingTestCase):
         assert_allclose(res.point, predpoint)
 
     def test_FrameUnformat(self):
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         nrv = frame.unformat(1, "56.4 #")
         self.assertEqual(nrv.nread, 5)
         self.assertEqual(nrv.value, 56.4)
 
     def test_FrameActiveUnit(self):
         """Test the ActiveUnit property"""
-        frame = astshim.Frame(2)
+        frame = ast.Frame(2)
         self.assertFalse(frame.activeUnit)
         frame.activeUnit = True
         self.assertTrue(frame.activeUnit)

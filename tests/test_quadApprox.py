@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -16,8 +16,8 @@ class TestQuadApprox(MappingTestCase):
             [0.5, 1, 2, 0],
             [0.5, 1, 0, 2],
         ], dtype=float)
-        polymap = astshim.PolyMap(coeff_f, 1)
-        qa = astshim.QuadApprox(polymap, [-1, -1], [1, 1], 3, 3)
+        polymap = ast.PolyMap(coeff_f, 1)
+        qa = ast.QuadApprox(polymap, [-1, -1], [1, 1], 3, 3)
         self.assertAlmostEqual(qa.rms, 0)
         self.assertEqual(len(qa.fit), 6)
         assert_allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5])

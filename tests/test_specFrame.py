@@ -2,14 +2,14 @@ from __future__ import absolute_import, division, print_function
 import math
 import unittest
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestSpecFrame(MappingTestCase):
 
     def test_SpecFrameBasics(self):
-        frame = astshim.SpecFrame()
+        frame = ast.SpecFrame()
         self.assertEqual(frame.className, "SpecFrame")
         self.assertEqual(frame.nIn, 1)
         self.assertEqual(frame.nAxes, 1)
@@ -39,9 +39,9 @@ class TestSpecFrame(MappingTestCase):
         self.checkPersistence(frame)
 
     def test_SpecFrameSetGetRefPos(self):
-        frame = astshim.SpecFrame()
+        frame = ast.SpecFrame()
         self.assertEqual(frame.className, "SpecFrame")
-        sky = astshim.SkyFrame()
+        sky = ast.SkyFrame()
         frame.setRefPos(sky, 0, 1)
 
         refpos = frame.getRefPos(sky)

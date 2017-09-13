@@ -4,14 +4,14 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestUnitMap(MappingTestCase):
 
     def test_UnitMapBasics(self):
-        unitmap = astshim.UnitMap(3)
+        unitmap = ast.UnitMap(3)
         self.assertEqual(unitmap.className, "UnitMap")
         self.assertEqual(unitmap.nIn, 3)
         self.assertEqual(unitmap.nOut, 3)

@@ -78,13 +78,12 @@ class TestFrameSetAppend(unittest.TestCase):
         set2 = self.makeFrameSet(3, 2)
         set12 = append(set1, set2)
 
-        self.assertEquals(set1.nFrame + set2.nFrame,
-                          set12.nFrame)
+        self.assertEqual(set1.nFrame + set2.nFrame, set12.nFrame)
         for i in range(1, 1+set1.nFrame):
             oldFrame = set1.getFrame(i)
             newFrame = set12.getFrame(i)
-            self.assertEquals(oldFrame.ident, newFrame.ident)
-            self.assertEquals(oldFrame.nAxes, newFrame.nAxes)
+            self.assertEqual(oldFrame.ident, newFrame.ident)
+            self.assertEqual(oldFrame.nAxes, newFrame.nAxes)
             if i == set1.base:
                 self.assertTrue(i == set12.base)
             else:
@@ -93,8 +92,8 @@ class TestFrameSetAppend(unittest.TestCase):
             offset = set1.nFrame
             oldFrame = set2.getFrame(i)
             newFrame = set12.getFrame(offset + i)
-            self.assertEquals(oldFrame.ident, newFrame.ident)
-            self.assertEquals(oldFrame.nAxes, newFrame.nAxes)
+            self.assertEqual(oldFrame.ident, newFrame.ident)
+            self.assertEqual(oldFrame.nAxes, newFrame.nAxes)
             if i == set2.current:
                 self.assertTrue(offset + i == set12.current)
             else:
@@ -119,8 +118,8 @@ class TestFrameSetAppend(unittest.TestCase):
         set2.base = 2
 
         # Use exact equality because nothing should change
-        self.assertEquals(set12.nFrame, nTotal)
-        self.assertEquals(set12.applyForward(x), y)
+        self.assertEqual(set12.nFrame, nTotal)
+        self.assertEqual(set12.applyForward(x), y)
 
     def test_AppendMismatch(self):
         """Check that append behaves as expected when joining non-identical frames.

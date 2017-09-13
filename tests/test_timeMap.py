@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 SecPerDay = 3600 * 24
@@ -15,7 +15,7 @@ class TestTimeMap(MappingTestCase):
     def test_TimeMapDefault(self):
         """Test a TimeMap with no conversions added
         """
-        timemap = astshim.TimeMap()
+        timemap = ast.TimeMap()
         self.assertEqual(timemap.className, "TimeMap")
         self.assertEqual(timemap.nIn, 1)
         self.assertEqual(timemap.nOut, 1)
@@ -31,7 +31,7 @@ class TestTimeMap(MappingTestCase):
         self.checkRoundTrip(timemap, indata)
 
     def test_TimeMapAddUTTOUTC(self):
-        timemap = astshim.TimeMap()
+        timemap = ast.TimeMap()
         dut1 = 0.35
         timemap.add("UTTOUTC", [dut1])
         indata = np.array([512345.0, 512346.0], dtype=float)
@@ -42,7 +42,7 @@ class TestTimeMap(MappingTestCase):
         self.checkRoundTrip(timemap, indata)
 
     def test_TimeMapAddInvalid(self):
-        timemap = astshim.TimeMap()
+        timemap = ast.TimeMap()
 
         with self.assertRaises(Exception):
             timemap.add("BEPTOMJD", [560])  # too few arguments

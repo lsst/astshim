@@ -160,7 +160,7 @@ def makePolyMapCoeffs(nIn, nOut):
 
 
 def makeTwoWayPolyMap(nIn, nOut):
-    """Make an astShim.PolyMap suitable for testing
+    """Make an astshim.PolyMap suitable for testing
 
     The forward transform is as follows:
     fj(x) = C0j x0^2 + C1j x1^2 + C2j x2^2 + ... + CNj xN^2 where Cij = 0.001 (i+j+1)
@@ -184,7 +184,7 @@ def makeTwoWayPolyMap(nIn, nOut):
 
 
 def makeForwardPolyMap(nIn, nOut):
-    """Make an astShim.PolyMap suitable for testing
+    """Make an astshim.PolyMap suitable for testing
 
     The forward transform is the same as for `makeTwoWayPolyMap`.
     This map does not have a reverse transform.

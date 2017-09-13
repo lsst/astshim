@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -13,7 +13,7 @@ class TestMatrixMap(MappingTestCase):
     def test_MatrixMapDiagonal(self):
         """Test MatrixMap constructed with a diagonal vector"""
 
-        mm = astshim.MatrixMap([-1.0, 2.0])
+        mm = ast.MatrixMap([-1.0, 2.0])
         self.assertEqual(mm.className, "MatrixMap")
         self.assertEqual(mm.nIn, 2)
         self.assertEqual(mm.nOut, 2)
@@ -50,7 +50,7 @@ class TestMatrixMap(MappingTestCase):
             [2.0, 3.0],
             [-1.0, -2.0]
         ], dtype=float)
-        mm = astshim.MatrixMap(matrix)
+        mm = ast.MatrixMap(matrix)
         self.assertEqual(mm.nIn, 2)
         self.assertEqual(mm.nOut, 3)
         self.assertTrue(mm.hasForward)
@@ -73,7 +73,7 @@ class TestMatrixMap(MappingTestCase):
 
         This is ticket DM-10942
         """
-        mm = astshim.MatrixMap([0.0, 0.0])
+        mm = ast.MatrixMap([0.0, 0.0])
 
         indata = np.array([
             [1.0, 2.0, 3.0],

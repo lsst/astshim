@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -16,9 +16,9 @@ class TestWcsMap(MappingTestCase):
         # unlike the tangent-plane projection which maps (0, pi/2) -> 0,0
         # and is not very well behaved at nearby points (as expected at a
         # pole).
-        wcsmap = astshim.WcsMap(2, astshim.WcsType.AIT, 1, 2)
-        self.assertIsInstance(wcsmap, astshim.WcsMap)
-        self.assertIsInstance(wcsmap, astshim.Mapping)
+        wcsmap = ast.WcsMap(2, ast.WcsType.AIT, 1, 2)
+        self.assertIsInstance(wcsmap, ast.WcsMap)
+        self.assertIsInstance(wcsmap, ast.Mapping)
         self.assertEqual(wcsmap.nIn, 2)
         self.assertEqual(wcsmap.nOut, 2)
 
@@ -32,7 +32,7 @@ class TestWcsMap(MappingTestCase):
         self.assertTrue(math.isinf(wcsmap.getPVi_m(1, 4)))
         self.assertEqual(wcsmap.getPVMax(2), 0)
         self.assertEqual(wcsmap.wcsAxis, (1, 2))
-        self.assertEqual(wcsmap.wcsType, astshim.WcsType.AIT)
+        self.assertEqual(wcsmap.wcsType, ast.WcsType.AIT)
 
         self.checkBasicSimplify(wcsmap)
         self.checkCopy(wcsmap)

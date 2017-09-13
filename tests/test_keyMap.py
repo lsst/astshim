@@ -3,14 +3,14 @@ import unittest
 
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import ObjectTestCase
 
 
 class TestKeyMap(ObjectTestCase):
 
     def test_KeyMapKey(self):
-        keyMap = astshim.KeyMap("SortBy=AgeDown")
+        keyMap = ast.KeyMap("SortBy=AgeDown")
         keyMap.putI("ikey", 5)
         keyMap.putS("skey", -3)
         keyMap.putB("bkey", 2)
@@ -26,8 +26,8 @@ class TestKeyMap(ObjectTestCase):
         self.assertEqual(keyMap.key(4), "fkey")
 
     def test_KeyMapScalars(self):
-        keyMap = astshim.KeyMap()
-        zoomMap = astshim.ZoomMap(2, 5)
+        keyMap = ast.KeyMap()
+        zoomMap = ast.ZoomMap(2, 5)
         keyMap.putI("ikey", 5)
         keyMap.putS("skey", -3)
         keyMap.putB("bkey", 2)
@@ -45,14 +45,14 @@ class TestKeyMap(ObjectTestCase):
         self.assertEqual(keyMap.length("ckey"), 1)
         self.assertEqual(keyMap.length("akey"), 1)
 
-        self.assertEqual(keyMap.type("ikey"), astshim.DataType.IntType)
-        self.assertEqual(keyMap.type("skey"), astshim.DataType.ShortIntType)
-        self.assertEqual(keyMap.type("bkey"), astshim.DataType.ByteType)
-        self.assertEqual(keyMap.type("dkey"), astshim.DataType.DoubleType)
-        self.assertEqual(keyMap.type("fkey"), astshim.DataType.FloatType)
-        self.assertEqual(keyMap.type("ckey"), astshim.DataType.StringType)
-        self.assertEqual(keyMap.type("akey"), astshim.DataType.ObjectType)
-        self.assertEqual(keyMap.type("no"), astshim.DataType.BadType)
+        self.assertEqual(keyMap.type("ikey"), ast.DataType.IntType)
+        self.assertEqual(keyMap.type("skey"), ast.DataType.ShortIntType)
+        self.assertEqual(keyMap.type("bkey"), ast.DataType.ByteType)
+        self.assertEqual(keyMap.type("dkey"), ast.DataType.DoubleType)
+        self.assertEqual(keyMap.type("fkey"), ast.DataType.FloatType)
+        self.assertEqual(keyMap.type("ckey"), ast.DataType.StringType)
+        self.assertEqual(keyMap.type("akey"), ast.DataType.ObjectType)
+        self.assertEqual(keyMap.type("no"), ast.DataType.BadType)
 
         self.assertEqual(keyMap.getI("ikey"), [5])
         self.assertEqual(keyMap.getI("ikey", 0), 5)
@@ -76,14 +76,14 @@ class TestKeyMap(ObjectTestCase):
             keyMap.getC("ckey", 1)  # invalid index
 
     def test_KeyMapCaseBlind(self):
-        keyMap = astshim.KeyMap("KeyCase=0")
+        keyMap = ast.KeyMap("KeyCase=0")
         keyMap.putC("ckey", "strvalue")
 
         self.assertEqual(keyMap.getC("CKey"), ["strvalue"])
         self.assertEqual(keyMap.getC("CKey", 0), "strvalue")
 
     def test_KeyMapRename(self):
-        keyMap = astshim.KeyMap()
+        keyMap = ast.KeyMap()
         keyMap.putC("ckey", "strvalue")
         keyMap.rename("ckey", "new")
         self.assertEqual(len(keyMap), 1)
@@ -91,14 +91,14 @@ class TestKeyMap(ObjectTestCase):
         self.assertEqual(keyMap.getC("new"), ["strvalue"])
 
     def test_KeyMapRemove(self):
-        keyMap = astshim.KeyMap()
+        keyMap = ast.KeyMap()
         keyMap.putC("ckey", "strvalue")
         keyMap.remove("ckey")
         self.assertEqual(len(keyMap), 0)
         self.assertEqual(keyMap.getC("ckey"), [])
 
     def test_KeyMapDefinedHasKey(self):
-        keyMap = astshim.KeyMap()
+        keyMap = ast.KeyMap()
         keyMap.putC("ckey", "strvalue")
         keyMap.putU("ukey")
 
@@ -110,7 +110,7 @@ class TestKeyMap(ObjectTestCase):
         self.assertFalse(keyMap.defined("no"))
 
     def testKeyMapKeys(self):
-        keyMap = astshim.KeyMap("SortBy=AgeDown")
+        keyMap = ast.KeyMap("SortBy=AgeDown")
         keyMap.putI("ikey", 5)
         keyMap.putS("skey", -3)
         keyMap.putB("bkey", 2)
@@ -124,9 +124,9 @@ class TestKeyMap(ObjectTestCase):
             self.assertEqual(key, desKeys[i])
 
     def test_KeyMapVectors(self):
-        keyMap = astshim.KeyMap()
-        zoomMap = astshim.ZoomMap(2, 5)
-        shiftMap = astshim.ShiftMap([3.3, -4.1])
+        keyMap = ast.KeyMap()
+        zoomMap = ast.ZoomMap(2, 5)
+        shiftMap = ast.ShiftMap([3.3, -4.1])
         keyMap.putI("ikey", [5, 2])
         keyMap.putS("skey", [-3, -1])
         keyMap.putB("bkey", [0, 2, 4, 8])
@@ -144,14 +144,14 @@ class TestKeyMap(ObjectTestCase):
         self.assertEqual(keyMap.length("ckey"), 3)
         self.assertEqual(keyMap.length("akey"), 2)
 
-        self.assertEqual(keyMap.type("ikey"), astshim.DataType.IntType)
-        self.assertEqual(keyMap.type("skey"), astshim.DataType.ShortIntType)
-        self.assertEqual(keyMap.type("bkey"), astshim.DataType.ByteType)
-        self.assertEqual(keyMap.type("dkey"), astshim.DataType.DoubleType)
-        self.assertEqual(keyMap.type("fkey"), astshim.DataType.FloatType)
-        self.assertEqual(keyMap.type("ckey"), astshim.DataType.StringType)
-        self.assertEqual(keyMap.type("akey"), astshim.DataType.ObjectType)
-        self.assertEqual(keyMap.type("no"), astshim.DataType.BadType)
+        self.assertEqual(keyMap.type("ikey"), ast.DataType.IntType)
+        self.assertEqual(keyMap.type("skey"), ast.DataType.ShortIntType)
+        self.assertEqual(keyMap.type("bkey"), ast.DataType.ByteType)
+        self.assertEqual(keyMap.type("dkey"), ast.DataType.DoubleType)
+        self.assertEqual(keyMap.type("fkey"), ast.DataType.FloatType)
+        self.assertEqual(keyMap.type("ckey"), ast.DataType.StringType)
+        self.assertEqual(keyMap.type("akey"), ast.DataType.ObjectType)
+        self.assertEqual(keyMap.type("no"), ast.DataType.BadType)
 
         self.assertEqual(keyMap.getI("ikey"), [5, 2])
         self.assertEqual(keyMap.getS("skey"), [-3, -1])

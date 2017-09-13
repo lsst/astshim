@@ -4,14 +4,14 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestMathMap(MappingTestCase):
 
     def test_MathMapInvertible(self):
-        mathmap = astshim.MathMap(2, 2,
+        mathmap = ast.MathMap(2, 2,
                                   ["r = sqrt(x * x + y * y)",
                                    "theta = atan2(y, x)"],
                                   ["x = r * cos(theta)", "y = r * sin(theta)"],
@@ -45,7 +45,7 @@ class TestMathMap(MappingTestCase):
         self.assertTrue(mathmap.simpIF)
 
     def test_MathMapNonInvertible(self):
-        mathmap = astshim.MathMap(2, 1,
+        mathmap = ast.MathMap(2, 1,
                                   ["r = sqrt(x * x + y * y)"],
                                   ["x = r", "y = 0"])
         self.assertEqual(mathmap.className, "MathMap")
