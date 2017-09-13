@@ -4,7 +4,7 @@ import unittest
 
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -13,7 +13,7 @@ class TestLutMap(MappingTestCase):
     def test_LutMap(self):
         offset = 1.0
         divisor = 0.5
-        lutmap = astshim.LutMap([1, 2, 4, 8], offset, divisor)
+        lutmap = ast.LutMap([1, 2, 4, 8], offset, divisor)
         self.assertEqual(lutmap.className, "LutMap")
         self.assertEqual(lutmap.nOut, 1)
 

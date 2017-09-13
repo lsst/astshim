@@ -5,14 +5,14 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestSphMap(MappingTestCase):
 
     def test_SphMapBasics(self):
-        sphmap = astshim.SphMap()
+        sphmap = ast.SphMap()
         self.assertEqual(sphmap.className, "SphMap")
         self.assertEqual(sphmap.nIn, 3)
         self.assertEqual(sphmap.nOut, 2)
@@ -38,7 +38,7 @@ class TestSphMap(MappingTestCase):
         self.checkRoundTrip(sphmap, indata)
 
     def test_SphMapAttributes(self):
-        sphmap = astshim.SphMap("PolarLong=0.5, UnitRadius=1")
+        sphmap = ast.SphMap("PolarLong=0.5, UnitRadius=1")
         self.assertEqual(sphmap.polarLong, 0.5)
         self.assertTrue(sphmap.unitRadius)
 

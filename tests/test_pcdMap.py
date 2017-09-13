@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -13,10 +13,10 @@ class TestPcdMap(MappingTestCase):
     def test_PcdMap(self):
         coeff = 0.002
         ctr = [2, 3]
-        pcdmap = astshim.PcdMap(coeff, ctr)
+        pcdmap = ast.PcdMap(coeff, ctr)
         self.assertEqual(pcdmap.className, "PcdMap")
-        self.assertIsInstance(pcdmap, astshim.PcdMap)
-        self.assertIsInstance(pcdmap, astshim.Mapping)
+        self.assertIsInstance(pcdmap, ast.PcdMap)
+        self.assertIsInstance(pcdmap, ast.Mapping)
         self.assertEqual(pcdmap.nIn, 2)
         self.assertEqual(pcdmap.nOut, 2)
         self.assertEqual(pcdmap.disco, coeff)
@@ -54,10 +54,10 @@ class TestPcdMap(MappingTestCase):
 
     def test_PcdMapBadConstruction(self):
         with self.assertRaises(Exception):
-            astshim.PcdMap(0.5, [1, 2, 3])
+            ast.PcdMap(0.5, [1, 2, 3])
 
         with self.assertRaises(Exception):
-            astshim.PcdMap(0.5, [1])
+            ast.PcdMap(0.5, [1])
 
 
 if __name__ == "__main__":

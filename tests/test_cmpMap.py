@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -17,11 +17,11 @@ class TestCmpMap(MappingTestCase):
         self.nin = 2
         self.zoom = 1.3
         self.shift = [-0.5, 1.2]
-        self.zoommap = astshim.ZoomMap(self.nin, self.zoom)
-        self.shiftmap = astshim.ShiftMap(self.shift)
+        self.zoommap = ast.ZoomMap(self.nin, self.zoom)
+        self.shiftmap = ast.ShiftMap(self.shift)
 
     def test_SeriesMap(self):
-        sermap = astshim.SeriesMap(self.shiftmap, self.zoommap)
+        sermap = ast.SeriesMap(self.shiftmap, self.zoommap)
         # adding to a SeriesMap increases by 1
         self.assertEqual(self.shiftmap.getRefCount(), 2)
         # adding to a SeriesMap increases by 1
@@ -36,7 +36,7 @@ class TestCmpMap(MappingTestCase):
 
         sermap2 = self.shiftmap.then(self.zoommap)
 
-        sermap3 = astshim.CmpMap(self.shiftmap, self.zoommap, True)
+        sermap3 = ast.CmpMap(self.shiftmap, self.zoommap, True)
 
         indata = np.array([
             [1.0, 2.0, -6.0, 30.0, 0.2],
@@ -57,7 +57,7 @@ class TestCmpMap(MappingTestCase):
         self.checkRoundTrip(sermap3, indata)
 
     def test_ParallelMap(self):
-        parmap = astshim.ParallelMap(self.shiftmap, self.zoommap)
+        parmap = ast.ParallelMap(self.shiftmap, self.zoommap)
         # adding to a ParallelMap increases by 1
         self.assertEqual(self.shiftmap.getRefCount(), 2)
         # adding to a ParallelMap increases by 1
@@ -87,7 +87,7 @@ class TestCmpMap(MappingTestCase):
         topos2 = parmap2.applyForward(indata)
         assert_allclose(topos2, pred_outdata)
 
-        parmap3 = astshim.CmpMap(self.shiftmap, self.zoommap, False)
+        parmap3 = ast.CmpMap(self.shiftmap, self.zoommap, False)
         topos3 = parmap3.applyForward(indata)
         assert_allclose(topos3, pred_outdata)
 
@@ -103,10 +103,10 @@ class TestCmpMap(MappingTestCase):
         m1 = 1.0
         m2 = 2.0
         shift = 3.0
-        matrixMap = astshim.MatrixMap(np.array([[m1, m2]]))
+        matrixMap = ast.MatrixMap(np.array([[m1, m2]]))
         self.assertEqual(matrixMap.nIn, 2)
         self.assertEqual(matrixMap.nOut, 1)
-        shiftMap = astshim.ShiftMap([shift])
+        shiftMap = ast.ShiftMap([shift])
         seriesMap = matrixMap.then(shiftMap)
 
         indata = np.array([

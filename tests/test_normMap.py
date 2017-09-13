@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -15,7 +15,7 @@ class TestNormMap(MappingTestCase):
     def test_NormMapFrame(self):
         """Check NormMap(Frame): output = input
         """
-        normmap = astshim.NormMap(astshim.Frame(2))
+        normmap = ast.NormMap(ast.Frame(2))
         self.assertEqual(normmap.className, "NormMap")
         self.assertEqual(normmap.nIn, 2)
         self.assertEqual(normmap.nOut, 2)
@@ -34,7 +34,7 @@ class TestNormMap(MappingTestCase):
     def testNormMapMap(self):
         """Check that NormMap(Mapping) is an error"""
         with self.assertRaises(TypeError):
-            astshim.NormMap(astshim.UnitMap(1))
+            ast.NormMap(ast.UnitMap(1))
 
     def test_NormMapSkyFrame(self):
         """Check NormMap(SkYFrame):
@@ -48,7 +48,7 @@ class TestNormMap(MappingTestCase):
         This test intentionally stays a small delta away from boundaries (except 0)
         because the expected behavior is not certain and not important
         """
-        normmap = astshim.NormMap(astshim.SkyFrame())
+        normmap = ast.NormMap(ast.SkyFrame())
         self.assertEqual(normmap.className, "NormMap")
         self.assertEqual(normmap.nIn, 2)
         self.assertEqual(normmap.nOut, 2)

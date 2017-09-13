@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose, assert_equal
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -24,7 +24,7 @@ class TestUnitNormMap(MappingTestCase):
         for nin in (1, 2, 3):
             center = full_center[0:nin]
             indata = full_indata[0:nin]
-            unitnormmap = astshim.UnitNormMap(center)
+            unitnormmap = ast.UnitNormMap(center)
             self.assertEqual(unitnormmap.className, "UnitNormMap")
             self.assertEqual(unitnormmap.nIn, nin)
             self.assertEqual(unitnormmap.nOut, nin + 1)
@@ -57,7 +57,7 @@ class TestUnitNormMap(MappingTestCase):
 
         # UnitNormMap must have at least one input
         with self.assertRaises(Exception):
-            astshim.UnitNormMap([])
+            ast.UnitNormMap([])
 
     def test_UnitNormMapSimplify(self):
         """Test advanced simplification of UnitNormMap
@@ -78,14 +78,14 @@ class TestUnitNormMap(MappingTestCase):
             [-5.0, 3.0, -7.0, 37.0, 0.0],
             [7.0, -23.0, -3.0, 45.0, 0.0],
         ], dtype=float)
-        unm1 = astshim.UnitNormMap(center1)
+        unm1 = ast.UnitNormMap(center1)
         unm1inv = unm1.getInverse()
-        unm2 = astshim.UnitNormMap(center2)
+        unm2 = ast.UnitNormMap(center2)
         unm2inv = unm2.getInverse()
-        shiftmap = astshim.ShiftMap(shift)
-        winmap_unitscale = astshim.WinMap(
+        shiftmap = ast.ShiftMap(shift)
+        winmap_unitscale = ast.WinMap(
             np.zeros(3), shift, np.ones(3), np.ones(3) + shift)
-        winmap_notunitscale = astshim.WinMap(
+        winmap_notunitscale = ast.WinMap(
             np.zeros(3), shift, np.ones(3), np.ones(3) * 2 + shift)
 
         for map1, map2, pred_simplified_class_name in (

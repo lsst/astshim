@@ -5,7 +5,7 @@ import numpy as np
 from numpy.polynomial.chebyshev import chebval, chebval2d
 import numpy.testing as npt
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -20,7 +20,7 @@ def normalize(inArray, lbnd, ubnd):
     ----------
     inArray : `numpy.array` of float
         Value(s) to normalize; a list of nAxes x nPoints values
-        (the form used by astshim.Mapping.applyForward)
+        (the form used by ast.Mapping.applyForward)
     lbnd : sequence of `float`
         Lower bounds (one element per axis)
     ubnd : sequence of `float`
@@ -138,10 +138,10 @@ class TestChebyMap(MappingTestCase):
         refCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
 
         # forward-only constructor
-        chebyMap1 = astshim.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
-        self.assertIsInstance(chebyMap1, astshim.Object)
-        self.assertIsInstance(chebyMap1, astshim.Mapping)
-        self.assertIsInstance(chebyMap1, astshim.ChebyMap)
+        chebyMap1 = ast.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
+        self.assertIsInstance(chebyMap1, ast.Object)
+        self.assertIsInstance(chebyMap1, ast.Mapping)
+        self.assertIsInstance(chebyMap1, ast.ChebyMap)
         self.assertEqual(chebyMap1.nIn, nin)
         self.assertEqual(chebyMap1.nOut, nout)
         self.assertTrue(chebyMap1.hasForward)
@@ -162,10 +162,10 @@ class TestChebyMap(MappingTestCase):
         npt.assert_allclose(outdata, pred_outdata)
 
         # bidirectional constructor, forward only specified
-        chebyMap2 = astshim.ChebyMap(coeff_f, null_coeff, lbnd_f, ubnd_f, [], [])
-        self.assertIsInstance(chebyMap2, astshim.Object)
-        self.assertIsInstance(chebyMap2, astshim.Mapping)
-        self.assertIsInstance(chebyMap2, astshim.ChebyMap)
+        chebyMap2 = ast.ChebyMap(coeff_f, null_coeff, lbnd_f, ubnd_f, [], [])
+        self.assertIsInstance(chebyMap2, ast.Object)
+        self.assertIsInstance(chebyMap2, ast.Mapping)
+        self.assertIsInstance(chebyMap2, ast.ChebyMap)
         self.assertEqual(chebyMap2.nIn, nin)
         self.assertEqual(chebyMap2.nOut, nout)
         self.assertTrue(chebyMap2.hasForward)
@@ -184,10 +184,10 @@ class TestChebyMap(MappingTestCase):
             chebyMap2.applyInverse(indata)
 
         # bidirectional constructor, inverse only specified
-        chebyMap3 = astshim.ChebyMap(null_coeff, coeff_f, [], [], lbnd_f, ubnd_f)
-        self.assertIsInstance(chebyMap3, astshim.Object)
-        self.assertIsInstance(chebyMap3, astshim.Mapping)
-        self.assertIsInstance(chebyMap3, astshim.ChebyMap)
+        chebyMap3 = ast.ChebyMap(null_coeff, coeff_f, [], [], lbnd_f, ubnd_f)
+        self.assertIsInstance(chebyMap3, ast.Object)
+        self.assertIsInstance(chebyMap3, ast.Mapping)
+        self.assertIsInstance(chebyMap3, ast.ChebyMap)
         self.assertEqual(chebyMap3.nIn, nin)
         self.assertEqual(chebyMap3.nOut, nout)
         self.assertFalse(chebyMap3.hasForward)
@@ -267,7 +267,7 @@ class TestChebyMap(MappingTestCase):
         refCheby_f = ReferenceCheby(referenceFunc_f, lbnd_f, ubnd_f)
         refCheby_i = ReferenceCheby(referenceFunc_i, lbnd_i, ubnd_i)
 
-        chebyMap = astshim.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
+        chebyMap = ast.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
         self.assertEqual(chebyMap.nIn, 2)
         self.assertEqual(chebyMap.nOut, 1)
 
@@ -331,7 +331,7 @@ class TestChebyMap(MappingTestCase):
                 chebval2d(x1, x2, c2),
             )
 
-        chebyMap1 = astshim.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
+        chebyMap1 = ast.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
         self.checkBasicSimplify(chebyMap1)
         self.assertTrue(chebyMap1.hasForward)
         self.assertFalse(chebyMap1.hasInverse)
@@ -404,7 +404,7 @@ class TestChebyMap(MappingTestCase):
                 chebval2d(x1, x2, c2),
             )
 
-        chebyMap1 = astshim.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
+        chebyMap1 = ast.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
         self.checkBasicSimplify(chebyMap1)
         self.assertTrue(chebyMap1.hasForward)
         self.assertFalse(chebyMap1.hasInverse)
@@ -439,7 +439,7 @@ class TestChebyMap(MappingTestCase):
             [-2.0, 2, 0, 3],
         ])
 
-        chebyMap1 = astshim.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
+        chebyMap1 = ast.ChebyMap(coeff_f, nout, lbnd_f, ubnd_f)
 
         # compute indata as a grid of points that cover the input range
         x1Edge = np.linspace(lbnd_f[0], ubnd_f[0], 1000)
@@ -499,11 +499,11 @@ class TestChebyMap(MappingTestCase):
 
         # execute many times to increase the odds of a segfault
         for i in range(1000):
-            amap = astshim.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
+            amap = ast.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
             amapinv = amap.getInverse()
             cmp2 = amapinv.then(amap)
             result = cmp2.simplify()
-            self.assertIsInstance(result, astshim.UnitMap)
+            self.assertIsInstance(result, ast.UnitMap)
 
 
 if __name__ == "__main__":

@@ -2,14 +2,14 @@ from __future__ import absolute_import, division, print_function
 import math
 import unittest
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestTimeFrame(MappingTestCase):
 
     def test_TimeFrameBasics(self):
-        frame = astshim.TimeFrame()
+        frame = ast.TimeFrame()
         self.assertEqual(frame.className, "TimeFrame")
         self.assertEqual(frame.nIn, 1)
         self.assertEqual(frame.nAxes, 1)
@@ -44,7 +44,7 @@ class TestTimeFrame(MappingTestCase):
         self.checkPersistence(frame)
 
     def testTimeFrameAttributes(self):
-        frame = astshim.TimeFrame(
+        frame = ast.TimeFrame(
             "AlignTimeScale=TT, LTOffset=1.1, TimeOrigin=2.2, TimeScale=TDB")
 
         self.assertEqual(frame.alignTimeScale, "TT")

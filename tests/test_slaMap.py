@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -12,7 +12,7 @@ class TestSlaMap(MappingTestCase):
 
     def test_SlaMap(self):
         last = 0.1  # an arbitrary value small enough to avoid wrap
-        slamap = astshim.SlaMap()
+        slamap = ast.SlaMap()
         slamap.add("R2H", [last])
         self.assertEqual(slamap.className, "SlaMap")
         self.assertEqual(slamap.nIn, 2)

@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -12,10 +12,10 @@ class TestWcsMap(MappingTestCase):
 
     def test_WinMap(self):
         # a map describing a shift of [1.0, -0.5] followed by a zoom of 2
-        winmap = astshim.WinMap([0, 0], [1, 1], [1, -0.5], [3, 1.5])
+        winmap = ast.WinMap([0, 0], [1, 1], [1, -0.5], [3, 1.5])
         pred_shift = [1.0, -0.5]
         pred_zoom = 2.0
-        self.assertIsInstance(winmap, astshim.WinMap)
+        self.assertIsInstance(winmap, ast.WinMap)
         self.assertEqual(winmap.nIn, 2)
         self.assertEqual(winmap.nOut, 2)
 

@@ -1,24 +1,24 @@
 from __future__ import absolute_import, division, print_function
 import unittest
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestFrameSet(MappingTestCase):
 
     def test_FrameSetBasics(self):
-        frame = astshim.Frame(2, "Ident=base")
-        frameSet = astshim.FrameSet(frame)
-        self.assertIsInstance(frameSet, astshim.FrameSet)
+        frame = ast.Frame(2, "Ident=base")
+        frameSet = ast.FrameSet(frame)
+        self.assertIsInstance(frameSet, ast.FrameSet)
         self.assertEqual(frameSet.nFrame, 1)
 
         # Make sure the frame is deep copied
         frame.ident = "newIdent"
         self.assertEqual(frameSet.getFrame(frameSet.BASE).ident, "base")
 
-        newFrame = astshim.Frame(2, "Ident=current")
-        mapping = astshim.UnitMap(2, "Ident=mapping")
+        newFrame = ast.Frame(2, "Ident=current")
+        mapping = ast.UnitMap(2, "Ident=mapping")
         frameSet.addFrame(1, mapping, newFrame)
         self.assertEqual(frameSet.nFrame, 2)
 
@@ -29,7 +29,7 @@ class TestFrameSet(MappingTestCase):
         self.assertEqual(frameSet.getMapping().ident, "mapping")
 
         # make sure BASE is available on the class and instance
-        self.assertEqual(astshim.FrameSet.BASE, frameSet.BASE)
+        self.assertEqual(ast.FrameSet.BASE, frameSet.BASE)
 
         baseframe = frameSet.getFrame(frameSet.BASE)
         self.assertEqual(baseframe.ident, "base")
@@ -40,7 +40,7 @@ class TestFrameSet(MappingTestCase):
 
         mapping = frameSet.getMapping(1, 2)
         self.assertEqual(mapping.className, "UnitMap")
-        frameSet.remapFrame(1, astshim.UnitMap(2))
+        frameSet.remapFrame(1, ast.UnitMap(2))
         frameSet.removeFrame(1)
         self.assertEqual(frameSet.nFrame, 1)
 
@@ -48,10 +48,10 @@ class TestFrameSet(MappingTestCase):
         self.checkPersistence(frameSet)
 
     def testFrameSetFrameMappingFrameConstructor(self):
-        baseFrame = astshim.Frame(2, "Ident=base")
-        mapping = astshim.UnitMap(2, "Ident=mapping")
-        currFrame = astshim.Frame(2, "Ident=current")
-        frameSet = astshim.FrameSet(baseFrame, mapping, currFrame)
+        baseFrame = ast.Frame(2, "Ident=base")
+        mapping = ast.UnitMap(2, "Ident=mapping")
+        currFrame = ast.Frame(2, "Ident=current")
+        frameSet = ast.FrameSet(baseFrame, mapping, currFrame)
         self.assertEqual(frameSet.nFrame, 2)
         self.assertEqual(frameSet.base, 1)
         self.assertEqual(frameSet.current, 2)
@@ -65,18 +65,18 @@ class TestFrameSet(MappingTestCase):
         self.assertEqual(frameSet.getMapping().ident, "mapping")
 
     def test_FrameSetGetFrame(self):
-        frame = astshim.Frame(2, "Ident=base")
-        frameSet = astshim.FrameSet(frame)
-        self.assertIsInstance(frameSet, astshim.FrameSet)
+        frame = ast.Frame(2, "Ident=base")
+        frameSet = ast.FrameSet(frame)
+        self.assertIsInstance(frameSet, ast.FrameSet)
         self.assertEqual(frameSet.nFrame, 1)
 
-        newFrame = astshim.Frame(2, "Ident=current")
-        frameSet.addFrame(1, astshim.UnitMap(2), newFrame)
+        newFrame = ast.Frame(2, "Ident=current")
+        frameSet.addFrame(1, ast.UnitMap(2), newFrame)
         self.assertEqual(frameSet.nFrame, 2)
 
-        baseFrameDeep = frameSet.getFrame(astshim.FrameSet.BASE)
+        baseFrameDeep = frameSet.getFrame(ast.FrameSet.BASE)
         baseFrameDeep.ident = "modifiedBase"
-        self.assertEqual(frameSet.getFrame(astshim.FrameSet.BASE).ident, "base")
+        self.assertEqual(frameSet.getFrame(ast.FrameSet.BASE).ident, "base")
 
     def test_FrameSetPermutationSkyFrame(self):
         """Test permuting FrameSet axes using a SkyFrame
@@ -88,10 +88,10 @@ class TestFrameSet(MappingTestCase):
         # test with arbitrary values that will not be wrapped by SkyFrame
         x = 0.257
         y = 0.832
-        frame1 = astshim.Frame(2)
-        unitMap = astshim.UnitMap(2)
-        frame2 = astshim.SkyFrame()
-        frameSet = astshim.FrameSet(frame1, unitMap, frame2)
+        frame1 = ast.Frame(2)
+        unitMap = ast.UnitMap(2)
+        frame2 = ast.SkyFrame()
+        frameSet = ast.FrameSet(frame1, unitMap, frame2)
         self.assertAlmostEqual(frameSet.applyForward([x, y]), [x, y])
         self.assertAlmostEqual(frameSet.applyInverse([x, y]), [x, y])
 
@@ -120,10 +120,10 @@ class TestFrameSet(MappingTestCase):
         x = 75.1
         y = -53.2
         z = 0.123
-        frame1 = astshim.Frame(3)
-        permMap = astshim.PermMap([1, 2, -1], [1, 2], [z])
-        frame2 = astshim.Frame(2)
-        frameSet = astshim.FrameSet(frame1, permMap, frame2)
+        frame1 = ast.Frame(3)
+        permMap = ast.PermMap([1, 2, -1], [1, 2], [z])
+        frame2 = ast.Frame(2)
+        frameSet = ast.FrameSet(frame1, permMap, frame2)
         self.assertAlmostEqual(frameSet.applyForward([x, y, z]), [x, y])
         self.assertAlmostEqual(frameSet.applyInverse([x, y]), [x, y, z])
 

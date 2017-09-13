@@ -1,16 +1,16 @@
 from __future__ import absolute_import, division, print_function
 import unittest
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
 class TestCmpFrame(MappingTestCase):
 
     def test_CmpFrame(self):
-        frame1 = astshim.Frame(2, "label(1)=a, label(2)=b")
-        frame2 = astshim.Frame(1, "label(1)=c")
-        cmpframe = astshim.CmpFrame(frame1, frame2)
+        frame1 = ast.Frame(2, "label(1)=a, label(2)=b")
+        frame2 = ast.Frame(1, "label(1)=c")
+        cmpframe = ast.CmpFrame(frame1, frame2)
         # adding to a CmpFrame increases by 1
         self.assertEqual(frame1.getRefCount(), 2)
         # adding to a CmpFrame increases by 1

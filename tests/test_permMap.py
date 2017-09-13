@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -13,7 +13,7 @@ class TestPermMap(MappingTestCase):
     def test_PermMapMatched(self):
         """Test a PermMap whose inverse is the inverse of its forward
         """
-        permmap = astshim.PermMap([2, 3, 1], [3, 1, 2])
+        permmap = ast.PermMap([2, 3, 1], [3, 1, 2])
         self.assertEqual(permmap.className, "PermMap")
         self.assertEqual(permmap.nIn, 3)
         self.assertEqual(permmap.nOut, 3)
@@ -40,7 +40,7 @@ class TestPermMap(MappingTestCase):
     def test_PermMapUnmatched(self):
         """Test PermMap with different number of inputs and outputs
         """
-        permmap = astshim.PermMap([2, 1, 3], [3, 1])
+        permmap = ast.PermMap([2, 1, 3], [3, 1])
         self.assertEqual(permmap.className, "PermMap")
         self.assertEqual(permmap.nIn, 3)
         self.assertEqual(permmap.nOut, 2)
@@ -58,7 +58,7 @@ class TestPermMap(MappingTestCase):
     def test_PermMapWithConstants(self):
         """Test a PermMap with constant values
         """
-        permmap = astshim.PermMap([-2, 1, 3], [2, 1, -1], [75.3, -126.5])
+        permmap = ast.PermMap([-2, 1, 3], [2, 1, -1], [75.3, -126.5])
         self.assertEqual(permmap.className, "PermMap")
         self.assertEqual(permmap.nIn, 3)
         self.assertEqual(permmap.nOut, 3)

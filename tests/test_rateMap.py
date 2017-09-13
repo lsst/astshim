@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-import astshim
+import astshim as ast
 from astshim.test import MappingTestCase
 
 
@@ -12,9 +12,9 @@ class TestRateMap(MappingTestCase):
 
     def test_RateMapBasics(self):
         zoomfac = 0.523
-        ratemap = astshim.RateMap(astshim.ZoomMap(2, zoomfac), 2, 2)
-        self.assertIsInstance(ratemap, astshim.RateMap)
-        self.assertIsInstance(ratemap, astshim.Mapping)
+        ratemap = ast.RateMap(ast.ZoomMap(2, zoomfac), 2, 2)
+        self.assertIsInstance(ratemap, ast.RateMap)
+        self.assertIsInstance(ratemap, ast.Mapping)
         self.assertEqual(ratemap.nOut, 1)
 
         self.checkBasicSimplify(ratemap)
@@ -30,7 +30,7 @@ class TestRateMap(MappingTestCase):
 
     def test_RateMap2(self):
         zoomfac = 23.323
-        ratemap = astshim.RateMap(astshim.ZoomMap(2, zoomfac), 2, 1)
+        ratemap = ast.RateMap(ast.ZoomMap(2, zoomfac), 2, 1)
 
         indata = np.array([
             [1.1, -43.5, -5.54],
