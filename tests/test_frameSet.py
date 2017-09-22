@@ -171,7 +171,7 @@ class TestFrameSet(MappingTestCase):
         self.assertEqual(zoomMap.getNObject(), initialNumZoomMap + 1)
         frameSet.remapFrame(1, shiftMap)
         self.assertEqual(zoomMap.getNObject(), initialNumZoomMap + 1)
-        self.assertEqual(shiftMap.getNObject(), initialNumShiftMap)
+        self.assertEqual(shiftMap.getNObject(), initialNumShiftMap + 1)
         predicted_output2 = (input_data.T - shift).T * zoom
         assert_allclose(frameSet.applyForward(input_data), predicted_output2)
 
