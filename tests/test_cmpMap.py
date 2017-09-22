@@ -35,8 +35,14 @@ class TestCmpMap(MappingTestCase):
         self.checkPersistence(sermap)
 
         sermap2 = self.shiftmap.then(self.zoommap)
+        self.checkBasicSimplify(sermap2)
+        self.checkCopy(sermap2)
+        self.checkPersistence(sermap2)
 
         sermap3 = ast.CmpMap(self.shiftmap, self.zoommap, True)
+        self.checkBasicSimplify(sermap3)
+        self.checkCopy(sermap3)
+        self.checkPersistence(sermap3)
 
         indata = np.array([
             [1.0, 2.0, -6.0, 30.0, 0.2],
@@ -71,6 +77,9 @@ class TestCmpMap(MappingTestCase):
         self.checkPersistence(parmap)
 
         parmap2 = self.shiftmap.under(self.zoommap)
+        self.checkBasicSimplify(parmap2)
+        self.checkCopy(parmap2)
+        self.checkPersistence(parmap2)
 
         indata = np.array([
             [3.0, 1.0, -6.0],
@@ -88,6 +97,10 @@ class TestCmpMap(MappingTestCase):
         assert_allclose(topos2, pred_outdata)
 
         parmap3 = ast.CmpMap(self.shiftmap, self.zoommap, False)
+        self.checkBasicSimplify(parmap3)
+        self.checkCopy(parmap3)
+        self.checkPersistence(parmap3)
+
         topos3 = parmap3.applyForward(indata)
         assert_allclose(topos3, pred_outdata)
 

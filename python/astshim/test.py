@@ -31,6 +31,10 @@ class ObjectTestCase(unittest.TestCase):
         self.assertEqual(cp.getNObject(), nobj + 1)
         self.assertEqual(cp.getRefCount(), 1)
 
+        del cp
+        self.assertEqual(obj.getNObject(), nobj)
+        self.assertEqual(obj.getRefCount(), nref)
+
     def checkPersistence(self, obj):
         """Check that an astshim object can be persisted and unpersisted
         """
