@@ -41,14 +41,14 @@ int main() {
     std::cout << "zoomMap for Mapping = " << zoomMap.getZoom() << "; is inverted=" << zoomMap.isInverted()
               << std::endl;
 
-    ast::Array2D to = ndarray::allocate(ndarray::makeVector(3, 2));
-    zoomMap.applyForward(from, to);
-
-    auto invZoomPtr = zoomMap.getInverse();
-    ast::Array2D rndTrip = ndarray::allocate(ndarray::makeVector(3, 2));
-    invZoomPtr->applyForward(to, rndTrip);
+    auto to = zoomMap.applyForward(from);
     std::cout << "x =" << from << std::endl;
     std::cout << "zoom(x) =" << to << std::endl;
+
+    auto invZoomPtr = zoomMap.getInverse();
+    // You can also pre-allocate the destination memory, which is useful if you want to reuse it
+    ast::Array2D rndTrip = ndarray::allocate(ndarray::makeVector(2, 3));
+    invZoomPtr->applyForward(to, rndTrip);
     std::cout << "round trip =" << rndTrip << std::endl;
 
     std::vector<double> shift = {1.5, -0.1};

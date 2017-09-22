@@ -38,8 +38,7 @@ int main() {
     // this example uses 2-d arrays because they can be printed to stdout.
     std::vector<double> fromVec = {0, 1000, 0, 1000, 0, 0, 1000, 1000};
     ast::Array2D from = ast::arrayFromVector(fromVec, 2);
-    ast::Array2D to = ndarray::allocate(ndarray::makeVector(4, 2));
-    frameSetPtr->applyForward(from, to);
+    auto to = frameSetPtr->applyForward(from);
     std::cout << "\n\npixels =" << from << std::endl;
     std::cout << "sky =" << to << std::endl;
 }
