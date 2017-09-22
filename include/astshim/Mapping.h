@@ -163,17 +163,20 @@ public:
     Array2D linearApprox(PointD const &lbnd, PointD const &ubnd, double tol) const;
 
     /**
-    Return a series compound mapping this(first(input)).
+    Return a series compound mapping this(first(input)) containing shallow copies of the original
 
     @param[in] next  the mapping whose input is the output of this mapping
 
     @throws std::invalid_argument if the number of input axes of `next` does not match
         the number of output axes of this mapping.
+
+    @warning The contained mappings are shallow copies (just like AST);
+    if you want deep copies then make them manually.
     */
     SeriesMap then(Mapping const &next) const;
 
     /**
-    Return a parallel compound mapping
+    Return a parallel compound mapping containing shallow copies of the original
 
     The resulting mapping has `getNIn() + next.getNIn()` inputs and `getNOut() + next.getNOut()` outputs.
     The first `getNIn()` axes of input are transformed by this mapping, producing the first `getNOut()` axes
@@ -184,6 +187,9 @@ public:
 
     @param[in] next  the mapping that processes the final `next.getNin()` axes of input to produce
     the final `next.getNout()` axes of output.
+
+    @warning The contained mappings are shallow copies (just like AST);
+    if you want deep copies then make them manually.
     */
     ParallelMap under(Mapping const &next) const;
 

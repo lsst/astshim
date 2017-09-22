@@ -61,7 +61,7 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
 
     @warning @ref SeriesMap contains shallow copies of the provided mappings (just like AST).
-    If you deep copies then provide deep copies to this constructor.
+    If you want deep copies then provide deep copies to this constructor.
     */
     explicit SeriesMap(Mapping const &map1, Mapping const &map2, std::string const &options = "")
             : CmpMap(map1, map2, true, options) {}
