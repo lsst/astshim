@@ -133,7 +133,7 @@ public:
         addFrame(1, mapping, currentFrame);
     }
 
-    ~FrameSet() {}
+    virtual ~FrameSet() {}
 
     FrameSet(FrameSet const &) = delete;
     FrameSet(FrameSet &&) = default;
