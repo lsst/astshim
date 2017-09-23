@@ -142,6 +142,51 @@ class MappingTestCase(ObjectTestCase):
             self.assertEqual(cmp3.nIn, cmp3simp.nIn)
             self.assertEqual(cmp3.nOut, cmp3simp.nOut)
 
+    def checkMemoryForCompoundObject(self, obj1, obj2, cmpObj, isSeries):
+        """Check the memory usage for a compoundObject
+
+        obj1: first object in compound object
+        obj2: second object in compound object
+        cmpObj: compound object (SeriesMap, ParallelMap, CmpMap or CmpFrame)
+        isSeries: is compound object in series? None to not test (e.g. CmpFrame)
+        """
+        # if obj1 and obj2 are the same type then copying the compound object
+        # will increase the NObject of each by 2, otherwise 1
+        deltaObj = 2 if type(obj1) == type(obj2) else 1
+
+        initialNumObj1 = obj1.getNObject()
+        initialNumObj2 = obj2.getNObject()
+        initialNumCmpObj = cmpObj.getNObject()
+        initialRefCountObj1 = obj1.getRefCount()
+        initialRefCountObj2 = obj2.getRefCount()
+        initialRefCountCmpObj = cmpObj.getRefCount()
+        self.assertEqual(obj1.getNObject(), initialNumObj1)
+        self.assertEqual(obj2.getNObject(), initialNumObj2)
+        if isSeries is not None:
+            if isSeries is True:
+                self.assertTrue(cmpObj.series)
+            elif isSeries is False:
+                self.assertFalse(cmpObj.series)
+
+        # making a deep copy should increase the object count of the contained objects
+        # but should not affect the reference count
+        cp = cmpObj.copy()
+        self.assertEqual(cmpObj.getRefCount(), initialRefCountCmpObj)
+        self.assertEqual(cmpObj.getNObject(), initialNumCmpObj + 1)
+        self.assertEqual(obj1.getRefCount(), initialRefCountObj1)
+        self.assertEqual(obj2.getRefCount(), initialRefCountObj2)
+        self.assertEqual(obj1.getNObject(), initialNumObj1 + deltaObj)
+        self.assertEqual(obj2.getNObject(), initialNumObj2 + deltaObj)
+
+        # deleting the deep copy should restore ref count and nobject
+        del cp
+        self.assertEqual(cmpObj.getRefCount(), initialRefCountCmpObj)
+        self.assertEqual(cmpObj.getNObject(), initialNumCmpObj)
+        self.assertEqual(obj1.getRefCount(), initialRefCountObj1)
+        self.assertEqual(obj1.getNObject(), initialNumObj1)
+        self.assertEqual(obj2.getRefCount(), initialRefCountObj2)
+        self.assertEqual(obj2.getNObject(), initialNumObj2)
+
 
 def makePolyMapCoeffs(nIn, nOut):
     """Make an array of coefficients for astshim.PolyMap for the following equation:

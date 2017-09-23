@@ -22,6 +22,8 @@ class TestCmpFrame(MappingTestCase):
         self.assertEqual(cmpframe.getLabel(3), "c")
 
         self.checkPersistence(cmpframe)
+        self.checkMemoryForCompoundObject(frame1, frame2, cmpframe, isSeries=None)
+
 
 if __name__ == "__main__":
     unittest.main()
