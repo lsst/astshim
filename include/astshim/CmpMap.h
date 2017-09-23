@@ -97,6 +97,10 @@ public:
     bool getSeries() { return detail::isSeries(reinterpret_cast<AstCmpMap *>(getRawPtr())); }
 
 protected:
+    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+        return copyImpl<CmpMap, AstCmpMap>();
+    }
+
     /// Construct a @ref CmpMap from a raw AST pointer
     /// (protected instead of private so that SeriesMap and ParallelMap can call it)
     explicit CmpMap(AstCmpMap *rawptr) : Mapping(reinterpret_cast<AstMapping *>(rawptr)) {
