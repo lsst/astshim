@@ -49,6 +49,8 @@ bool isSeries(AstCmpMap const *cmpMap) {
     AstMapping *rawMap2;
     int series, invert1, invert2;
     astDecompose(cmpMap, &rawMap1, &rawMap2, &series, &invert1, &invert2);
+    astAnnul(rawMap1);
+    astAnnul(rawMap2);
     assertOK();
     return series;
 }
