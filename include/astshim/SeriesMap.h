@@ -84,7 +84,6 @@ protected:
     }
 
     /// Construct a SeriesMap from a raw AST pointer
-    /// @ todo: test rawptr to make sure it is in series
     explicit SeriesMap(AstCmpMap *rawptr) : CmpMap(rawptr) {
         if (!getSeries()) {
             throw std::runtime_error("Compound mapping is in parallel");
