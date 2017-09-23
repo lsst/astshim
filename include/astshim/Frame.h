@@ -1014,6 +1014,9 @@ public:
 
     @param[in]  next  The next frame in the compound frame (the final next.getNAxes() axes)
     @return a new CmpFrame
+
+    @warning The contained frames are shallow copies (just like AST);
+    if you want deep copies then make them manually.
     */
     CmpFrame under(Frame const &next) const;
 

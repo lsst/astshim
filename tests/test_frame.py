@@ -180,12 +180,19 @@ class TestFrame(MappingTestCase):
 
     def test_FrameOver(self):
         frame1 = ast.Frame(2, "label(1)=a, label(2)=b")
+        initialNumFrames = frame1.getNObject()  # may be >1 when run using pytest
         frame2 = ast.Frame(1, "label(1)=c")
+        self.assertEqual(frame1.getNObject(), initialNumFrames + 1)
         cf = frame1.under(frame2)
         self.assertEqual(cf.nAxes, 3)
         self.assertEqual(cf.getLabel(1), "a")
         self.assertEqual(cf.getLabel(2), "b")
         self.assertEqual(cf.getLabel(3), "c")
+
+        # check that the contained frames are shallow copies
+        self.assertEqual(frame1.getNObject(), initialNumFrames + 1)
+        self.assertEqual(frame1.getRefCount(), 2)
+        self.assertEqual(frame2.getRefCount(), 2)
 
     def test_FramePerm(self):
         frame = ast.Frame(2)

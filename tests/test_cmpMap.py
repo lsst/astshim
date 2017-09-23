@@ -22,21 +22,24 @@ class TestCmpMap(MappingTestCase):
 
     def test_SeriesMap(self):
         sermap = ast.SeriesMap(self.shiftmap, self.zoommap)
-        # adding to a SeriesMap increases by 1
-        self.assertEqual(self.shiftmap.getRefCount(), 2)
-        # adding to a SeriesMap increases by 1
-        self.assertEqual(self.zoommap.getRefCount(), 2)
-        self.assertEqual(sermap.nIn, self.nin)
-        self.assertEqual(sermap.nOut, self.nin)
-        self.assertTrue(sermap.series)
+        self.assertEqual(sermap.getRefCount(), 1)
 
         self.checkBasicSimplify(sermap)
         self.checkCopy(sermap)
         self.checkPersistence(sermap)
+        self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, sermap, isSeries=True)
 
         sermap2 = self.shiftmap.then(self.zoommap)
+        self.checkBasicSimplify(sermap2)
+        self.checkCopy(sermap2)
+        self.checkPersistence(sermap2)
+        self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, sermap2, isSeries=True)
 
         sermap3 = ast.CmpMap(self.shiftmap, self.zoommap, True)
+        self.checkBasicSimplify(sermap3)
+        self.checkCopy(sermap3)
+        self.checkPersistence(sermap3)
+        self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, sermap3, isSeries=True)
 
         indata = np.array([
             [1.0, 2.0, -6.0, 30.0, 0.2],
@@ -69,8 +72,13 @@ class TestCmpMap(MappingTestCase):
         self.checkBasicSimplify(parmap)
         self.checkCopy(parmap)
         self.checkPersistence(parmap)
+        self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, parmap, isSeries=False)
 
         parmap2 = self.shiftmap.under(self.zoommap)
+        self.checkBasicSimplify(parmap2)
+        self.checkCopy(parmap2)
+        self.checkPersistence(parmap2)
+        self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, parmap2, isSeries=False)
 
         indata = np.array([
             [3.0, 1.0, -6.0],
@@ -88,6 +96,11 @@ class TestCmpMap(MappingTestCase):
         assert_allclose(topos2, pred_outdata)
 
         parmap3 = ast.CmpMap(self.shiftmap, self.zoommap, False)
+        self.checkBasicSimplify(parmap3)
+        self.checkCopy(parmap3)
+        self.checkPersistence(parmap3)
+        self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, parmap3, isSeries=False)
+
         topos3 = parmap3.applyForward(indata)
         assert_allclose(topos3, pred_outdata)
 

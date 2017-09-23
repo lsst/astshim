@@ -133,7 +133,7 @@ public:
         addFrame(1, mapping, currentFrame);
     }
 
-    ~FrameSet() {}
+    virtual ~FrameSet() {}
 
     FrameSet(FrameSet const &) = delete;
     FrameSet(FrameSet &&) = default;
@@ -411,7 +411,7 @@ public:
         (see attribute `Variant`).
     */
     void remapFrame(int iframe, Mapping &map) {
-        astRemapFrame(getRawPtr(), iframe, map.getRawPtr());
+        astRemapFrame(getRawPtr(), iframe, map.copy()->getRawPtr());
         assertOK();
     };
 

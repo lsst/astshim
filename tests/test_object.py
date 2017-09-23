@@ -42,19 +42,17 @@ class TestObject(ObjectTestCase):
         """Test Object.copy and Object.same"""
         obj = ast.ZoomMap(2, 1.3, "Ident=original")
 
-        # there may be more than one object in existence if run with pytest
-        initialNumObj = obj.getNObject()
+        initialNumObj = obj.getNObject()  # may be >1 when run using pytest
 
         self.checkCopy(obj)
         cp = obj.copy()
-        # a deep copy does not increment
+        # A deep copy does not increment refCount but does incremente nObject
         self.assertEqual(obj.getRefCount(), 1)
-
-        seriesMap = obj.then(obj)
-        # obj itself plus two copies in the SeriesMap
-        self.assertEqual(obj.getRefCount(), 3)
-        del seriesMap
-        self.assertEqual(obj.getRefCount(), 1)
+        self.assertEqual(obj.getNObject(), initialNumObj + 1)
+        # A deep copy is not the `same` as the original:
+        # `same` compares AST pointers, similar to Python `is`
+        self.assertFalse(obj.same(cp))
+        self.assertTrue(obj.same(obj))
 
         cp.ident = "copy"
         self.assertEqual(cp.ident, "copy")
@@ -63,6 +61,15 @@ class TestObject(ObjectTestCase):
         del cp
         self.assertEqual(obj.getNObject(), initialNumObj)
         self.assertEqual(obj.getRefCount(), 1)
+
+        seriesMap = obj.then(obj)
+        # The seriesMap contains two shallow copies of `obj`, so refCount
+        # is increased by 2 and nObject remains unchanged
+        self.assertEqual(obj.getRefCount(), 3)
+        self.assertEqual(obj.getNObject(), initialNumObj)
+        del seriesMap
+        self.assertEqual(obj.getRefCount(), 1)
+        self.assertEqual(obj.getNObject(), initialNumObj)
 
     def test_error_handling(self):
         """Test handling of AST errors
