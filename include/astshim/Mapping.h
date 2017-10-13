@@ -432,7 +432,7 @@ private:
 
     @param[in] from  input coordinates, with dimensions (nPts, nIn)
     @param[in] doForward  if true then perform a forward transform, else inverse
-    @param[out] to  transformed coordinates, with dimensions (nPts, nOut)
+    @param[out] to  transformed coordinates, must be pre-allocated with dimensions (nPts, nOut)
     */
     void _tran(ConstArray2D const &from, bool doForward, Array2D const &to) const;
 

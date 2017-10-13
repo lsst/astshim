@@ -5,7 +5,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 import astshim as ast
-from astshim.test import MappingTestCase
+from astshim.test import MappingTestCase, makeTwoWayPolyMap
 
 
 class TestMapping(MappingTestCase):
@@ -147,6 +147,15 @@ class TestMapping(MappingTestCase):
             self.assertEqual(split.splitMap.nIn, 1)
             self.assertEqual(split.splitMap.nOut, 1)
             self.assertEqual(split.origOut[0], i + 1)
+
+    def test_ZeroPoints(self):
+        """Test that Mapping.applyForward and applyInverse can handle zero points
+        """
+        mapping = makeTwoWayPolyMap(2, 3)
+        out_points1 = mapping.applyForward([])
+        self.assertEqual(len(out_points1), 0)
+        out_points2 = mapping.applyInverse([])
+        self.assertEqual(len(out_points2), 0)
 
 
 if __name__ == "__main__":
