@@ -114,8 +114,11 @@ void Mapping::_tran(ConstArray2D const &from, bool doForward, Array2D const &to)
     detail::assertEqual(to.getSize<0>(), "to.size[0]", static_cast<std::size_t>(nToAxes), "to coords");
     detail::assertEqual(from.getSize<1>(), "from.size[1]", to.getSize<1>(), "to.size[1]");
     int const nPts = from.getSize<1>();
-    astTranN(getRawPtr(), nPts, nFromAxes, nPts, from.getData(), static_cast<int>(doForward), nToAxes, nPts,
-             to.getData());
+    // astTranN treats 0 points as an error and the call isn't needed anyway
+    if (nPts > 0) {
+        astTranN(getRawPtr(), nPts, nFromAxes, nPts, from.getData(), static_cast<int>(doForward), nToAxes, nPts,
+                 to.getData());
+    }
     assertOK();
     detail::astBadToNan(to);
 }
