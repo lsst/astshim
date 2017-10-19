@@ -67,12 +67,12 @@ ConstArray2D arrayFromVector(std::vector<double> const &vec, int nAxes) {
 }
 
 Array2D arrayFromVector(std::vector<double> &vec, int nAxes) {
-    if (vec.size() % nAxes != 0) {
+    int nPoints = vec.size() / nAxes;
+    if (nPoints * nAxes != vec.size()) {
         std::ostringstream os;
         os << "vec length = " << vec.size() << " not a multiple of nAxes = " << nAxes;
         throw std::runtime_error(os.str());
     }
-    int nPoints = vec.size() / nAxes;
     Array2D::Index shape = ndarray::makeVector(nAxes, nPoints);
     Array2D::Index strides = ndarray::makeVector(nPoints, 1);
     return external(vec.data(), shape, strides);
