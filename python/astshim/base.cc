@@ -20,7 +20,10 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
+#include "numpy/arrayobject.h"
+#include "ndarray/pybind11.h"
 #include "astshim/base.h"
 
 namespace py = pybind11;
@@ -32,10 +35,22 @@ namespace {
 PYBIND11_PLUGIN(base) {
     py::module mod("base", "Python wrapper for base.h");
 
-    // Note: do not wrap arrayFromVector because it is unsafe (the array
-    // will be corrupted if the vector is deleted) and unnecessary (use numpy)
+    // Need to import numpy for ndarray and eigen conversions
+    if (_import_array() < 0) {
+        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
+        return nullptr;
+    }
+
     mod.def("assertOK", &assertOK, "rawObj1"_a = nullptr, "rawObj2"_a = nullptr);
     mod.def("escapes", &escapes, "include"_a = -1);
+
+    // Make a deep copy to avoid memory issues in Python
+    mod.def("arrayFromVector", [](std::vector<double> const & data, int nAxes) {
+        auto const arrayShallow = arrayFromVector(data, nAxes);
+        ndarray::Array<double, 2, 2> arrayDeep = allocate(arrayShallow.getShape());
+        arrayDeep.deep() = arrayShallow;
+        return arrayDeep;
+    }, "vec"_a, "nAxes"_a);
 
     py::enum_<DataType>(mod, "DataType")
             .value("IntType", DataType::IntType)

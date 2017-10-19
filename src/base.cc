@@ -74,7 +74,7 @@ Array2D arrayFromVector(std::vector<double> &vec, int nAxes) {
     }
     int nPoints = vec.size() / nAxes;
     Array2D::Index shape = ndarray::makeVector(nAxes, nPoints);
-    Array2D::Index strides = ndarray::makeVector(1, nAxes);
+    Array2D::Index strides = ndarray::makeVector(nPoints, 1);
     return external(vec.data(), shape, strides);
 }
 
