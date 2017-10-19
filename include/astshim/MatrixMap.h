@@ -53,7 +53,7 @@ public:
                         - The number of output coordinates is the number of rows.
     @param[in] options  Comma-separated list of attribute assignments.
     */
-    explicit MatrixMap(ndarray::Array<const double, 2, 2> const &matrix, std::string const &options = "")
+    explicit MatrixMap(ConstArray2D const &matrix, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
                       // form 0 = full matrix, 1 = diagonal elements only
                       astMatrixMap(matrix.getSize<1>(), matrix.getSize<0>(), 0, matrix.getData(), "%s",

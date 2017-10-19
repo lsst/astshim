@@ -109,7 +109,7 @@ public:
     @param[in] coeff_i  A  @ref ChebyMap_CoefficientMatrices "matrix of coefficients" describing the
         inverse transformation. If `coeff_i` is empty then no inverse transformation is provided,
         unless you specify suitable options to request an iterative inverse; see the
-        @ref ChebyMap(ndarray::Array<const double, 2, 2> const &, int, std::vector<double> const &,
+        @ref ChebyMap(ConstArray2D const &, int, std::vector<double> const &,
         std::string const &) "other constructor" for details.
     @param[in] lbnd_f  Lower bounds for input data; one element per input axis
     @param[in] ubnd_f  Upper bounds for input data; one element per input axis
@@ -158,10 +158,10 @@ public:
     The coefficients describing the inverse transformation work the same way, of course,
     but each coefficient is described by `(2 + nout)` values.
     */
-    explicit ChebyMap(ndarray::Array<const double, 2, 2> const &coeff_f,
-                      ndarray::Array<const double, 2, 2> const &coeff_i, std::vector<double> const &lbnd_f,
-                      std::vector<double> const &ubnd_f, std::vector<double> const &lbnd_i,
-                      std::vector<double> const &ubnd_i, std::string const &options = "")
+    explicit ChebyMap(ConstArray2D const &coeff_f, ConstArray2D const &coeff_i,
+                      std::vector<double> const &lbnd_f, std::vector<double> const &ubnd_f,
+                      std::vector<double> const &lbnd_i, std::vector<double> const &ubnd_i,
+                      std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
                       _makeRawChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i, options))) {}
 
@@ -181,9 +181,8 @@ public:
     @throws std::invalid_argument if the forward transform is not defined (coeff_f is empty)
     @throws std::invalid_argument if lbnd_f or ubnd_f do not have nin elements
     */
-    explicit ChebyMap(ndarray::Array<const double, 2, 2> const &coeff_f, int nout,
-                      std::vector<double> const &lbnd_f, std::vector<double> const &ubnd_f,
-                      std::string const &options = "IterInverse=0")
+    explicit ChebyMap(ConstArray2D const &coeff_f, int nout, std::vector<double> const &lbnd_f,
+                      std::vector<double> const &ubnd_f, std::string const &options = "IterInverse=0")
             : Mapping(reinterpret_cast<AstMapping *>(
                       _makeRawChebyMap(coeff_f, nout, lbnd_f, ubnd_f, options))) {}
 
@@ -313,16 +312,14 @@ protected:
 
 private:
     /// Make a raw AstChebyMap with specified forward and inverse transforms.
-    AstChebyMap *_makeRawChebyMap(ndarray::Array<const double, 2, 2> const &coeff_f,
-                                  ndarray::Array<const double, 2, 2> const &coeff_i,
+    AstChebyMap *_makeRawChebyMap(ConstArray2D const &coeff_f, ConstArray2D const &coeff_i,
                                   std::vector<double> const &lbnd_f, std::vector<double> const &ubnd_f,
                                   std::vector<double> const &lbnd_i, std::vector<double> const &ubnd_i,
                                   std::string const &options = "") const;
 
     /// Make a raw AstChebyMap with a specified forward transform and an iterative inverse.
-    AstChebyMap *_makeRawChebyMap(ndarray::Array<const double, 2, 2> const &coeff_f, int nout,
-                                  std::vector<double> const &lbnd_f, std::vector<double> const &ubnd_f,
-                                  std::string const &options = "") const;
+    AstChebyMap *_makeRawChebyMap(ConstArray2D const &coeff_f, int nout, std::vector<double> const &lbnd_f,
+                                  std::vector<double> const &ubnd_f, std::string const &options = "") const;
 };
 
 }  // namespace ast

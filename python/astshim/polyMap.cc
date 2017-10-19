@@ -49,11 +49,10 @@ PYBIND11_PLUGIN(polyMap) {
 
     py::class_<PolyMap, std::shared_ptr<PolyMap>, Mapping> cls(mod, "PolyMap");
 
-    cls.def(py::init<ndarray::Array<const double, 2, 2> const &, ndarray::Array<const double, 2, 2> const &,
-                     std::string const &>(),
-            "coeff_f"_a, "coeff_i"_a, "options"_a = "IterInverse=0");
-    cls.def(py::init<ndarray::Array<const double, 2, 2> const &, int, std::string const &>(), "coeff_f"_a,
-            "nout"_a, "options"_a = "IterInverse=0");
+    cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::string const &>(), "coeff_f"_a,
+            "coeff_i"_a, "options"_a = "IterInverse=0");
+    cls.def(py::init<ConstArray2D const &, int, std::string const &>(), "coeff_f"_a, "nout"_a,
+            "options"_a = "IterInverse=0");
 
     cls.def_property_readonly("iterInverse", &PolyMap::getIterInverse);
     cls.def_property_readonly("nIterInverse", &PolyMap::getNIterInverse);

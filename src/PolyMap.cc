@@ -41,8 +41,7 @@ PolyMap::PolyMap(AstPolyMap *map) : Mapping(reinterpret_cast<AstMapping *>(map))
 }
 
 /// Make a raw AstPolyMap with specified forward and inverse transforms.
-AstPolyMap *PolyMap::_makeRawPolyMap(ndarray::Array<const double, 2, 2> const &coeff_f,
-                                     ndarray::Array<const double, 2, 2> const &coeff_i,
+AstPolyMap *PolyMap::_makeRawPolyMap(ConstArray2D const &coeff_f, ConstArray2D const &coeff_i,
                                      std::string const &options) const {
     const int nin = coeff_f.getSize<1>() - 2;
     const int ncoeff_f = coeff_f.getSize<0>();
@@ -71,7 +70,7 @@ AstPolyMap *PolyMap::_makeRawPolyMap(ndarray::Array<const double, 2, 2> const &c
 }
 
 /// Make a raw AstPolyMap with a specified forward transform and an optional iterative inverse.
-AstPolyMap *PolyMap::_makeRawPolyMap(ndarray::Array<const double, 2, 2> const &coeff_f, int nout,
+AstPolyMap *PolyMap::_makeRawPolyMap(ConstArray2D const &coeff_f, int nout,
                                      std::string const &options) const {
     const int nin = coeff_f.getSize<1>() - 2;
     const int ncoeff_f = coeff_f.getSize<0>();

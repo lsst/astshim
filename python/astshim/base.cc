@@ -45,9 +45,9 @@ PYBIND11_PLUGIN(base) {
     mod.def("escapes", &escapes, "include"_a = -1);
 
     // Make a deep copy to avoid memory issues in Python
-    mod.def("arrayFromVector", [](std::vector<double> const & data, int nAxes) {
+    mod.def("arrayFromVector", [](std::vector<double> const& data, int nAxes) {
         auto const arrayShallow = arrayFromVector(data, nAxes);
-        ndarray::Array<double, 2, 2> arrayDeep = allocate(arrayShallow.getShape());
+        Array2D arrayDeep = allocate(arrayShallow.getShape());
         arrayDeep.deep() = arrayShallow;
         return arrayDeep;
     }, "vec"_a, "nAxes"_a);
