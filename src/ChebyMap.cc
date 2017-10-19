@@ -74,8 +74,8 @@ ChebyDomain ChebyMap::getDomain(bool forward) const {
 }
 
 /// Make a raw AstChebyMap with specified forward and inverse transforms.
-AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<double, 2, 2> const &coeff_f,
-                                        ndarray::Array<double, 2, 2> const &coeff_i,
+AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<const double, 2, 2> const &coeff_f,
+                                        ndarray::Array<const double, 2, 2> const &coeff_i,
                                         std::vector<double> const &lbnd_f, std::vector<double> const &ubnd_f,
                                         std::vector<double> const &lbnd_i, std::vector<double> const &ubnd_i,
                                         std::string const &options) const {
@@ -121,7 +121,7 @@ AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<double, 2, 2> const &coef
 }
 
 /// Make a raw AstChebyMap with a specified forward transform and an optional iterative inverse.
-AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
+AstChebyMap *ChebyMap::_makeRawChebyMap(ndarray::Array<const double, 2, 2> const &coeff_f, int nout,
                                         std::vector<double> const &lbnd_f, std::vector<double> const &ubnd_f,
                                         std::string const &options) const {
     const int nin = coeff_f.getSize<1>() - 2;

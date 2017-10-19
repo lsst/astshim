@@ -61,7 +61,7 @@ public:
     @param[in] coeff_i  A @ref PolyMap_CoefficientMatrices "matrix of coefficients" describing the
         inverse transformation. If coeff_i is empty then no inverse transformation is provided,
         unless you specify suitable options to request an iterative inverse; see the
-        @ref PolyMap(ndarray::Array<double, 2, 2> const &, int, std::string const &) "other constructor"
+        @ref PolyMap(ndarray::Array<const double, 2, 2> const &, int, std::string const &) "other constructor"
         for details.
     @param[in] options  Comma-separated list of attribute assignments.
 
@@ -96,7 +96,8 @@ public:
     The coefficients describing the inverse transformation work the same way, of course,
     but each coefficient is described by `(2 + nout)` values.
     */
-    explicit PolyMap(ndarray::Array<double, 2, 2> const &coeff_f, ndarray::Array<double, 2, 2> const &coeff_i,
+    explicit PolyMap(ndarray::Array<const double, 2, 2> const &coeff_f,
+                     ndarray::Array<const double, 2, 2> const &coeff_i,
                      std::string const &options = "IterInverse=0")
             : Mapping(reinterpret_cast<AstMapping *>(_makeRawPolyMap(coeff_f, coeff_i, options))) {}
 
@@ -123,7 +124,7 @@ public:
 
     @throws std::invalid_argument if the forward transform is not specified (coeff_f is empty)
     */
-    explicit PolyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
+    explicit PolyMap(ndarray::Array<const double, 2, 2> const &coeff_f, int nout,
                      std::string const &options = "IterInverse=0")
             : Mapping(reinterpret_cast<AstMapping *>(_makeRawPolyMap(coeff_f, nout, options))) {}
 
@@ -233,12 +234,12 @@ protected:
 
 private:
     /// Make a raw AstPolyMap with specified forward and inverse transforms.
-    AstPolyMap *_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f,
-                                ndarray::Array<double, 2, 2> const &coeff_i,
+    AstPolyMap *_makeRawPolyMap(ndarray::Array<const double, 2, 2> const &coeff_f,
+                                ndarray::Array<const double, 2, 2> const &coeff_i,
                                 std::string const &options = "") const;
 
     /// Make a raw AstPolyMap with a specified forward transform and an optional iterative inverse.
-    AstPolyMap *_makeRawPolyMap(ndarray::Array<double, 2, 2> const &coeff_f, int nout,
+    AstPolyMap *_makeRawPolyMap(ndarray::Array<const double, 2, 2> const &coeff_f, int nout,
                                 std::string const &options = "") const;
 };
 
