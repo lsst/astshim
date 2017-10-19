@@ -43,7 +43,7 @@ using Array2D = ndarray::Array<double, 2, 2>;
 /**
 2D array of const double; typically used for lists of const points
 */
-using ConstArray2D = ndarray::Array<double const, 2, 2>;
+using ConstArray2D = ndarray::Array<const double, 2, 2>;
 /**
 Vector of ints; typically used for the bounds of Mapping.tranGridForward and inverse
 */
