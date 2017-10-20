@@ -227,7 +227,7 @@ public:
     double getNatLon() const { return getD("NatLon"); }
 
     /**
-    Get @ref WcsMap_PVi_m "PVi_m" for one value if i and m: a FITS-WCS projection parameter.
+    Get @ref WcsMap_PVi_m "PVi_m" for one value of i and m: a FITS-WCS projection parameter.
 
     @param[in] i  Axis index, starting at 1
     @param[in] m  Parameter number, in range 1 to @ref WcsMap_PVMax "PVMax"
