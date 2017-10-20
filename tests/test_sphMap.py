@@ -21,7 +21,13 @@ class TestSphMap(MappingTestCase):
 
         self.checkCopy(sphmap)
         self.checkPersistence(sphmap)
+        # SphMap followed by an inverse, simplified, is a compound map,
+        # not a UnitMap, since data only round trips for unit vectors.
+        # Hence the following test instead of checkBasicSimplify:
+        simplified = sphmap.then(sphmap.getInverse()).simplify()
+        self.assertTrue(isinstance(simplified, ast.CmpMap))
 
+        # for data to round trip, all inputs must be unit vectors
         indata = np.array([
             [1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0 / math.sqrt(3.0)],
             [0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 1.0 / math.sqrt(3.0)],
