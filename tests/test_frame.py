@@ -31,8 +31,8 @@ class TestFrame(MappingTestCase):
         self.assertEqual(frame.getDigits(), 7)
 
         for axis in (1, 2):
-            self.assertTrue(math.isinf(frame.getBottom(axis)))
-            self.assertTrue(math.isinf(frame.getTop(axis)))
+            self.assertGreater(abs(frame.getBottom(axis)), 1e99)
+            self.assertGreater(abs(frame.getTop(axis)), 1e99)
             self.assertGreater(frame.getTop(axis), frame.getBottom(axis))
             self.assertTrue(frame.getDirection(axis))
             self.assertEqual(frame.getDigits(axis), 7)

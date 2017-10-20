@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-import math
 import unittest
 
 import astshim as ast
@@ -26,8 +25,8 @@ class TestTimeFrame(MappingTestCase):
         self.assertEqual(frame.system, "MJD")
         self.assertEqual(frame.title, "Modified Julian Date")
 
-        self.assertTrue(math.isinf(frame.getBottom(1)))
-        self.assertTrue(math.isinf(frame.getTop(1)))
+        self.assertGreater(abs(frame.getBottom(1)), 1e99)
+        self.assertGreater(abs(frame.getTop(1)), 1e99)
         self.assertGreater(frame.getTop(1), frame.getBottom(1))
         self.assertTrue(frame.getDirection(1))
         self.assertEqual(frame.getInternalUnit(1), "d")

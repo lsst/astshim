@@ -31,8 +31,8 @@ class TestSkyFrame(MappingTestCase):
         self.assertEqual(frame.system, "ICRS")
         self.assertEqual(frame.title, "ICRS coordinates")
 
-        self.assertTrue(math.isinf(frame.getBottom(1)))
-        self.assertTrue(math.isinf(frame.getTop(1)))
+        self.assertGreater(abs(frame.getBottom(1)), 1e99)
+        self.assertGreater(abs(frame.getTop(1)), 1e99)
         self.assertGreater(frame.getTop(1), frame.getBottom(1))
         self.assertFalse(frame.getDirection(1))
         self.assertEqual(frame.getInternalUnit(1), "rad")
