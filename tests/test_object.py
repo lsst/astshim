@@ -153,21 +153,37 @@ class TestObject(ObjectTestCase):
         self.assertEqual(cp.ident, "initial_ident")
 
     def test_show(self):
-        obj = ast.ZoomMap(2, 1.3)
+        # pick an object with no floats so we don't have to worry
+        # about the float representation
+        obj = ast.Frame(2)
         desShowLines = [
-            " Begin ZoomMap \t# Zoom about the origin",
-            "    Nin = 2 \t# Number of input coordinates",
-            " IsA Mapping \t# Mapping between coordinate systems",
-            "    Zoom = 1.3 \t# Zoom factor",
-            " End ZoomMap",
+            " Begin Frame \t# Coordinate system description",
+            "#   Title = \"2-d coordinate system\" \t# Title of coordinate system",
+            "    Naxes = 2 \t# Number of coordinate axes",
+            "#   Lbl1 = \"Axis 1\" \t# Label for axis 1",
+            "#   Lbl2 = \"Axis 2\" \t# Label for axis 2",
+            "    Ax1 = \t# Axis number 1",
+            "       Begin Axis \t# Coordinate axis",
+            "       End Axis",
+            "    Ax2 = \t# Axis number 2",
+            "       Begin Axis \t# Coordinate axis",
+            "       End Axis",
+            " End Frame",
             "",
         ]
         desShowLinesNoComments = [
-            " Begin ZoomMap",
-            "    Nin = 2",
-            " IsA Mapping",
-            "    Zoom = 1.3",
-            " End ZoomMap",
+            " Begin Frame",
+            "#   Title = \"2-d coordinate system\"",
+            "    Naxes = 2",
+            "#   Lbl1 = \"Axis 1\"",
+            "#   Lbl2 = \"Axis 2\"",
+            "    Ax1 =",
+            "       Begin Axis",
+            "       End Axis",
+            "    Ax2 =",
+            "       Begin Axis",
+            "       End Axis",
+            " End Frame",
             "",
         ]
         self.assertEqual(obj.show(), "\n".join(desShowLines))
