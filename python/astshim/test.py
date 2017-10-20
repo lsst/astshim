@@ -4,6 +4,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 from .channel import Channel
+from .fitsChan import FitsChan
 from .polyMap import PolyMap
 from .xmlChan import XmlChan
 from .stream import StringStream
@@ -37,28 +38,25 @@ class ObjectTestCase(unittest.TestCase):
 
     def checkPersistence(self, obj):
         """Check that an astshim object can be persisted and unpersisted
-        """
-        # round trip with a Channel
-        ss1 = StringStream()
-        chan1 = Channel(ss1)
-        chan1.write(obj)
-        ss1.sinkToSource()
-        obj_copy1 = chan1.read()
-        self.assertEqual(obj.className, obj_copy1.className)
-        self.assertEqual(obj.show(), obj_copy1.show())
-        self.assertEqual(str(obj), str(obj_copy1))
-        self.assertEqual(repr(obj), repr(obj_copy1))
 
-        # round trip with an XmlChan
-        ss2 = StringStream()
-        chan2 = XmlChan(ss2)
-        chan2.write(obj)
-        ss2.sinkToSource()
-        obj_copy2 = chan2.read()
-        self.assertEqual(obj.className, obj_copy2.className)
-        self.assertEqual(obj.show(), obj_copy2.show())
-        self.assertEqual(str(obj), str(obj_copy2))
-        self.assertEqual(repr(obj), repr(obj_copy2))
+        Check persistence using Channel, FitsChan (with native encoding,
+        as the only encoding compatible with all AST objects),
+        and XmlChan
+        """
+        for channelType, options in (
+            (Channel, ""),
+            (FitsChan, "Encoding=Native"),
+            (XmlChan, ""),
+        ):
+            ss = StringStream()
+            chan = Channel(ss)
+            chan.write(obj)
+            ss.sinkToSource()
+            obj_copy = chan.read()
+            self.assertEqual(obj.className, obj_copy.className)
+            self.assertEqual(obj.show(), obj_copy.show())
+            self.assertEqual(str(obj), str(obj_copy))
+            self.assertEqual(repr(obj), repr(obj_copy))
 
 
 class MappingTestCase(ObjectTestCase):
