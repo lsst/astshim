@@ -11,11 +11,11 @@ from astshim.test import MappingTestCase
 class TestMathMap(MappingTestCase):
 
     def test_MathMapInvertible(self):
-        mathmap = ast.MathMap(2, 2,
-                                  ["r = sqrt(x * x + y * y)",
-                                   "theta = atan2(y, x)"],
-                                  ["x = r * cos(theta)", "y = r * sin(theta)"],
-                                  "SimpIF=1, SimpFI=1, Seed=-57")
+        mathmap = ast.MathMap(
+            2, 2,
+            ["r = sqrt(x * x + y * y)", "theta = atan2(y, x)"],
+            ["x = r * cos(theta)", "y = r * sin(theta)"],
+            "SimpIF=1, SimpFI=1, Seed=-57")
         self.assertEqual(mathmap.className, "MathMap")
         self.assertEqual(mathmap.nIn, 2)
         self.assertEqual(mathmap.nOut, 2)
@@ -46,8 +46,8 @@ class TestMathMap(MappingTestCase):
 
     def test_MathMapNonInvertible(self):
         mathmap = ast.MathMap(2, 1,
-                                  ["r = sqrt(x * x + y * y)"],
-                                  ["x = r", "y = 0"])
+                              ["r = sqrt(x * x + y * y)"],
+                              ["x = r", "y = 0"])
         self.assertEqual(mathmap.className, "MathMap")
         self.assertEqual(mathmap.nIn, 2)
         self.assertEqual(mathmap.nOut, 1)
