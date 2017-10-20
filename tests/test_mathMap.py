@@ -22,7 +22,6 @@ class TestMathMap(MappingTestCase):
 
         self.checkBasicSimplify(mathmap)
         self.checkCopy(mathmap)
-        self.checkPersistence(mathmap)
 
         indata = np.array([
             [1.0, 2.0, 3.0],
@@ -39,6 +38,7 @@ class TestMathMap(MappingTestCase):
         assert_allclose(theta, pred_theta)
 
         self.checkRoundTrip(mathmap, indata)
+        self.checkMappingPersistence(mathmap, indata)
 
         self.assertEqual(mathmap.seed, -57)
         self.assertTrue(mathmap.simpFI)
@@ -52,12 +52,17 @@ class TestMathMap(MappingTestCase):
         self.assertEqual(mathmap.nIn, 2)
         self.assertEqual(mathmap.nOut, 1)
 
-        self.checkPersistence(mathmap)
         with self.assertRaises(AssertionError):
             self.checkBasicSimplify(mathmap)
 
         self.assertFalse(mathmap.simpFI)
         self.assertFalse(mathmap.simpIF)
+
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
+        ])
+        self.checkMappingPersistence(mathmap, indata)
 
 
 if __name__ == "__main__":

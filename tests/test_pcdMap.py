@@ -24,7 +24,6 @@ class TestPcdMap(MappingTestCase):
 
         self.checkBasicSimplify(pcdmap)
         self.checkCopy(pcdmap)
-        self.checkPersistence(pcdmap)
 
         # the center maps to itself
         assert_allclose(pcdmap.applyForward(ctr), ctr)
@@ -35,6 +34,7 @@ class TestPcdMap(MappingTestCase):
         ])
         # inverse uses a fit so don't expect too much
         self.checkRoundTrip(pcdmap, indata, atol=1e-4)
+        self.checkMappingPersistence(pcdmap, indata)
 
         outdata = pcdmap.applyForward(indata)
 

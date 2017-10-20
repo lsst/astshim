@@ -19,7 +19,6 @@ class TestShiftMap(MappingTestCase):
 
         self.checkBasicSimplify(shiftmap)
         self.checkCopy(shiftmap)
-        self.checkPersistence(shiftmap)
 
         indata = np.array([
             [1.1, -43.5],
@@ -30,6 +29,7 @@ class TestShiftMap(MappingTestCase):
         pred_outdata = (indata.T + offset).T
         assert_allclose(outdata, pred_outdata)
         self.checkRoundTrip(shiftmap, indata)
+        self.checkMappingPersistence(shiftmap, indata)
 
 
 if __name__ == "__main__":

@@ -35,7 +35,6 @@ class TestWcsMap(MappingTestCase):
 
         self.checkBasicSimplify(wcsmap)
         self.checkCopy(wcsmap)
-        self.checkPersistence(wcsmap)
 
         indata = np.array([
             [0.0, 0.001, 0.0, 0.0],
@@ -49,6 +48,7 @@ class TestWcsMap(MappingTestCase):
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(wcsmap, indata)
+        self.checkMappingPersistence(wcsmap, indata)
 
 
 if __name__ == "__main__":

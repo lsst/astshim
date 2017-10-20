@@ -18,7 +18,6 @@ class TestUnitMap(MappingTestCase):
 
         self.checkBasicSimplify(unitmap)
         self.checkCopy(unitmap)
-        self.checkPersistence(unitmap)
 
         indata = np.array([
             [1.1, 2.2, 3.3, 4.4],
@@ -28,6 +27,7 @@ class TestUnitMap(MappingTestCase):
         outdata = unitmap.applyForward(indata)
         assert_allclose(outdata, indata)
         self.checkRoundTrip(unitmap, indata)
+        self.checkMappingPersistence(unitmap, indata)
 
 
 if __name__ == "__main__":

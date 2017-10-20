@@ -148,7 +148,7 @@ class TestChebyMap(MappingTestCase):
         self.assertFalse(chebyMap1.hasInverse)
         self.checkBasicSimplify(chebyMap1)
         self.checkCopy(chebyMap1)
-        self.checkPersistence(chebyMap1)
+        self.checkMappingPersistence(chebyMap1, indata)
         domain1 = chebyMap1.getDomain(forward=True)
         npt.assert_allclose(domain1.lbnd, lbnd_f)
         npt.assert_allclose(domain1.ubnd, ubnd_f)
@@ -172,7 +172,7 @@ class TestChebyMap(MappingTestCase):
         self.assertFalse(chebyMap2.hasInverse)
         self.checkBasicSimplify(chebyMap2)
         self.checkCopy(chebyMap2)
-        self.checkPersistence(chebyMap2)
+        self.checkMappingPersistence(chebyMap1, indata)
         domain2 = chebyMap2.getDomain(forward=True)
         npt.assert_allclose(domain2.lbnd, lbnd_f)
         npt.assert_allclose(domain2.ubnd, ubnd_f)
@@ -273,7 +273,7 @@ class TestChebyMap(MappingTestCase):
 
         self.checkBasicSimplify(chebyMap)
         self.checkCopy(chebyMap)
-        self.checkPersistence(chebyMap)
+        self.checkMappingPersistence(chebyMap, indata_f)
 
         outdata_f = chebyMap.applyForward(indata_f)
         des_outdata_f = refCheby_f.transform(indata_f)

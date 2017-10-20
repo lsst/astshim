@@ -20,7 +20,6 @@ class TestSphMap(MappingTestCase):
         self.assertFalse(sphmap.unitRadius)
 
         self.checkCopy(sphmap)
-        self.checkPersistence(sphmap)
         # SphMap followed by an inverse, simplified, is a compound map,
         # not a UnitMap, since data only round trips for unit vectors.
         # Hence the following test instead of checkBasicSimplify:
@@ -42,6 +41,7 @@ class TestSphMap(MappingTestCase):
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(sphmap, indata)
+        self.checkMappingPersistence(sphmap, indata)
 
     def test_SphMapAttributes(self):
         sphmap = ast.SphMap("PolarLong=0.5, UnitRadius=1")

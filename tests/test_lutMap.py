@@ -19,7 +19,6 @@ class TestLutMap(MappingTestCase):
 
         self.checkBasicSimplify(lutmap)
         self.checkCopy(lutmap)
-        self.checkPersistence(lutmap)
 
         indata, pred_outdata = zip(*[
             (1.0, 1.0),   # (1 - 1)/0.5 = 0 -> 1
@@ -35,6 +34,8 @@ class TestLutMap(MappingTestCase):
         self.assertEqual(lutmap.lutInterp, 0)
         self.assertAlmostEqual(lutmap.lutEpsilon,
                                sys.float_info.epsilon, delta=1e-18)
+
+        self.checkMappingPersistence(lutmap, indata)
 
 
 if __name__ == "__main__":

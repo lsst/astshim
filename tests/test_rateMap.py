@@ -19,7 +19,6 @@ class TestRateMap(MappingTestCase):
 
         self.checkBasicSimplify(ratemap)
         self.checkCopy(ratemap)
-        self.checkPersistence(ratemap)
 
         indata = np.array([
             [1.1, -43.5, -5.54],
@@ -27,6 +26,8 @@ class TestRateMap(MappingTestCase):
         ])
         outdata = ratemap.applyForward(indata)
         assert_allclose(outdata, zoomfac)
+
+        self.checkMappingPersistence(ratemap, indata)
 
     def test_RateMap2(self):
         zoomfac = 23.323
@@ -38,6 +39,8 @@ class TestRateMap(MappingTestCase):
         ])
         outdata = ratemap.applyForward(indata)
         assert_allclose(outdata, 0)
+
+        self.checkMappingPersistence(ratemap, indata)
 
 
 if __name__ == "__main__":
