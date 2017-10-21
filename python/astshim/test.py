@@ -1,9 +1,10 @@
 import unittest
 
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_array_equal
 
 from .channel import Channel
+from .fitsChan import FitsChan
 from .polyMap import PolyMap
 from .xmlChan import XmlChan
 from .stream import StringStream
@@ -37,28 +38,25 @@ class ObjectTestCase(unittest.TestCase):
 
     def checkPersistence(self, obj):
         """Check that an astshim object can be persisted and unpersisted
-        """
-        # round trip with a Channel
-        ss1 = StringStream()
-        chan1 = Channel(ss1)
-        chan1.write(obj)
-        ss1.sinkToSource()
-        obj_copy1 = chan1.read()
-        self.assertEqual(obj.className, obj_copy1.className)
-        self.assertEqual(obj.show(), obj_copy1.show())
-        self.assertEqual(str(obj), str(obj_copy1))
-        self.assertEqual(repr(obj), repr(obj_copy1))
 
-        # round trip with an XmlChan
-        ss2 = StringStream()
-        chan2 = XmlChan(ss2)
-        chan2.write(obj)
-        ss2.sinkToSource()
-        obj_copy2 = chan2.read()
-        self.assertEqual(obj.className, obj_copy2.className)
-        self.assertEqual(obj.show(), obj_copy2.show())
-        self.assertEqual(str(obj), str(obj_copy2))
-        self.assertEqual(repr(obj), repr(obj_copy2))
+        Check persistence using Channel, FitsChan (with native encoding,
+        as the only encoding compatible with all AST objects),
+        and XmlChan
+        """
+        for channelType, options in (
+            (Channel, ""),
+            (FitsChan, "Encoding=Native"),
+            (XmlChan, ""),
+        ):
+            ss = StringStream()
+            chan = Channel(ss)
+            chan.write(obj)
+            ss.sinkToSource()
+            obj_copy = chan.read()
+            self.assertEqual(obj.className, obj_copy.className)
+            self.assertEqual(obj.show(), obj_copy.show())
+            self.assertEqual(str(obj), str(obj_copy))
+            self.assertEqual(repr(obj), repr(obj_copy))
 
 
 class MappingTestCase(ObjectTestCase):
@@ -141,6 +139,50 @@ class MappingTestCase(ObjectTestCase):
             self.assertEqual(mb.nOut, cmp3.nOut)
             self.assertEqual(cmp3.nIn, cmp3simp.nIn)
             self.assertEqual(cmp3.nOut, cmp3simp.nOut)
+
+    def checkMappingPersistence(self, amap, poslist):
+        """Check that a mapping gives identical answers to unpersisted copy
+
+        poslist is a list of input position for a forward transform
+            (if it exists), or the inverse transform (if not).
+            A numpy array with shape [nAxes, num points]
+            or collection that can be cast to same
+
+        Checks each direction, if present. However, for generality,
+        does not check that the two directions are inverses of each other;
+        call checkRoundTrip for that.
+
+        Does everything checkPersistence does, so no need to call both.
+        """
+        for channelType, options in (
+            (Channel, ""),
+            (FitsChan, "Encoding=Native"),
+            (XmlChan, ""),
+        ):
+            ss = StringStream()
+            chan = Channel(ss)
+            chan.write(amap)
+            ss.sinkToSource()
+            amap_copy = chan.read()
+            self.assertEqual(amap.className, amap_copy.className)
+            self.assertEqual(amap.show(), amap_copy.show())
+            self.assertEqual(str(amap), str(amap_copy))
+            self.assertEqual(repr(amap), repr(amap_copy))
+
+            if amap.hasForward:
+                outPoslist = amap.applyForward(poslist)
+                assert_array_equal(outPoslist, amap_copy.applyForward(poslist))
+
+                if amap.hasInverse:
+                    assert_array_equal(amap.applyInverse(outPoslist),
+                                       amap_copy.applyInverse(outPoslist))
+
+            elif amap.hasInverse:
+                assert_array_equal(amap.applyInverse(poslist),
+                                   amap_copy.applyInverse(poslist))
+
+            else:
+                raise RuntimeError("mapping has neither forward nor inverse transform")
 
     def checkMemoryForCompoundObject(self, obj1, obj2, cmpObj, isSeries):
         """Check the memory usage for a compoundObject

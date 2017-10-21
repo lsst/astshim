@@ -22,7 +22,6 @@ class TestMatrixMap(MappingTestCase):
 
         self.checkBasicSimplify(mm)
         self.checkCopy(mm)
-        self.checkPersistence(mm)
 
         indata = np.array([
             [1.0, 2.0, 3.0],
@@ -36,6 +35,7 @@ class TestMatrixMap(MappingTestCase):
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(mm, indata)
+        self.checkMappingPersistence(mm, indata)
 
     def test_MatrixMapMatrix(self):
         """Test MatrixMap constructed with a 2-d matrix
@@ -67,6 +67,8 @@ class TestMatrixMap(MappingTestCase):
             [-1.0, -4.0, -7.0],
         ], dtype=float)
         assert_allclose(outdata, pred_outdata)
+
+        self.checkMappingPersistence(mm, indata)
 
     def test_MatrixMapWithZeros(self):
         """Test that a MatrixMap all coefficients 0 can be simplified

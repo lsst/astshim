@@ -20,7 +20,6 @@ class TestSlaMap(MappingTestCase):
 
         self.checkBasicSimplify(slamap)
         self.checkCopy(slamap)
-        self.checkPersistence(slamap)
 
         indata = np.array([
             [0.0, 1.0, 3.0],
@@ -32,6 +31,7 @@ class TestSlaMap(MappingTestCase):
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(slamap, indata)
+        self.checkMappingPersistence(slamap, indata)
 
 
 if __name__ == "__main__":

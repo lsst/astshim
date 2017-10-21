@@ -26,19 +26,16 @@ class TestCmpMap(MappingTestCase):
 
         self.checkBasicSimplify(sermap)
         self.checkCopy(sermap)
-        self.checkPersistence(sermap)
         self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, sermap, isSeries=True)
 
         sermap2 = self.shiftmap.then(self.zoommap)
         self.checkBasicSimplify(sermap2)
         self.checkCopy(sermap2)
-        self.checkPersistence(sermap2)
         self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, sermap2, isSeries=True)
 
         sermap3 = ast.CmpMap(self.shiftmap, self.zoommap, True)
         self.checkBasicSimplify(sermap3)
         self.checkCopy(sermap3)
-        self.checkPersistence(sermap3)
         self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, sermap3, isSeries=True)
 
         indata = np.array([
@@ -59,6 +56,10 @@ class TestCmpMap(MappingTestCase):
         self.checkRoundTrip(sermap2, indata)
         self.checkRoundTrip(sermap3, indata)
 
+        self.checkMappingPersistence(sermap, indata)
+        self.checkMappingPersistence(sermap2, indata)
+        self.checkMappingPersistence(sermap3, indata)
+
     def test_ParallelMap(self):
         parmap = ast.ParallelMap(self.shiftmap, self.zoommap)
         # adding to a ParallelMap increases by 1
@@ -71,13 +72,11 @@ class TestCmpMap(MappingTestCase):
 
         self.checkBasicSimplify(parmap)
         self.checkCopy(parmap)
-        self.checkPersistence(parmap)
         self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, parmap, isSeries=False)
 
         parmap2 = self.shiftmap.under(self.zoommap)
         self.checkBasicSimplify(parmap2)
         self.checkCopy(parmap2)
-        self.checkPersistence(parmap2)
         self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, parmap2, isSeries=False)
 
         indata = np.array([
@@ -98,7 +97,6 @@ class TestCmpMap(MappingTestCase):
         parmap3 = ast.CmpMap(self.shiftmap, self.zoommap, False)
         self.checkBasicSimplify(parmap3)
         self.checkCopy(parmap3)
-        self.checkPersistence(parmap3)
         self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, parmap3, isSeries=False)
 
         topos3 = parmap3.applyForward(indata)
@@ -107,6 +105,10 @@ class TestCmpMap(MappingTestCase):
         self.checkRoundTrip(parmap, indata)
         self.checkRoundTrip(parmap2, indata)
         self.checkRoundTrip(parmap3, indata)
+
+        self.checkMappingPersistence(parmap, indata)
+        self.checkMappingPersistence(parmap2, indata)
+        self.checkMappingPersistence(parmap3, indata)
 
     def test_SeriesMapMatrixShiftSimplify(self):
         """Test that a non-square matrix map followed by a shift map can be simplified

@@ -23,7 +23,6 @@ class TestZoomMap(MappingTestCase):
 
                 self.checkBasicSimplify(zoommap)
                 self.checkCopy(zoommap)
-                self.checkPersistence(zoommap)
 
                 indata = np.array([
                     [1.0, 2.0, -6.0, 30.0, 1.0],
@@ -32,6 +31,7 @@ class TestZoomMap(MappingTestCase):
                     [7.0, -23.0, -3.0, 45.0, 0.0],
                 ], dtype=float)[0:nin]
                 self.checkRoundTrip(zoommap, indata)
+                self.checkMappingPersistence(zoommap, indata)
 
                 topos = zoommap.applyForward(indata)
                 assert_allclose(indata * zoom, topos)

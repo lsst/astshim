@@ -22,7 +22,6 @@ class TestNormMap(MappingTestCase):
 
         self.checkBasicSimplify(normmap)
         self.checkCopy(normmap)
-        self.checkPersistence(normmap)
 
         indata = np.array([
             [100.0, 2000.0, 3000.0],
@@ -30,6 +29,8 @@ class TestNormMap(MappingTestCase):
         ], dtype=float)
         outdata = normmap.applyForward(indata)
         assert_allclose(outdata, indata)
+
+        self.checkMappingPersistence(normmap, indata)
 
     def testNormMapMap(self):
         """Check that NormMap(Mapping) is an error"""
@@ -54,7 +55,6 @@ class TestNormMap(MappingTestCase):
         self.assertEqual(normmap.nOut, 2)
 
         self.checkBasicSimplify(normmap)
-        self.checkPersistence(normmap)
 
         # I'm not sure why 100 is needed; I expected ~10 (2 pi)
         eps = 100 * sys.float_info.epsilon
@@ -81,6 +81,8 @@ class TestNormMap(MappingTestCase):
         ]).T
         outdata = normmap.applyForward(indata)
         assert_allclose(outdata, pred_outdata)
+
+        self.checkMappingPersistence(normmap, indata)
 
 
 if __name__ == "__main__":

@@ -20,7 +20,6 @@ class TestPermMap(MappingTestCase):
 
         self.checkBasicSimplify(permmap)
         self.checkCopy(permmap)
-        self.checkPersistence(permmap)
 
         indata = np.array([
             [1.1, -43.5],
@@ -36,6 +35,7 @@ class TestPermMap(MappingTestCase):
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(permmap, indata)
+        self.checkMappingPersistence(permmap, indata)
 
     def test_PermMapUnmatched(self):
         """Test PermMap with different number of inputs and outputs
@@ -45,15 +45,15 @@ class TestPermMap(MappingTestCase):
         self.assertEqual(permmap.nIn, 3)
         self.assertEqual(permmap.nOut, 2)
 
-        self.checkPersistence(permmap)
-
         indata = np.array([1.1, 2.2, -3.3])
         outdata = permmap.applyForward(indata)
         assert_allclose(outdata, [-3.3, 1.1])
 
-        indata = np.array([1.1, 2.2])
-        outdata = permmap.applyInverse(indata)
-        assert_allclose(outdata, [2.2, 1.1, np.nan], equal_nan=True)
+        indata2 = np.array([1.1, 2.2])
+        outdata2 = permmap.applyInverse(indata2)
+        assert_allclose(outdata2, [2.2, 1.1, np.nan], equal_nan=True)
+
+        self.checkMappingPersistence(permmap, indata)
 
     def test_PermMapWithConstants(self):
         """Test a PermMap with constant values
@@ -69,6 +69,8 @@ class TestPermMap(MappingTestCase):
 
         outdata2 = permmap.applyInverse(indata)
         assert_allclose(outdata2, [-126.5, 1.1, 3.3])
+
+        self.checkMappingPersistence(permmap, indata)
 
 
 if __name__ == "__main__":

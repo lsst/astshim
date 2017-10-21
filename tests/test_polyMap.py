@@ -33,7 +33,6 @@ class TestPolyMap(MappingTestCase):
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
-        self.checkPersistence(pm)
 
         indata = np.array([
             [1.0, 2.0, 3.0],
@@ -49,6 +48,8 @@ class TestPolyMap(MappingTestCase):
 
         indata_roundtrip = pm.applyInverse(outdata)
         npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-4)
+
+        self.checkMappingPersistence(pm, indata)
 
     def test_polyMapAttributes(self):
         coeff_f = np.array([
@@ -82,6 +83,8 @@ class TestPolyMap(MappingTestCase):
 
         indata_roundtrip = pm.applyInverse(outdata)
         npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-6)
+
+        self.checkMappingPersistence(pm, indata)
 
     def test_polyMapNoInverse(self):
         """Test a unidirectional polymap with no numeric inverse
@@ -120,6 +123,8 @@ class TestPolyMap(MappingTestCase):
         with self.assertRaises(RuntimeError):
             pminv.applyForward(indata)
 
+        self.checkMappingPersistence(pm, indata)
+
     def test_PolyMapBidirectional(self):
         coeff_f = np.array([
             [1., 1, 1, 0],
@@ -139,7 +144,6 @@ class TestPolyMap(MappingTestCase):
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
-        self.checkPersistence(pm)
 
         indata = np.array([
             [1.0, 2.0, 3.0],
@@ -147,6 +151,7 @@ class TestPolyMap(MappingTestCase):
         ])
 
         self.checkRoundTrip(pm, indata)
+        self.checkMappingPersistence(pm, indata)
 
     def test_PolyMapEmptyForwardCoeffs(self):
         """Test constructing a PolyMap with empty forward coefficients
@@ -165,7 +170,6 @@ class TestPolyMap(MappingTestCase):
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
-        self.checkPersistence(pm)
 
         self.assertFalse(pm.hasForward)
         self.assertTrue(pm.hasInverse)
@@ -188,11 +192,16 @@ class TestPolyMap(MappingTestCase):
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
-        self.checkPersistence(pm)
 
         self.assertTrue(pm.hasForward)
         self.assertFalse(pm.hasInverse)
         self.assertFalse(pm.iterInverse)
+
+        indata = np.array([
+            [1.0, 2.0, 3.0],
+            [0.0, 1.0, 2.0],
+        ])
+        self.checkMappingPersistence(pm, indata)
 
     def test_PolyMapNoTransform(self):
         """Test constructing a PolyMap with neither forward nor inverse
@@ -239,6 +248,9 @@ class TestPolyMap(MappingTestCase):
         indata2 = pm2.applyInverse(outdata)
         npt.assert_allclose(indata, indata2, atol=1.0e-10)
 
+        self.checkMappingPersistence(pm, indata)
+        self.checkMappingPersistence(pm2, indata)
+
     def test_PolyMapPolyMapUnivertible(self):
         """Test polyTran on a PolyMap without a single-valued inverse
 
@@ -253,7 +265,6 @@ class TestPolyMap(MappingTestCase):
 
         self.checkBasicSimplify(pm)
         self.checkCopy(pm)
-        self.checkPersistence(pm)
 
         indata = np.array([-0.5, 0.5, 1.1, 1.8])
         pred_outdata = (2.0*indata.T**2 - indata.T**3).T
@@ -264,6 +275,8 @@ class TestPolyMap(MappingTestCase):
         indata_iterative = pm.applyInverse(outdata)
         outdata_roundtrip = pm.applyForward(indata_iterative)
         npt.assert_allclose(outdata, outdata_roundtrip)
+
+        self.checkMappingPersistence(pm, indata)
 
         with self.assertRaises(RuntimeError):
             # includes the range where the inverse has multiple values,

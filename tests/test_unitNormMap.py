@@ -32,9 +32,9 @@ class TestUnitNormMap(MappingTestCase):
 
             self.checkBasicSimplify(unitnormmap)
             self.checkCopy(unitnormmap)
-            self.checkPersistence(unitnormmap)
 
             self.checkRoundTrip(unitnormmap, indata)
+            self.checkMappingPersistence(unitnormmap, indata)
 
             outdata = unitnormmap.applyForward(indata)
             norm = outdata[-1]

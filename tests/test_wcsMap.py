@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-import math
 import unittest
 
 import numpy as np
@@ -28,15 +27,14 @@ class TestWcsMap(MappingTestCase):
         self.assertEqual(wcsmap.getPVi_m(1, 0), 0)
         self.assertEqual(wcsmap.getPVi_m(1, 1), 0)
         self.assertEqual(wcsmap.getPVi_m(1, 2), 0)
-        self.assertTrue(math.isinf(wcsmap.getPVi_m(1, 3)))
-        self.assertTrue(math.isinf(wcsmap.getPVi_m(1, 4)))
+        self.assertGreater(abs(wcsmap.getPVi_m(1, 3)), 1e99)
+        self.assertGreater(abs(wcsmap.getPVi_m(1, 4)), 1e99)
         self.assertEqual(wcsmap.getPVMax(2), 0)
         self.assertEqual(wcsmap.wcsAxis, (1, 2))
         self.assertEqual(wcsmap.wcsType, ast.WcsType.AIT)
 
         self.checkBasicSimplify(wcsmap)
         self.checkCopy(wcsmap)
-        self.checkPersistence(wcsmap)
 
         indata = np.array([
             [0.0, 0.001, 0.0, 0.0],
@@ -50,6 +48,7 @@ class TestWcsMap(MappingTestCase):
         assert_allclose(outdata, pred_outdata)
 
         self.checkRoundTrip(wcsmap, indata)
+        self.checkMappingPersistence(wcsmap, indata)
 
 
 if __name__ == "__main__":

@@ -52,7 +52,12 @@ class TestFrameSet(MappingTestCase):
         self.assertEqual(frameSet.current, 2)
 
         self.checkCopy(frameSet)
-        self.checkPersistence(frameSet)
+
+        input_data = np.array([
+            [0.0, 0.1, -1.5],
+            [5.1, 0.0, 3.1],
+        ])
+        self.checkMappingPersistence(frameSet, input_data)
 
     def testFrameSetFrameMappingFrameConstructor(self):
         baseFrame = ast.Frame(2, "Ident=base")
@@ -164,6 +169,7 @@ class TestFrameSet(MappingTestCase):
         ])
         predicted_output1 = input_data * zoom
         assert_allclose(frameSet.applyForward(input_data), predicted_output1)
+        self.checkMappingPersistence(frameSet, input_data)
 
         shift = (0.5, -1.5)
         shiftMap = ast.ShiftMap(shift, "Ident=shift")
