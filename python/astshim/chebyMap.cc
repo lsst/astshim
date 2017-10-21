@@ -59,12 +59,12 @@ PYBIND11_PLUGIN(chebyMap) {
 
     py::class_<ChebyMap, std::shared_ptr<ChebyMap>, Mapping> cls(mod, "ChebyMap");
 
-    cls.def(py::init<ndarray::Array<double, 2, 2> const &, ndarray::Array<double, 2, 2> const &,
+    cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::vector<double> const &,
                      std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
-                     std::vector<double> const &, std::string const &>(),
+                     std::string const &>(),
             "coeff_i"_a, "coeff_i"_a, "lbnds_f"_a, "ubnds_f"_a, "lbnds_i"_a, "ubnds_i"_a, "options"_a = "");
-    cls.def(py::init<ndarray::Array<double, 2, 2> const &, int, std::vector<double> const &,
-                     std::vector<double> const &, std::string const &>(),
+    cls.def(py::init<ConstArray2D const &, int, std::vector<double> const &, std::vector<double> const &,
+                     std::string const &>(),
             "coeff_i"_a, "nout"_a, "lbnds_f"_a, "ubnds_f"_a, "options"_a = "");
 
     cls.def("copy", &ChebyMap::copy);
