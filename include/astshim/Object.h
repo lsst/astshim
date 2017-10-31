@@ -241,7 +241,7 @@ public:
 
     @throws std::runtime_error if an error results.
     */
-    bool test(std::string const &attrib) {
+    bool test(std::string const &attrib) const {
         bool res = astTest(getRawPtr(), attrib.c_str());
         assertOK();
         return res;
