@@ -579,6 +579,36 @@ class TestObject(ObjectTestCase):
         self.assertEqual(fc.getCardName(), "UNDEFVAL")
         self.assertEqual(fc.testFits(), ast.NOVALUE)
 
+    def test_FitsChanInsertShift(self):
+        """Check that a simple WCS can still be written as FITS-WCS
+        after inserting a shift at the beginning of GRID to IWC
+
+        This tests LSST ticket DM-12524
+        """
+        ss = ast.StringStream("".join(self.cards))
+        fc = ast.FitsChan(ss, "Encoding=FITS-WCS, IWC=1")
+        frameSet = fc.read()
+        self.assertIsInstance(frameSet, ast.FrameSet)
+        self.assertAlmostEqual(fc.fitsTol, 0.1)
+
+        shift = 30
+        shiftMap = ast.ShiftMap([shift, shift])
+        shiftedFrameSet = self.insertPixelMapping(shiftMap, frameSet)
+
+        fc2 = writeFitsWcs(frameSet)
+        self.assertGreater(fc2.nCard, 9)
+        for i in (1, 2):
+            fv = fc2.getFitsF("CRPIX%d" % (i,))
+            self.assertAlmostEqual(fv.value, 100)
+
+        fc3 = writeFitsWcs(shiftedFrameSet)
+        self.assertGreaterEqual(fc3.nCard, fc2.nCard)
+        for i in (1, 2):
+            fv = fc3.getFitsF("CRPIX%d" % (i,))
+            self.assertAlmostEqual(fv.value, 100 - shift)
+        for name in fc2.getAllCardNames():
+            self.assertEqual(fc3.testFits(name), ast.PRESENT)
+
     def test_FitsChanFitsTol(self):
         """Test that increasing FitsTol allows writing a WCS with distortion as FITS-WCS
         """
