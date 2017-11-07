@@ -127,6 +127,7 @@ provided by @ref Channel and @ref Object
 - @ref FitsChan_Encoding "Encoding": System for encoding Objects as FITS headers
 - @ref FitsChan_FitsAxisOrder "FitsAxisOrder": Sets the order of WCS axes within new FITS-WCS headers
 - @ref FitsChan_FitsDigits "FitsDigits": Digits of precision for floating-point FITS values
+- @ref FitsChan_FitsTol "FitsTol": Tolerance used for writing a FrameSet using a foreign encoding
 - @ref FitsChan_Iwc "Iwc": Add a Frame describing Intermediate World Coords?
 - @ref FitsChan_NCard "NCard": Number of FITS header cards in a FitsChan
 - @ref FitsChan_Nkey "Nkey": Number of unique keywords in a FitsChan
@@ -535,6 +536,11 @@ public:
     int getFitsDigits() const { return getI("FitsDigits"); }
 
     /**
+    Get @ref FitsChan_FitsTol "FitsTol": Tolerance used for writing a FrameSet using a foreign encoding
+    */
+    double getFitsTol() const { return getD("FitsTol"); }
+
+    /**
     Get @ref FitsChan_Iwc "Iwc": add a Frame describing Intermediate World Coords?
     */
     bool getIwc() const { return getB("Iwc"); }
@@ -937,6 +943,11 @@ public:
     See @ref getFitsDigits for details.
     */
     void setFitsDigits(int digits) { setI("FitsDigits", digits); }
+
+    /**
+    Set @ref FitsChan_FitsTol "FitsTol": Tolerance used for writing a FrameSet using a foreign encoding
+    */
+    void setFitsTol(double tol) { return setD("FitsTol", tol); }
 
     /**
     Set @ref FitsChan_Iwc "Iwc": add a Frame describing Intermediate World Coords?

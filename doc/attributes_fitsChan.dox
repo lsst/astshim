@@ -815,6 +815,17 @@ or by the action of the @ref FitsChan's sink function
 when it is finally deleted.
 
 
+@subsection FitsChan_FitsTol FitsTol
+
+Tolerance used for writing a FrameSet using a foreign encoding, such as FITS-WCS (double)
+
+This attribute is used when attempting to write a FrameSet to a FitsChan using a foreign encoding.
+It specifies the maximum departure from linearity allowed on any axis within the mapping from
+pixel coordinates to Intermediate World Coordinates. It is expressed in units of pixels. If an axis
+of the Mapping is found to deviate from linearity by more than this amount, the write operation fails.
+If the linearity test succeeds, a linear approximation to the mapping is used to determine the
+FITS keyword values to be placed in the FitsChan. The default value for "FitsTol" is 0.1.
+
 @subsection FitsChan_Iwc Iwc
 
 Add a Frame describing Intermediate World Coords? (bool)

@@ -13,6 +13,19 @@ def pad(card):
     return "%-80s" % (card,)
 
 
+def writeFitsWcs(frameSet, extraOptions=None):
+    """Write a FrameSet as FITS-WCS
+
+    extraOptions are in addition to Encoding=Fits-WCS, CDMatrix=1
+    """
+    options = "Encoding=FITS-WCS, CDMatrix=1"
+    if extraOptions is not None:
+        options = "%s, %s" % (options, extraOptions)
+    fc = ast.FitsChan(ast.StringStream(), options)
+    fc.write(frameSet)
+    return fc
+
+
 class TestObject(ObjectTestCase):
 
     def setUp(self):
@@ -34,6 +47,42 @@ class TestObject(ObjectTestCase):
             "HISTORY  third of three history fields",
         )
         self.cards = [pad(card) for card in shortCards]
+
+    def insertPixelMapping(self, mapping, frameSet):
+        """Make a new WCS by inserting a new mapping at the beginnning of the GRID-IWC mapping
+
+        Return the new FrameSet (the original is not altered).
+        """
+        frameSet = frameSet.copy()
+
+        skyFrame = frameSet.getFrame(ast.FrameSet.CURRENT)  # use this copy for the new sky frame
+        self.assertIsInstance(skyFrame, ast.SkyFrame)
+        oldSkyIndex = frameSet.current
+
+        if not frameSet.findFrame(ast.Frame(2, "Domain=GRID")):
+            raise KeyError("No GRID frame")
+        gridIndex = frameSet.current
+
+        if not frameSet.findFrame(ast.Frame(2, "Domain=IWC")):
+            raise KeyError("No IWC frame")
+        oldIwcIndex = frameSet.current
+        iwcFrame = frameSet.getFrame(oldIwcIndex)  # use this copy for the new IWC frame
+
+        oldGridToIwc = frameSet.getMapping(gridIndex, oldIwcIndex)
+        iwcToSky = frameSet.getMapping(oldIwcIndex, oldSkyIndex)
+
+        # Remove frames in order high to low, so removal doesn't alter the indices remaining to be removed;
+        # update gridIndex during removal so it still points to the GRID frame
+        framesToRemove = reversed(sorted([oldIwcIndex, oldSkyIndex]))
+        for index in framesToRemove:
+            if (index < gridIndex):
+                gridIndex -= 1
+            frameSet.removeFrame(index)
+
+        newGridToIwc = mapping.then(oldGridToIwc).simplify()
+        frameSet.addFrame(gridIndex, newGridToIwc, iwcFrame)
+        frameSet.addFrame(ast.FrameSet.CURRENT, iwcToSky, skyFrame)
+        return frameSet
 
     def test_FitsChanPreloaded(self):
         """Test a FitsChan that starts out loaded with data
@@ -529,6 +578,31 @@ class TestObject(ObjectTestCase):
         fc.setCard(3)
         self.assertEqual(fc.getCardName(), "UNDEFVAL")
         self.assertEqual(fc.testFits(), ast.NOVALUE)
+
+    def test_FitsChanFitsTol(self):
+        """Test that increasing FitsTol allows writing a WCS with distortion as FITS-WCS
+        """
+        ss = ast.StringStream("".join(self.cards))
+        fc = ast.FitsChan(ss, "Encoding=FITS-WCS, IWC=1")
+        frameSet = fc.read()
+
+        distortion = ast.PcdMap(0.001, [0.0, 0.0])
+        distortedFrameSet = self.insertPixelMapping(distortion, frameSet)
+
+        # Writing as FTIS-WCS should fail with the default FitsTol
+        fc = writeFitsWcs(distortedFrameSet)
+        self.assertEqual(fc.nCard, 0)
+
+        # Writing as FITS-WCS should succeed with adequate FitsTol
+        fc2 = writeFitsWcs(distortedFrameSet, "FitsTol=1000")
+        self.assertGreater(fc2.nCard, 9)
+        for i in (1, 2):
+            fv = fc2.getFitsF("CRVAL%d" % (i,))
+            self.assertAlmostEqual(fv.value, 0)
+            fv2 = fc2.getFitsS("CTYPE1")
+            self.assertEqual(fv2.value, "RA---TAN")
+            fv3 = fc2.getFitsS("CTYPE2")
+            self.assertEqual(fv3.value, "DEC--TAN")
 
 
 if __name__ == "__main__":
