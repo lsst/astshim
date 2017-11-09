@@ -100,6 +100,18 @@ inline double safeDouble(double val) {
     return val != AST__BAD ? val : std::numeric_limits<double>::quiet_NaN();
 }
 
+/**
+Return a copy of a string in which all characters are uppercase
+*/
+inline std::string stringToUpper(std::string const &str) {
+    std::string upstr;
+    upstr.reserve(str.size());
+    for (char c : str) {
+        upstr += std::toupper(c);
+    }
+    return upstr;
+}
+
 }  // namespace detail
 }  // namespace ast
 

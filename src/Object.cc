@@ -34,6 +34,7 @@
 #include "astshim/CmpFrame.h"
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
+#include "astshim/FrameDict.h"
 #include "astshim/KeyMap.h"
 #include "astshim/LutMap.h"
 #include "astshim/MathMap.h"
@@ -90,6 +91,7 @@ std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
                     {"CmpFrame", makeShim<CmpFrame, AstCmpFrame>},
                     {"Frame", makeShim<Frame, AstFrame>},
                     {"FrameSet", makeShim<FrameSet, AstFrameSet>},
+                    {"FrameDict", makeShim<FrameDict, AstFrameSet>},
                     {"KeyMap", makeShim<KeyMap, AstKeyMap>},
                     {"LutMap", makeShim<LutMap, AstLutMap>},
                     {"MathMap", makeShim<MathMap, AstMathMap>},

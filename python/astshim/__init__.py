@@ -30,6 +30,7 @@ from .channel import *
 from .mapping import *
 from .frame import *
 from .frameSet import *
+from .frameDict import *
 from .keyMap import *
 # misc
 from .mapBox import *

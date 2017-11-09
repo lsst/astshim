@@ -1225,7 +1225,7 @@ public:
     /**
     Set @ref Frame_Domain "Domain": coordinate system domain
     */
-    void setDomain(std::string const &domain) { setC("Domain", domain); }
+    virtual void setDomain(std::string const &domain) { setC("Domain", domain); }
 
     /**
     Set @ref Frame_Dut1 "Dut1": difference between the UT1 and UTC timescale (sec)

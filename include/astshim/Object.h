@@ -31,6 +31,8 @@
 
 namespace ast {
 
+class FrameDict;
+
 /**
 Abstract base class for all AST objects
 
@@ -48,6 +50,7 @@ Object provides the following attributes:
 */
 class Object {
     friend class MapSplit;
+    friend class FrameDict;
 
 private:
     using Deleter = void (*)(AstObject *);
@@ -509,9 +512,8 @@ protected:
         astSetL(getRawPtr(), attrib.c_str(), value);
         assertOK();
     }
-
 private:
-    /**
+    /*
     Given a bare AST object pointer return a shared pointer to an ast::Object of the correct type
 
     The returned object takes ownership of the pointer. This is almost always what you want,
@@ -520,6 +522,13 @@ private:
     @param[in] rawObj  A bare AST object pointer
     */
     static std::shared_ptr<Object> _basicFromAstObject(AstObject *rawObj);
+
+    /*
+    Swap the raw object pointers between this and another object
+    */
+    void swapRawPointers(Object &other) noexcept {
+        swap(_objPtr, other._objPtr);
+    }
 
     ObjectPtr _objPtr;
 };

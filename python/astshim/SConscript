@@ -8,6 +8,7 @@ scripts.BasicSConscript.pybind11([
     "mapping",
     "frame",
     "frameSet",
+    "frameDict",
     "keyMap/keyMap",
 
     "mapBox",

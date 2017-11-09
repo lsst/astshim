@@ -130,7 +130,7 @@ public:
     explicit FrameSet(Frame const &baseFrame, Mapping const &mapping, Frame const &currentFrame,
                       std::string const &options = "")
             : FrameSet(astFrameSet(baseFrame.copy()->getRawPtr(), "%s", options.c_str())) {
-        addFrame(1, mapping, currentFrame);
+        _basicAddFrame(1, mapping, currentFrame);
     }
 
     virtual ~FrameSet() {}
@@ -206,12 +206,7 @@ public:
         the current @ref Frame in this FrameSet.
     */
     virtual void addFrame(int iframe, Mapping const &map, Frame const &frame) {
-        if (iframe == AST__ALLFRAMES) {
-            throw std::runtime_error("iframe = AST__ALLFRAMES; call addAxes instead");
-        }
-        // astAddFrame makes deep copies of the map and frame, so no need to do anything extra
-        astAddFrame(getRawPtr(), iframe, map.getRawPtr(), frame.getRawPtr());
-        assertOK();
+        _basicAddFrame(iframe, map, frame);
     }
 
     /**
@@ -442,7 +437,7 @@ public:
 
     @throws std::runtime_error if you attempt to remove the last frame
     */
-    void removeFrame(int iframe) {
+    virtual void removeFrame(int iframe) {
         astRemoveFrame(getRawPtr(), iframe);
         assertOK();
     }
@@ -497,6 +492,18 @@ protected:
             throw std::invalid_argument(os.str());
         }
     }
+
+private:
+    // non-virtual version of addFrame for use by constructors
+    void _basicAddFrame(int iframe, Mapping const &map, Frame const &frame) {
+        if (iframe == AST__ALLFRAMES) {
+            throw std::runtime_error("iframe = AST__ALLFRAMES; call addAxes instead");
+        }
+        // astAddFrame makes deep copies of the map and frame, so no need to do anything extra
+        astAddFrame(getRawPtr(), iframe, map.getRawPtr(), frame.getRawPtr());
+        assertOK();
+    }
+
 };
 
 }  // namespace ast
