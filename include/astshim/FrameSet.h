@@ -130,7 +130,7 @@ public:
     explicit FrameSet(Frame const &baseFrame, Mapping const &mapping, Frame const &currentFrame,
                       std::string const &options = "")
             : FrameSet(astFrameSet(baseFrame.copy()->getRawPtr(), "%s", options.c_str())) {
-        addFrame(1, mapping, currentFrame);
+        _basicAddFrame(1, mapping, currentFrame);
     }
 
     virtual ~FrameSet() {}
@@ -205,13 +205,8 @@ public:
         and the `current` @ref Frame of the `frame` FrameSet. This latter @ref Frame becomes
         the current @ref Frame in this FrameSet.
     */
-    void addFrame(int iframe, Mapping const &map, Frame const &frame) {
-        if (iframe == AST__ALLFRAMES) {
-            throw std::runtime_error("iframe = AST__ALLFRAMES; call addAxes instead");
-        }
-        // astAddFrame makes deep copies of the map and frame, so no need to do anything extra
-        astAddFrame(getRawPtr(), iframe, map.getRawPtr(), frame.getRawPtr());
-        assertOK();
+    virtual void addFrame(int iframe, Mapping const &map, Frame const &frame) {
+        _basicAddFrame(iframe, map, frame);
     }
 
     /**
@@ -282,11 +277,11 @@ public:
     /**
     Obtain a @ref Mapping that converts between two @ref Frame "Frames" in a @ref FrameSet
 
-    @param[in] ind1   The index of the first @ref Frame in the @ref FrameSet, the frame
+    @param[in] from   The index of the first @ref Frame in the @ref FrameSet, the frame
         describing the coordinate system for the "input" end of the Mapping.
         This value should lie in the range 1 to the number of frames already in this @ref FrameSet
         (as given by @ref getNFrame).
-    @param[in] ind2   The index of the second @ref Frame in the @ref FrameSet,
+    @param[in] to   The index of the second @ref Frame in the @ref FrameSet,
         the frame describing the coordinate system for the "output" end of the @ref Mapping.
         This value should lie in the range 1 to the number of frames already in this @ref FrameSet
         (as given by @ref getNFrame).
@@ -304,8 +299,8 @@ public:
         If necessary, call `hasForward` or `hasInverse` on the returned @ref Mapping
         to determine if the required transformation is available.
     */
-    std::shared_ptr<Mapping> getMapping(int ind1 = BASE, int ind2 = CURRENT) const {
-        AstObject *rawMap = reinterpret_cast<AstObject *>(astGetMapping(getRawPtr(), ind1, ind2));
+    std::shared_ptr<Mapping> getMapping(int from = BASE, int to = CURRENT) const {
+        AstObject *rawMap = reinterpret_cast<AstObject *>(astGetMapping(getRawPtr(), from, to));
         assertOK(rawMap);
         if (!rawMap) {
             throw std::runtime_error("getMapping failed (returned a null mapping)");
@@ -442,7 +437,7 @@ public:
 
     @throws std::runtime_error if you attempt to remove the last frame
     */
-    void removeFrame(int iframe) {
+    virtual void removeFrame(int iframe) {
         astRemoveFrame(getRawPtr(), iframe);
         assertOK();
     }
@@ -497,6 +492,18 @@ protected:
             throw std::invalid_argument(os.str());
         }
     }
+
+private:
+    // non-virtual version of addFrame for use by constructors
+    void _basicAddFrame(int iframe, Mapping const &map, Frame const &frame) {
+        if (iframe == AST__ALLFRAMES) {
+            throw std::runtime_error("iframe = AST__ALLFRAMES; call addAxes instead");
+        }
+        // astAddFrame makes deep copies of the map and frame, so no need to do anything extra
+        astAddFrame(getRawPtr(), iframe, map.getRawPtr(), frame.getRawPtr());
+        assertOK();
+    }
+
 };
 
 }  // namespace ast

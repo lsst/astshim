@@ -14,6 +14,7 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
 ## Differences between this and Starlink AST
 
 - Most functions in AST are classes or methods in this shim.
+- New class `FrameDict` which is a `FrameSet` that can reference frames by domain name.
 - `Mapping::applyForward` and `Mapping::applyInverse` methods transform single points or lists of points.
     These replace AST's `astTran<X>` functions and no `invert` flag is supported.
     There are three versions of each method:
