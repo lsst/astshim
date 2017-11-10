@@ -54,7 +54,8 @@ class TestMakeRadialMapping(MappingTestCase):
             # compute desired output
             in_from_center = in_data - center_reshaped
             in_norm = np.linalg.norm(in_from_center, axis=0)
-            unit_vector = np.where(in_norm != 0, in_from_center / in_norm, in_from_center)
+            with np.errstate(invalid='ignore'):
+                unit_vector = np.where(in_norm != 0, in_from_center / in_norm, in_from_center)
             out_norm = mapping1d.applyForward(in_norm)
             out_from_center = unit_vector * out_norm
             desired_out_data = out_from_center + center_reshaped
@@ -89,7 +90,8 @@ class TestMakeRadialMapping(MappingTestCase):
             # compute desired output
             in_from_center = in_data - center_reshaped
             in_norm = np.linalg.norm(in_from_center, axis=0)
-            unit_vector = np.where(in_norm != 0, in_from_center / in_norm, in_from_center)
+            with np.errstate(invalid='ignore'):
+                unit_vector = np.where(in_norm != 0, in_from_center / in_norm, in_from_center)
             out_norm = in_norm * zoom
             out_from_center = unit_vector * out_norm
             desired_out_data = out_from_center + center_reshaped
