@@ -93,6 +93,7 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def_property("tabOK", &FitsChan::getTabOK, &FitsChan::setTabOK);
     cls.def_property("polyTan", &FitsChan::getPolyTan, &FitsChan::setPolyTan);
     cls.def_property("warnings", &FitsChan::getWarnings, &FitsChan::setWarnings);
+    cls.def_property("fitsTol", &FitsChan::getFitsTol, &FitsChan::setFitsTol);
 
     cls.def("delFits", &FitsChan::delFits);
     cls.def("emptyFits", &FitsChan::emptyFits);
