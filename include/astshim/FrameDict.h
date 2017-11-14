@@ -105,8 +105,10 @@ public:
 
     @throws std::invalid_argument if two Frames in the FrameSet have the same non-empty domain.
     */
-    explicit FrameDict(FrameSet const &frameSet)
-            : FrameDict(reinterpret_cast<AstFrameSet *>(frameSet.copy()->getRawPtr())) {}
+    explicit FrameDict(FrameSet const &frameSet) : FrameSet(std::move(*frameSet.copy())), _domainIndexDict() {
+        _domainIndexDict = _makeNewDict(*this);
+    }
+
     virtual ~FrameDict() {}
 
     FrameDict(FrameDict const &) = delete;
