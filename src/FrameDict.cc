@@ -71,12 +71,7 @@ void FrameDict::setDomain(std::string const &domain) {
     _update(*copy);
 }
 
-FrameDict::FrameDict(AstFrameSet *rawptr) : FrameSet(rawptr) {
-    if (!astIsAFrameSet(getRawPtr())) {
-        std::ostringstream os;
-        os << "this is a " << getClassName() << ", which is not a FrameSet";
-        throw std::invalid_argument(os.str());
-    }
+FrameDict::FrameDict(AstFrameSet *rawptr) : FrameSet(rawptr), _domainIndexDict() {
     _domainIndexDict = _makeNewDict(*this);
 }
 
