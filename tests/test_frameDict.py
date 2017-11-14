@@ -6,6 +6,7 @@ from numpy.testing import assert_allclose
 
 import astshim as ast
 from astshim.test import MappingTestCase
+from astshim.detail.testUtils import makeFrameDict
 
 
 class TestFrameDict(MappingTestCase):
@@ -60,11 +61,13 @@ class TestFrameDict(MappingTestCase):
     def test_FrameDictFrameSetConstructor(self):
         frameSet = ast.FrameSet(self.frame1, self.zoomMap, self.frame2)
         frameDict = ast.FrameDict(frameSet)
-
         indata = np.array([[1.1, 2.1, 3.1], [1.2, 2.2, 3.2]])
         predictedOut = indata * self.zoom
         assert_allclose(frameDict.applyForward(indata), predictedOut)
         assert_allclose(frameDict.applyInverse(predictedOut), indata)
+
+        frameDict2 = makeFrameDict(frameSet)
+        self.assertEqual(frameDict2.getRefCount(), 1)
 
     def test_FrameDictAddFrame(self):
         frameDict = ast.FrameDict(self.frame1)

@@ -2,6 +2,7 @@
 from lsst.sconsUtils import scripts
 scripts.BasicSConscript.pybind11([
     "base",
+    "detail/testUtils",
     "object",
     "stream",
     "channel",
