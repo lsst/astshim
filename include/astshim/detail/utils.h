@@ -81,7 +81,7 @@ inline std::string formatAxisAttr(std::string const &name, int axis) {
 }
 
 /**
-Return true if the compound map is in seris
+Return true if the compound map is in series
 */
 bool isSeries(AstCmpMap const *cmpMap);
 
