@@ -131,6 +131,8 @@ provided by @ref Channel and @ref Object
 - @ref FitsChan_Iwc "Iwc": Add a Frame describing Intermediate World Coords?
 - @ref FitsChan_NCard "NCard": Number of FITS header cards in a FitsChan
 - @ref FitsChan_Nkey "Nkey": Number of unique keywords in a FitsChan
+- @ref FitsChan_SipReplace "SipReplace": Ignore inverse SIP coefficients (replacing them with
+        fit coefficients or an iterative inverse)?
 - @ref FitsChan_TabOK "TabOK": Should the FITS "-TAB" algorithm be recognised?
 - @ref FitsChan_PolyTan "PolyTan": Use PVi_m keywords to define distorted TAN projection?
 - @ref FitsChan_Warnings "Warnings": Produces warnings about selected conditions
@@ -556,6 +558,12 @@ public:
     int getNKey() const { return getI("NKey"); }
 
     /**
+    Get @ref FitsChan_SipReplace "SipReplace": ignore inverse SIP coefficients (replacing them with
+    fit coefficients or an iterative inverse)?
+    */
+    bool getSipReplace() const { return getB("SipReplace"); }
+
+    /**
     Get @ref FitsChan_TabOK "TabOK": should the FITS "-TAB" algorithm be recognised?
     */
     int getTabOK() const { return getI("TabOK"); }
@@ -960,6 +968,12 @@ public:
     See @ref getIwc for details.
     */
     void setIwc(bool iwcs) { setB("Iwc", iwcs); }
+
+    /**
+    Set @ref FitsChan_SipReplace "SipReplace": ignore inverse SIP coefficients (replacing them with
+    fit coefficients or an iterative inverse)?
+    */
+    void setSipReplace(bool replace) { setB("SipReplace", replace); }
 
     /**
     Set @ref FitsChan_TabOK "TabOK": should the FITS "-TAB" algorithm be recognised?

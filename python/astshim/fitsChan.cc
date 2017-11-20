@@ -92,6 +92,7 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def_property_readonly("nCard", &FitsChan::getNCard);
     cls.def_property_readonly("nKey", &FitsChan::getNKey);
     cls.def_property("iwc", &FitsChan::getIwc, &FitsChan::setIwc);
+    cls.def_property("sipReplace", &FitsChan::getSipReplace, &FitsChan::setSipReplace);
     cls.def_property("tabOK", &FitsChan::getTabOK, &FitsChan::setTabOK);
     cls.def_property("polyTan", &FitsChan::getPolyTan, &FitsChan::setPolyTan);
     cls.def_property("warnings", &FitsChan::getWarnings, &FitsChan::setWarnings);
