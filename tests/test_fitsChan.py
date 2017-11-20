@@ -84,6 +84,51 @@ class TestObject(ObjectTestCase):
         frameSet.addFrame(ast.FrameSet.CURRENT, iwcToSky, skyFrame)
         return frameSet
 
+    def test_FitsChanAttributes(self):
+        """Test getting and setting FitsChan attributes
+
+        Does not test the behavior of the attributes.
+        """
+        ss = ast.StringStream("".join(self.cards))
+        fc = ast.FitsChan(ss)
+        self.assertFalse(fc.carLin)
+        self.assertFalse(fc.cdMatrix)
+        self.assertFalse(fc.clean)
+        self.assertFalse(fc.defB1950)
+        self.assertEqual(fc.encoding, "FITS-WCS")
+        self.assertEqual(fc.fitsAxisOrder, "<auto>")
+        self.assertAlmostEqual(fc.fitsTol, 0.1)
+        self.assertFalse(fc.iwc)
+        self.assertTrue(fc.sipReplace)
+        self.assertEqual(fc.tabOK, 0)
+        self.assertEqual(fc.polyTan, -1)
+        warningSet = set(fc.warnings.split(" "))
+        desiredWarningSet = set("BadKeyName BadKeyValue Tnx Zpx BadCel BadMat BadPV BadCTYPE".split(" "))
+        self.assertEqual(warningSet, desiredWarningSet)
+
+        fc.carLin = True
+        self.assertTrue(fc.carLin)
+        fc.cdMatrix = True
+        self.assertTrue(fc.cdMatrix)
+        fc.clean = True
+        self.assertTrue(fc.clean)
+        fc.defB1950 = True
+        self.assertTrue(fc.defB1950)
+        fc.encoding = "NATIVE"
+        self.assertEqual(fc.encoding, "NATIVE")
+        fc.fitsAxisOrder = "<copy>"
+        self.assertEqual(fc.fitsAxisOrder, "<copy>")
+        fc.fitsTol = 0.001
+        self.assertAlmostEqual(fc.fitsTol, 0.001)
+        fc.iwc = True
+        self.assertTrue(fc.iwc)
+        fc.tabOK = 1
+        self.assertEqual(fc.tabOK, 1)
+        fc.polyTan = 0
+        self.assertEqual(fc.polyTan, 0)
+        fc.warnings = "BadKeyName BadMat"
+        self.assertEqual(fc.warnings, "BadKeyName BadMat")
+
     def test_FitsChanPreloaded(self):
         """Test a FitsChan that starts out loaded with data
         """
