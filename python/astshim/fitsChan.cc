@@ -82,6 +82,8 @@ PYBIND11_PLUGIN(fitsChan) {
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
+    cls.def_property("carLin", &FitsChan::getCarLin, &FitsChan::setCarLin);
+    cls.def_property("cdMatrix", &FitsChan::getCDMatrix, &FitsChan::setCDMatrix);
     cls.def_property("clean", &FitsChan::getClean, &FitsChan::setClean);
     cls.def_property("defB1950", &FitsChan::getDefB1950, &FitsChan::setDefB1950);
     cls.def_property("encoding", &FitsChan::getEncoding, &FitsChan::setEncoding);
@@ -90,6 +92,7 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def_property_readonly("nCard", &FitsChan::getNCard);
     cls.def_property_readonly("nKey", &FitsChan::getNKey);
     cls.def_property("iwc", &FitsChan::getIwc, &FitsChan::setIwc);
+    cls.def_property("sipReplace", &FitsChan::getSipReplace, &FitsChan::setSipReplace);
     cls.def_property("tabOK", &FitsChan::getTabOK, &FitsChan::setTabOK);
     cls.def_property("polyTan", &FitsChan::getPolyTan, &FitsChan::setPolyTan);
     cls.def_property("warnings", &FitsChan::getWarnings, &FitsChan::setWarnings);
@@ -110,8 +113,6 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("getCardComm", &FitsChan::getCardComm);
     cls.def("getCardName", &FitsChan::getCardName);
     cls.def("getCardType", &FitsChan::getCardType);
-    cls.def("getCarLin", &FitsChan::getCarLin);
-    cls.def("getCDMatrix", &FitsChan::getCDMatrix);
     cls.def("purgeWcs", &FitsChan::purgeWcs);
     cls.def("putCards", &FitsChan::putCards, "cards"_a);
     cls.def("putFits", &FitsChan::putFits, "card"_a, "overwrite"_a);
@@ -125,7 +126,6 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("setFitsL", &FitsChan::setFitsL, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
     cls.def("setFitsS", &FitsChan::setFitsS, "name"_a, "value"_a, "comment"_a = "", "overwrite"_a = false);
     cls.def("setFitsU", &FitsChan::setFitsU, "name"_a, "comment"_a = "", "overwrite"_a = false);
-    cls.def("setCDMatrix", &FitsChan::setCDMatrix, "cdmatrix"_a);
     cls.def("showFits", &FitsChan::showFits);
     cls.def("testFits", &FitsChan::testFits, "name"_a = "");
     cls.def("writeFits", &FitsChan::writeFits);

@@ -867,6 +867,15 @@ If any keyword occurrs more than once, the @ref FitsChan_Nkey "Nkey" attribute v
 will be smaller than the @ref FitsChan_NCard "NCard" attribute value.
 
 
+@subsection FitsChan_SipReplace SipReplace
+
+Ignore inverse SIP coefficients (replacing them with fit coefficients or an iterative inverse)? (bool)
+
+If true then ignore SIP inverse coefficients. If false then attempt to fit
+new inverse coefficients; if those cannot be determined to suitable accuracy
+then use an iterative inverse. The default is false.
+
+
 @subsection FitsChan_TabOK TabOK
 
 Should the FITS "-TAB" algorithm be recognised? (bool)
