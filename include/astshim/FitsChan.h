@@ -923,15 +923,11 @@ public:
 
     /**
     Set @ref FitsChan_Clean "Clean": remove cards used whilst reading even if an error occurs?
-
-    See @ref getClean for details.
     */
     void setClean(bool clean) { setB("Clean", clean); }
 
     /**
     Set @ref FitsChan_DefB1950 "DefB1950": use FK4 B1950 as default equatorial coordinates?
-
-    See @ref getDefB1950 for details.
     */
     void setDefB1950(bool defB1950) { setB("DefB1950", defB1950); }
 
@@ -944,16 +940,12 @@ public:
     /**
     Set @ref FitsChan_FitsAxisOrder "FitsAxisOrder": the order for the WCS axes in any new
     FITS-WCS headers created using @ref Channel.write.
-
-    See @ref getFitsAxisOrder for details.
     */
     void setFitsAxisOrder(std::string const &order) { setC("FitsAxisOrder", order); }
 
     /**
     Set @ref FitsChan_FitsDigits "FitsDigits": digits of precision
     for floating-point FITS values
-
-    See @ref getFitsDigits for details.
     */
     void setFitsDigits(int digits) { setI("FitsDigits", digits); }
 
@@ -964,8 +956,6 @@ public:
 
     /**
     Set @ref FitsChan_Iwc "Iwc": add a Frame describing Intermediate World Coords?
-
-    See @ref getIwc for details.
     */
     void setIwc(bool iwcs) { setB("Iwc", iwcs); }
 
@@ -977,24 +967,18 @@ public:
 
     /**
     Set @ref FitsChan_TabOK "TabOK": should the FITS "-TAB" algorithm be recognised?
-
-    See @ref getTabOK for details.
     */
     void setTabOK(int tabOK) { setI("TabOK", tabOK); }
 
     /**
     Set @ref FitsChan_PolyTan "PolyTan": use `PVi_m` keywords
     to define distorted TAN projection?
-
-    See @ref getPolyTan for details.
     */
     void setPolyTan(int polytan) { setI("PolyTan", polytan); }
 
     /**
     Set @ref FitsChan_Warnings "Warnings" attribute, which controls the issuing of warnings about
     selected conditions when an @ref Object or keyword is read from or written to a @ref FitsChan.
-
-    See @ref getWarnings for details.
     */
     void setWarnings(std::string const &warnings) { setC("Warnings", warnings); }
 
