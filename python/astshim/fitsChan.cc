@@ -82,6 +82,7 @@ PYBIND11_PLUGIN(fitsChan) {
 
     cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
+    cls.def_property("carLin", &FitsChan::getCarLin, &FitsChan::setCarLin);
     cls.def_property("clean", &FitsChan::getClean, &FitsChan::setClean);
     cls.def_property("defB1950", &FitsChan::getDefB1950, &FitsChan::setDefB1950);
     cls.def_property("encoding", &FitsChan::getEncoding, &FitsChan::setEncoding);
@@ -110,7 +111,6 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("getCardComm", &FitsChan::getCardComm);
     cls.def("getCardName", &FitsChan::getCardName);
     cls.def("getCardType", &FitsChan::getCardType);
-    cls.def("getCarLin", &FitsChan::getCarLin);
     cls.def("getCDMatrix", &FitsChan::getCDMatrix);
     cls.def("purgeWcs", &FitsChan::purgeWcs);
     cls.def("putCards", &FitsChan::putCards, "cards"_a);

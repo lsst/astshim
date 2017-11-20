@@ -903,6 +903,11 @@ public:
     }
 
     /**
+    Set @ref FitsChan_CarLin "CarLin": ignore spherical rotations on CAR projections?
+    */
+    void setCarLin(bool cdMatrix) { setB("CarLin", cdMatrix); }
+
+    /**
     Get @ref FitsChan_CDMatrix "CDMatrix": Use CDi_j keywords to represent pixel scaling,
     rotation, etc?
     */
