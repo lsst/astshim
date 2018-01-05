@@ -131,6 +131,7 @@ provided by @ref Channel and @ref Object
 - @ref FitsChan_Iwc "Iwc": Add a Frame describing Intermediate World Coords?
 - @ref FitsChan_NCard "NCard": Number of FITS header cards in a FitsChan
 - @ref FitsChan_Nkey "Nkey": Number of unique keywords in a FitsChan
+- @ref FitsChan_SipOK "SipOK": Use Spitzer Space Telescope keywords to define distortion?
 - @ref FitsChan_SipReplace "SipReplace": Ignore inverse SIP coefficients (replacing them with
         fit coefficients or an iterative inverse)?
 - @ref FitsChan_TabOK "TabOK": Should the FITS "-TAB" algorithm be recognised?
@@ -558,6 +559,11 @@ public:
     int getNKey() const { return getI("NKey"); }
 
     /**
+    Get @ref FitsChan_SipOK "SipOK": use Spitzer Space Telescope keywords to define distortion?
+    */
+    bool getSipOK() const { return getB("SipOK"); }
+
+    /**
     Get @ref FitsChan_SipReplace "SipReplace": ignore inverse SIP coefficients (replacing them with
     fit coefficients or an iterative inverse)?
     */
@@ -958,6 +964,11 @@ public:
     Set @ref FitsChan_Iwc "Iwc": add a Frame describing Intermediate World Coords?
     */
     void setIwc(bool iwcs) { setB("Iwc", iwcs); }
+
+    /**
+    Set @ref FitsChan_SipOK "SipOK": use Spitzer Space Telescope keywords to define distortion?
+    */
+    void setSipOK(bool sipOK) { setB("SipOK", sipOK); }
 
     /**
     Set @ref FitsChan_SipReplace "SipReplace": ignore inverse SIP coefficients (replacing them with

@@ -517,7 +517,7 @@ aberration, but ignores atmospheric refraction, polar motion, etc.
 These may be added in a later release.
 
 If an AST SkyFrame that represents offset rather than absolute
-coordinates (see attribute SkyRefIs) is written to a @ref FitsChan using
+coordinates (see attribute @ref FitsChan_SkyRefIs "SkyRefIs") is written to a @ref FitsChan using
 `FITS-WCS` encoding, two alternate axis descriptions will be created.
 One will describe the offset coordinates, and will use "OFLN" and
 "OFLT" as the axis codes in the CTYPE keywords. The other will
@@ -867,6 +867,32 @@ If any keyword occurrs more than once, the @ref FitsChan_Nkey "Nkey" attribute v
 will be smaller than the @ref FitsChan_NCard "NCard" attribute value.
 
 
+@subsection FitsChan_SipOK SipOK
+
+Use Spitzer Space Telescope keywords to define distortion? (bool)
+
+This attribute is a boolean value which specifies whether to include support for the "SIP" scheme,
+which can be used to add distortion to basic FITS-WCS projections. This scheme was first defined by
+the Spitzer Space Telescope and is described in the following document:
+http://irsa.ipac.caltech.edu/data/SPITZER/d The default for SipOK is 1.
+
+When using astRead to read a FITS-WCS encoded header, a suitable PolyMap will always be included
+in the returned FrameSet if the header contains SIP keywords, regardless of the value of the SipOK attribute.
+The PolyMap will be immediately before the MatrixMap that corresponds to the FITS-WCS PC or CD matrix.
+
+When using astWrite to write a FrameSet to a FITS-WCS encoded header, suitable SIP keywords will be included
+in the header if the FrameSet contains a PolyMap immediately before the MatrixMap that corresponds to the
+FITS-WCS PC or CD matrix, but only if the SipOK attribute is non-zero. If the FrameSet contains a PolyMap
+but SipOK is zero, then an attempt will be made to write out the FrameSet without SIP keywords using a
+linear approximation to the pixel-to-IWC mapping. If this fails because the Mapping exceeds the linearity
+requirement specified by attribute FitsTol, astWrite will return zero, indicating that the FrameSet
+could not be written out. Note, SIP headers can only be produced for axes that form part of a SkyFrame.
+
+Note, the SIP distortion scheme is independent of the TPV/TPN distortion schemes (see attribute
+@ref FitsChan_PolyTan "PolyTan").
+A FITS-WCS header could in principle, contain keywords for both schemes although this is unlikely.
+
+
 @subsection FitsChan_SipReplace SipReplace
 
 Ignore inverse SIP coefficients (replacing them with fit coefficients or an iterative inverse)? (bool)
@@ -968,7 +994,6 @@ of the FitsChan. If the FitsChan contains any `PVi_m` keywords for
 the latitude axis, or if it contains `PVi_m` keywords for the
 longitude axis with "m" greater than 4, then the distorted TAN
 convention is used. Otherwise, the standard convention is used.
-
 
 @subsection FitsChan_Warnings Warnings
 

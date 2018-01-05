@@ -99,6 +99,7 @@ class TestObject(ObjectTestCase):
         self.assertEqual(fc.fitsAxisOrder, "<auto>")
         self.assertAlmostEqual(fc.fitsTol, 0.1)
         self.assertFalse(fc.iwc)
+        self.assertTrue(fc.sipOK)
         self.assertTrue(fc.sipReplace)
         self.assertEqual(fc.tabOK, 0)
         self.assertEqual(fc.polyTan, -1)
