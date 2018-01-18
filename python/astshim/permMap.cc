@@ -44,6 +44,7 @@ PYBIND11_PLUGIN(permMap) {
     cls.def(py::init<std::vector<int> const &, std::vector<int> const &, std::vector<double> const &,
                      std::string const &>(),
             "inperm"_a, "outperm"_a, "constant"_a = std::vector<double>(), "options"_a = "");
+    cls.def(py::init<PermMap const &>());
 
     cls.def("copy", &PermMap::copy);
 

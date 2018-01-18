@@ -40,6 +40,7 @@ PYBIND11_PLUGIN(sphMap) {
     py::class_<SphMap, std::shared_ptr<SphMap>, Mapping> cls(mod, "SphMap");
 
     cls.def(py::init<std::string const &>(), "options"_a = "");
+    cls.def(py::init<SphMap const &>());
 
     cls.def_property_readonly("unitRadius", &SphMap::getUnitRadius);
     cls.def_property_readonly("polarLong", &SphMap::getPolarLong);

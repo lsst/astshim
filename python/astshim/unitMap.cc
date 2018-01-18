@@ -40,6 +40,7 @@ PYBIND11_PLUGIN(unitMap) {
     py::class_<UnitMap, std::shared_ptr<UnitMap>, Mapping> cls(mod, "UnitMap");
 
     cls.def(py::init<int, std::string const &>(), "ncoord"_a, "options"_a = "");
+    cls.def(py::init<UnitMap const &>());
 
     cls.def("copy", &UnitMap::copy);
 

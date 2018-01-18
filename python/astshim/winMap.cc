@@ -44,6 +44,7 @@ PYBIND11_PLUGIN(winMap) {
     cls.def(py::init<std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
                      std::vector<double> const &, std::string const &>(),
             "ina"_a, "inb"_a, "outa"_a, "outb"_a, "options"_a = "");
+    cls.def(py::init<WinMap const &>());
 
     cls.def("copy", &WinMap::copy);
 

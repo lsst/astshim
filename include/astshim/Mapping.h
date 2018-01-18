@@ -62,7 +62,8 @@ class Mapping : public Object {
 public:
     virtual ~Mapping() {}
 
-    Mapping(Mapping const &) = delete;
+    /// Copy constructor: make a deep copy
+    Mapping(Mapping const &) = default;
     Mapping(Mapping &&) = default;
     Mapping &operator=(Mapping const &) = delete;
     Mapping &operator=(Mapping &&) = default;

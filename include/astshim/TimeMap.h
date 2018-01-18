@@ -58,7 +58,8 @@ public:
 
     virtual ~TimeMap() {}
 
-    TimeMap(TimeMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    TimeMap(TimeMap const &) = default;
     TimeMap(TimeMap &&) = default;
     TimeMap &operator=(TimeMap const &) = delete;
     TimeMap &operator=(TimeMap &&) = default;

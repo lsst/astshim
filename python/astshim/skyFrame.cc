@@ -43,6 +43,7 @@ PYBIND11_PLUGIN(skyFrame) {
     py::class_<SkyFrame, std::shared_ptr<SkyFrame>, Frame> cls(mod, "SkyFrame");
 
     cls.def(py::init<std::string const &>(), "options"_a = "");
+    cls.def(py::init<SkyFrame const &>());
 
     cls.def("copy", &SkyFrame::copy);
 

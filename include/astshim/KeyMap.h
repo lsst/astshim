@@ -94,7 +94,8 @@ public:
 
     virtual ~KeyMap(){};
 
-    KeyMap(KeyMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    KeyMap(KeyMap const &) = default;
     KeyMap(KeyMap &&) = default;
     KeyMap &operator=(KeyMap const &) = delete;
     KeyMap &operator=(KeyMap &&) = default;

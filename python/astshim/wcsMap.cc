@@ -77,6 +77,7 @@ PYBIND11_PLUGIN(wcsMap) {
 
     cls.def(py::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,
             "latax"_a, "options"_a = "");
+    cls.def(py::init<WcsMap const &>());
 
     cls.def_property_readonly("natLat", &WcsMap::getNatLat);
     cls.def_property_readonly("natLon", &WcsMap::getNatLon);

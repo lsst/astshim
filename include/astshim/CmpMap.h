@@ -77,7 +77,8 @@ public:
 
     virtual ~CmpMap() {}
 
-    CmpMap(CmpMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    CmpMap(CmpMap const &) = default;
     CmpMap(CmpMap &&) = default;
     CmpMap &operator=(CmpMap const &) = delete;
     CmpMap &operator=(CmpMap &&) = default;

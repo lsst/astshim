@@ -135,7 +135,8 @@ public:
 
     virtual ~FrameSet() {}
 
-    FrameSet(FrameSet const &) = delete;
+    /// Copy constructor: make a deep copy
+    FrameSet(FrameSet const &) = default;
     FrameSet(FrameSet &&) = default;
     FrameSet &operator=(FrameSet const &) = delete;
     FrameSet &operator=(FrameSet &&) = default;

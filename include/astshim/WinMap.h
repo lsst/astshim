@@ -65,7 +65,8 @@ public:
 
     virtual ~WinMap() {}
 
-    WinMap(WinMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    WinMap(WinMap const &) = default;
     WinMap(WinMap &&) = default;
     WinMap &operator=(WinMap const &) = delete;
     WinMap &operator=(WinMap &&) = default;

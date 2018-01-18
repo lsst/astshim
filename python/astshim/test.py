@@ -20,17 +20,26 @@ class ObjectTestCase(unittest.TestCase):
         """
         nobj = obj.getNObject()
         nref = obj.getRefCount()
-        cp = obj.copy()
-        self.assertEqual(type(obj), type(cp))
-        self.assertEqual(str(obj), str(cp))
-        self.assertEqual(repr(obj), repr(cp))
-        self.assertEqual(obj.getNObject(), nobj + 1)
-        # Object.copy makes a new pointer instead of copying the old one,
-        # so the reference count of the old one does not increase
-        self.assertEqual(obj.getRefCount(), nref)
-        self.assertFalse(obj.same(cp))
-        self.assertEqual(cp.getNObject(), nobj + 1)
-        self.assertEqual(cp.getRefCount(), 1)
+
+        def copyIter(obj):
+            yield obj.copy()
+            yield type(obj)(obj)
+
+        for cp in copyIter(obj):
+            self.assertEqual(type(obj), type(cp))
+            self.assertEqual(str(obj), str(cp))
+            self.assertEqual(repr(obj), repr(cp))
+            self.assertEqual(obj.getNObject(), nobj + 1)
+            # Object.copy makes a new pointer instead of copying the old one,
+            # so the reference count of the old one does not increase
+            self.assertEqual(obj.getRefCount(), nref)
+            self.assertFalse(obj.same(cp))
+            self.assertEqual(cp.getNObject(), nobj + 1)
+            self.assertEqual(cp.getRefCount(), 1)
+            # changing an attribute of the copy does not affect the original
+            originalIdent = obj.ident
+            cp.ident = obj.ident + " modified"
+            self.assertEqual(obj.ident, originalIdent)
 
         del cp
         self.assertEqual(obj.getNObject(), nobj)

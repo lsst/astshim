@@ -48,6 +48,7 @@ PYBIND11_PLUGIN(matrixMap) {
 
     cls.def(py::init<ConstArray2D const &, std::string const &>(), "matrix"_a, "options"_a = "");
     cls.def(py::init<std::vector<double> const &, std::string const &>(), "diag"_a, "options"_a = "");
+    cls.def(py::init<MatrixMap const &>());
 
     cls.def("copy", &MatrixMap::copy);
 

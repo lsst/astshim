@@ -111,7 +111,8 @@ public:
 
     virtual ~FrameDict() {}
 
-    FrameDict(FrameDict const &) = delete;
+    /// Copy constructor: make a deep copy
+    FrameDict(FrameDict const &) = default;
     FrameDict(FrameDict &&) = default;
     FrameDict &operator=(FrameDict const &) = delete;
     FrameDict &operator=(FrameDict &&) = default;
