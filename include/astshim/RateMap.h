@@ -74,7 +74,8 @@ public:
 
     virtual ~RateMap() {}
 
-    RateMap(RateMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    RateMap(RateMap const &) = default;
     RateMap(RateMap &&) = default;
     RateMap &operator=(RateMap const &) = delete;
     RateMap &operator=(RateMap &&) = default;

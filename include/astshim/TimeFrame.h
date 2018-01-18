@@ -91,7 +91,8 @@ public:
 
     virtual ~TimeFrame() {}
 
-    TimeFrame(TimeFrame const &) = delete;
+    /// Copy constructor: make a deep copy
+    TimeFrame(TimeFrame const &) = default;
     TimeFrame(TimeFrame &&) = default;
     TimeFrame &operator=(TimeFrame const &) = delete;
     TimeFrame &operator=(TimeFrame &&) = default;

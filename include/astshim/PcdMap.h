@@ -89,7 +89,8 @@ public:
 
     virtual ~PcdMap() {}
 
-    PcdMap(PcdMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    PcdMap(PcdMap const &) = default;
     PcdMap(PcdMap &&) = default;
     PcdMap &operator=(PcdMap const &) = delete;
     PcdMap &operator=(PcdMap &&) = default;

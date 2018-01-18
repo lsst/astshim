@@ -56,7 +56,8 @@ public:
 
     virtual ~UnitMap() {}
 
-    UnitMap(UnitMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    UnitMap(UnitMap const &) = default;
     UnitMap(UnitMap &&) = default;
     UnitMap &operator=(UnitMap const &) = delete;
     UnitMap &operator=(UnitMap &&) = default;

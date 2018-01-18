@@ -80,7 +80,8 @@ public:
 
     virtual ~PermMap() {}
 
-    PermMap(PermMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    PermMap(PermMap const &) = default;
     PermMap(PermMap &&) = default;
     PermMap &operator=(PermMap const &) = delete;
     PermMap &operator=(PermMap &&) = default;

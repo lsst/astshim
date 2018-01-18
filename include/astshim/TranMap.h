@@ -64,7 +64,8 @@ public:
 
     virtual ~TranMap() {}
 
-    TranMap(TranMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    TranMap(TranMap const &) = default;
     TranMap(TranMap &&) = default;
     TranMap &operator=(TranMap const &) = delete;
     TranMap &operator=(TranMap &&) = default;

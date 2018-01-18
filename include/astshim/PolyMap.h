@@ -128,7 +128,8 @@ public:
 
     virtual ~PolyMap() {}
 
-    PolyMap(PolyMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    PolyMap(PolyMap const &) = default;
     PolyMap(PolyMap &&) = default;
     PolyMap &operator=(PolyMap const &) = delete;
     PolyMap &operator=(PolyMap &&) = default;

@@ -63,7 +63,8 @@ public:
 
     virtual ~ZoomMap() {}
 
-    ZoomMap(ZoomMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    ZoomMap(ZoomMap const &) = default;
     ZoomMap(ZoomMap &&) = default;
     ZoomMap &operator=(ZoomMap const &) = delete;
     ZoomMap &operator=(ZoomMap &&) = default;

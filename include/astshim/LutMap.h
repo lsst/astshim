@@ -78,7 +78,8 @@ public:
 
     virtual ~LutMap() {}
 
-    LutMap(LutMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    LutMap(LutMap const &) = default;
     LutMap(LutMap &&) = default;
     LutMap &operator=(LutMap const &) = delete;
     LutMap &operator=(LutMap &&) = default;

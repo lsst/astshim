@@ -78,7 +78,8 @@ public:
 
     virtual ~CmpFrame() {}
 
-    CmpFrame(CmpFrame const &) = delete;
+    /// Copy constructor: make a deep copy
+    CmpFrame(CmpFrame const &) = default;
     CmpFrame(CmpFrame &&) = default;
     CmpFrame &operator=(CmpFrame const &) = delete;
     CmpFrame &operator=(CmpFrame &&) = default;

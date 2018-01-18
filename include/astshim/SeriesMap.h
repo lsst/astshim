@@ -68,7 +68,8 @@ public:
 
     virtual ~SeriesMap() {}
 
-    SeriesMap(SeriesMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    SeriesMap(SeriesMap const &) = default;
     SeriesMap(SeriesMap &&) = default;
     SeriesMap &operator=(SeriesMap const &) = delete;
     SeriesMap &operator=(SeriesMap &&) = default;

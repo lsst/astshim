@@ -126,7 +126,8 @@ public:
 
     virtual ~SkyFrame() {}
 
-    SkyFrame(SkyFrame const &) = delete;
+    /// Copy constructor: make a deep copy
+    SkyFrame(SkyFrame const &) = default;
     SkyFrame(SkyFrame &&) = default;
     SkyFrame &operator=(SkyFrame const &) = delete;
     SkyFrame &operator=(SkyFrame &&) = default;

@@ -212,7 +212,8 @@ public:
 
     virtual ~WcsMap() {}
 
-    WcsMap(WcsMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    WcsMap(WcsMap const &) = default;
     WcsMap(WcsMap &&) = default;
     WcsMap &operator=(WcsMap const &) = delete;
     WcsMap &operator=(WcsMap &&) = default;

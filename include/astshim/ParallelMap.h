@@ -68,7 +68,8 @@ public:
 
     virtual ~ParallelMap() {}
 
-    ParallelMap(ParallelMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    ParallelMap(ParallelMap const &) = default;
     ParallelMap(ParallelMap &&) = default;
     ParallelMap &operator=(ParallelMap const &) = delete;
     ParallelMap &operator=(ParallelMap &&) = default;

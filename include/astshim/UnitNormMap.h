@@ -69,7 +69,8 @@ public:
 
     virtual ~UnitNormMap() {}
 
-    UnitNormMap(UnitNormMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    UnitNormMap(UnitNormMap const &) = default;
     UnitNormMap(UnitNormMap &&) = default;
     UnitNormMap &operator=(UnitNormMap const &) = delete;
     UnitNormMap &operator=(UnitNormMap &&) = default;

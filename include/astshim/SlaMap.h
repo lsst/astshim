@@ -70,7 +70,8 @@ public:
 
     virtual ~SlaMap() {}
 
-    SlaMap(SlaMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    SlaMap(SlaMap const &) = default;
     SlaMap(SlaMap &&) = default;
     SlaMap &operator=(SlaMap const &) = delete;
     SlaMap &operator=(SlaMap &&) = default;

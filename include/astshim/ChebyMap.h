@@ -188,7 +188,8 @@ public:
 
     virtual ~ChebyMap() {}
 
-    ChebyMap(ChebyMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    ChebyMap(ChebyMap const &) = default;
     ChebyMap(ChebyMap &&) = default;
     ChebyMap &operator=(ChebyMap const &) = delete;
     ChebyMap &operator=(ChebyMap &&) = default;
