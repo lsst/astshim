@@ -44,6 +44,7 @@ PYBIND11_PLUGIN(frameDict) {
     cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
             "mapping"_a, "currentFrame"_a, "options"_a = "");
     cls.def(py::init<FrameSet const &>(), "frameSet"_a);
+    cls.def(py::init<FrameDict const &>());
 
     cls.def("copy", &FrameDict::copy);
 

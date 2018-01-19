@@ -41,6 +41,7 @@ PYBIND11_PLUGIN(rateMap) {
 
     cls.def(py::init<Mapping const &, int, int, std::string const &>(), "map"_a, "ax1"_a, "ax2"_a,
             "options"_a = "");
+    cls.def(py::init<RateMap const &>());
 
     cls.def("copy", &RateMap::copy);
 

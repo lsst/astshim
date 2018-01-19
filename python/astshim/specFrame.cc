@@ -44,6 +44,7 @@ PYBIND11_PLUGIN(specFrame) {
     py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame> cls(mod, "SpecFrame");
 
     cls.def(py::init<std::string const &>(), "options"_a = "");
+    cls.def(py::init<SpecFrame const &>());
 
     cls.def("copy", &SpecFrame::copy);
 

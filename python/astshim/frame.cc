@@ -85,6 +85,7 @@ PYBIND11_PLUGIN(frame) {
     py::class_<Frame, std::shared_ptr<Frame>, Mapping> cls(mod, "Frame");
 
     cls.def(py::init<int, std::string const &>(), "naxes"_a, "options"_a = "");
+    cls.def(py::init<Frame const &>());
 
     cls.def_property("activeUnit", &Frame::getActiveUnit, &Frame::setActiveUnit);
     cls.def_property("alignSystem", &Frame::getAlignSystem, &Frame::setAlignSystem);

@@ -66,6 +66,7 @@ PYBIND11_PLUGIN(chebyMap) {
     cls.def(py::init<ConstArray2D const &, int, std::vector<double> const &, std::vector<double> const &,
                      std::string const &>(),
             "coeff_i"_a, "nout"_a, "lbnds_f"_a, "ubnds_f"_a, "options"_a = "");
+    cls.def(py::init<ChebyMap const &>());
 
     cls.def("copy", &ChebyMap::copy);
     cls.def("getDomain", &ChebyMap::getDomain, "forward"_a);

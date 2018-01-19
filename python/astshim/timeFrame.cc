@@ -42,6 +42,7 @@ PYBIND11_PLUGIN(timeFrame) {
     py::class_<TimeFrame, std::shared_ptr<TimeFrame>, Frame> cls(mod, "TimeFrame");
 
     cls.def(py::init<std::string const &>(), "options"_a = "");
+    cls.def(py::init<TimeFrame const &>());
 
     cls.def_property("alignTimeScale", &TimeFrame::getAlignTimeScale, &TimeFrame::setAlignTimeScale);
     cls.def_property("ltOffset", &TimeFrame::getLTOffset, &TimeFrame::setLTOffset);

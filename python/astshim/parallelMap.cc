@@ -42,6 +42,7 @@ PYBIND11_PLUGIN(parallelMap) {
 
     cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
             "options"_a = "");
+    cls.def(py::init<ParallelMap const &>());
 
     cls.def("copy", &ParallelMap::copy);
 
