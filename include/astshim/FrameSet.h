@@ -129,7 +129,7 @@ public:
     */
     explicit FrameSet(Frame const &baseFrame, Mapping const &mapping, Frame const &currentFrame,
                       std::string const &options = "")
-            : FrameSet(astFrameSet(baseFrame.copy()->getRawPtr(), "%s", options.c_str())) {
+            : FrameSet(baseFrame, options) {
         _basicAddFrame(1, mapping, currentFrame);
     }
 
