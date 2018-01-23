@@ -1,3 +1,4 @@
+import pickle
 import unittest
 
 import numpy as np
@@ -58,8 +59,8 @@ class ObjectTestCase(unittest.TestCase):
         """Check that an astshim object can be persisted and unpersisted
 
         Check persistence using Channel, FitsChan (with native encoding,
-        as the only encoding compatible with all AST objects),
-        and XmlChan
+        as the only encoding compatible with all AST objects), XmlChan
+        and pickle.
         """
         for channelType, options in (
             (Channel, ""),
@@ -74,6 +75,9 @@ class ObjectTestCase(unittest.TestCase):
                 chan.clearCard()
             obj_copy = chan.read()
             self.assertObjectsIdentical(obj, obj_copy)
+
+        obj_copy = pickle.loads(pickle.dumps(obj))
+        self.assertObjectsIdentical(obj, obj_copy)
 
 
 class MappingTestCase(ObjectTestCase):

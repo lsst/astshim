@@ -19,24 +19,59 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
+#include <memory>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
+#include "astshim/Channel.h"
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
 #include "astshim/FrameDict.h"
 #include "astshim/Mapping.h"
+#include "astshim/Stream.h"
 
 namespace ast {
 namespace {
+
+/*
+Make a FrameDict from a string output by Object.show()
+
+Use this instead of the standard ObjectMaker for FrameDict
+because ObjectMaker would return a FrameSet (since the serialization
+is the same for both).
+*/
+class FrameDictMaker {
+public:
+    FrameDictMaker() = default;
+    ~FrameDictMaker() = default;
+    std::shared_ptr<Object> operator()(std::string const &state) {
+        std::cout << "FrameDictMaker() called\n";
+        ast::StringStream stream(state);
+        ast::Channel chan(stream);
+        auto objPtr = chan.read();
+        auto frameSetPtr = std::dynamic_pointer_cast<ast::FrameSet>(objPtr);
+        if (!frameSetPtr) {
+            throw std::runtime_error("Object being unpickled is a " + objPtr->getClassName()
+                                     + " not a FrameSet");
+        }
+        return std::make_shared<ast::FrameDict>(*frameSetPtr);
+    }
+};
 
 PYBIND11_PLUGIN(frameDict) {
     py::module mod("frameDict", "Python wrapper for FrameDict");
 
     py::module::import("astshim.frameSet");
+
+    py::class_<FrameDictMaker, std::shared_ptr<FrameDictMaker>> makerCls(mod, "FrameDictMaker");
+    makerCls.def(py::init<>());
+    makerCls.def("__call__", &FrameDictMaker::operator());
+    makerCls.def("__reduce__",
+                       [makerCls](FrameDictMaker const &self) { return py::make_tuple(makerCls, py::tuple()); });
 
     py::class_<FrameDict, std::shared_ptr<FrameDict>, FrameSet> cls(mod, "FrameDict");
 
@@ -86,6 +121,13 @@ PYBIND11_PLUGIN(frameDict) {
     cls.def("setCurrent", (void (FrameDict::*)(int)) & FrameDict::setCurrent, "index"_a);
     cls.def("setCurrent", (void (FrameDict::*)(std::string const &)) & FrameDict::setCurrent, "domain"_a);
     cls.def("setDomain", &FrameDict::setDomain, "domain"_a);
+
+    /// Override standard pickling support so we get a FrameDict back, instead of a FrameSet
+    cls.def("__reduce__", [makerCls](Object const &self) {
+        std::string state = self.show(false);
+        auto unpickleArgs = py::make_tuple(state);
+        return py::make_tuple(makerCls(), unpickleArgs);
+    });
 
     return mod.ptr();
 }

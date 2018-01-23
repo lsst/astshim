@@ -50,8 +50,10 @@ This has several useful applications:
 All contained Frames with explicitly set, non-empty domains must have unique domains (where the comparison
 ignores case). Use FrameSet if you want a collection of Frames that may have matching domains.
 
-@warning FrameDict.getClassName returns "FrameSet". This is because FrameDict has no direct AST equivalent;
-it is merely a convenience wrapper around FrameSet.
+@warning FrameDict is a convenience wrapper around FrameSet with no corresponding class in AST.
+As a consequence:
+- FrameDict.getClassName returns "FrameSet"
+- A FrameDict persisted using a Channel or pickle is unpersisted as a FrameSet
 
 @note
 - AST casts all Frame domains to uppercase. This is why domain comparison and domain lookup are case blind.
