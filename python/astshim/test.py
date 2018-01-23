@@ -11,9 +11,20 @@ from .stream import StringStream
 
 
 class ObjectTestCase(unittest.TestCase):
-
     """Base class for unit tests of objects
     """
+
+    def assertObjectsIdentical(self, obj1, obj2):
+        """Assert that two astshim objects are identical.
+
+        Identical means the objects are of the same class
+        and all properties are identical
+        (including whether set or defaulted).
+        """
+        self.assertEqual(obj1.className, obj2.className)
+        self.assertEqual(obj1.show(), obj2.show())
+        self.assertEqual(str(obj1), str(obj2))
+        self.assertEqual(repr(obj1), repr(obj2))
 
     def checkCopy(self, obj):
         """Check that an astshim object can be deep-copied
@@ -26,9 +37,7 @@ class ObjectTestCase(unittest.TestCase):
             yield type(obj)(obj)
 
         for cp in copyIter(obj):
-            self.assertEqual(type(obj), type(cp))
-            self.assertEqual(str(obj), str(cp))
-            self.assertEqual(repr(obj), repr(cp))
+            self.assertObjectsIdentical(obj, cp)
             self.assertEqual(obj.getNObject(), nobj + 1)
             # Object.copy makes a new pointer instead of copying the old one,
             # so the reference count of the old one does not increase
@@ -64,10 +73,7 @@ class ObjectTestCase(unittest.TestCase):
             if channelType == FitsChan:
                 chan.clearCard()
             obj_copy = chan.read()
-            self.assertEqual(obj.className, obj_copy.className)
-            self.assertEqual(obj.show(), obj_copy.show())
-            self.assertEqual(str(obj), str(obj_copy))
-            self.assertEqual(repr(obj), repr(obj_copy))
+            self.assertObjectsIdentical(obj, obj_copy)
 
 
 class MappingTestCase(ObjectTestCase):
