@@ -58,9 +58,11 @@ class ObjectTestCase(unittest.TestCase):
             (XmlChan, ""),
         ):
             ss = StringStream()
-            chan = Channel(ss)
+            chan = channelType(ss, options)
             chan.write(obj)
             ss.sinkToSource()
+            if channelType == FitsChan:
+                chan.clearCard()
             obj_copy = chan.read()
             self.assertEqual(obj.className, obj_copy.className)
             self.assertEqual(obj.show(), obj_copy.show())
