@@ -297,12 +297,7 @@ protected:
     /**
     Construct an @ref Object from a pointer to a raw AstObject
     */
-    explicit Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
-        assertOK();
-        if (!object) {
-            throw std::runtime_error("Null pointer");
-        }
-    }
+    explicit Object(AstObject *object);
 
     /**
     Functor to make an astshim instance from a raw AST pointer of the corresponding type.

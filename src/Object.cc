@@ -162,6 +162,13 @@ std::string Object::show(bool showComments) const {
     return os.str();
 }
 
+Object::Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
+    assertOK();
+    if (!object) {
+        throw std::runtime_error("Null pointer");
+    }
+}
+
 // Explicit instantiations
 template std::shared_ptr<FrameSet> Object::fromAstObject<FrameSet>(AstObject *, bool);
 template std::shared_ptr<Frame> Object::fromAstObject<Frame>(AstObject *, bool);
