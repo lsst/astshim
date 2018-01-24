@@ -36,6 +36,8 @@ PYBIND11_PLUGIN(testUtils) {
 
     mod.def("makeFrameDict", makeFrameDict);
 
+    mod.def("watchPointer", astWatchPointer);
+
     return mod.ptr();
 }
 

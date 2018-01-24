@@ -26,6 +26,7 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include "unistd.h"
 
 #include "astshim/base.h"
 #include "astshim/detail/utils.h"
@@ -164,6 +165,7 @@ std::string Object::show(bool showComments) const {
 
 Object::Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
     assertOK();
+    std::cout << "Object(" << object << ") of type " << astGetC(object, "Class") << " in process " << getpid() << "\n";
     if (!object) {
         throw std::runtime_error("Null pointer");
     }

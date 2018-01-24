@@ -39,8 +39,10 @@ static const int FITSLEN = 80;
 /// A wrapper around astAnnul; intended as a custom deleter for std::unique_ptr
 inline void annulAstObject(AstObject *object) {
     if (object != nullptr) {
-        std::cout << "astAnnul(" << object << ") of type " << astGetC(object, "Class") << " in process "
-                  << getpid() << "\n";
+        std::cout << "astAnnul(" << object << ")"
+                  // << " with ref count " << astGetI(object, "RefCount")
+                  // << " of type " << astGetC(object, "Class")
+                  << " in process " << getpid() << "\n";
         astAnnul(object);
     }
 }
