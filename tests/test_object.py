@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function
+import multiprocessing
 import unittest
 
 import numpy as np
@@ -151,6 +152,18 @@ class TestObject(ObjectTestCase):
         self.assertEqual(obj.ident, "initial_ident")
         cp = obj.copy()
         self.assertEqual(cp.ident, "initial_ident")
+
+    def test_multiprocessing(self):
+        """Make sure we can return objects from multiprocessing
+        """
+        numProcesses = 1
+        naxes = 2
+        params = [naxes]*numProcesses
+        pool = multiprocessing.Pool(processes=numProcesses)
+        results = pool.map_async(ast.UnitMap, params).get()
+        pool.close()
+        pool.join()
+        self.assertEqual(results, [ast.UnitMap(naxes)]*numProcesses)
 
     def test_show(self):
         # pick an object with no floats so we don't have to worry
