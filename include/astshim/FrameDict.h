@@ -155,7 +155,7 @@ public:
     using FrameSet::getMapping;
 
     /**
-    Variant of @ref getMapping(int, int) with the second frame specified by domain.
+    Variant of @ref FrameSet::getMapping with the second frame specified by domain.
 
     @throw std::out_of_range if no frame found with the specified from or to domain
     */
@@ -164,7 +164,7 @@ public:
     }
 
     /**
-    Variant of @ref getMapping(int, int) with the first frame specified by domain.
+    Variant of @ref FrameSet::getMapping with the first frame specified by domain.
 
     @throw std::out_of_range if no frame found with the specified from or to domain
     */
@@ -173,7 +173,7 @@ public:
     }
 
     /**
-    Variant of @ref getMapping(int, int) with the both frames specified by domain.
+    Variant of @ref FrameSet::getMapping with the both frames specified by domain.
 
     @throw std::out_of_range if no frame found with the specified from or to domain
     */
@@ -258,8 +258,8 @@ protected:
         return copyImpl<FrameDict, AstFrameSet>();
     }
 
-    /*
-    Return a copy as a FrameSet
+    /**
+    Return a deep copy as a FrameSet
 
     This is used internally for operations that modify the contents:
     - Retrieve a copy as a FrameSet
