@@ -15,14 +15,14 @@ class ObjectTestCase(unittest.TestCase):
     """Base class for unit tests of objects
     """
 
-    def assertObjectsIdentical(self, obj1, obj2):
+    def assertObjectsIdentical(self, obj1, obj2, checkType=True):
         """Assert that two astshim objects are identical.
 
-        Identical means the objects are of the same class
-        and all properties are identical
-        (including whether set or defaulted).
+        Identical means the objects are of the same class (if checkType)
+        and all properties are identical (including whether set or defaulted).
         """
-        self.assertEqual(obj1.className, obj2.className)
+        if checkType:
+            self.assertIs(type(obj1), type(obj2))
         self.assertEqual(obj1.show(), obj2.show())
         self.assertEqual(str(obj1), str(obj2))
         self.assertEqual(repr(obj1), repr(obj2))
@@ -55,8 +55,13 @@ class ObjectTestCase(unittest.TestCase):
         self.assertEqual(obj.getNObject(), nobj)
         self.assertEqual(obj.getRefCount(), nref)
 
-    def checkPersistence(self, obj):
+    def checkPersistence(self, obj, typeFromChannel=None):
         """Check that an astshim object can be persisted and unpersisted
+
+        @param[in] obj  Object to be checked
+        @param[in] typeFromChannel  Type of object expected to be read from
+                        a channel (since some thin wrapper types are read
+                        as the underlying type); None if the original type
 
         Check persistence using Channel, FitsChan (with native encoding,
         as the only encoding compatible with all AST objects), XmlChan
@@ -71,10 +76,14 @@ class ObjectTestCase(unittest.TestCase):
             chan = channelType(ss, options)
             chan.write(obj)
             ss.sinkToSource()
-            if channelType == FitsChan:
+            if channelType is FitsChan:
                 chan.clearCard()
             obj_copy = chan.read()
-            self.assertObjectsIdentical(obj, obj_copy)
+            if typeFromChannel is not None:
+                self.assertIs(type(obj_copy), typeFromChannel)
+                self.assertObjectsIdentical(obj, obj_copy, checkType=False)
+            else:
+                self.assertObjectsIdentical(obj, obj_copy)
 
         obj_copy = pickle.loads(pickle.dumps(obj))
         self.assertObjectsIdentical(obj, obj_copy)
