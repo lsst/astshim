@@ -52,6 +52,10 @@ way.
 ### Attributes
 
 @ref CmpMap has no attributes beyond those provided by @ref Mapping and @ref Object.
+
+@warning CmpMap will sometimes appears as a SeriesMap or ParallelMap, as appropriate, including:
+- getClassName() will return "SeriesMap" or "ParallelMap", as appropriate
+- A CmpMap persisted using a Channel or pickle will be unpersisted as a SeriesMap or ParallelMap
 */
 class CmpMap : public Mapping {
     friend class Object;
