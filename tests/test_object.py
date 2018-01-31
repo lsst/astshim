@@ -1,10 +1,16 @@
 from __future__ import absolute_import, division, print_function
+import multiprocessing
 import unittest
 
 import numpy as np
 
 import astshim as ast
 from astshim.test import ObjectTestCase
+
+
+class PickleableUnitMap(ast.UnitMap):
+    def __reduce__(self):
+        return (PickleableUnitMap, (self.nIn,))
 
 
 class TestObject(ObjectTestCase):
@@ -151,6 +157,19 @@ class TestObject(ObjectTestCase):
         self.assertEqual(obj.ident, "initial_ident")
         cp = obj.copy()
         self.assertEqual(cp.ident, "initial_ident")
+
+    def test_multiprocessing(self):
+        """Make sure we can return objects from multiprocessing
+
+        This tests DM-13316: AST errors when using multiprocessing
+        to return astshim objects.
+        """
+        numProcesses = 2
+        naxes = 1
+        params = [naxes]*numProcesses
+        pool = multiprocessing.Pool(processes=numProcesses)
+        results = pool.map(PickleableUnitMap, params)
+        self.assertEqual(results, [PickleableUnitMap(naxes)]*numProcesses)
 
     def test_show(self):
         # pick an object with no floats so we don't have to worry
