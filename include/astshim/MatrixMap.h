@@ -75,7 +75,8 @@ public:
 
     virtual ~MatrixMap() {}
 
-    MatrixMap(MatrixMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    MatrixMap(MatrixMap const &) = default;
     MatrixMap(MatrixMap &&) = default;
     MatrixMap &operator=(MatrixMap const &) = delete;
     MatrixMap &operator=(MatrixMap &&) = default;

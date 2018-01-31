@@ -52,7 +52,8 @@ public:
 
     virtual ~ShiftMap() {}
 
-    ShiftMap(ShiftMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    ShiftMap(ShiftMap const &) = default;
     ShiftMap(ShiftMap &&) = default;
     ShiftMap &operator=(ShiftMap const &) = delete;
     ShiftMap &operator=(ShiftMap &&) = default;

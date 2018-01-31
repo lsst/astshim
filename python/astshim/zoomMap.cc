@@ -40,6 +40,7 @@ PYBIND11_PLUGIN(zoomMap) {
     py::class_<ZoomMap, std::shared_ptr<ZoomMap>, Mapping> cls(mod, "ZoomMap");
 
     cls.def(py::init<int, double, std::string const &>(), "ncoord"_a, "zoom"_a, "options"_a = "");
+    cls.def(py::init<ZoomMap const &>());
 
     cls.def_property_readonly("zoom", &ZoomMap::getZoom);
 

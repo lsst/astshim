@@ -517,7 +517,7 @@ aberration, but ignores atmospheric refraction, polar motion, etc.
 These may be added in a later release.
 
 If an AST SkyFrame that represents offset rather than absolute
-coordinates (see attribute @ref FitsChan_SkyRefIs "SkyRefIs") is written to a @ref FitsChan using
+coordinates (see attribute @ref SkyFrame_SkyRefIs "SkyRefIs") is written to a @ref FitsChan using
 `FITS-WCS` encoding, two alternate axis descriptions will be created.
 One will describe the offset coordinates, and will use "OFLN" and
 "OFLT" as the axis codes in the CTYPE keywords. The other will

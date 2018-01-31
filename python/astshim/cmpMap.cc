@@ -40,6 +40,7 @@ PYBIND11_PLUGIN(cmpMap) {
 
     cls.def(py::init<Mapping const &, Mapping const &, bool, std::string const &>(), "map1"_a, "map2"_a,
             "series"_a, "options"_a = "");
+    cls.def(py::init<CmpMap const &>());
 
     cls.def("__getitem__", &CmpMap::operator[], py::is_operator());
     cls.def("__len__", [](CmpMap const &) { return 2; });

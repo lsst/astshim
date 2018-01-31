@@ -1,3 +1,4 @@
+import pickle
 import unittest
 
 import numpy as np
@@ -11,37 +12,60 @@ from .stream import StringStream
 
 
 class ObjectTestCase(unittest.TestCase):
-
     """Base class for unit tests of objects
     """
+
+    def assertObjectsIdentical(self, obj1, obj2, checkType=True):
+        """Assert that two astshim objects are identical.
+
+        Identical means the objects are of the same class (if checkType)
+        and all properties are identical (including whether set or defaulted).
+        """
+        if checkType:
+            self.assertIs(type(obj1), type(obj2))
+        self.assertEqual(obj1.show(), obj2.show())
+        self.assertEqual(str(obj1), str(obj2))
+        self.assertEqual(repr(obj1), repr(obj2))
 
     def checkCopy(self, obj):
         """Check that an astshim object can be deep-copied
         """
         nobj = obj.getNObject()
         nref = obj.getRefCount()
-        cp = obj.copy()
-        self.assertEqual(type(obj), type(cp))
-        self.assertEqual(str(obj), str(cp))
-        self.assertEqual(repr(obj), repr(cp))
-        self.assertEqual(obj.getNObject(), nobj + 1)
-        # Object.copy makes a new pointer instead of copying the old one,
-        # so the reference count of the old one does not increase
-        self.assertEqual(obj.getRefCount(), nref)
-        self.assertFalse(obj.same(cp))
-        self.assertEqual(cp.getNObject(), nobj + 1)
-        self.assertEqual(cp.getRefCount(), 1)
+
+        def copyIter(obj):
+            yield obj.copy()
+            yield type(obj)(obj)
+
+        for cp in copyIter(obj):
+            self.assertObjectsIdentical(obj, cp)
+            self.assertEqual(obj.getNObject(), nobj + 1)
+            # Object.copy makes a new pointer instead of copying the old one,
+            # so the reference count of the old one does not increase
+            self.assertEqual(obj.getRefCount(), nref)
+            self.assertFalse(obj.same(cp))
+            self.assertEqual(cp.getNObject(), nobj + 1)
+            self.assertEqual(cp.getRefCount(), 1)
+            # changing an attribute of the copy does not affect the original
+            originalIdent = obj.ident
+            cp.ident = obj.ident + " modified"
+            self.assertEqual(obj.ident, originalIdent)
 
         del cp
         self.assertEqual(obj.getNObject(), nobj)
         self.assertEqual(obj.getRefCount(), nref)
 
-    def checkPersistence(self, obj):
+    def checkPersistence(self, obj, typeFromChannel=None):
         """Check that an astshim object can be persisted and unpersisted
 
+        @param[in] obj  Object to be checked
+        @param[in] typeFromChannel  Type of object expected to be read from
+                        a channel (since some thin wrapper types are read
+                        as the underlying type); None if the original type
+
         Check persistence using Channel, FitsChan (with native encoding,
-        as the only encoding compatible with all AST objects),
-        and XmlChan
+        as the only encoding compatible with all AST objects), XmlChan
+        and pickle.
         """
         for channelType, options in (
             (Channel, ""),
@@ -49,14 +73,20 @@ class ObjectTestCase(unittest.TestCase):
             (XmlChan, ""),
         ):
             ss = StringStream()
-            chan = Channel(ss)
+            chan = channelType(ss, options)
             chan.write(obj)
             ss.sinkToSource()
+            if channelType is FitsChan:
+                chan.clearCard()
             obj_copy = chan.read()
-            self.assertEqual(obj.className, obj_copy.className)
-            self.assertEqual(obj.show(), obj_copy.show())
-            self.assertEqual(str(obj), str(obj_copy))
-            self.assertEqual(repr(obj), repr(obj_copy))
+            if typeFromChannel is not None:
+                self.assertIs(type(obj_copy), typeFromChannel)
+                self.assertObjectsIdentical(obj, obj_copy, checkType=False)
+            else:
+                self.assertObjectsIdentical(obj, obj_copy)
+
+        obj_copy = pickle.loads(pickle.dumps(obj))
+        self.assertObjectsIdentical(obj, obj_copy)
 
 
 class MappingTestCase(ObjectTestCase):

@@ -45,6 +45,7 @@ PYBIND11_PLUGIN(mathMap) {
     cls.def(py::init<int, int, std::vector<std::string> const &, std::vector<std::string> const &,
                      std::string const &>(),
             "nin"_a, "nout"_a, "fwd"_a, "ref"_a, "options"_a = "");
+    cls.def(py::init<MathMap const &>());
 
     cls.def_property_readonly("seed", &MathMap::getSeed);
     cls.def_property_readonly("simpFI", &MathMap::getSimpFI);

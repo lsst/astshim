@@ -41,7 +41,10 @@ component in forming further @ref ParallelMap "ParallelMaps".
 @ref Mapping "Mappings" of arbitrary complexity may be built from simple
 individual @ref Mapping "Mappings" in this way.
 
-@warning This wraps AST's AstCmpMap, so getClassName() returns "CmpMap".
+@warning ParallelMap is a convenience wrapper around CmpMap. Specialized code hides some
+of this, so getClassName() will return "ParallelMap" and an ParallelMap persisted using a Channel
+or pickle will be returned as a "ParallelMap" in Python. However, it will be visible in
+other ways, such as the output from show().
 
 ### Attributes
 
@@ -68,7 +71,8 @@ public:
 
     virtual ~ParallelMap() {}
 
-    ParallelMap(ParallelMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    ParallelMap(ParallelMap const &) = default;
     ParallelMap(ParallelMap &&) = default;
     ParallelMap &operator=(ParallelMap const &) = delete;
     ParallelMap &operator=(ParallelMap &&) = default;

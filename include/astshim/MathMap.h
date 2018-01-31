@@ -380,7 +380,8 @@ public:
 
     virtual ~MathMap() {}
 
-    MathMap(MathMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    MathMap(MathMap const &) = default;
     MathMap(MathMap &&) = default;
     MathMap &operator=(MathMap const &) = delete;
     MathMap &operator=(MathMap &&) = default;

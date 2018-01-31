@@ -41,7 +41,10 @@ Since a SeriesMap is itself a Mapping, it can be used as a
 component in forming further @ref SeriesMap "SeriesMaps". @ref Mapping "Mappings" of arbitrary
 complexity may be built from simple individual @ref Mapping "Mappings" in this way.
 
-@warning This wraps AST's AstCmpMap, so getClassName() returns "CmpMap".
+@warning SeriesMap is a convenience wrapper around CmpMap. Specialized code hides some
+of this, so getClassName() will return "SeriesMap" and an SeriesMap persisted using a Channel
+or pickle will be returned as a "SeriesMap" in Python. However, it will be visible in
+other ways, such as the output from show().
 
 ### Attributes
 
@@ -68,7 +71,8 @@ public:
 
     virtual ~SeriesMap() {}
 
-    SeriesMap(SeriesMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    SeriesMap(SeriesMap const &) = default;
     SeriesMap(SeriesMap &&) = default;
     SeriesMap &operator=(SeriesMap const &) = delete;
     SeriesMap &operator=(SeriesMap &&) = default;

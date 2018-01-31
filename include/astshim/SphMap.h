@@ -65,7 +65,8 @@ public:
 
     virtual ~SphMap() {}
 
-    SphMap(SphMap const &) = delete;
+    /// Copy constructor: make a deep copy
+    SphMap(SphMap const &) = default;
     SphMap(SphMap &&) = default;
     SphMap &operator=(SphMap const &) = delete;
     SphMap &operator=(SphMap &&) = default;

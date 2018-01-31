@@ -40,6 +40,7 @@ PYBIND11_PLUGIN(frameSet) {
     cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
     cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
             "mapping"_a, "currentFrame"_a, "options"_a = "");
+    cls.def(py::init<Frame const &>());
 
     // def_readonly_static makes in only available in the class, not instances, so...
     cls.attr("BASE") = py::cast(AST__BASE);

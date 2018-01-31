@@ -170,7 +170,8 @@ public:
 
     virtual ~Frame() {}
 
-    Frame(Frame const &) = delete;
+    /// Copy constructor: make a deep copy
+    Frame(Frame const &) = default;
     Frame(Frame &&) = default;
     Frame &operator=(Frame const &) = delete;
     Frame &operator=(Frame &&) = default;

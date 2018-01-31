@@ -118,7 +118,8 @@ public:
 
     virtual ~SpecFrame() {}
 
-    SpecFrame(SpecFrame const &) = delete;
+    /// Copy constructor: make a deep copy
+    SpecFrame(SpecFrame const &) = default;
     SpecFrame(SpecFrame &&) = default;
     SpecFrame &operator=(SpecFrame const &) = delete;
     SpecFrame &operator=(SpecFrame &&) = default;

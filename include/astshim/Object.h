@@ -60,7 +60,8 @@ public:
 
     virtual ~Object() {}
 
-    Object(Object const &) = delete;
+    /// Copy constructor: make a deep copy
+    Object(Object const &object) : _objPtr(object.getRawPtrCopy(), &detail::annulAstObject) {}
     Object(Object &&) = default;
     Object &operator=(Object const &) = delete;
     Object &operator=(Object &&) = default;
@@ -78,7 +79,8 @@ public:
 
     See operator== for details
     */
-    bool operator!=(Object const &rhs) const { return !(*this == rhs); };
+    bool operator!=(Object const &rhs) const {
+        return !(*this == rhs); };
 
     /**
     Construct an @ref Object from a string, using astFromString
@@ -295,12 +297,7 @@ protected:
     /**
     Construct an @ref Object from a pointer to a raw AstObject
     */
-    explicit Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
-        assertOK();
-        if (!object) {
-            throw std::runtime_error("Null pointer");
-        }
-    }
+    explicit Object(AstObject *object);
 
     /**
     Functor to make an astshim instance from a raw AST pointer of the corresponding type.
@@ -522,6 +519,15 @@ private:
     @param[in] rawObj  A bare AST object pointer
     */
     static std::shared_ptr<Object> _basicFromAstObject(AstObject *rawObj);
+
+    /*
+    Get a deep copy of the raw AST pointer.
+    */
+    AstObject * getRawPtrCopy() const {
+        AstObject * rawPtrCopy = reinterpret_cast<AstObject *>(astCopy(getRawPtr()));
+        assertOK(rawPtrCopy);
+        return rawPtrCopy;
+    }
 
     /*
     Swap the raw object pointers between this and another object

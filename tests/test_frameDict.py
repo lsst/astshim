@@ -55,7 +55,7 @@ class TestFrameDict(MappingTestCase):
             [5.1, 0.0, 3.1],
         ])
         self.checkMappingPersistence(frameDict, indata)
-        self.checkPersistence(frameDict)
+        self.checkPersistence(frameDict, typeFromChannel=ast.FrameSet)
         self.checkDict(frameDict)
 
     def test_FrameDictFrameSetConstructor(self):
@@ -87,7 +87,7 @@ class TestFrameDict(MappingTestCase):
         self.assertEqual(frameDict.getFrame(frameDict.BASE).domain, "FRAME1")
         self.assertEqual(frameDict.getFrame(frameDict.CURRENT).domain, "FRAME2")
         self.assertEqual(frameDict.getMapping().ident, "zoomMap")
-        self.checkPersistence(frameDict)
+        self.checkPersistence(frameDict, typeFromChannel=ast.FrameSet)
         self.checkDict(frameDict)
 
         # make sure we can't add a frame with a duplicate domain name
@@ -117,7 +117,7 @@ class TestFrameDict(MappingTestCase):
         self.assertEqual(frameDict.getFrame(frameDict.BASE).domain, "FRAME1")
         self.assertEqual(frameDict.getFrame(frameDict.CURRENT).domain, "FRAME2")
         self.assertEqual(frameDict.getMapping().ident, "zoomMap")
-        self.checkPersistence(frameDict)
+        self.checkPersistence(frameDict, typeFromChannel=ast.FrameSet)
         self.checkDict(frameDict)
 
     def test_FrameDictGetMapping(self):

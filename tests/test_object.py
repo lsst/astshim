@@ -8,11 +8,6 @@ import astshim as ast
 from astshim.test import ObjectTestCase
 
 
-class PickleableUnitMap(ast.UnitMap):
-    def __reduce__(self):
-        return (PickleableUnitMap, (self.nIn,))
-
-
 class TestObject(ObjectTestCase):
 
     def test_attributes(self):
@@ -168,8 +163,8 @@ class TestObject(ObjectTestCase):
         naxes = 1
         params = [naxes]*numProcesses
         pool = multiprocessing.Pool(processes=numProcesses)
-        results = pool.map(PickleableUnitMap, params)
-        self.assertEqual(results, [PickleableUnitMap(naxes)]*numProcesses)
+        results = pool.map(ast.UnitMap, params)
+        self.assertEqual(results, [ast.UnitMap(naxes)]*numProcesses)
 
     def test_show(self):
         # pick an object with no floats so we don't have to worry

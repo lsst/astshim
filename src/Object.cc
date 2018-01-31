@@ -30,6 +30,7 @@
 #include "astshim/base.h"
 #include "astshim/detail/utils.h"
 #include "astshim/Object.h"
+#include "astshim/Channel.h"
 #include "astshim/ChebyMap.h"
 #include "astshim/CmpFrame.h"
 #include "astshim/Frame.h"
@@ -149,12 +150,9 @@ std::shared_ptr<Class> Object::fromAstObject(AstObject *rawObj, bool copy) {
 }
 
 void Object::show(std::ostream &os, bool showComments) const {
-    auto ch = astChannel(nullptr, sinkToOstream, "%s", showComments ? "" : "Comment=0");
-
-    // Store a poiner to the ostream in the channel, as required by sinkToOstream
-    astPutChannelData(ch, &os);
-    astWrite(ch, this->getRawPtr());
-    astAnnul(ch);
+    Stream stream(nullptr, &os);
+    Channel ch(stream, showComments ? "" : "Comment=0");
+    ch.write(*this);
     assertOK();
 }
 
@@ -162,6 +160,13 @@ std::string Object::show(bool showComments) const {
     std::ostringstream os;
     show(os, showComments);
     return os.str();
+}
+
+Object::Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
+    assertOK();
+    if (!object) {
+        throw std::runtime_error("Null pointer");
+    }
 }
 
 // Explicit instantiations
