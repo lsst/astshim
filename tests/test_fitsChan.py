@@ -26,7 +26,7 @@ def writeFitsWcs(frameSet, extraOptions=None):
     return fc
 
 
-class TestObject(ObjectTestCase):
+class TestFitsChan(ObjectTestCase):
 
     def setUp(self):
         shortCards = (

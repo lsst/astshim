@@ -8,7 +8,7 @@ from astshim.test import ObjectTestCase
 DataDir = os.path.join(os.path.dirname(__file__), "data")
 
 
-class TestObject(ObjectTestCase):
+class TestXmlChan(ObjectTestCase):
 
     def test_XmlChanDefaultAttributes(self):
         sstream = ast.StringStream()
