@@ -8,7 +8,7 @@ import astshim as ast
 from astshim.test import MappingTestCase
 
 
-class TestWcsMap(MappingTestCase):
+class TestWinMap(MappingTestCase):
 
     def test_WinMap(self):
         # a map describing a shift of [1.0, -0.5] followed by a zoom of 2

@@ -8,7 +8,7 @@ import astshim as ast
 from astshim.test import ObjectTestCase
 
 
-class TestObject(ObjectTestCase):
+class TestBase(ObjectTestCase):
 
     def test_arrayFromVector(self):
         nAxes = 3
