@@ -85,7 +85,7 @@ public:
         if ((_istreamPtr) && (*_istreamPtr)) {
             if (_isFits) {
                 // http://codereview.stackexchange.com/a/28759
-                _sourceStr.reserve(detail::FITSLEN);
+                _sourceStr.resize(detail::FITSLEN);
                 _istreamPtr->read(&_sourceStr[0], detail::FITSLEN);
             } else {
                 std::getline(*_istreamPtr, _sourceStr);
