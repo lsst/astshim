@@ -71,11 +71,10 @@ PYBIND11_PLUGIN(chebyMap) {
     cls.def("copy", &ChebyMap::copy);
     cls.def("getDomain", &ChebyMap::getDomain, "forward"_a);
     cls.def("polyTran",
-            (ChebyMap(ChebyMap::*)(bool, double, double, int, std::vector<double> const &,
-                                   std::vector<double> const &) const) &
-                    ChebyMap::polyTran,
+            py::overload_cast<bool, double, double, int, std::vector<double> const &,
+                              std::vector<double> const &>(&ChebyMap::polyTran, py::const_),
             "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a, "ubnd"_a);
-    cls.def("polyTran", (ChebyMap(ChebyMap::*)(bool, double, double, int) const) & ChebyMap::polyTran,
+    cls.def("polyTran", py::overload_cast<bool, double, double, int>(&ChebyMap::polyTran, py::const_),
             "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a);
 
     return mod.ptr();

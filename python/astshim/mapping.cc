@@ -69,23 +69,21 @@ PYBIND11_PLUGIN(mapping) {
     cls.def("simplify", &Mapping::simplify);
     // wrap the overloads of applyForward, applyInverse, tranGridForward and tranGridInverse that return a new
     // result
-    cls.def("applyForward", (Array2D(Mapping::*)(ConstArray2D const &) const) & Mapping::applyForward,
+    cls.def("applyForward", py::overload_cast<ConstArray2D const &>(&Mapping::applyForward, py::const_),
             "from"_a);
     cls.def("applyForward",
-            (std::vector<double>(Mapping::*)(std::vector<double> const &) const) & Mapping::applyForward,
-            "from"_a);
-    cls.def("applyInverse", (Array2D(Mapping::*)(ConstArray2D const &) const) & Mapping::applyInverse,
+            py::overload_cast<std::vector<double> const &>(&Mapping::applyForward, py::const_), "from"_a);
+    cls.def("applyInverse", py::overload_cast<ConstArray2D const &>(&Mapping::applyInverse, py::const_),
             "from"_a);
     cls.def("applyInverse",
-            (std::vector<double>(Mapping::*)(std::vector<double> const &) const) & Mapping::applyInverse,
-            "from"_a);
+            py::overload_cast<std::vector<double> const &>(&Mapping::applyInverse, py::const_), "from"_a);
     cls.def("tranGridForward",
-            (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
-                    Mapping::tranGridForward,
+            py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridForward,
+                                                                                py::const_),
             "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
     cls.def("tranGridInverse",
-            (Array2D(Mapping::*)(PointI const &, PointI const &, double, int, int) const) &
-                    Mapping::tranGridInverse,
+            py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridInverse,
+                                                                                py::const_),
             "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
 
     return mod.ptr();

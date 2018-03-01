@@ -46,7 +46,7 @@ PYBIND11_PLUGIN(pcdMap) {
     cls.def(py::init<PcdMap const &>());
 
     cls.def_property_readonly("disco", &PcdMap::getDisco);
-    cls.def_property_readonly("pcdCen", (std::vector<double>(PcdMap::*)() const) & PcdMap::getPcdCen);
+    cls.def_property_readonly("pcdCen", py::overload_cast<>(&PcdMap::getPcdCen, py::const_));
 
     cls.def("copy", &PcdMap::copy);
 

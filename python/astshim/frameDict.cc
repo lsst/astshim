@@ -55,8 +55,8 @@ public:
         auto objPtr = chan.read();
         auto frameSetPtr = std::dynamic_pointer_cast<ast::FrameSet>(objPtr);
         if (!frameSetPtr) {
-            throw std::runtime_error("Object being unpickled is a " + objPtr->getClassName()
-                                     + " not a FrameSet");
+            throw std::runtime_error("Object being unpickled is a " + objPtr->getClassName() +
+                                     " not a FrameSet");
         }
         return std::make_shared<ast::FrameDict>(*frameSetPtr);
     }
@@ -71,7 +71,7 @@ PYBIND11_PLUGIN(frameDict) {
     makerCls.def(py::init<>());
     makerCls.def("__call__", &FrameDictMaker::operator());
     makerCls.def("__reduce__",
-                       [makerCls](FrameDictMaker const &self) { return py::make_tuple(makerCls, py::tuple()); });
+                 [makerCls](FrameDictMaker const &self) { return py::make_tuple(makerCls, py::tuple()); });
 
     py::class_<FrameDict, std::shared_ptr<FrameDict>, FrameSet> cls(mod, "FrameDict");
 
@@ -83,43 +83,38 @@ PYBIND11_PLUGIN(frameDict) {
 
     cls.def("copy", &FrameDict::copy);
 
-    cls.def("addFrame", (void (FrameDict::*)(int, Mapping const &, Frame const &)) & FrameDict::addFrame,
+    cls.def("addFrame", py::overload_cast<int, Mapping const &, Frame const &>(&FrameDict::addFrame),
             "iframe"_a, "map"_a, "frame"_a);
     cls.def("addFrame",
-            (void (FrameDict::*)(std::string const &, Mapping const &, Frame const &)) & FrameDict::addFrame,
+            py::overload_cast<std::string const &, Mapping const &, Frame const &>(&FrameDict::addFrame),
             "domain"_a, "map"_a, "frame"_a);
     cls.def("getAllDomains", &FrameDict::getAllDomains);
-    cls.def("getFrame", (std::shared_ptr<Frame>(FrameDict::*)(int, bool) const) & FrameDict::getFrame,
-            "index"_a, "copy"_a = true);
-    cls.def("getFrame",
-            (std::shared_ptr<Frame>(FrameDict::*)(std::string const &, bool) const) & FrameDict::getFrame,
+    cls.def("getFrame", py::overload_cast<int, bool>(&FrameDict::getFrame, py::const_), "index"_a,
+            "copy"_a = true);
+    cls.def("getFrame", py::overload_cast<std::string const &, bool>(&FrameDict::getFrame, py::const_),
             "domain"_a, "copy"_a = true);
-    cls.def("getMapping", (std::shared_ptr<Mapping>(FrameDict::*)(int, int) const) & FrameDict::getMapping,
+    cls.def("getMapping", py::overload_cast<int, int>(&FrameDict::getMapping, py::const_),
+            "from"_a = FrameDict::BASE, "to"_a = FrameDict::CURRENT);
+    cls.def("getMapping", py::overload_cast<int, std::string const &>(&FrameDict::getMapping, py::const_),
+            "from"_a = FrameDict::BASE, "to"_a = FrameDict::CURRENT);
+    cls.def("getMapping", py::overload_cast<std::string const &, int>(&FrameDict::getMapping, py::const_),
             "from"_a = FrameDict::BASE, "to"_a = FrameDict::CURRENT);
     cls.def("getMapping",
-            (std::shared_ptr<Mapping>(FrameDict::*)(int, std::string const &) const) & FrameDict::getMapping,
-            "from"_a, "to"_a);
-    cls.def("getMapping",
-            (std::shared_ptr<Mapping>(FrameDict::*)(std::string const &, int) const) & FrameDict::getMapping,
-            "from"_a, "to"_a);
-    cls.def("getMapping",
-            (std::shared_ptr<Mapping>(FrameDict::*)(std::string const &, std::string const &) const) &
-                    FrameDict::getMapping,
-            "from"_a, "to"_a);
+            py::overload_cast<std::string const &, std::string const &>(&FrameDict::getMapping, py::const_),
+            "from"_a = FrameDict::BASE, "to"_a = FrameDict::CURRENT);
     cls.def("getIndex", &FrameDict::getIndex, "domain"_a);
     cls.def("hasDomain", &FrameDict::hasDomain, "domain"_a);
-    cls.def("mirrorVariants", (void (FrameDict::*)(int)) & FrameDict::mirrorVariants, "index"_a);
-    cls.def("mirrorVariants", (void (FrameDict::*)(std::string const &)) & FrameDict::mirrorVariants,
-            "domain"_a);
-    cls.def("remapFrame", (void (FrameDict::*)(int, Mapping &)) & FrameDict::remapFrame, "index"_a, "map"_a);
-    cls.def("remapFrame", (void (FrameDict::*)(std::string const &, Mapping &)) & FrameDict::remapFrame,
+    cls.def("mirrorVariants", py::overload_cast<int>(&FrameDict::mirrorVariants), "index"_a);
+    cls.def("mirrorVariants", py::overload_cast<std::string const &>(&FrameDict::mirrorVariants), "domain"_a);
+    cls.def("remapFrame", py::overload_cast<int, Mapping &>(&FrameDict::remapFrame), "index"_a, "map"_a);
+    cls.def("remapFrame", py::overload_cast<std::string const &, Mapping &>(&FrameDict::remapFrame),
             "domain"_a, "map"_a);
-    cls.def("removeFrame", (void (FrameDict::*)(int)) & FrameDict::removeFrame, "index"_a);
-    cls.def("removeFrame", (void (FrameDict::*)(std::string const &)) & FrameDict::removeFrame, "domain"_a);
-    cls.def("setBase", (void (FrameDict::*)(int)) & FrameDict::setBase, "index"_a);
-    cls.def("setBase", (void (FrameDict::*)(std::string const &)) & FrameDict::setBase, "domain"_a);
-    cls.def("setCurrent", (void (FrameDict::*)(int)) & FrameDict::setCurrent, "index"_a);
-    cls.def("setCurrent", (void (FrameDict::*)(std::string const &)) & FrameDict::setCurrent, "domain"_a);
+    cls.def("removeFrame", py::overload_cast<int>(&FrameDict::removeFrame), "index"_a);
+    cls.def("removeFrame", py::overload_cast<std::string const &>(&FrameDict::removeFrame), "domain"_a);
+    cls.def("setBase", py::overload_cast<int>(&FrameDict::setBase), "index"_a);
+    cls.def("setBase", py::overload_cast<std::string const &>(&FrameDict::setBase), "domain"_a);
+    cls.def("setCurrent", py::overload_cast<int>(&FrameDict::setCurrent), "index"_a);
+    cls.def("setCurrent", py::overload_cast<std::string const &>(&FrameDict::setCurrent), "domain"_a);
     cls.def("setDomain", &FrameDict::setDomain, "domain"_a);
 
     /// Override standard pickling support so we get a FrameDict back, instead of a FrameSet
