@@ -5,10 +5,11 @@ import unittest
 import astshim as ast
 from astshim.test import ObjectTestCase
 
-DataDir = os.path.join(os.path.dirname(__file__), "data")
-
 
 class TestXmlChan(ObjectTestCase):
+
+    def setUp(self):
+        self.dataDir = os.path.join(os.path.dirname(__file__), "data")
 
     def test_XmlChanDefaultAttributes(self):
         sstream = ast.StringStream()
