@@ -88,7 +88,7 @@ PYBIND11_PLUGIN(object) {
     cls.def("lock", &Object::lock, "wait"_a);
     cls.def("same", &Object::same, "other"_a);
     // do not wrap the ostream version of show, since there is no obvious Python equivalent to ostream
-    cls.def("show", (std::string(Object::*)(bool) const) & Object::show, "showComments"_a = true);
+    cls.def("show", py::overload_cast<bool>(&Object::show, py::const_), "showComments"_a = true);
 
     cls.def("test", &Object::test, "attrib"_a);
     cls.def("unlock", &Object::unlock, "report"_a = false);

@@ -52,9 +52,8 @@ PYBIND11_PLUGIN(specFrame) {
     cls.def("getAlignStdOfRest", &SpecFrame::getAlignStdOfRest);
     cls.def("getRefDec", &SpecFrame::getRefDec);
     cls.def("getRefRA", &SpecFrame::getRefRA);
-    cls.def("getRefPos", (std::vector<double>(SpecFrame::*)(SkyFrame const &) const) & SpecFrame::getRefPos,
-            "frame"_a);
-    cls.def("getRefPos", (std::vector<double>(SpecFrame::*)() const) & SpecFrame::getRefPos);
+    cls.def("getRefPos", py::overload_cast<SkyFrame const &>(&SpecFrame::getRefPos, py::const_), "frame"_a);
+    cls.def("getRefPos", py::overload_cast<>(&SpecFrame::getRefPos, py::const_));
     cls.def("getRestFreq", &SpecFrame::getRestFreq);
     cls.def("getSourceSys", &SpecFrame::getSourceSys);
     cls.def("getSourceVel", &SpecFrame::getSourceVel);
@@ -66,11 +65,11 @@ PYBIND11_PLUGIN(specFrame) {
     cls.def("setAlignStdOfRest", &SpecFrame::setAlignStdOfRest, "stdOfRest"_a);
     cls.def("setRefDec", &SpecFrame::setRefDec, "refDec"_a);
     cls.def("setRefRA", &SpecFrame::setRefRA, "refRA"_a);
-    cls.def("setRefPos", (void (SpecFrame::*)(SkyFrame const &, double, double)) & SpecFrame::setRefPos,
+    cls.def("setRefPos", py::overload_cast<SkyFrame const &, double, double>(&SpecFrame::setRefPos),
             "frame"_a, "lon"_a, "lat"_a);
-    cls.def("setRefPos", (void (SpecFrame::*)(double, double)) & SpecFrame::setRefPos, "ra"_a, "dec"_a);
-    cls.def("setRestFreq", (void (SpecFrame::*)(double)) & SpecFrame::setRestFreq, "freq"_a);
-    cls.def("setRestFreq", (void (SpecFrame::*)(std::string const &)) & SpecFrame::setRestFreq, "freq"_a);
+    cls.def("setRefPos", py::overload_cast<double, double>(&SpecFrame::setRefPos), "ra"_a, "dec"_a);
+    cls.def("setRestFreq", py::overload_cast<double>(&SpecFrame::setRestFreq), "freq"_a);
+    cls.def("setRestFreq", py::overload_cast<std::string const &>(&SpecFrame::setRestFreq), "freq"_a);
     cls.def("setSourceSys", &SpecFrame::setSourceSys, "system"_a);
     cls.def("setSourceVel", &SpecFrame::setSourceVel, "vel"_a);
     cls.def("setSourceVRF", &SpecFrame::setSourceVRF, "vrf"_a);
