@@ -6,14 +6,15 @@ import unittest
 import astshim as ast
 from astshim.test import MappingTestCase
 
-DataDir = os.path.join(os.path.dirname(__file__))
-
 
 class TestChannel(MappingTestCase):
 
+    def setUp(self):
+        self.dataDir = os.path.join(os.path.dirname(__file__), "data")
+
     def test_ChannelFileStream(self):
-        path1 = os.path.join(DataDir, "channelFileStream1.txt")
-        path2 = os.path.join(DataDir, "channelFileStream2.txt")
+        path1 = os.path.join(self.dataDir, "channelFileStream1.txt")
+        path2 = os.path.join(self.dataDir, "channelFileStream2.txt")
 
         outstream = ast.FileStream(path1, True)
         outchan = ast.Channel(outstream)

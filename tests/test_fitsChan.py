@@ -5,8 +5,6 @@ import unittest
 import astshim as ast
 from astshim.test import ObjectTestCase
 
-DataDir = os.path.join(os.path.dirname(__file__))
-
 
 def pad(card):
     """Pad a string withs paces to length 80 characters"""
@@ -29,6 +27,7 @@ def writeFitsWcs(frameSet, extraOptions=None):
 class TestFitsChan(ObjectTestCase):
 
     def setUp(self):
+        self.dataDir = os.path.join(os.path.dirname(__file__), "data")
         shortCards = (
             "NAXIS1  =                  200",
             "NAXIS2  =                  200",
@@ -153,7 +152,7 @@ class TestFitsChan(ObjectTestCase):
 
         In particular, make sure that cards are written as the channel is destroyed
         """
-        path = os.path.join(DataDir, "test_fitsChanFileStream.fits")
+        path = os.path.join(self.dataDir, "test_fitsChanFileStream.fits")
         fc1 = ast.FitsChan(ast.FileStream(path, True))
         fc1.putCards("".join(self.cards))
         # delete the channel, which writes cards,
@@ -679,6 +678,25 @@ class TestFitsChan(ObjectTestCase):
             self.assertEqual(fv2.value, "RA---TAN")
             fv3 = fc2.getFitsS("CTYPE2")
             self.assertEqual(fv3.value, "DEC--TAN")
+
+    def test_FitsChanDM13686(self):
+        """Test that a particular FrameSet will not segfault when
+        we attempt to write it to a FitsChan as FITS-WCS
+        """
+        def readObjectFromShow(path):
+            """Read an ast object saved as Object.show()"""
+            with open(path, "r") as f:
+                objectText = f.read()
+            stream = ast.StringStream(objectText)
+            chan = ast.Channel(stream)
+            return chan.read()
+
+        path = os.path.join(self.dataDir, "frameSetDM13686.txt")
+        frameSet = readObjectFromShow(path)
+        strStream = ast.StringStream()
+        fitsChan = ast.FitsChan(strStream, "Encoding=FITS-WCS")
+        # This FrameSet can be represtented as FITS-WCS, so 1 object is written
+        self.assertEqual(fitsChan.write(frameSet), 1)
 
 
 if __name__ == "__main__":
