@@ -6,7 +6,7 @@ import unittest
 import astshim as ast
 from astshim.test import MappingTestCase
 
-DataDir = os.path.join(os.path.dirname(__file__))
+DataDir = os.path.join(os.path.dirname(__file__), "data")
 
 
 class TestChannel(MappingTestCase):
