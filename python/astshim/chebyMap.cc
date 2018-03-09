@@ -24,7 +24,6 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include "numpy/arrayobject.h"
 #include "ndarray/pybind11.h"
 
 #include "astshim/Mapping.h"
@@ -48,12 +47,6 @@ PYBIND11_PLUGIN(chebyMap) {
     py::module mod("chebyMap", "Python wrapper for ChebyMap");
 
     py::module::import("astshim.mapping");
-
-    // Need to import numpy for ndarray and eigen conversions
-    if (_import_array() < 0) {
-        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
-        return nullptr;
-    }
 
     declareChebyDomain(mod);
 

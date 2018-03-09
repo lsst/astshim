@@ -21,7 +21,6 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include "numpy/arrayobject.h"
 #include "ndarray/pybind11.h"
 
 #include "astshim/base.h"
@@ -42,12 +41,6 @@ PYBIND11_PLUGIN(mapping) {
     py::module::import("astshim.object");
     py::module::import("astshim.mapBox");
     py::module::import("astshim.mapSplit");
-
-    // Need to import numpy for ndarray and eigen conversions
-    if (_import_array() < 0) {
-        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
-        return nullptr;
-    }
 
     py::class_<Mapping, std::shared_ptr<Mapping>, Object> cls(mod, "Mapping");
 
