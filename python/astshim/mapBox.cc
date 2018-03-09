@@ -21,7 +21,6 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include "numpy/arrayobject.h"
 #include "ndarray/pybind11.h"
 
 #include "astshim/MapBox.h"
@@ -35,12 +34,6 @@ namespace {
 
 PYBIND11_PLUGIN(mapBox) {
     py::module mod("mapBox", "Python wrapper for MapBox");
-
-    // Need to import numpy for ndarray and eigen conversions
-    if (_import_array() < 0) {
-        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
-        return nullptr;
-    }
 
     py::class_<MapBox> cls(mod, "MapBox");
 

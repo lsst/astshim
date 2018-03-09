@@ -21,7 +21,6 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include "numpy/arrayobject.h"
 #include "ndarray/pybind11.h"
 
 namespace py = pybind11;
@@ -37,12 +36,6 @@ PYBIND11_PLUGIN(functional) {
 
     py::module::import("astshim.frameSet");
     py::module::import("astshim.mapping");
-
-    // Need to import numpy for ndarray and eigen conversions
-    if (_import_array() < 0) {
-        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
-        return nullptr;
-    }
 
     mod.def("append", &append, "first"_a, "second"_a);
     mod.def("makeRadialMapping", &makeRadialMapping, "center"_a, "mapping1d"_a);

@@ -22,7 +22,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include "numpy/arrayobject.h"
 #include "ndarray/pybind11.h"
 #include "astshim/base.h"
 
@@ -34,12 +33,6 @@ namespace {
 
 PYBIND11_PLUGIN(base) {
     py::module mod("base", "Python wrapper for base.h");
-
-    // Need to import numpy for ndarray and eigen conversions
-    if (_import_array() < 0) {
-        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
-        return nullptr;
-    }
 
     mod.def("assertOK", &assertOK, "rawObj1"_a = nullptr, "rawObj2"_a = nullptr);
     mod.def("escapes", &escapes, "include"_a = -1);

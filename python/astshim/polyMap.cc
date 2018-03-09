@@ -24,7 +24,6 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include "numpy/arrayobject.h"
 #include "ndarray/pybind11.h"
 
 #include "astshim/Mapping.h"
@@ -40,12 +39,6 @@ PYBIND11_PLUGIN(polyMap) {
     py::module mod("polyMap", "Python wrapper for PolyMap");
 
     py::module::import("astshim.mapping");
-
-    // Need to import numpy for ndarray and eigen conversions
-    if (_import_array() < 0) {
-        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
-        return nullptr;
-    }
 
     py::class_<PolyMap, std::shared_ptr<PolyMap>, Mapping> cls(mod, "PolyMap");
 
