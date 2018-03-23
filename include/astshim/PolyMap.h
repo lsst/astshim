@@ -167,7 +167,7 @@ public:
     X=P_i(Y) for the inverse transformation.
 
     The `forward` parameter specifies the transformation to be replaced.
-    If it is false, a new forward transformation is created
+    If it is true, a new forward transformation is created
     by first finding the input values (X) using the inverse transformation
     (which must be available) at a regular grid of points (Y) covering a
     rectangular region of the @ref PolyMap's output space. The coefficients of
