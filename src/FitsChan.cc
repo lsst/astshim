@@ -21,11 +21,11 @@
  */
 
 #include <complex>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "astshim/base.h"
-#include "astshim/detail/utils.h"
 #include "astshim/Object.h"
 #include "astshim/Stream.h"
 #include "astshim/FitsChan.h"
@@ -119,11 +119,11 @@ std::vector<std::string> FitsChan::getAllCardNames() {
 }
 
 FoundValue<std::string> FitsChan::findFits(std::string const &name, bool inc) {
-    char fitsbuf[detail::FITSLEN + 1];  // leave room for a terminating \0
-    fitsbuf[0] = '\0';                  // in case nothing is found
-    bool success = static_cast<bool>(astFindFits(getRawPtr(), name.c_str(), fitsbuf, inc));
+    std::unique_ptr<char[]> fitsbuf(new char[detail::FITSLEN + 1]);
+    fitsbuf[0] = '\0';  // in case nothing is found
+    bool success = static_cast<bool>(astFindFits(getRawPtr(), name.c_str(), fitsbuf.get(), inc));
     assertOK();
-    return FoundValue<std::string>(success, std::string(fitsbuf));
+    return FoundValue<std::string>(success, std::string(fitsbuf.get()));
 }
 
 FitsKeyState FitsChan::testFits(std::string const &name) const {
