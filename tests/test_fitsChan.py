@@ -313,7 +313,7 @@ class TestFitsChan(ObjectTestCase):
 
         # replace ANINT card with new everything: name, value type and comment
         fc.setCard(4)
-        fc.setFitsCF("NEWNAME", complex(99.9, 99.8), "New comment", overwrite = True)
+        fc.setFitsCF("NEWNAME", complex(99.9, 99.8), "New comment", overwrite=True)
         self.assertEqual(fc.getAllCardNames(),
                          ["ACOMPLEX", "ACONT", "AFLOAT", "NEWNAME",
                           "ALOGICAL", "ASTRING", "UNDEFVAL", "        "])

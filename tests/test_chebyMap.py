@@ -345,7 +345,7 @@ class TestChebyMap(MappingTestCase):
 
         # fit an inverse transform
         chebyMap2 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
-                                       lbnd = lbnd_f, ubnd=ubnd_f)
+                                       lbnd=lbnd_f, ubnd=ubnd_f)
         self.assertTrue(chebyMap2.hasForward)
         self.assertTrue(chebyMap2.hasInverse)
         # forward should be identical to the original
@@ -418,7 +418,7 @@ class TestChebyMap(MappingTestCase):
 
         with self.assertRaises(RuntimeError):
             chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
-                               lbnd = lbnd_f, ubnd=ubnd_f)
+                               lbnd=lbnd_f, ubnd=ubnd_f)
 
     def test_chebyGetDomain(self):
         """Test ChebyMap.getDomain's ability to estimate values
