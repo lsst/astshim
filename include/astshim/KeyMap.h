@@ -24,6 +24,7 @@
 
 #include <complex>
 #include <ostream>
+#include <memory>
 
 #include "astshim/base.h"
 #include "astshim/Channel.h"
@@ -275,13 +276,13 @@ public:
     /// Get one std::string value for a given key
     std::string getC(std::string const &key, int ind) const {
         int const maxChar = 1 + astMapLenC(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str());
-        char charArr[maxChar];
+        std::unique_ptr<char[]> cstr(new char[maxChar]);
         if (!astMapGetElemC(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), maxChar, ind,
-                            charArr)) {
+                            cstr.get())) {
             throwKeyNotFound(key);
         }
         assertOK();
-        return std::string(charArr);
+        return std::string(cstr.get());
     }
 
     /// Get all std::string values for a given key
@@ -291,12 +292,12 @@ public:
         if (size > 0) {
             // # of chars for each entry; the +1 is needed to provide space for the terminating null
             int const eltLen = 1 + astMapLenC(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str());
-            char charArr[size * eltLen];
+            std::unique_ptr<char[]> cstr(new char[size * eltLen]);
             int nret;  // should equal size after the call
             astMapGet1C(reinterpret_cast<AstKeyMap const *>(getRawPtr()), key.c_str(), eltLen, size, &nret,
-                        charArr);
+                        cstr.get());
             for (int i = 0; i < size; ++i) {
-                retVec.push_back(std::string(charArr + i * eltLen));
+                retVec.push_back(std::string(cstr.get() + i * eltLen));
             }
         }
         assertOK();

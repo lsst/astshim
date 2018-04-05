@@ -8,4 +8,6 @@ __all__ = []  # import only for side effects
 def keys(self):
     for i in range(len(self)):
         yield self.key(i)
+
+
 KeyMap.keys = keys

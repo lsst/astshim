@@ -22,6 +22,7 @@
 #ifndef ASTSHIM_DETAIL_UTILS_H
 #define ASTSHIM_DETAIL_UTILS_H
 
+#include <cstddef>
 #include <cctype>
 #include <limits>
 #include <sstream>
