@@ -1,0 +1,4 @@
+# don't whine about undocumented default constructors
+EXTRACT_ALL = YES
+EXCLUDE_PATTERNS += */astshim/src/*.cc
+EXCLUDE_PATTERNS += */astshim/src/detail/*.cc
