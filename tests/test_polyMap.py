@@ -218,7 +218,7 @@ class TestPolyMap(MappingTestCase):
         with self.assertRaises(ValueError):
             ast.PolyMap(coeff_f, 3)
 
-    def test_PolyMapPolyTran(self):
+    def test_PolyMapPolyTranTrivial(self):
         coeff_f = np.array([
             [1., 1, 1, 0],
             [1., 1, 0, 1],
@@ -250,6 +250,35 @@ class TestPolyMap(MappingTestCase):
 
         self.checkMappingPersistence(pm, indata)
         self.checkMappingPersistence(pm2, indata)
+
+    def test_PolyMapPolyTranNontrivial(self):
+        """Test PolyMap.polyTran on a non-trivial case
+        """
+        # Approximate "field angle to focal plane" transformation coefficients for LSST
+        # thus the domain of the forward direction is 1.75 degrees = 0.0305 radians
+        # The camera has 10 um pixels = 0.01 mm
+        # The desired accuracy of the inverse transformation is
+        # 0.001 pixels = 1e-5 mm = 9.69e-10 radians
+        plateScaleRad = 9.69627362219072e-05  # radians per mm
+        radialCoeff = np.array([0.0, 1.0, 0.0, 0.925]) / plateScaleRad
+        polyCoeffs = []
+        for i, coeff in enumerate(radialCoeff):
+            polyCoeffs.append((coeff, 1, i))
+        polyCoeffs = np.array(polyCoeffs)
+        fieldAngleToFocalPlane = ast.PolyMap(polyCoeffs, 1)
+
+        atolRad = 1.0e-9
+        fieldAngleToFocalPlane2 = fieldAngleToFocalPlane.polyTran(forward=False, acc=atolRad, maxacc=atolRad,
+                                                                  maxorder=10, lbnd=[0], ubnd=[0.0305])
+        fieldAngle = np.linspace(0, 0.0305, 100)
+        focalPlane = fieldAngleToFocalPlane.applyForward(fieldAngle)
+        fieldAngleRoundTrip = fieldAngleToFocalPlane2.applyInverse(focalPlane)
+        npt.assert_allclose(fieldAngle, fieldAngleRoundTrip, atol=atolRad)
+
+        # Verify that polyTran cannot fit the inverse when maxorder is too small
+        with self.assertRaises(RuntimeError):
+            fieldAngleToFocalPlane.polyTran(forward=False, acc=atolRad, maxacc=atolRad,
+                                            maxorder=3, lbnd=[0], ubnd=[0.0305])
 
     def test_PolyMapPolyMapUnivertible(self):
         """Test polyTran on a PolyMap without a single-valued inverse
