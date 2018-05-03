@@ -12,12 +12,13 @@ This attribute indicates whether the inverse transformation of
 the PolyMap should be implemented via an iterative Newton-Raphson
 approximation that uses the forward transformation to transform
 candidate input positions until an output position is found which
-is close to the required output position. By default, an iterative
-inverse is provided if, and only if, no inverse polynomial was supplied
-when the PolyMap was constructed.
+is close to the required output position. False by default.
+
+Note: if IterInverse is true then the iterative inverse is used by
+applyInverse, even if inverse coefficients are also supplied.
 
 The @ref PolyMap_NIterInverse "NIterInverse" and @ref PolyMap_TolInverse "TolInverse"
-attributes provide parameters that control the behaviour of the inverse approcimation method.
+attributes provide parameters that control the behaviour of the inverse approximation method.
 
 
 @subsection PolyMap_NIterInverse NIterInverse

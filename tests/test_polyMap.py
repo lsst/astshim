@@ -280,6 +280,29 @@ class TestPolyMap(MappingTestCase):
             fieldAngleToFocalPlane.polyTran(forward=False, acc=atolRad, maxacc=atolRad,
                                             maxorder=3, lbnd=[0], ubnd=[0.0305])
 
+    def test_PolyMapIterInverseDominates(self):
+        """Test that IterInverse dominates inverse coefficients for applyInverse
+        """
+        coeff_f = np.array([
+            [1., 1, 1],
+        ])
+        # these coefficients don't match coeff_f, in that the inverse mapping
+        # does not undo the forward mapping (as proven below)
+        coeff_i = np.array([
+            [25., 1, 2],
+        ])
+        polyMap = ast.PolyMap(coeff_f, coeff_i, "IterInverse=1")
+
+        indata = np.array([-0.5, 0.5, 1.1, 1.8])
+        outdata = polyMap.applyForward(indata)
+        indata_roundtrip = polyMap.applyInverse(outdata)
+        npt.assert_allclose(indata, indata_roundtrip)
+
+        # prove that without the iterative inverse the PolyMap does not invert correctly
+        polyMap2 = ast.PolyMap(coeff_f, coeff_i)
+        indata_roundtrip2 = polyMap2.applyInverse(outdata)
+        self.assertFalse(np.allclose(indata, indata_roundtrip2))
+
     def test_PolyMapPolyMapUnivertible(self):
         """Test polyTran on a PolyMap without a single-valued inverse
 
