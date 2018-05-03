@@ -29,6 +29,21 @@ namespace ast {
 
 PolyMap PolyMap::polyTran(bool forward, double acc, double maxacc, int maxorder,
                           std::vector<double> const &lbnd, std::vector<double> const &ubnd) const {
+    // If there is an iterative inverse then reject attempts to fit the other direction.
+    // AST catches the case that there are no inverse coefficients,
+    // but I prefer to also raise if there are inverse coefficients because
+    // the iterative inverse cannot match the inverse coefficients, except in the most trivial cases,
+    // and the inverse coefficients are used to fit the forward direction,
+    // so the results are likely to be surprising
+    if (getIterInverse()) {
+        if (forward != isInverted()) {
+            if (forward) {
+                throw std::invalid_argument("Cannot fit forward transform when inverse is iterative");
+            } else {
+                throw std::invalid_argument("Cannot fit inverse transform when forward is iterative");
+            }
+        }
+    }
     return PolyMap(detail::polyTranImpl<AstPolyMap>(*this, forward, acc, maxacc, maxorder, lbnd, ubnd));
 }
 

@@ -303,6 +303,40 @@ class TestPolyMap(MappingTestCase):
         indata_roundtrip2 = polyMap2.applyInverse(outdata)
         self.assertFalse(np.allclose(indata, indata_roundtrip2))
 
+    def test_PolyMapPolyTranIterInverse(self):
+        """Test PolyTran on a PolyMap that has an iterative inverse
+
+        The result should use the fit inverse, not the iterative inverse
+        """
+        coeff_f = np.array([
+            [1., 1, 1],
+        ])
+        for polyMap in (
+            ast.PolyMap(coeff_f, 1, "IterInverse=1"),
+            ast.PolyMap(coeff_f, coeff_f, "IterInverse=1"),
+        ):
+            # make sure IterInverse is True and set
+            self.assertTrue(polyMap.iterInverse)
+            self.assertTrue(polyMap.test("IterInverse"))
+
+            # fit inverse; this should clear iterInverse
+            polyMapFitInv = polyMap.polyTran(False, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
+            self.assertFalse(polyMapFitInv.iterInverse)
+            self.assertFalse(polyMapFitInv.test("IterInverse"))
+
+            # fit forward direction of inverted mapping; this should also clear IterInverse
+            polyMapInvFitFwd = polyMap.getInverse().polyTran(True, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
+            self.assertFalse(polyMapInvFitFwd.iterInverse)
+            self.assertFalse(polyMapFitInv.test("IterInverse"))
+
+            # cannot fit forward because inverse is iterative
+            with self.assertRaises(ValueError):
+                polyMap.polyTran(True, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
+
+            # cannot fit inverse of inverted mapping because forward is iterative
+            with self.assertRaises(ValueError):
+                polyMap.getInverse().polyTran(False, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
+
     def test_PolyMapPolyMapUnivertible(self):
         """Test polyTran on a PolyMap without a single-valued inverse
 
