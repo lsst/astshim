@@ -4,6 +4,7 @@ _build.*
 config.log
 .sconf_temp
 .cache
+.pytest_cache
 *.o
 *.os
 *.so
