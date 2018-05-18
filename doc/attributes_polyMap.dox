@@ -8,16 +8,32 @@ namespace ast {
 
 Provide an iterative inverse transformation? (bool)
 
-This attribute indicates whether the inverse transformation of
-the PolyMap should be implemented via an iterative Newton-Raphson
+This attribute indicates whether the inverse transformation of the
+uninverted PolyMap should be implemented via an iterative Newton-Raphson
 approximation that uses the forward transformation to transform
 candidate input positions until an output position is found which
-is close to the required output position. By default, an iterative
-inverse is provided if, and only if, no inverse polynomial was supplied
-when the PolyMap was constructed.
+is close to the required output position. False by default.
+
+Note, the term "inverse transformation" here refers to the inverse
+transformation of the original PolyMap, ignoring any subsequent
+inversions. Also, "input" and "output" refer to the inputs and
+outputs of the original PolyMap.
+
+Note: if IterInverse is true then the iterative inverse is used by
+applyInverse, even if inverse coefficients are also supplied.
 
 The @ref PolyMap_NIterInverse "NIterInverse" and @ref PolyMap_TolInverse "TolInverse"
-attributes provide parameters that control the behaviour of the inverse approcimation method.
+attributes provide parameters that control the behaviour of the inverse approximation method.
+
+The iterative inverse returns nan axis values at positions
+for which the inverse transformation is undefined. For instance,
+if the forward transformation is y = x*x, the iterative inverse
+will return x = nan at y = -1. If the inverse transformation
+is multiply defined, the position returned by the iterative inverse
+will be the position of the solution that is closest to the
+supplied position. For instance, using the above example, y = x*x,
+the iterative inverse will return x = +2 at y = 4, because x = +2
+is the closest solution to 4 (the other solution is x = -2).
 
 
 @subsection PolyMap_NIterInverse NIterInverse

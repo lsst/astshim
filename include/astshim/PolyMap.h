@@ -154,6 +154,9 @@ public:
     the other transformation and performing a least squares polynomial
     fit in the opposite direction to the sampled positions and values.
 
+    IterInverse will be cleared in the returned mapping if the inverse
+    was fit by polyTran.
+
     This method can only be used on (1-input,1-output) or (2-input, 2-output)
     @ref PolyMap "PolyMaps".
 
@@ -219,6 +222,12 @@ public:
 
     @throws std::invalid_argument if the size of `lbnd` or `ubnd` does not match getNIn() (if `forward` false)
                     or getNOut() (if `forward` true).
+    @throws std::invalid_argument if forward true and the inverse transform is iterative
+                    (even if this transform also has inverse coefficients, since the result
+                    is unlikely to match user expectations)
+    @throws std::invalid_argument if forward false and the forward transform is iterative
+                    (even if this transform also has forward coefficients, since the result
+                    is unlikely to match user expectations)
     */
     PolyMap polyTran(bool forward, double acc, double maxacc, int maxorder, std::vector<double> const &lbnd,
                      std::vector<double> const &ubnd) const;
