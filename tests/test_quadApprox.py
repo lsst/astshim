@@ -20,7 +20,7 @@ class TestQuadApprox(MappingTestCase):
         qa = ast.QuadApprox(polymap, [-1, -1], [1, 1], 3, 3)
         self.assertAlmostEqual(qa.rms, 0)
         self.assertEqual(len(qa.fit), 6)
-        assert_allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5])
+        assert_allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5], atol=1e-12)
 
 
 if __name__ == "__main__":

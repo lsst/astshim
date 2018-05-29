@@ -20,13 +20,13 @@ class TestPcdMap(MappingTestCase):
         self.assertEqual(pcdmap.nIn, 2)
         self.assertEqual(pcdmap.nOut, 2)
         self.assertEqual(pcdmap.disco, coeff)
-        assert_allclose(pcdmap.pcdCen, ctr)
+        assert_allclose(pcdmap.pcdCen, ctr, atol=1e-12)
 
         self.checkBasicSimplify(pcdmap)
         self.checkCopy(pcdmap)
 
         # the center maps to itself
-        assert_allclose(pcdmap.applyForward(ctr), ctr)
+        assert_allclose(pcdmap.applyForward(ctr), ctr, atol=1e-12)
 
         indata = np.array([
             [0.0, -1.0, 4.2],
@@ -50,7 +50,7 @@ class TestPcdMap(MappingTestCase):
         pred_outrelctr[0, :] = pred_outrad * np.cos(inrelctrdir)
         pred_outrelctr[1, :] = pred_outrad * np.sin(inrelctrdir)
         pred_outdata = pred_outrelctr + np.expand_dims(ctr, 1)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
     def test_PcdMapBadConstruction(self):
         with self.assertRaises(Exception):

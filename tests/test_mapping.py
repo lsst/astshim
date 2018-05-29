@@ -64,8 +64,8 @@ class TestMapping(MappingTestCase):
         ubndin = np.maximum(inbnd_a, inbnd_b)
         predlbndOut = lbndin * zoom + shift
         predubndOut = ubndin * zoom + shift
-        assert_allclose(mapbox.lbndOut, predlbndOut)
-        assert_allclose(mapbox.ubndOut, predubndOut)
+        assert_allclose(mapbox.lbndOut, predlbndOut, atol=1e-12)
+        assert_allclose(mapbox.ubndOut, predubndOut, atol=1e-12)
 
         # note that mapbox.xl and xu is only partially predictable
         # because any X from the input gives the same Y
@@ -75,8 +75,8 @@ class TestMapping(MappingTestCase):
 
         # confirm that order of inbnd_a, inbnd_b doesn't matter
         mapbox2 = ast.MapBox(winmap, inbnd_b, inbnd_a)
-        assert_allclose(mapbox2.lbndOut, mapbox.lbndOut)
-        assert_allclose(mapbox2.ubndOut, mapbox.ubndOut)
+        assert_allclose(mapbox2.lbndOut, mapbox.lbndOut, atol=1e-12)
+        assert_allclose(mapbox2.ubndOut, mapbox.ubndOut, atol=1e-12)
 
         # the xl and xu need only agree on the diagonal, as above
         for i in range(2):
@@ -91,7 +91,7 @@ class TestMapping(MappingTestCase):
             [1.3, 0.0],
             [0.0, 1.3]
         ], dtype=float)
-        assert_allclose(coeffs, descoeffs)
+        assert_allclose(coeffs, descoeffs, atol=1e-12)
 
     def test_QuadApprox(self):
         # simple parabola
@@ -103,7 +103,7 @@ class TestMapping(MappingTestCase):
         qa = ast.QuadApprox(polymap, [-1, -1], [1, 1], 3, 3)
         self.assertAlmostEqual(qa.rms, 0)
         self.assertEqual(len(qa.fit), 6)
-        assert_allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5])
+        assert_allclose(qa.fit, [0, 0, 0, 0, 0.5, 0.5], atol=1e-12)
 
     def test_MappingRate(self):
         """Exercise Mapping.rate for a trivial case"""

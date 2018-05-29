@@ -43,8 +43,8 @@ class TestPolyMap(MappingTestCase):
         pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
         pred_yout = yin
         xout, yout = outdata
-        npt.assert_allclose(xout, pred_xout)
-        npt.assert_allclose(yout, pred_yout)
+        npt.assert_allclose(xout, pred_xout, atol=1e-12)
+        npt.assert_allclose(yout, pred_yout, atol=1e-12)
 
         indata_roundtrip = pm.applyInverse(outdata)
         npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-4)
@@ -78,8 +78,8 @@ class TestPolyMap(MappingTestCase):
         pred_xout = (1.2 * xin * xin) - (0.5 * yin * xin)
         pred_yout = yin
         xout, yout = outdata
-        npt.assert_allclose(xout, pred_xout)
-        npt.assert_allclose(yout, pred_yout)
+        npt.assert_allclose(xout, pred_xout, atol=1e-12)
+        npt.assert_allclose(yout, pred_yout, atol=1e-12)
 
         indata_roundtrip = pm.applyInverse(outdata)
         npt.assert_allclose(indata, indata_roundtrip, atol=1.0e-6)
@@ -246,7 +246,7 @@ class TestPolyMap(MappingTestCase):
         outdata2 = pm2.applyForward(indata)
         npt.assert_equal(outdata, outdata2)
         indata2 = pm2.applyInverse(outdata)
-        npt.assert_allclose(indata, indata2, atol=1.0e-10)
+        npt.assert_allclose(indata, indata2, atol=1.0e-12)
 
         self.checkMappingPersistence(pm, indata)
         self.checkMappingPersistence(pm2, indata)
@@ -296,7 +296,7 @@ class TestPolyMap(MappingTestCase):
         indata = np.array([-0.5, 0.5, 1.1, 1.8])
         outdata = polyMap.applyForward(indata)
         indata_roundtrip = polyMap.applyInverse(outdata)
-        npt.assert_allclose(indata, indata_roundtrip)
+        npt.assert_allclose(indata, indata_roundtrip, atol=1e-12)
 
         # prove that without the iterative inverse the PolyMap does not invert correctly
         polyMap2 = ast.PolyMap(coeff_f, coeff_i)
@@ -355,12 +355,12 @@ class TestPolyMap(MappingTestCase):
         indata = np.array([-0.5, 0.5, 1.1, 1.8])
         pred_outdata = (2.0*indata.T**2 - indata.T**3).T
         outdata = pm.applyForward(indata)
-        npt.assert_allclose(outdata, pred_outdata)
+        npt.assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         # the iterative inverse should give valid values
         indata_iterative = pm.applyInverse(outdata)
         outdata_roundtrip = pm.applyForward(indata_iterative)
-        npt.assert_allclose(outdata, outdata_roundtrip)
+        npt.assert_allclose(outdata, outdata_roundtrip, atol=1e-12)
 
         self.checkMappingPersistence(pm, indata)
 

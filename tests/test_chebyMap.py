@@ -150,8 +150,8 @@ class TestChebyMap(MappingTestCase):
         self.checkCopy(chebyMap1)
         self.checkMappingPersistence(chebyMap1, indata)
         domain1 = chebyMap1.getDomain(forward=True)
-        npt.assert_allclose(domain1.lbnd, lbnd_f)
-        npt.assert_allclose(domain1.ubnd, ubnd_f)
+        npt.assert_allclose(domain1.lbnd, lbnd_f, atol=1e-12)
+        npt.assert_allclose(domain1.ubnd, ubnd_f, atol=1e-12)
 
         outdata = chebyMap1.applyForward(indata)
 
@@ -159,7 +159,7 @@ class TestChebyMap(MappingTestCase):
             chebyMap1.applyInverse(indata)
 
         pred_outdata = refCheby.transform(indata)
-        npt.assert_allclose(outdata, pred_outdata)
+        npt.assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         # bidirectional constructor, forward only specified
         chebyMap2 = ast.ChebyMap(coeff_f, null_coeff, lbnd_f, ubnd_f, [], [])
@@ -174,11 +174,11 @@ class TestChebyMap(MappingTestCase):
         self.checkCopy(chebyMap2)
         self.checkMappingPersistence(chebyMap1, indata)
         domain2 = chebyMap2.getDomain(forward=True)
-        npt.assert_allclose(domain2.lbnd, lbnd_f)
-        npt.assert_allclose(domain2.ubnd, ubnd_f)
+        npt.assert_allclose(domain2.lbnd, lbnd_f, atol=1e-12)
+        npt.assert_allclose(domain2.ubnd, ubnd_f, atol=1e-12)
 
         outdata2 = chebyMap2.applyForward(indata)
-        npt.assert_allclose(outdata2, outdata)
+        npt.assert_allclose(outdata2, outdata, atol=1e-12)
 
         with self.assertRaises(RuntimeError):
             chebyMap2.applyInverse(indata)
@@ -193,11 +193,11 @@ class TestChebyMap(MappingTestCase):
         self.assertFalse(chebyMap3.hasForward)
         self.assertTrue(chebyMap3.hasInverse)
         domain3 = chebyMap3.getDomain(forward=False)
-        npt.assert_allclose(domain3.lbnd, lbnd_f)
-        npt.assert_allclose(domain3.ubnd, ubnd_f)
+        npt.assert_allclose(domain3.lbnd, lbnd_f, atol=1e-12)
+        npt.assert_allclose(domain3.ubnd, ubnd_f, atol=1e-12)
 
         outdata3 = chebyMap3.applyInverse(indata)
-        npt.assert_allclose(outdata3, outdata)
+        npt.assert_allclose(outdata3, outdata, atol=1e-12)
 
         with self.assertRaises(RuntimeError):
             chebyMap3.applyForward(indata)
@@ -278,12 +278,12 @@ class TestChebyMap(MappingTestCase):
         outdata_f = chebyMap.applyForward(indata_f)
         des_outdata_f = refCheby_f.transform(indata_f)
 
-        npt.assert_allclose(outdata_f, des_outdata_f)
+        npt.assert_allclose(outdata_f, des_outdata_f, atol=1e-12)
 
         outdata_i = chebyMap.applyInverse(indata_i)
         des_outdata_i = refCheby_i.transform(indata_i)
 
-        npt.assert_allclose(outdata_i, des_outdata_i)
+        npt.assert_allclose(outdata_i, des_outdata_i, atol=1e-12)
 
     def test_ChebyMapPolyTran(self):
         nin = 2
@@ -341,7 +341,7 @@ class TestChebyMap(MappingTestCase):
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
         des_outdata = referenceCheby.transform(indata)
 
-        npt.assert_allclose(outdata, des_outdata)
+        npt.assert_allclose(outdata, des_outdata, atol=1e-12)
 
         # fit an inverse transform
         chebyMap2 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,
@@ -362,7 +362,7 @@ class TestChebyMap(MappingTestCase):
         npt.assert_equal(chebyMap3.applyForward(indata), outdata)
         # inverse should be basically the same
         roundTripIn3 = chebyMap3.applyInverse(outdata)
-        npt.assert_allclose(roundTripIn3, roundTripIn2)
+        npt.assert_allclose(roundTripIn3, roundTripIn2, atol=1e-12)
 
     def test_ChebyMapChebyMapUnivertible(self):
         """Test polyTran on a ChebyMap without a single-valued inverse
@@ -414,7 +414,7 @@ class TestChebyMap(MappingTestCase):
         referenceCheby = ReferenceCheby(referenceFunc, lbnd_f, ubnd_f)
         des_outdata = referenceCheby.transform(indata)
 
-        npt.assert_allclose(outdata, des_outdata)
+        npt.assert_allclose(outdata, des_outdata, atol=1e-12)
 
         with self.assertRaises(RuntimeError):
             chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6,

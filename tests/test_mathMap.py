@@ -34,8 +34,8 @@ class TestMathMap(MappingTestCase):
         theta = outdata[1]
         pred_r = np.sqrt(x * x + y * y)
         pred_theta = np.arctan2(y, x)
-        assert_allclose(r, pred_r)
-        assert_allclose(theta, pred_theta)
+        assert_allclose(r, pred_r, atol=1e-12)
+        assert_allclose(theta, pred_theta, atol=1e-12)
 
         self.checkRoundTrip(mathmap, indata)
         self.checkMappingPersistence(mathmap, indata)

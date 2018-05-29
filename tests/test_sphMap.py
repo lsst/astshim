@@ -38,7 +38,7 @@ class TestSphMap(MappingTestCase):
             [0.0, 0.0, halfpi, 0.0, 0.0, -halfpi, math.atan(1.0 / math.sqrt(2.0))],
         ], dtype=float)
         outdata = sphmap.applyForward(indata)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         self.checkRoundTrip(sphmap, indata)
         self.checkMappingPersistence(sphmap, indata)

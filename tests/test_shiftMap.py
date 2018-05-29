@@ -27,7 +27,7 @@ class TestShiftMap(MappingTestCase):
         ])
         outdata = shiftmap.applyForward(indata)
         pred_outdata = (indata.T + offset).T
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
         self.checkRoundTrip(shiftmap, indata)
         self.checkMappingPersistence(shiftmap, indata)
 

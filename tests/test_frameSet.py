@@ -168,7 +168,7 @@ class TestFrameSet(MappingTestCase):
             [5.1, 0.0, 3.1],
         ])
         predicted_output1 = input_data * zoom
-        assert_allclose(frameSet.applyForward(input_data), predicted_output1)
+        assert_allclose(frameSet.applyForward(input_data), predicted_output1, atol=1e-12)
         self.checkMappingPersistence(frameSet, input_data)
 
         shift = (0.5, -1.5)
@@ -179,7 +179,7 @@ class TestFrameSet(MappingTestCase):
         self.assertEqual(zoomMap.getNObject(), initialNumZoomMap + 1)
         self.assertEqual(shiftMap.getNObject(), initialNumShiftMap + 1)
         predicted_output2 = (input_data.T - shift).T * zoom
-        assert_allclose(frameSet.applyForward(input_data), predicted_output2)
+        assert_allclose(frameSet.applyForward(input_data), predicted_output2, atol=1e-12)
 
     def test_FrameSetPermutationSkyFrame(self):
         """Test permuting FrameSet axes using a SkyFrame

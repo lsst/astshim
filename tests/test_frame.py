@@ -111,7 +111,7 @@ class TestFrame(MappingTestCase):
             [-43.5, 1309.31],
         ])
         outdata = fset.applyForward(indata)
-        assert_allclose(outdata, indata)
+        assert_allclose(outdata, indata, atol=1e-12)
         self.checkRoundTrip(fset, indata)
 
         self.assertIsNone(frame.convert(ast.Frame(3)))
@@ -132,7 +132,7 @@ class TestFrame(MappingTestCase):
             [-43.5, 1309.31],
         ])
         outdata = fset.applyForward(indata)
-        assert_allclose(outdata, indata)
+        assert_allclose(outdata, indata, atol=1e-12)
         self.checkRoundTrip(fset, indata)
 
         self.assertIsNone(frame.findFrame(ast.Frame(3)))
@@ -216,7 +216,7 @@ class TestFrame(MappingTestCase):
         ]
         self.assertAlmostEqual(res.d1, d1pred)
         self.assertAlmostEqual(res.d2, d2pred)
-        assert_allclose(res.point, predpoint)
+        assert_allclose(res.point, predpoint, atol=1e-12)
 
     def test_FrameUnformat(self):
         frame = ast.Frame(2)

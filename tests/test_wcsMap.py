@@ -45,7 +45,7 @@ class TestWcsMap(MappingTestCase):
             [0.0, 0.0, 0.001, 0.95885108],
         ])
         outdata = wcsmap.applyForward(indata)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         self.checkRoundTrip(wcsmap, indata)
         self.checkMappingPersistence(wcsmap, indata)

@@ -44,13 +44,13 @@ class TestCmpMap(MappingTestCase):
         ], dtype=float)
         pred_outdata = ((indata.T + self.shift) * self.zoom).T
         topos = sermap.applyForward(indata)
-        assert_allclose(topos, pred_outdata)
+        assert_allclose(topos, pred_outdata, atol=1e-12)
 
         topos2 = sermap2.applyForward(indata)
-        assert_allclose(topos2, pred_outdata)
+        assert_allclose(topos2, pred_outdata, atol=1e-12)
 
         topos3 = sermap3.applyForward(indata)
-        assert_allclose(topos3, pred_outdata)
+        assert_allclose(topos3, pred_outdata, atol=1e-12)
 
         self.checkRoundTrip(sermap, indata)
         self.checkRoundTrip(sermap2, indata)
@@ -89,10 +89,10 @@ class TestCmpMap(MappingTestCase):
         pred_outdata.T[:, 0:2] += self.shift
         pred_outdata.T[:, 2:4] *= self.zoom
         topos = parmap.applyForward(indata)
-        assert_allclose(topos, pred_outdata)
+        assert_allclose(topos, pred_outdata, atol=1e-12)
 
         topos2 = parmap2.applyForward(indata)
-        assert_allclose(topos2, pred_outdata)
+        assert_allclose(topos2, pred_outdata, atol=1e-12)
 
         parmap3 = ast.CmpMap(self.shiftmap, self.zoommap, False)
         self.checkBasicSimplify(parmap3)
@@ -100,7 +100,7 @@ class TestCmpMap(MappingTestCase):
         self.checkMemoryForCompoundObject(self.shiftmap, self.zoommap, parmap3, isSeries=False)
 
         topos3 = parmap3.applyForward(indata)
-        assert_allclose(topos3, pred_outdata)
+        assert_allclose(topos3, pred_outdata, atol=1e-12)
 
         self.checkRoundTrip(parmap, indata)
         self.checkRoundTrip(parmap2, indata)
@@ -132,11 +132,11 @@ class TestCmpMap(MappingTestCase):
         pred_outdata.shape = (1, len(pred_outdata))
 
         outdata = seriesMap.applyForward(indata)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         simplifiedMap = seriesMap.simplify()
         outdata2 = simplifiedMap.applyForward(indata)
-        assert_allclose(outdata2, pred_outdata)
+        assert_allclose(outdata2, pred_outdata, atol=1e-12)
 
 
 if __name__ == "__main__":

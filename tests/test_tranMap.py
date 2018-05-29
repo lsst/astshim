@@ -32,9 +32,9 @@ class TestTranMap(MappingTestCase):
             [3.0, 99.0, -5.0, 21.0, 0.0],
         ], dtype=float)
         outdata = tranmap.applyForward(indata)
-        assert_allclose(outdata, indata)
+        assert_allclose(outdata, indata, atol=1e-12)
         outdata_roundtrip = tranmap.applyInverse(outdata)
-        assert_allclose(indata, outdata_roundtrip * zoomfac)
+        assert_allclose(indata, outdata_roundtrip * zoomfac, atol=1e-12)
 
         with self.assertRaises(AssertionError):
             self.checkRoundTrip(tranmap, indata)
@@ -56,7 +56,7 @@ class TestTranMap(MappingTestCase):
             [3.0, 99.0, -5.0, 21.0, 0.0],
         ], dtype=float)
         outdata = tranmap.applyForward(indata)
-        assert_allclose(outdata, indata * zoomfac)
+        assert_allclose(outdata, indata * zoomfac, atol=1e-12)
 
         self.checkRoundTrip(tranmap, indata)
         self.checkMappingPersistence(tranmap, indata)

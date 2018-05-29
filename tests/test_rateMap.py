@@ -25,7 +25,7 @@ class TestRateMap(MappingTestCase):
             [2.2, 1309.31, 35.2],
         ])
         outdata = ratemap.applyForward(indata)
-        assert_allclose(outdata, zoomfac)
+        assert_allclose(outdata, zoomfac, atol=1e-12)
 
         self.checkMappingPersistence(ratemap, indata)
 
@@ -38,7 +38,7 @@ class TestRateMap(MappingTestCase):
             [2.2, 1309.31, 35.2],
         ])
         outdata = ratemap.applyForward(indata)
-        assert_allclose(outdata, 0)
+        assert_allclose(outdata, 0, atol=1e-12)
 
         self.checkMappingPersistence(ratemap, indata)
 

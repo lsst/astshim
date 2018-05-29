@@ -63,8 +63,8 @@ class TestFrameDict(MappingTestCase):
         frameDict = ast.FrameDict(frameSet)
         indata = np.array([[1.1, 2.1, 3.1], [1.2, 2.2, 3.2]])
         predictedOut = indata * self.zoom
-        assert_allclose(frameDict.applyForward(indata), predictedOut)
-        assert_allclose(frameDict.applyInverse(predictedOut), indata)
+        assert_allclose(frameDict.applyForward(indata), predictedOut, atol=1e-12)
+        assert_allclose(frameDict.applyInverse(predictedOut), indata, atol=1e-12)
 
         frameDict2 = makeFrameDict(frameSet)
         self.assertEqual(frameDict2.getRefCount(), 1)
@@ -139,7 +139,7 @@ class TestFrameDict(MappingTestCase):
         indata = np.array([[1.1, 2.1, 3.1], [1.2, 2.2, 3.2]])
         predictedOut = indata * self.zoom
         for zoomMap in zoomMapList:
-            assert_allclose(zoomMap.applyForward(indata), predictedOut)
+            assert_allclose(zoomMap.applyForward(indata), predictedOut, atol=1e-12)
 
         # check that getMapping returns a deep copy
         for i, zoomMap in enumerate(zoomMapList):
@@ -250,8 +250,8 @@ class TestFrameDict(MappingTestCase):
                 [5.1, 0.0, 3.1],
             ])
             predictedOut1 = indata * self.zoom
-            assert_allclose(frameDict.applyForward(indata), predictedOut1)
-            assert_allclose(frameDict.applyInverse(predictedOut1), indata)
+            assert_allclose(frameDict.applyForward(indata), predictedOut1, atol=1e-12)
+            assert_allclose(frameDict.applyInverse(predictedOut1), indata, atol=1e-12)
             self.checkMappingPersistence(frameDict, indata)
 
             shift = (0.5, -1.5)
@@ -265,8 +265,8 @@ class TestFrameDict(MappingTestCase):
             self.assertEqual(self.zoomMap.getNObject(), self.initialNumZoomMap + 1)
             self.assertEqual(shiftMap.getNObject(), initialNumShiftMap + 1)
             predictedOut2 = (indata.T - shift).T * self.zoom
-            assert_allclose(frameDict.applyForward(indata), predictedOut2)
-            assert_allclose(frameDict.applyInverse(predictedOut2), indata)
+            assert_allclose(frameDict.applyForward(indata), predictedOut2, atol=1e-12)
+            assert_allclose(frameDict.applyInverse(predictedOut2), indata, atol=1e-12)
 
     def test_FrameDictPermutationSkyFrame(self):
         """Test permuting FrameDict axes using a SkyFrame
@@ -339,7 +339,7 @@ class TestFrameDict(MappingTestCase):
             [5.1, 0.0, 3.1],
         ])
         predictedOut1 = indata.copy() * self.zoom
-        assert_allclose(frameDict.applyForward(indata), predictedOut1)
+        assert_allclose(frameDict.applyForward(indata), predictedOut1, atol=1e-12)
 
         frameDict.setCurrent("FRAME1")
         self.assertEqual(frameDict.base, 1)
@@ -348,7 +348,7 @@ class TestFrameDict(MappingTestCase):
         self.assertEqual(frameDict.getIndex("FRAME2"), 2)
 
         predictedOutput2 = indata.copy()
-        assert_allclose(frameDict.applyForward(indata), predictedOutput2)
+        assert_allclose(frameDict.applyForward(indata), predictedOutput2, atol=1e-12)
 
         frameDict.setBase("FRAME2")
         self.assertEqual(frameDict.base, 2)
@@ -357,7 +357,7 @@ class TestFrameDict(MappingTestCase):
         self.assertEqual(frameDict.getIndex("FRAME2"), 2)
 
         predictedOutput3 = indata.copy() / self.zoom
-        assert_allclose(frameDict.applyForward(indata), predictedOutput3)
+        assert_allclose(frameDict.applyForward(indata), predictedOutput3, atol=1e-12)
 
     def test_FrameDictSetDomain(self):
         frameDict = ast.FrameDict(self.frame1, self.zoomMap, self.frame2)

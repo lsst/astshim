@@ -28,7 +28,7 @@ class TestSlaMap(MappingTestCase):
         outdata = slamap.applyForward(indata)
         pred_outdata = indata
         pred_outdata[0] = last - indata[0]
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         self.checkRoundTrip(slamap, indata)
         self.checkMappingPersistence(slamap, indata)

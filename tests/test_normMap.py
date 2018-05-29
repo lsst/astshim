@@ -28,7 +28,7 @@ class TestNormMap(MappingTestCase):
             [-100.0, -1000.0, -2000.0],
         ], dtype=float)
         outdata = normmap.applyForward(indata)
-        assert_allclose(outdata, indata)
+        assert_allclose(outdata, indata, atol=1e-12)
 
         self.checkMappingPersistence(normmap, indata)
 
@@ -80,7 +80,7 @@ class TestNormMap(MappingTestCase):
             [pi, pi / 2 - eps],
         ]).T
         outdata = normmap.applyForward(indata)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         self.checkMappingPersistence(normmap, indata)
 

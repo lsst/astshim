@@ -121,10 +121,10 @@ class TestSkyFrame(MappingTestCase):
     def test_SkyFrameSkyRef(self):
         frame = ast.SkyFrame()
 
-        assert_allclose(frame.getSkyRef(), [0, 0])
+        assert_allclose(frame.getSkyRef(), [0, 0], atol=1e-12)
         newSkyRef = [-4.5, 1.23]
         frame.setSkyRef(newSkyRef)
-        assert_allclose(frame.getSkyRef(), newSkyRef)
+        assert_allclose(frame.getSkyRef(), newSkyRef, atol=1e-12)
 
     def test_SkyFrameSkyRefIs(self):
         frame = ast.SkyFrame()
@@ -138,10 +138,10 @@ class TestSkyFrame(MappingTestCase):
         frame = ast.SkyFrame()
 
         defSkyRefP = [0.0, math.pi/2]
-        assert_allclose(frame.getSkyRefP(), defSkyRefP)
+        assert_allclose(frame.getSkyRefP(), defSkyRefP, atol=1e-12)
         newSkyRefP = [0.1234, 0.5643]
         frame.setSkyRefP(newSkyRefP)
-        assert_allclose(frame.getSkyRefP(), newSkyRefP)
+        assert_allclose(frame.getSkyRefP(), newSkyRefP, atol=1e-12)
 
     def test_SkyFrameSkyTol(self):
         frame = ast.SkyFrame()

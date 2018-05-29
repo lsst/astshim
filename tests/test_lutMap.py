@@ -28,7 +28,7 @@ class TestLutMap(MappingTestCase):
             (2.5, 8.0),   # (2.5 - 1)/0.5 = 3 -> 8
         ])
         outdata = lutmap.applyForward(indata)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
         self.checkRoundTrip(lutmap, indata)
 
         self.assertEqual(lutmap.lutInterp, 0)

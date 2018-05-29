@@ -46,14 +46,14 @@ class TestUnitNormMap(MappingTestCase):
 
             relative_indata = (indata.T - center).T
             pred_norm = np.linalg.norm(relative_indata, axis=0)
-            assert_allclose(norm, pred_norm)
+            assert_allclose(norm, pred_norm, atol=1e-12)
 
             pred_relative_indata = outdata[0:nin] * norm
             # the first input point is at the center, so the output is
             # [NaN, NaN, ..., NaN, 0], (as checked above),
             # but the expected value after scaling by the norm is 0s, so...
             pred_relative_indata[:, 0] = [0]*nin
-            assert_allclose(relative_indata, pred_relative_indata)
+            assert_allclose(relative_indata, pred_relative_indata, atol=1e-12)
 
         # UnitNormMap must have at least one input
         with self.assertRaises(Exception):
@@ -106,7 +106,7 @@ class TestUnitNormMap(MappingTestCase):
             self.assertEqual(cmpmap.nOut, cmpmap_simp.nOut)
             testptview = np.array(testpoints[0:cmpmap.nIn])
             assert_allclose(cmpmap.applyForward(
-                testptview), cmpmap_simp.applyForward(testptview))
+                testptview), cmpmap_simp.applyForward(testptview), atol=1e-12)
 
 
 if __name__ == "__main__":

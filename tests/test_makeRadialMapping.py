@@ -33,7 +33,7 @@ class TestMakeRadialMapping(MappingTestCase):
         self.assertTrue(radial_map.hasForward)
         self.assertFalse(radial_map.hasInverse)
         in_data1 = self.in_data_full[0]
-        npt.assert_allclose(radial_map.applyForward(in_data1), mapping1d.applyForward(in_data1))
+        npt.assert_allclose(radial_map.applyForward(in_data1), mapping1d.applyForward(in_data1), atol=1e-12)
 
         for center in (
             [0.0],
@@ -61,7 +61,7 @@ class TestMakeRadialMapping(MappingTestCase):
             desired_out_data = out_from_center + center_reshaped
 
             out_data = radial_map.applyForward(in_data)
-            npt.assert_allclose(out_data, desired_out_data)
+            npt.assert_allclose(out_data, desired_out_data, atol=1e-12)
 
     def test_MakeRadialMappingInvertible(self):
         """Test makeRadialMapping on a mapping that has an accurate inverse"""
@@ -97,7 +97,7 @@ class TestMakeRadialMapping(MappingTestCase):
             desired_out_data = out_from_center + center_reshaped
 
             out_data = radial_map.applyForward(in_data)
-            npt.assert_allclose(out_data, desired_out_data)
+            npt.assert_allclose(out_data, desired_out_data, atol=1e-12)
 
     def test_MakeRadialMappingErrorHandling(self):
         """Test error handling in makeRadialMapping"""

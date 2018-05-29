@@ -29,8 +29,8 @@ class TestMapBox(MappingTestCase):
         ubndin = np.maximum(inbnd_a, inbnd_b)
         predlbndOut = lbndin * zoom + shift
         predubndOut = ubndin * zoom + shift
-        assert_allclose(mapbox.lbndOut, predlbndOut)
-        assert_allclose(mapbox.ubndOut, predubndOut)
+        assert_allclose(mapbox.lbndOut, predlbndOut, atol=1e-12)
+        assert_allclose(mapbox.ubndOut, predubndOut, atol=1e-12)
 
         # note that mapbox.xl and xu is only partially predictable
         # because any X from the input gives the same Y
@@ -40,8 +40,8 @@ class TestMapBox(MappingTestCase):
 
         # confirm that order of inbnd_a, inbnd_b doesn't matter
         mapbox2 = ast.MapBox(winmap, inbnd_b, inbnd_a)
-        assert_allclose(mapbox2.lbndOut, mapbox.lbndOut)
-        assert_allclose(mapbox2.ubndOut, mapbox.ubndOut)
+        assert_allclose(mapbox2.lbndOut, mapbox.lbndOut, atol=1e-12)
+        assert_allclose(mapbox2.ubndOut, mapbox.ubndOut, atol=1e-12)
 
         # the xl and xu need only agree on the diagonal, as above
         for i in range(2):

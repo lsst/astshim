@@ -28,7 +28,7 @@ class TestWinMap(MappingTestCase):
         ], dtype=float)
         pred_outdata = (indata.T * pred_zoom + pred_shift).T
         outdata = winmap.applyForward(indata)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         self.checkRoundTrip(winmap, indata)
         self.checkMappingPersistence(winmap, indata)

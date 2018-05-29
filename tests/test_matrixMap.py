@@ -32,7 +32,7 @@ class TestMatrixMap(MappingTestCase):
             [-1.0, -2.0, -3.0],
             [0.0, 2.0, 4.0],
         ], dtype=float)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         self.checkRoundTrip(mm, indata)
         self.checkMappingPersistence(mm, indata)
@@ -66,7 +66,7 @@ class TestMatrixMap(MappingTestCase):
             [2.0, 7.0, 12.0],
             [-1.0, -4.0, -7.0],
         ], dtype=float)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         self.checkMappingPersistence(mm, indata)
 
@@ -86,11 +86,11 @@ class TestMatrixMap(MappingTestCase):
             [0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0],
         ], dtype=float)
-        assert_allclose(outdata, pred_outdata)
+        assert_allclose(outdata, pred_outdata, atol=1e-12)
 
         simplifiedMM = mm.simplify()
         outdata2 = simplifiedMM.applyForward(indata)
-        assert_allclose(outdata2, pred_outdata)
+        assert_allclose(outdata2, pred_outdata, atol=1e-12)
 
 
 if __name__ == "__main__":

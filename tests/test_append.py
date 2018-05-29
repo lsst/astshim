@@ -55,12 +55,12 @@ class TestFrameSetAppend(unittest.TestCase):
         x = [1.2, 3.4]
         y_merged = set12.applyForward(x)
         y_separate = set2.applyForward(set1.applyForward(x))
-        assert_allclose(y_merged, y_separate)
+        assert_allclose(y_merged, y_separate, atol=1e-12)
 
         y = [-0.3]
         x_merged = set12.applyInverse(y)
         x_separate = set1.applyInverse(set2.applyInverse(y))
-        assert_allclose(x_merged, x_separate)
+        assert_allclose(x_merged, x_separate, atol=1e-12)
 
         # No side effects
         self.assertEqual(set1.base, 1)
@@ -133,7 +133,7 @@ class TestFrameSetAppend(unittest.TestCase):
         x = [1.2, 3.4, 5.6]
         y_merged = set12.applyForward(x)
         y_separate = set2.applyForward(set1.applyForward(x))
-        assert_allclose(y_merged, y_separate)
+        assert_allclose(y_merged, y_separate, atol=1e-12)
 
         iFrom = set1.current
         iTo = set1.nFrame + set2.base

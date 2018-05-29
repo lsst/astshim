@@ -25,7 +25,7 @@ class TestTimeMap(MappingTestCase):
 
         indata = np.array([0.0, 1.0], dtype=float)
         outdata = timemap.applyForward(indata)
-        assert_allclose(outdata, indata)
+        assert_allclose(outdata, indata, atol=1e-12)
 
         self.checkRoundTrip(timemap, indata)
         self.checkMappingPersistence(timemap, indata)
