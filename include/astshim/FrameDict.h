@@ -254,7 +254,7 @@ public:
     void setDomain(std::string const &domain) override;
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<FrameDict, AstFrameSet>();
     }
 

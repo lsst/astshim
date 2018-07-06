@@ -98,7 +98,7 @@ public:
     int getLutInterp() const { return getI("LutInterp"); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<LutMap, AstLutMap>();
     }
 

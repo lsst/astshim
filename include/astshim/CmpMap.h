@@ -102,7 +102,7 @@ public:
     bool getSeries() { return detail::isSeries(reinterpret_cast<AstCmpMap *>(getRawPtr())); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<CmpMap, AstCmpMap>();
     }
 

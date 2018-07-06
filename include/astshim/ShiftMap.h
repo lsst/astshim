@@ -62,7 +62,7 @@ public:
     std::shared_ptr<ShiftMap> copy() const { return std::static_pointer_cast<ShiftMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<ShiftMap, AstShiftMap>();
     }
 

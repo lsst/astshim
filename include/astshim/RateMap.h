@@ -84,7 +84,7 @@ public:
     std::shared_ptr<RateMap> copy() const { return std::static_pointer_cast<RateMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<RateMap, AstRateMap>();
     }
 

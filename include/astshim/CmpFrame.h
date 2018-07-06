@@ -96,7 +96,7 @@ public:
     std::shared_ptr<Frame> operator[](int i) const { return decompose<Frame>(i, false); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<CmpFrame, AstCmpFrame>();
     }
 
