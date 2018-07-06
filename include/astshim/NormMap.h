@@ -74,7 +74,7 @@ public:
     std::shared_ptr<NormMap> copy() const { return std::static_pointer_cast<NormMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<NormMap, AstNormMap>();
     }
 

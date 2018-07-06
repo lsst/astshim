@@ -81,7 +81,7 @@ public:
     double getPolarLong() const { return getD("PolarLong"); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<SphMap, AstSphMap>();
     }
 

@@ -233,7 +233,7 @@ public:
                      std::vector<double> const &ubnd) const;
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<PolyMap, AstPolyMap>();
     }
 

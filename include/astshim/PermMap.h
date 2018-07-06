@@ -90,7 +90,7 @@ public:
     std::shared_ptr<PermMap> copy() const { return std::static_pointer_cast<PermMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<PermMap, AstPermMap>();
     }
 

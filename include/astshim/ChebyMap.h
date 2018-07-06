@@ -304,7 +304,7 @@ public:
     ChebyMap polyTran(bool forward, double acc, double maxacc, int maxorder) const;
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<ChebyMap, AstChebyMap>();
     }
 

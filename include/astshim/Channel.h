@@ -156,7 +156,7 @@ public:
     int write(Object const &object);
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override { return std::shared_ptr<Object>(); }
+    std::shared_ptr<Object> copyPolymorphic() const override { return std::shared_ptr<Object>(); }
 
     /**
     Construct a channel from an AST channel pointer and a @ref Stream

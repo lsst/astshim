@@ -76,7 +76,7 @@ public:
     double getZoom() const { return getF("Zoom"); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<ZoomMap, AstZoomMap>();
     }
 

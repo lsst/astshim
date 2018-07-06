@@ -145,7 +145,7 @@ public:
     void setTimeScale(std::string const &scale) { return setC("TimeScale", scale); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<TimeFrame, AstTimeFrame>();
     }
 

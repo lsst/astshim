@@ -254,7 +254,7 @@ public:
     WcsType getWcsType() const { return static_cast<WcsType>(getI("WcsType")); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<WcsMap, AstWcsMap>();
     }
 

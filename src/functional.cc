@@ -56,7 +56,7 @@ std::shared_ptr<Mapping> makeRadialMapping(std::vector<double> const& center, Ma
                                     " outputs, instead of 1");
     }
     auto unitNormMap = UnitNormMap(center);
-    return std::make_shared<Mapping>(
+    return std::make_shared<SeriesMap>(
             unitNormMap.then(UnitMap(naxes).under(mapping1d)).then(*unitNormMap.getInverse()));
 }
 

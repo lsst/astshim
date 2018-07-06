@@ -271,7 +271,7 @@ public:
     void setStdOfRest(std::string const &stdOfRest) { setC("StdOfRest", stdOfRest); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<SpecFrame, AstSpecFrame>();
     }
 

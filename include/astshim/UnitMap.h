@@ -66,7 +66,7 @@ public:
     std::shared_ptr<UnitMap> copy() const { return std::static_pointer_cast<UnitMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<UnitMap, AstUnitMap>();
     }
 

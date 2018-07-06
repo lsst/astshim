@@ -579,7 +579,7 @@ public:
 
 protected:
     // Protected implementation of deep-copy.
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return std::static_pointer_cast<KeyMap>(copyImpl<KeyMap, AstKeyMap>());
     }
 

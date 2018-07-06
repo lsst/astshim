@@ -239,7 +239,7 @@ public:
     }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<SkyFrame, AstSkyFrame>();
     }
 

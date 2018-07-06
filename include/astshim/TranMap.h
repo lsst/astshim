@@ -82,7 +82,7 @@ public:
     std::shared_ptr<TranMap> copy() const { return std::static_pointer_cast<TranMap>(copyPolymorphic()); }
 
 protected:
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
+    std::shared_ptr<Object> copyPolymorphic() const override {
         return copyImpl<TranMap, AstTranMap>();
     }
 

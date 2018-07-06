@@ -1523,7 +1523,7 @@ protected:
         }
     }
 
-    virtual std::shared_ptr<Object> copyPolymorphic() const override { return copyImpl<Frame, AstFrame>(); }
+    std::shared_ptr<Object> copyPolymorphic() const override { return copyImpl<Frame, AstFrame>(); }
 
 private:
     /**

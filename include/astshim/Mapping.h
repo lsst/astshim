@@ -68,9 +68,6 @@ public:
     Mapping &operator=(Mapping const &) = delete;
     Mapping &operator=(Mapping &&) = default;
 
-    /// Return a deep copy of this object.
-    std::shared_ptr<Mapping> copy() const { return std::static_pointer_cast<Mapping>(copyPolymorphic()); }
-
     /**
     Get @ref Mapping_NIn "NIn": the number of input axes
     */
@@ -404,11 +401,6 @@ protected:
             os << "this is a " << getClassName() << ", which is not a Mapping";
             throw std::invalid_argument(os.str());
         }
-    }
-
-    // Protected implementation of deep-copy.
-    virtual std::shared_ptr<Object> copyPolymorphic() const override {
-        return std::static_pointer_cast<Mapping>(copyImpl<Mapping, AstMapping>());
     }
 
     /**
