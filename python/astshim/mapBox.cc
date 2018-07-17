@@ -32,9 +32,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(mapBox) {
-    py::module mod("mapBox", "Python wrapper for MapBox");
-
+PYBIND11_MODULE(mapBox, mod) {
     py::class_<MapBox> cls(mod, "MapBox");
 
     cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
@@ -48,8 +46,6 @@ PYBIND11_PLUGIN(mapBox) {
     cls.def_readonly("ubndOut", &MapBox::ubndOut);
     cls.def_readonly("xl", &MapBox::xl);
     cls.def_readonly("xu", &MapBox::xu);
-
-    return mod.ptr();
 }
 
 }  // namespace

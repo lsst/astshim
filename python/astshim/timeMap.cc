@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(timeMap) {
-    py::module mod("timeMap", "Python wrapper for TimeMap");
-
+PYBIND11_MODULE(timeMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<TimeMap, std::shared_ptr<TimeMap>, Mapping> cls(mod, "TimeMap");
@@ -46,8 +44,6 @@ PYBIND11_PLUGIN(timeMap) {
 
     cls.def("copy", &TimeMap::copy);
     cls.def("add", &TimeMap::add, "cvt"_a, "args"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

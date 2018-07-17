@@ -32,9 +32,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(tranMap) {
-    py::module mod("tranMap", "Python wrapper for TranMap");
-
+PYBIND11_MODULE(tranMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<TranMap, std::shared_ptr<TranMap>, Mapping> cls(mod, "TranMap");
@@ -47,8 +45,6 @@ PYBIND11_PLUGIN(tranMap) {
     cls.def("__len__", [](TranMap const &) { return 2; });
 
     cls.def("copy", &TranMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

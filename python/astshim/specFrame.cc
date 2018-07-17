@@ -36,9 +36,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(specFrame) {
-    py::module mod("specFrame", "Python wrapper for SpecFrame");
-
+PYBIND11_MODULE(specFrame, mod) {
     py::module::import("astshim.frame");
 
     py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame> cls(mod, "SpecFrame");
@@ -75,8 +73,6 @@ PYBIND11_PLUGIN(specFrame) {
     cls.def("setSourceVRF", &SpecFrame::setSourceVRF, "vrf"_a);
     cls.def("setSpecOrigin", &SpecFrame::setSpecOrigin, "origin"_a);
     cls.def("setStdOfRest", &SpecFrame::setStdOfRest, "stdOfRest"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

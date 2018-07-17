@@ -33,9 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(wcsMap) {
-    py::module mod("wcsMap", "Python wrapper for WcsMap");
-
+PYBIND11_MODULE(wcsMap, mod) {
     py::module::import("astshim.mapping");
 
     py::enum_<WcsType>(mod, "WcsType")
@@ -87,8 +85,6 @@ PYBIND11_PLUGIN(wcsMap) {
     cls.def("copy", &WcsMap::copy);
     cls.def("getPVi_m", &WcsMap::getPVi_m, "i"_a, "m"_a);
     cls.def("getPVMax", &WcsMap::getPVMax);
-
-    return mod.ptr();
 }
 
 }  // namespace

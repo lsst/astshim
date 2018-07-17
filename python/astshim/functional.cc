@@ -31,16 +31,12 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(functional) {
-    py::module mod("functional");
-
+PYBIND11_MODULE(functional, mod) {
     py::module::import("astshim.frameSet");
     py::module::import("astshim.mapping");
 
     mod.def("append", &append, "first"_a, "second"_a);
     mod.def("makeRadialMapping", &makeRadialMapping, "center"_a, "mapping1d"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

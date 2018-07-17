@@ -31,14 +31,10 @@ namespace ast {
 namespace detail {
 namespace {
 
-PYBIND11_PLUGIN(testUtils) {
-    py::module mod("testUtils");
-
+PYBIND11_MODULE(testUtils, mod) {
     mod.def("makeFrameDict", makeFrameDict);
-
-    return mod.ptr();
 }
 
 }  // namespace
-}
+}  // namespace detail
 }  // namespace ast

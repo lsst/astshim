@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(lutMap) {
-    py::module mod("lutMap", "Python wrapper for LutMap");
-
+PYBIND11_MODULE(lutMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<LutMap, std::shared_ptr<LutMap>, Mapping> cls(mod, "LutMap");
@@ -49,8 +47,6 @@ PYBIND11_PLUGIN(lutMap) {
     cls.def_property_readonly("lutInterp", &LutMap::getLutInterp);
 
     cls.def("copy", &LutMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

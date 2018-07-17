@@ -33,9 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(mapSplit) {
-    py::module mod("mapSplit", "Python wrapper for MapSplit");
-
+PYBIND11_MODULE(mapSplit, mod) {
     py::class_<MapSplit> cls(mod, "MapSplit");
 
     cls.def(py::init<Mapping const &, std::vector<int> const &>(), "map"_a, "in"_a);
@@ -43,8 +41,6 @@ PYBIND11_PLUGIN(mapSplit) {
     cls.def_readonly("splitMap", &MapSplit::splitMap);
     cls.def_readonly("origIn", &MapSplit::origIn);
     cls.def_readonly("origOut", &MapSplit::origOut);
-
-    return mod.ptr();
 }
 
 }  // namespace

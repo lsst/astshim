@@ -35,9 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(mathMap) {
-    py::module mod("mathMap", "Python wrapper for MathMap");
-
+PYBIND11_MODULE(mathMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<MathMap, std::shared_ptr<MathMap>, Mapping> cls(mod, "MathMap");
@@ -52,8 +50,6 @@ PYBIND11_PLUGIN(mathMap) {
     cls.def_property_readonly("simpIF", &MathMap::getSimpIF);
 
     cls.def("copy", &MathMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

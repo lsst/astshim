@@ -33,9 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(parallelMap) {
-    py::module mod("parallelMap", "Python wrapper for ParallelMap");
-
+PYBIND11_MODULE(parallelMap, mod) {
     py::module::import("astshim.cmpMap");
 
     py::class_<ParallelMap, std::shared_ptr<ParallelMap>, CmpMap> cls(mod, "ParallelMap");
@@ -45,8 +43,6 @@ PYBIND11_PLUGIN(parallelMap) {
     cls.def(py::init<ParallelMap const &>());
 
     cls.def("copy", &ParallelMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

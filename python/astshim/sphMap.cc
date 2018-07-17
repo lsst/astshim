@@ -32,9 +32,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(sphMap) {
-    py::module mod("sphMap", "Python wrapper for SphMap");
-
+PYBIND11_MODULE(sphMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<SphMap, std::shared_ptr<SphMap>, Mapping> cls(mod, "SphMap");
@@ -46,8 +44,6 @@ PYBIND11_PLUGIN(sphMap) {
     cls.def_property_readonly("polarLong", &SphMap::getPolarLong);
 
     cls.def("copy", &SphMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

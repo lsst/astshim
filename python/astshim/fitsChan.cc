@@ -45,9 +45,7 @@ void wrapFoundValue(py::module &mod, std::string const &suffix) {
     cls.def_readwrite("value", &FoundValue<T>::value);
 }
 
-PYBIND11_PLUGIN(fitsChan) {
-    py::module mod("fitsChan", "Python wrapper for FitsChan");
-
+PYBIND11_MODULE(fitsChan, mod) {
     py::module::import("astshim.channel");
 
     py::enum_<FitsKeyState>(mod, "FitsKeyState")
@@ -132,8 +130,6 @@ PYBIND11_PLUGIN(fitsChan) {
     cls.def("writeFits", &FitsChan::writeFits);
     cls.def("clearCard", &FitsChan::clearCard);
     cls.def("setCard", &FitsChan::setCard, "i"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

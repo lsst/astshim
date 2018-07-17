@@ -62,9 +62,7 @@ public:
     }
 };
 
-PYBIND11_PLUGIN(frameDict) {
-    py::module mod("frameDict", "Python wrapper for FrameDict");
-
+PYBIND11_MODULE(frameDict, mod) {
     py::module::import("astshim.frameSet");
 
     py::class_<FrameDictMaker, std::shared_ptr<FrameDictMaker>> makerCls(mod, "FrameDictMaker");
@@ -123,8 +121,6 @@ PYBIND11_PLUGIN(frameDict) {
         auto unpickleArgs = py::make_tuple(state);
         return py::make_tuple(makerCls(), unpickleArgs);
     });
-
-    return mod.ptr();
 }
 
 }  // namespace

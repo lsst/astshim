@@ -32,9 +32,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(matrixMap) {
-    py::module mod("matrixMap", "Python wrapper for MatrixMap");
-
+PYBIND11_MODULE(matrixMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<MatrixMap, std::shared_ptr<MatrixMap>, Mapping> cls(mod, "MatrixMap");
@@ -44,8 +42,6 @@ PYBIND11_PLUGIN(matrixMap) {
     cls.def(py::init<MatrixMap const &>());
 
     cls.def("copy", &MatrixMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

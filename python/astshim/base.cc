@@ -31,9 +31,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(base) {
-    py::module mod("base", "Python wrapper for base.h");
-
+PYBIND11_MODULE(base, mod) {
     mod.def("assertOK", &assertOK, "rawObj1"_a = nullptr, "rawObj2"_a = nullptr);
     mod.def("escapes", &escapes, "include"_a = -1);
 
@@ -57,8 +55,6 @@ PYBIND11_PLUGIN(base) {
             .value("UndefinedType", DataType::UndefinedType)
             .value("BadType", DataType::BadType)
             .export_values();
-
-    return mod.ptr();
 }
 
 }  // namespace

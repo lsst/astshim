@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(pcdMap) {
-    py::module mod("pcdMap", "Python wrapper for PcdMap");
-
+PYBIND11_MODULE(pcdMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<PcdMap, std::shared_ptr<PcdMap>, Mapping> cls(mod, "PcdMap");
@@ -49,8 +47,6 @@ PYBIND11_PLUGIN(pcdMap) {
     cls.def_property_readonly("pcdCen", py::overload_cast<>(&PcdMap::getPcdCen, py::const_));
 
     cls.def("copy", &PcdMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

@@ -33,9 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(cmpFrame) {
-    py::module mod("cmpFrame", "Python wrapper for CmpFrame");
-
+PYBIND11_MODULE(cmpFrame, mod) {
     py::module::import("astshim.frame");
 
     py::class_<CmpFrame, std::shared_ptr<CmpFrame>, Frame> cls(mod, "CmpFrame");
@@ -48,8 +46,6 @@ PYBIND11_PLUGIN(cmpFrame) {
     cls.def("__len__", [](CmpFrame const &) { return 2; });
 
     cls.def("copy", &CmpFrame::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

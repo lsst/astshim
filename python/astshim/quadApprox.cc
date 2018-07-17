@@ -31,9 +31,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(quadApprox) {
-    py::module mod("quadApprox", "Python wrapper for QuadApprox");
-
+PYBIND11_MODULE(quadApprox, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<QuadApprox> cls(mod, "QuadApprox");
@@ -43,8 +41,6 @@ PYBIND11_PLUGIN(quadApprox) {
 
     cls.def_readonly("fit", &QuadApprox::fit);
     cls.def_readonly("rms", &QuadApprox::rms);
-
-    return mod.ptr();
 }
 
 }  // namespace

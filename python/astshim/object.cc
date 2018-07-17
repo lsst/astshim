@@ -53,9 +53,7 @@ public:
     }
 };
 
-PYBIND11_PLUGIN(object) {
-    py::module mod("object", "Python wrapper for Object");
-
+PYBIND11_MODULE(object, mod) {
     py::module::import("astshim.base");
 
     py::class_<ObjectMaker, std::shared_ptr<ObjectMaker>> makerCls(mod, "ObjectMaker");
@@ -100,8 +98,6 @@ PYBIND11_PLUGIN(object) {
         auto unpickleArgs = py::make_tuple(state);
         return py::make_tuple(makerCls(), unpickleArgs);
     });
-
-    return mod.ptr();
 }
 
 }  // namespace
