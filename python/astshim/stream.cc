@@ -32,9 +32,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(stream) {
-    py::module mod("stream", "Python wrapper for Stream.h");
-
+PYBIND11_MODULE(stream, mod) {
     // Stream
     py::class_<Stream, std::shared_ptr<Stream>> clsStream(mod, "Stream");
 
@@ -62,8 +60,6 @@ PYBIND11_PLUGIN(stream) {
     clsStringStream.def("getSourceData", &StringStream::getSourceData);
     clsStringStream.def("getSinkData", &StringStream::getSinkData);
     clsStringStream.def("sinkToSource", &StringStream::sinkToSource);
-
-    return mod.ptr();
 }
 
 }  // namespace

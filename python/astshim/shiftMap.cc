@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(shiftMap) {
-    py::module mod("shiftMap", "Python wrapper for ShiftMap");
-
+PYBIND11_MODULE(shiftMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<ShiftMap, std::shared_ptr<ShiftMap>, Mapping> cls(mod, "ShiftMap");
@@ -45,8 +43,6 @@ PYBIND11_PLUGIN(shiftMap) {
     cls.def(py::init<ShiftMap const &>());
 
     cls.def("copy", &ShiftMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

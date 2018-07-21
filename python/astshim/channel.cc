@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(channel) {
-    py::module mod("channel", "Python wrapper for Channel");
-
+PYBIND11_MODULE(channel, mod) {
     py::module::import("astshim.object");
 
     py::class_<Channel, std::shared_ptr<Channel>, Object> cls(mod, "Channel");
@@ -54,8 +52,6 @@ PYBIND11_PLUGIN(channel) {
     cls.def("read", &Channel::read);
     cls.def("write", &Channel::write, "object"_a);
     cls.def("warnings", &Channel::warnings);
-
-    return mod.ptr();
 }
 
 }  // namespace

@@ -35,9 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(polyMap) {
-    py::module mod("polyMap", "Python wrapper for PolyMap");
-
+PYBIND11_MODULE(polyMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<PolyMap, std::shared_ptr<PolyMap>, Mapping> cls(mod, "PolyMap");
@@ -55,8 +53,6 @@ PYBIND11_PLUGIN(polyMap) {
     cls.def("copy", &PolyMap::copy);
     cls.def("polyTran", &PolyMap::polyTran, "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a,
             "ubnd"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

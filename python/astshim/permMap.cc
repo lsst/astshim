@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(permMap) {
-    py::module mod("permMap", "Python wrapper for PermMap");
-
+PYBIND11_MODULE(permMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<PermMap, std::shared_ptr<PermMap>, Mapping> cls(mod, "PermMap");
@@ -47,8 +45,6 @@ PYBIND11_PLUGIN(permMap) {
     cls.def(py::init<PermMap const &>());
 
     cls.def("copy", &PermMap::copy);
-
-    return mod.ptr();
 }
 
 }  // namespace

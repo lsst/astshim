@@ -35,9 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(skyFrame) {
-    py::module mod("skyFrame", "Python wrapper for SkyFrame");
-
+PYBIND11_MODULE(skyFrame, mod) {
     py::module::import("astshim.frame");
 
     py::class_<SkyFrame, std::shared_ptr<SkyFrame>, Frame> cls(mod, "SkyFrame");
@@ -76,8 +74,6 @@ PYBIND11_PLUGIN(skyFrame) {
     cls.def("setSkyRef", &SkyFrame::setSkyRef);
     cls.def("setSkyRefP", &SkyFrame::setSkyRefP);
     cls.def("skyOffsetMap", &SkyFrame::skyOffsetMap);
-
-    return mod.ptr();
 }
 
 }  // namespace

@@ -35,9 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(mapping) {
-    py::module mod("mapping", "Python wrapper for Mapping");
-
+PYBIND11_MODULE(mapping, mod) {
     py::module::import("astshim.object");
     py::module::import("astshim.mapBox");
     py::module::import("astshim.mapSplit");
@@ -78,8 +76,6 @@ PYBIND11_PLUGIN(mapping) {
             py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridInverse,
                                                                                 py::const_),
             "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

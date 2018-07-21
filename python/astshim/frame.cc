@@ -72,9 +72,7 @@ void wrapFrameMapping(py::module &mod) {
     cls.def_readwrite("mapping", &FrameMapping::mapping);
 }
 
-PYBIND11_PLUGIN(frame) {
-    py::module mod("frame", "Python wrapper for Frame");
-
+PYBIND11_MODULE(frame, mod) {
     py::module::import("astshim.mapping");
 
     wrapDirectionPoint(mod);
@@ -147,8 +145,6 @@ PYBIND11_PLUGIN(frame) {
     cls.def("setTop", &Frame::setTop, "axis"_a, "top"_a);
     cls.def("setUnit", &Frame::setUnit, "axis"_a, "unit"_a);
     cls.def("unformat", &Frame::unformat, "axis"_a, "str"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(timeFrame) {
-    py::module mod("timeFrame", "Python wrapper for TimeFrame");
-
+PYBIND11_MODULE(timeFrame, mod) {
     py::module::import("astshim.frame");
 
     py::class_<TimeFrame, std::shared_ptr<TimeFrame>, Frame> cls(mod, "TimeFrame");
@@ -51,8 +49,6 @@ PYBIND11_PLUGIN(timeFrame) {
 
     cls.def("copy", &TimeFrame::copy);
     cls.def("currentTime", &TimeFrame::currentTime);
-
-    return mod.ptr();
 }
 
 }  // namespace

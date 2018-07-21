@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(slaMap) {
-    py::module mod("slaMap", "Python wrapper for SlaMap");
-
+PYBIND11_MODULE(slaMap, mod) {
     py::module::import("astshim.mapping");
 
     py::class_<SlaMap, std::shared_ptr<SlaMap>, Mapping> cls(mod, "SlaMap");
@@ -46,8 +44,6 @@ PYBIND11_PLUGIN(slaMap) {
 
     cls.def("copy", &SlaMap::copy);
     cls.def("add", &SlaMap::add, "cvt"_a, "args"_a = std::vector<double>());
-
-    return mod.ptr();
 }
 
 }  // namespace

@@ -34,9 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(keyMap) {
-    py::module mod("keyMap", "Python wrapper for KeyMap");
-
+PYBIND11_MODULE(keyMap, mod) {
     py::module::import("astshim.object");
 
     py::class_<KeyMap, std::shared_ptr<KeyMap>, Object> cls(mod, "KeyMap");
@@ -138,8 +136,6 @@ PYBIND11_PLUGIN(keyMap) {
     cls.def("remove", &KeyMap::remove, "key"_a);
     cls.def("rename", &KeyMap::rename, "oldKey"_a, "newKey"_a);
     cls.def("type", &KeyMap::type, "key"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

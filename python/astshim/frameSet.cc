@@ -30,9 +30,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(frameSet) {
-    py::module mod("frameSet", "Python wrapper for FrameSet");
-
+PYBIND11_MODULE(frameSet, mod) {
     py::module::import("astshim.frame");
 
     py::class_<FrameSet, std::shared_ptr<FrameSet>, Frame> cls(mod, "FrameSet");
@@ -63,8 +61,6 @@ PYBIND11_PLUGIN(frameSet) {
     cls.def("remapFrame", &FrameSet::remapFrame, "iframe"_a, "map"_a);
     cls.def("removeFrame", &FrameSet::removeFrame, "iframe"_a);
     cls.def("renameVariant", &FrameSet::renameVariant, "name"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

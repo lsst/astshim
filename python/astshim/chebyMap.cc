@@ -43,9 +43,7 @@ void declareChebyDomain(py::module const &mod) {
     cls.def_readonly("ubnd", &ChebyDomain::ubnd);
 }
 
-PYBIND11_PLUGIN(chebyMap) {
-    py::module mod("chebyMap", "Python wrapper for ChebyMap");
-
+PYBIND11_MODULE(chebyMap, mod) {
     py::module::import("astshim.mapping");
 
     declareChebyDomain(mod);
@@ -69,8 +67,6 @@ PYBIND11_PLUGIN(chebyMap) {
             "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a, "ubnd"_a);
     cls.def("polyTran", py::overload_cast<bool, double, double, int>(&ChebyMap::polyTran, py::const_),
             "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a);
-
-    return mod.ptr();
 }
 
 }  // namespace

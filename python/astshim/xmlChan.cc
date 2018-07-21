@@ -32,9 +32,7 @@ using namespace pybind11::literals;
 namespace ast {
 namespace {
 
-PYBIND11_PLUGIN(xmlChan) {
-    py::module mod("xmlChan", "Python wrapper for XmlChan");
-
+PYBIND11_MODULE(xmlChan, mod) {
     py::module::import("astshim.channel");
 
     py::class_<XmlChan, std::shared_ptr<XmlChan>, Channel> cls(mod, "XmlChan");
@@ -44,8 +42,6 @@ PYBIND11_PLUGIN(xmlChan) {
     cls.def_property("xmlFormat", &XmlChan::getXmlFormat, &XmlChan::setXmlFormat);
     cls.def_property("xmlLength", &XmlChan::getXmlLength, &XmlChan::setXmlLength);
     cls.def_property("xmlPrefix", &XmlChan::getXmlPrefix, &XmlChan::setXmlPrefix);
-
-    return mod.ptr();
 }
 
 }  // namespace
