@@ -123,10 +123,10 @@ class TestObject(ObjectTestCase):
 
         # make sure base is unset in the inverse of the inverse of frameSet1,
         # else the equality test will fail for hard-to-understand reasons
-        self.assertFalse(frameSet1.getInverse().getInverse().test("Base"))
-        self.assertNotEqual(frameSet1, frameSet1.getInverse())
-        self.assertEqual(frameSet1, frameSet1.getInverse().getInverse())
-        self.assertFalse(frameSet1.getInverse().getInverse().test("Base"))
+        self.assertFalse(frameSet1.inverted().inverted().test("Base"))
+        self.assertNotEqual(frameSet1, frameSet1.inverted())
+        self.assertEqual(frameSet1, frameSet1.inverted().inverted())
+        self.assertFalse(frameSet1.inverted().inverted().test("Base"))
 
         frame3 = ast.Frame(2)
         frame3.title = "Frame 3"

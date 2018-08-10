@@ -68,7 +68,7 @@ When a @ref FrameSet is used in a context that requires a @ref Mapping,
 the @ref Mapping used is the one between its base @ref Frame and its
 current @ref Frame. Thus, a @ref FrameSet may be used to convert "native"
 coordinates into "apparent" ones, and vice versa. Like any
-@ref Mapping, a @ref FrameSet may also be inverted (see @ref Mapping.getInverse),
+@ref Mapping, a @ref FrameSet may also be inverted (see @ref Mapping.inverted),
 which has the effect of returning a copy with base and current @ref Frame "Frames"
 swapped, hence of reversing the @ref Mapping between them.
 

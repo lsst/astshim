@@ -500,7 +500,7 @@ class TestChebyMap(MappingTestCase):
         # execute many times to increase the odds of a segfault
         for i in range(1000):
             amap = ast.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
-            amapinv = amap.getInverse()
+            amapinv = amap.inverted()
             cmp2 = amapinv.then(amap)
             result = cmp2.simplify()
             self.assertIsInstance(result, ast.UnitMap)

@@ -38,7 +38,7 @@ SeriesMap Mapping::then(Mapping const &next) const { return SeriesMap(*this, nex
 
 ParallelMap Mapping::under(Mapping const &next) const { return ParallelMap(*this, next); }
 
-std::shared_ptr<Mapping> Mapping::getInverse() const {
+std::shared_ptr<Mapping> Mapping::inverted() const {
     auto rawCopy = reinterpret_cast<AstMapping *>(astCopy(getRawPtr()));
     astInvert(rawCopy);
     assertOK(reinterpret_cast<AstObject *>(rawCopy));

@@ -113,12 +113,12 @@ class MappingTestCase(ObjectTestCase):
         rt_poslist = amap.applyInverse(to_poslist)
         assert_allclose(poslist, rt_poslist, rtol=rtol, atol=atol)
 
-        # forward with applyForward, inverse with getInverse().applyForward
-        amapinv = amap.getInverse()
+        # forward with applyForward, inverse with inverted().applyForward
+        amapinv = amap.inverted()
         rt2_poslist = amapinv.applyForward(to_poslist)
         assert_allclose(poslist, rt2_poslist, rtol=rtol, atol=atol)
 
-        # forward and inverse with a compound map of amap.then(amap.getInverse())
+        # forward and inverse with a compound map of amap.then(amap.inverted())
         acmp = amap.then(amapinv)
         assert_allclose(poslist, acmp.applyForward(poslist), rtol=rtol, atol=atol)
 
@@ -139,7 +139,7 @@ class MappingTestCase(ObjectTestCase):
         - A compound mapping of a amap and its inverse simplifies to a unit amap
         - A compound mapping of a amap and a unit amap simplifies to the original amap
         """
-        amapinv = amap.getInverse()
+        amapinv = amap.inverted()
         cmp1 = amap.then(amapinv)
         unit1 = cmp1.simplify()
         self.assertEqual(unit1.className, "UnitMap")

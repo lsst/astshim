@@ -79,9 +79,9 @@ class TestUnitNormMap(MappingTestCase):
             [7.0, -23.0, -3.0, 45.0, 0.0],
         ], dtype=float)
         unm1 = ast.UnitNormMap(center1)
-        unm1inv = unm1.getInverse()
+        unm1inv = unm1.inverted()
         unm2 = ast.UnitNormMap(center2)
-        unm2inv = unm2.getInverse()
+        unm2inv = unm2.inverted()
         shiftmap = ast.ShiftMap(shift)
         winmap_unitscale = ast.WinMap(
             np.zeros(3), shift, np.ones(3), np.ones(3) + shift)

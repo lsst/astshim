@@ -12,7 +12,7 @@ If the attribute value is `false` (the default), the @ref Mapping's behaviour
 is in the usual direction. However, if it is `true` then, its two transformations
 have been inter-changed, so that the @ref Mapping displays the inverse of its native behaviour.
 
-@ref Mapping.getInverse returns the inverse of the mapping (e.g. a copy of the mapping
+@ref Mapping.inverted returns the inverse of the mapping (e.g. a copy of the mapping
 with its @ref Mapping_Invert Invert property set)
 
 ### Applicability

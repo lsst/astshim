@@ -90,7 +90,7 @@ public:
     Is this an inverted mapping?
 
     Note: this gets the @ref Mapping_Invert "Invert" attribute.
-    This method is not called `getInvert` because that is too similar to @ref getInverse.
+    This method is not called `getInvert` because that sounds like it might return the inverse.
     */
     bool isInverted() const { return getB("Invert"); }
 
@@ -135,7 +135,7 @@ public:
     has a zoom factor of 4.0 then its inverse also reports a zoom factor of 4.0 (despite behaving
     like an uninverted @ref ZoomMap with zoom factor of 0.25).
     */
-    std::shared_ptr<Mapping> getInverse() const;
+    std::shared_ptr<Mapping> inverted() const;
 
     /**
     Compute a linear approximation to the forward transformation.

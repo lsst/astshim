@@ -31,7 +31,7 @@ class TestMapping(MappingTestCase):
         self.assertTrue(self.zoommap.hasInverse)
 
     def test_MappingInvert(self):
-        invmap = self.zoommap.getInverse()
+        invmap = self.zoommap.inverted()
 
         self.assertEqual(invmap.className, "ZoomMap")
         self.assertTrue(invmap.isInverted)

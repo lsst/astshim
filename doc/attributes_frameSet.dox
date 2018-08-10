@@ -33,7 +33,7 @@ Otherwise an error is reported.
 
 ### Notes
 
-- The @ref Mapping.getInverse "Inverse" of a @ref FrameSet
+- The @ref Mapping.inverted "Inverse" of a @ref FrameSet
 has the values of its @ref FrameSet_Base "Base" and @ref FrameSet_Current "Current" attributes interchanged.
 
 
@@ -54,7 +54,7 @@ case-insensitive). If found, the @ref Frame is made the current @ref Frame.
 Otherwise an error is reported.
 
 ### Notes
-- The @ref Mapping.getInverse "Inverse" of a @ref FrameSet
+- The @ref Mapping.inverted "Inverse" of a @ref FrameSet
 has the values of its @ref FrameSet_Base "Base" and @ref FrameSet_Current "Current" attributes interchanged.
 
 

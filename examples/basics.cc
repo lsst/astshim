@@ -45,7 +45,7 @@ int main() {
     std::cout << "x =" << from << std::endl;
     std::cout << "zoom(x) =" << to << std::endl;
 
-    auto invZoomPtr = zoomMap.getInverse();
+    auto invZoomPtr = zoomMap.inverted();
     // You can also pre-allocate the destination memory, which is useful if you want to reuse it
     ast::Array2D rndTrip = ndarray::allocate(ndarray::makeVector(2, 3));
     invZoomPtr->applyForward(to, rndTrip);

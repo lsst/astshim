@@ -52,7 +52,7 @@ PYBIND11_MODULE(mapping, mod) {
     cls.def_property("report", &Mapping::getReport, &Mapping::setReport);
 
     cls.def("copy", &Mapping::copy);
-    cls.def("getInverse", &Mapping::getInverse);
+    cls.def("inverted", &Mapping::inverted);
     cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
     cls.def("then", &Mapping::then, "next"_a);
     cls.def("under", &Mapping::under, "next"_a);
