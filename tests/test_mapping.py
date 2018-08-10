@@ -129,7 +129,7 @@ class TestMapping(MappingTestCase):
         self.assertFalse(self.zoommap.test("Report"))
 
     def test_MappingSimplify(self):
-        simpmap = self.zoommap.simplify()
+        simpmap = self.zoommap.simplified()
 
         self.assertEqual(simpmap.className, "ZoomMap")
         self.assertFalse(simpmap.isInverted)

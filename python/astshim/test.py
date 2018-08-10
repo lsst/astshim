@@ -141,7 +141,7 @@ class MappingTestCase(ObjectTestCase):
         """
         amapinv = amap.inverted()
         cmp1 = amap.then(amapinv)
-        unit1 = cmp1.simplify()
+        unit1 = cmp1.simplified()
         self.assertEqual(unit1.className, "UnitMap")
         self.assertEqual(amap.nIn, cmp1.nIn)
         self.assertEqual(amap.nIn, cmp1.nOut)
@@ -149,7 +149,7 @@ class MappingTestCase(ObjectTestCase):
         self.assertEqual(cmp1.nOut, unit1.nOut)
 
         cmp2 = amapinv.then(amap)
-        unit2 = cmp2.simplify()
+        unit2 = cmp2.simplified()
         self.assertEqual(unit2.className, "UnitMap")
         self.assertEqual(amapinv.nIn, cmp2.nIn)
         self.assertEqual(amapinv.nIn, cmp2.nOut)
@@ -163,8 +163,8 @@ class MappingTestCase(ObjectTestCase):
             (amapinv, unit1, amapinv),
         ):
             cmp3 = ma.then(mb)
-            cmp3simp = cmp3.simplify()
-            self.assertEqual(cmp3simp.className, amap.simplify().className)
+            cmp3simp = cmp3.simplified()
+            self.assertEqual(cmp3simp.className, amap.simplified().className)
             self.assertEqual(ma.nIn, cmp3.nIn)
             self.assertEqual(mb.nOut, cmp3.nOut)
             self.assertEqual(cmp3.nIn, cmp3simp.nIn)

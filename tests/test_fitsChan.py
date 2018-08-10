@@ -78,7 +78,7 @@ class TestFitsChan(ObjectTestCase):
                 gridIndex -= 1
             frameSet.removeFrame(index)
 
-        newGridToIwc = mapping.then(oldGridToIwc).simplify()
+        newGridToIwc = mapping.then(oldGridToIwc).simplified()
         frameSet.addFrame(gridIndex, newGridToIwc, iwcFrame)
         frameSet.addFrame(ast.FrameSet.CURRENT, iwcToSky, skyFrame)
         return frameSet

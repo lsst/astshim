@@ -57,7 +57,7 @@ PYBIND11_MODULE(mapping, mod) {
     cls.def("then", &Mapping::then, "next"_a);
     cls.def("under", &Mapping::under, "next"_a);
     cls.def("rate", &Mapping::rate, "at"_a, "ax1"_a, "ax2"_a);
-    cls.def("simplify", &Mapping::simplify);
+    cls.def("simplified", &Mapping::simplified);
     // wrap the overloads of applyForward, applyInverse, tranGridForward and tranGridInverse that return a new
     // result
     cls.def("applyForward", py::overload_cast<ConstArray2D const &>(&Mapping::applyForward, py::const_),

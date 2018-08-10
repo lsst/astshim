@@ -72,10 +72,10 @@ can be tested for linearity using the astLinearApprox function.
 
 @subsection Mapping_IsSimple IsSimple
 
-Has the mapping been simplified by the @ref Mapping.simplify method?
+Has the mapping been simplified by the @ref Mapping.simplified method?
 
 If the @ref Mapping_IsSimple "IsSimple" value is `true`, then the Mapping has been simplified
-and so there is nothing to be gained by simplifying it again. Indeed, @ref Mapping.simplify
+and so there is nothing to be gained by simplifying it again. Indeed, @ref Mapping.simplified
 will immediately return the Mapping unchanged if @ref Mapping_IsSimple "IsSimple" is `true`.
 
 ### Applicability

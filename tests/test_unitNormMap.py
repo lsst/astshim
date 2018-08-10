@@ -100,7 +100,7 @@ class TestUnitNormMap(MappingTestCase):
             cmpmap = map1.then(map2)
             self.assertEqual(map1.nIn, cmpmap.nIn)
             self.assertEqual(map2.nOut, cmpmap.nOut)
-            cmpmap_simp = cmpmap.simplify()
+            cmpmap_simp = cmpmap.simplified()
             self.assertEqual(cmpmap_simp.className, pred_simplified_class_name)
             self.assertEqual(cmpmap.nIn, cmpmap_simp.nIn)
             self.assertEqual(cmpmap.nOut, cmpmap_simp.nOut)

@@ -502,7 +502,7 @@ class TestChebyMap(MappingTestCase):
             amap = ast.ChebyMap(coeff_f, coeff_i, lbnd_f, ubnd_f, lbnd_i, ubnd_i)
             amapinv = amap.inverted()
             cmp2 = amapinv.then(amap)
-            result = cmp2.simplify()
+            result = cmp2.simplified()
             self.assertIsInstance(result, ast.UnitMap)
 
 

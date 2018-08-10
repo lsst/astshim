@@ -151,8 +151,7 @@ public:
     and the @ref Frame specified by parameter `frame`. In addition, each @ref Mapping in the FrameSet
     is replaced by a CmpMap containing the original @ref Mapping and a UnitMap in parallel.
     The NIn and NOut attributes of the UnitMap are set equal to the number of axes
-    in the supplied @ref Frame.  Each new CmpMap is simplified using `simplify` before
-    being stored in the FrameSet.
+    in the supplied @ref Frame.  Each new CmpMap is simplified before being stored in the FrameSet.
 
     @param[in] frame  @ref Frame whose axes are to be appended to each @ref Frame in this FrameSet.
     */

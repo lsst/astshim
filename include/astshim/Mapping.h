@@ -227,7 +227,7 @@ public:
     /**
     Return a simplied version of the mapping (which may be a compound Mapping such as a CmpMap).
 
-    Simplfy eliminates redundant computational steps and merges separate steps which can be performed
+    Simplification eliminates redundant computational steps and merges separate steps which can be performed
     more efficiently in a single operation. As a simple example, a Mapping which multiplied coordinates by 5,
     and then multiplied the result by 10, could be simplified to a single step which multiplied by 50.
     Similarly, a Mapping which multiplied by 5, and then divided by 5, could be reduced to
@@ -245,7 +245,7 @@ public:
       This restriction does not apply to the simplification of Frames.
     * The returned mapping is always independent of the original (a deep copy), unlike astSimplify.
     */
-    std::shared_ptr<Mapping> simplify() const {
+    std::shared_ptr<Mapping> simplified() const {
         AstObject *rawSimpMap = reinterpret_cast<AstObject *>(astSimplify(getRawPtr()));
         assertOK(rawSimpMap);
         return Object::fromAstObject<Mapping>(rawSimpMap, true);

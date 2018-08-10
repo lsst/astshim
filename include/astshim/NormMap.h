@@ -37,7 +37,7 @@ are both equal to the number of axes in the supplied @ref Frame.
 The forward and inverse transformation of a @ref NormMap are both
 defined but are identical (that is, they do not form a real inverse
 pair in that the inverse transformation does not undo the
-normalisation, instead it reapplies it). However, @ref Mapping.simplify
+normalisation, instead it reapplies it). However, @ref Mapping.simplified
 will replace neighbouring pairs of forward and inverse
 @ref NormMap "NormMaps" by a single @ref UnitMap (so long as the @ref Frame "Frames" encapsulated by
 the two @ref NormMap "NormMaps" are equal - i.e. have the same class and the same

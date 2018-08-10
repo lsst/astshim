@@ -395,7 +395,7 @@ class TestPolyMap(MappingTestCase):
             amap = ast.PolyMap(coeff_f, coeff_i)
             amapinv = amap.inverted()
             cmp2 = amapinv.then(amap)
-            result = cmp2.simplify()
+            result = cmp2.simplified()
             self.assertIsInstance(result, ast.UnitMap)
 
 
