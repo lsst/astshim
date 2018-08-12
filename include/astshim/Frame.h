@@ -451,9 +451,8 @@ public:
     - When aligning (say) two images, which have been calibrated by
         attaching @ref FrameSet "FrameSets" to them, it is usually necessary to convert
         between the base @ref Frame "Frames" (representing "native" pixel coordinates)
-        of both @ref FrameSet "FrameSets". This may be achieved by calling @ref convert
-        in the inverses of the @ref FrameSet "FrameSets" (using @ref Mapping.getInverse "getInverse")
-        so as to interchange their base and current frames.
+        of both @ref FrameSet "FrameSets". This may be achieved by obtaining the inverses
+        of the @ref FrameSet "FrameSets" (using @ref Mapping.inverted "inverted").
     */
     std::shared_ptr<FrameSet> convert(Frame const &to, std::string const &domainlist = "");
 

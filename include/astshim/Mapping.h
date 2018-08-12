@@ -90,7 +90,7 @@ public:
     Is this an inverted mapping?
 
     Note: this gets the @ref Mapping_Invert "Invert" attribute.
-    This method is not called `getInvert` because that is too similar to @ref getInverse.
+    This method is not called `getInvert` because that sounds like it might return the inverse.
     */
     bool isInverted() const { return getB("Invert"); }
 
@@ -135,7 +135,7 @@ public:
     has a zoom factor of 4.0 then its inverse also reports a zoom factor of 4.0 (despite behaving
     like an uninverted @ref ZoomMap with zoom factor of 0.25).
     */
-    std::shared_ptr<Mapping> getInverse() const;
+    std::shared_ptr<Mapping> inverted() const;
 
     /**
     Compute a linear approximation to the forward transformation.
@@ -227,7 +227,7 @@ public:
     /**
     Return a simplied version of the mapping (which may be a compound Mapping such as a CmpMap).
 
-    Simplfy eliminates redundant computational steps and merges separate steps which can be performed
+    Simplification eliminates redundant computational steps and merges separate steps which can be performed
     more efficiently in a single operation. As a simple example, a Mapping which multiplied coordinates by 5,
     and then multiplied the result by 10, could be simplified to a single step which multiplied by 50.
     Similarly, a Mapping which multiplied by 5, and then divided by 5, could be reduced to
@@ -245,7 +245,7 @@ public:
       This restriction does not apply to the simplification of Frames.
     * The returned mapping is always independent of the original (a deep copy), unlike astSimplify.
     */
-    std::shared_ptr<Mapping> simplify() const {
+    std::shared_ptr<Mapping> simplified() const {
         AstObject *rawSimpMap = reinterpret_cast<AstObject *>(astSimplify(getRawPtr()));
         assertOK(rawSimpMap);
         return Object::fromAstObject<Mapping>(rawSimpMap, true);

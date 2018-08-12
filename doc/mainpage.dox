@@ -23,7 +23,7 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
     - Accept a 2-dimensional ndarray and return a newly allocated 2-dimensional ndarray.
     - Accept a 2-dimensional ndarray and fill a pre-allocated 2-dimensional ndarray.
 - @ref Mapping "Mappings" may not be inverted in place.
-    Instead call @ref Mapping.getInverse to get an inverse mapping,
+    Instead call @ref Mapping.inverted to get an inverse mapping,
     and @ref Mapping.isInverted to find out if a mapping is inverted.
 - Compound mappings and frames have a few minor changes:
     - New classes @ref SeriesMap and @ref ParallelMap are subclasses of @ref CmpMap

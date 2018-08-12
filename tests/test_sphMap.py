@@ -23,7 +23,7 @@ class TestSphMap(MappingTestCase):
         # SphMap followed by an inverse, simplified, is a compound map,
         # not a UnitMap, since data only round trips for unit vectors.
         # Hence the following test instead of checkBasicSimplify:
-        simplified = sphmap.then(sphmap.getInverse()).simplify()
+        simplified = sphmap.then(sphmap.inverted()).simplified()
         self.assertTrue(isinstance(simplified, ast.CmpMap))
 
         # for data to round trip, all inputs must be unit vectors

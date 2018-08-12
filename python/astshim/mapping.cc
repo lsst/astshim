@@ -52,12 +52,12 @@ PYBIND11_MODULE(mapping, mod) {
     cls.def_property("report", &Mapping::getReport, &Mapping::setReport);
 
     cls.def("copy", &Mapping::copy);
-    cls.def("getInverse", &Mapping::getInverse);
+    cls.def("inverted", &Mapping::inverted);
     cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
     cls.def("then", &Mapping::then, "next"_a);
     cls.def("under", &Mapping::under, "next"_a);
     cls.def("rate", &Mapping::rate, "at"_a, "ax1"_a, "ax2"_a);
-    cls.def("simplify", &Mapping::simplify);
+    cls.def("simplified", &Mapping::simplified);
     // wrap the overloads of applyForward, applyInverse, tranGridForward and tranGridInverse that return a new
     // result
     cls.def("applyForward", py::overload_cast<ConstArray2D const &>(&Mapping::applyForward, py::const_),

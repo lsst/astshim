@@ -88,7 +88,7 @@ class TestMatrixMap(MappingTestCase):
         ], dtype=float)
         assert_allclose(outdata, pred_outdata)
 
-        simplifiedMM = mm.simplify()
+        simplifiedMM = mm.simplified()
         outdata2 = simplifiedMM.applyForward(indata)
         assert_allclose(outdata2, pred_outdata)
 

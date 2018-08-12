@@ -134,7 +134,7 @@ class TestCmpMap(MappingTestCase):
         outdata = seriesMap.applyForward(indata)
         assert_allclose(outdata, pred_outdata)
 
-        simplifiedMap = seriesMap.simplify()
+        simplifiedMap = seriesMap.simplified()
         outdata2 = simplifiedMap.applyForward(indata)
         assert_allclose(outdata2, pred_outdata)
 

@@ -31,7 +31,7 @@ class TestMapping(MappingTestCase):
         self.assertTrue(self.zoommap.hasInverse)
 
     def test_MappingInvert(self):
-        invmap = self.zoommap.getInverse()
+        invmap = self.zoommap.inverted()
 
         self.assertEqual(invmap.className, "ZoomMap")
         self.assertTrue(invmap.isInverted)
@@ -129,7 +129,7 @@ class TestMapping(MappingTestCase):
         self.assertFalse(self.zoommap.test("Report"))
 
     def test_MappingSimplify(self):
-        simpmap = self.zoommap.simplify()
+        simpmap = self.zoommap.simplified()
 
         self.assertEqual(simpmap.className, "ZoomMap")
         self.assertFalse(simpmap.isInverted)

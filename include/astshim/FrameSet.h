@@ -68,9 +68,9 @@ When a @ref FrameSet is used in a context that requires a @ref Mapping,
 the @ref Mapping used is the one between its base @ref Frame and its
 current @ref Frame. Thus, a @ref FrameSet may be used to convert "native"
 coordinates into "apparent" ones, and vice versa. Like any
-@ref Mapping, a @ref FrameSet may also be inverted (see @ref Mapping.getInverse),
-which has the effect of interchanging its base and current @ref Frame "Frames" and
-hence of reversing the @ref Mapping between them.
+@ref Mapping, a @ref FrameSet may also be inverted (see @ref Mapping.inverted),
+which has the effect of returning a copy with base and current @ref Frame "Frames"
+swapped, hence of reversing the @ref Mapping between them.
 
 Regions may be added into a @ref FrameSet (since a Region is a type of
 @ref Frame), either explicitly or as components within @ref CmpFrame "CmpFrames". In this
@@ -151,8 +151,7 @@ public:
     and the @ref Frame specified by parameter `frame`. In addition, each @ref Mapping in the FrameSet
     is replaced by a CmpMap containing the original @ref Mapping and a UnitMap in parallel.
     The NIn and NOut attributes of the UnitMap are set equal to the number of axes
-    in the supplied @ref Frame.  Each new CmpMap is simplified using `simplify` before
-    being stored in the FrameSet.
+    in the supplied @ref Frame.  Each new CmpMap is simplified before being stored in the FrameSet.
 
     @param[in] frame  @ref Frame whose axes are to be appended to each @ref Frame in this FrameSet.
     */

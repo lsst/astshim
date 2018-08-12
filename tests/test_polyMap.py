@@ -110,7 +110,7 @@ class TestPolyMap(MappingTestCase):
         with self.assertRaises(RuntimeError):
             pm.applyInverse(indata)
 
-        pminv = pm.getInverse()
+        pminv = pm.inverted()
         self.assertFalse(pminv.hasForward)
         self.assertTrue(pminv.hasInverse)
         self.assertTrue(pminv.isInverted)
@@ -325,7 +325,7 @@ class TestPolyMap(MappingTestCase):
             self.assertFalse(polyMapFitInv.test("IterInverse"))
 
             # fit forward direction of inverted mapping; this should also clear IterInverse
-            polyMapInvFitFwd = polyMap.getInverse().polyTran(True, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
+            polyMapInvFitFwd = polyMap.inverted().polyTran(True, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
             self.assertFalse(polyMapInvFitFwd.iterInverse)
             self.assertFalse(polyMapFitInv.test("IterInverse"))
 
@@ -335,7 +335,7 @@ class TestPolyMap(MappingTestCase):
 
             # cannot fit inverse of inverted mapping because forward is iterative
             with self.assertRaises(ValueError):
-                polyMap.getInverse().polyTran(False, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
+                polyMap.inverted().polyTran(False, 1.0E-10, 1.0E-10, 4, [-1.0], [1.0])
 
     def test_PolyMapPolyMapUnivertible(self):
         """Test polyTran on a PolyMap without a single-valued inverse
@@ -393,9 +393,9 @@ class TestPolyMap(MappingTestCase):
         # execute many times to increase the odds of a segfault
         for i in range(1000):
             amap = ast.PolyMap(coeff_f, coeff_i)
-            amapinv = amap.getInverse()
+            amapinv = amap.inverted()
             cmp2 = amapinv.then(amap)
-            result = cmp2.simplify()
+            result = cmp2.simplified()
             self.assertIsInstance(result, ast.UnitMap)
 
 

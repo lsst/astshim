@@ -79,9 +79,9 @@ class TestUnitNormMap(MappingTestCase):
             [7.0, -23.0, -3.0, 45.0, 0.0],
         ], dtype=float)
         unm1 = ast.UnitNormMap(center1)
-        unm1inv = unm1.getInverse()
+        unm1inv = unm1.inverted()
         unm2 = ast.UnitNormMap(center2)
-        unm2inv = unm2.getInverse()
+        unm2inv = unm2.inverted()
         shiftmap = ast.ShiftMap(shift)
         winmap_unitscale = ast.WinMap(
             np.zeros(3), shift, np.ones(3), np.ones(3) + shift)
@@ -100,7 +100,7 @@ class TestUnitNormMap(MappingTestCase):
             cmpmap = map1.then(map2)
             self.assertEqual(map1.nIn, cmpmap.nIn)
             self.assertEqual(map2.nOut, cmpmap.nOut)
-            cmpmap_simp = cmpmap.simplify()
+            cmpmap_simp = cmpmap.simplified()
             self.assertEqual(cmpmap_simp.className, pred_simplified_class_name)
             self.assertEqual(cmpmap.nIn, cmpmap_simp.nIn)
             self.assertEqual(cmpmap.nOut, cmpmap_simp.nOut)
