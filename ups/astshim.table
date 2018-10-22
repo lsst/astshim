@@ -1,5 +1,4 @@
 setupRequired(sconsUtils)
-setupRequired(ndarray)
 setupRequired(starlink_ast)
 
 # The following is boilerplate for all packages.
