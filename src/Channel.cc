@@ -49,6 +49,7 @@ Channel::~Channel() {
 
 std::shared_ptr<Object> Channel::read() {
     AstObject *rawRet = reinterpret_cast<AstObject *>(astRead(getRawPtr()));
+    assertOK(rawRet);
     if (!rawRet) {
         throw std::runtime_error("Could not read an AST object from this channel");
     }
