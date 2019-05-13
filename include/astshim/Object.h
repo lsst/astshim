@@ -87,6 +87,7 @@ public:
     */
     static std::shared_ptr<Object> fromString(std::string const &str) {
         auto *rawPtr = reinterpret_cast<AstObject *>(astFromString(str.c_str()));
+        assertOK(rawPtr);
         return Object::_basicFromAstObject(rawPtr);
     }
 
@@ -436,7 +437,10 @@ protected:
 
     @throws std::runtime_error if the attribute is read-only
     */
-    void set(std::string const &setting) { astSet(getRawPtr(), "%s", setting.c_str()); }
+    void set(std::string const &setting) {
+        astSet(getRawPtr(), "%s", setting.c_str());
+        assertOK();
+    }
 
     /**
     Set the value of an attribute as a bool

@@ -166,7 +166,9 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit Frame(int naxes, std::string const &options = "")
-            : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, "%s", options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astFrame(naxes, "%s", options.c_str()))) {
+        assertOK();
+    }
 
     virtual ~Frame() {}
 

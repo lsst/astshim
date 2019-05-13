@@ -59,7 +59,9 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit ZoomMap(int ncoord, double zoom, std::string const &options = "")
-            : Mapping(reinterpret_cast<AstMapping *>(astZoomMap(ncoord, zoom, "%s", options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astZoomMap(ncoord, zoom, "%s", options.c_str()))) {
+                assertOK();
+            }
 
     virtual ~ZoomMap() {}
 

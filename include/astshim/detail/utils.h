@@ -40,6 +40,7 @@ static const int FITSLEN = 80;
 inline void annulAstObject(AstObject *object) {
     if (object != nullptr) {
         astAnnul(object);
+        assertOK();
     }
 }
 

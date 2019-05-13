@@ -135,7 +135,9 @@ private:
             os << "pcdcen.size() = " << pcdcen.size() << "; must be 2";
             throw std::invalid_argument(os.str());
         }
-        return astPcdMap(disco, pcdcen.data(), "%s", options.c_str());
+        auto result = astPcdMap(disco, pcdcen.data(), "%s", options.c_str());
+        assertOK();
+        return result;
     }
 };
 

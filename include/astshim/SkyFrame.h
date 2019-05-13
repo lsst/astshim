@@ -122,7 +122,9 @@ public:
         systems.
     */
     explicit SkyFrame(std::string const &options = "")
-            : Frame(reinterpret_cast<AstFrame *>(astSkyFrame("%s", options.c_str()))) {}
+            : Frame(reinterpret_cast<AstFrame *>(astSkyFrame("%s", options.c_str()))) {
+        assertOK();
+    }
 
     virtual ~SkyFrame() {}
 
@@ -235,6 +237,7 @@ public:
     */
     std::shared_ptr<Mapping> skyOffsetMap() {
         auto *rawMap = reinterpret_cast<AstObject *>(astSkyOffsetMap(getRawPtr()));
+        assertOK();
         return Object::fromAstObject<Mapping>(rawMap, false);
     }
 

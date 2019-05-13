@@ -60,7 +60,9 @@ public:
     explicit TranMap(Mapping const &map1, Mapping const &map2, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(astTranMap(const_cast<AstObject *>(map1.getRawPtr()),
                                                                 const_cast<AstObject *>(map2.getRawPtr()),
-                                                                "%s", options.c_str()))) {}
+                                                                "%s", options.c_str()))) {
+        assertOK();
+    }
 
     virtual ~TranMap() {}
 

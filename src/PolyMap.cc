@@ -80,8 +80,10 @@ AstPolyMap *PolyMap::_makeRawPolyMap(ConstArray2D const &coeff_f, ConstArray2D c
         throw std::invalid_argument(os.str());
     }
 
-    return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i, coeff_i.getData(), "%s",
-                      options.c_str());
+    auto result = astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i, coeff_i.getData(), "%s",
+                             options.c_str());
+    assertOK();
+    return result;
 }
 
 /// Make a raw AstPolyMap with a specified forward transform and an optional iterative inverse.
@@ -104,7 +106,9 @@ AstPolyMap *PolyMap::_makeRawPolyMap(ConstArray2D const &coeff_f, int nout,
         throw std::invalid_argument(os.str());
     }
 
-    return astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), 0, nullptr, "%s", options.c_str());
+    auto result = astPolyMap(nin, nout, ncoeff_f, coeff_f.getData(), 0, nullptr, "%s", options.c_str());
+    assertOK();
+    return result;
 }
 
 }  // namespace ast

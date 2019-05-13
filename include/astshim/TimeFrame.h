@@ -87,7 +87,9 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit TimeFrame(std::string const &options = "")
-            : Frame(reinterpret_cast<AstFrame *>(astTimeFrame("%s", options.c_str()))) {}
+            : Frame(reinterpret_cast<AstFrame *>(astTimeFrame("%s", options.c_str()))) {
+                assertOK();
+            }
 
     virtual ~TimeFrame() {}
 
@@ -118,7 +120,11 @@ public:
         since the epoch `00:00:00 UTC 1 January 1970 AD` (equivalent to TAI with a constant offset).
     - Any inaccuracy in the system clock will be reflected in the value returned by this function.
     */
-    double currentTime() const { return detail::safeDouble(astCurrentTime(getRawPtr())); }
+    double currentTime() const {
+        auto result = detail::safeDouble(astCurrentTime(getRawPtr()));
+        assertOK();
+        return result;
+    }
 
     /// Get @ref TimeFrame_AlignTimeScale "AlignTimeScale": time scale in which to align TimeFrames.
     std::string getAlignTimeScale() const { return getC("AlignTimeScale"); }

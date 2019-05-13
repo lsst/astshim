@@ -115,7 +115,9 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit FrameSet(Frame const &frame, std::string const &options = "")
-            : FrameSet(astFrameSet(frame.copy()->getRawPtr(), "%s", options.c_str())) {}
+            : FrameSet(astFrameSet(frame.copy()->getRawPtr(), "%s", options.c_str())) {
+        assertOK();
+    }
 
     /**
     Construct a FrameSet from two frames and a mapping that connects them

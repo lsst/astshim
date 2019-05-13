@@ -37,6 +37,7 @@ QuadApprox::QuadApprox(Mapping const& map, std::vector<double> const& lbnd, std:
     detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nIn), "nIn");
     fit.reserve(6 * map.getNOut());
     bool isok = astQuadApprox(map.getRawPtr(), lbnd.data(), ubnd.data(), nx, ny, fit.data(), &rms);
+    assertOK();
     if (!isok) {
         throw std::runtime_error("Failed to fit a quadratic approximation");
     }

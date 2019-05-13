@@ -114,9 +114,12 @@ AstChebyMap *ChebyMap::_makeRawChebyMap(ConstArray2D const &coeff_f, ConstArray2
                             "number of output axes");
     }
 
-    return reinterpret_cast<AstChebyMap *>(astChebyMap(nin, nout, ncoeff_f, coeff_f.getData(), ncoeff_i,
-                                                       coeff_i.getData(), lbnd_f.data(), ubnd_f.data(),
-                                                       lbnd_i.data(), ubnd_i.data(), "%s", options.c_str()));
+    auto result = reinterpret_cast<AstChebyMap *>(astChebyMap(nin, nout, ncoeff_f, coeff_f.getData(),
+                                                              ncoeff_i, coeff_i.getData(), lbnd_f.data(),
+                                                              ubnd_f.data(), lbnd_i.data(), ubnd_i.data(),
+                                                              "%s", options.c_str()));
+    assertOK();
+    return result;
 }
 
 /// Make a raw AstChebyMap with a specified forward transform and an optional iterative inverse.

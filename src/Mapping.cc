@@ -53,10 +53,10 @@ Array2D Mapping::linearApprox(PointD const &lbnd, PointD const &ubnd, double tol
     detail::assertEqual(ubnd.size(), "ubnd.size", static_cast<std::size_t>(nIn), "nIn");
     Array2D fit = ndarray::allocate(ndarray::makeVector(1 + nIn, nOut));
     int isOK = astLinearApprox(getRawPtr(), lbnd.data(), ubnd.data(), tol, fit.getData());
+    assertOK();
     if (!isOK) {
         throw std::runtime_error("Mapping not sufficiently linear");
     }
-    assertOK();
     return fit;
 }
 
@@ -74,6 +74,7 @@ std::shared_ptr<Class> Mapping::decompose(int i, bool copy) const {
     AstMapping *rawMap2;
     int series, invert1, invert2;
     astDecompose(getRawPtr(), &rawMap1, &rawMap2, &series, &invert1, &invert2);
+    assertOK();
 
     if (!rawMap2) {
         // Not a compound object; free rawMap1 (rawMap2 is null, so no need to free it) and throw an exception
@@ -95,12 +96,14 @@ std::shared_ptr<Class> Mapping::decompose(int i, bool copy) const {
     }
     astAnnul(reinterpret_cast<AstObject *>(rawMap1));
     astAnnul(reinterpret_cast<AstObject *>(rawMap2));
+    assertOK();
 
     // If the mapping's internal invert flag does not match the value used when the CmpMap was made
     // then invert the mapping. Note that it is not possible to create such objects in astshim
     // but it is possible to read in objects created by other software.
     if (invert != astGetI(retRawMap, "Invert")) {
         astInvert(retRawMap);
+        assertOK();
     }
 
     return Object::fromAstObject<Class>(reinterpret_cast<AstObject *>(retRawMap), copy);

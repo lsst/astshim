@@ -60,7 +60,9 @@ public:
     */
     explicit NormMap(Frame const &frame, std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(
-                      astNormMap(const_cast<AstObject *>(frame.getRawPtr()), "%s", options.c_str()))) {}
+                      astNormMap(const_cast<AstObject *>(frame.getRawPtr()), "%s", options.c_str()))) {
+                          assertOK();
+                      }
 
     virtual ~NormMap() {}
 

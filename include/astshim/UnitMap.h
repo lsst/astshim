@@ -52,7 +52,9 @@ public:
     @param[in] options  Comma-separated list of attribute assignments.
     */
     explicit UnitMap(int ncoord, std::string const &options = "")
-            : Mapping(reinterpret_cast<AstMapping *>(astUnitMap(ncoord, "%s", options.c_str()))) {}
+            : Mapping(reinterpret_cast<AstMapping *>(astUnitMap(ncoord, "%s", options.c_str()))) {
+                assertOK();
+            }
 
     virtual ~UnitMap() {}
 

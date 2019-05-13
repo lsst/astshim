@@ -44,13 +44,16 @@ char const *cstrOrNull(std::string const &str) { return str.empty() ? nullptr : 
 FitsChan::FitsChan(Stream &stream, std::string const &options)
         : Channel(reinterpret_cast<AstChannel *>(
                           astFitsChan(detail::source, detail::sink, "%s", options.c_str())),
-                  stream, true) {}
+                  stream, true) {
+    assertOK();
+}
 
 FitsChan::~FitsChan() {
     // when an astFitsChan is destroyed it first writes out any cards, but if I let astFitsChan
     // do this automatically then it occurs while the Channel and its Source are being destroyed,
     // which is too late
     astWriteFits(getRawPtr());
+    // No 'assertOK' here: can't throw in a Dtor.
 }
 
 FoundValue<std::complex<double>> FitsChan::getFitsCF(std::string const &name,

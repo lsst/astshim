@@ -29,7 +29,9 @@
 namespace ast {
 
 Channel::Channel(Stream &stream, std::string const &options)
-        : Channel(astChannel(detail::source, detail::sink, "%s", options.c_str()), stream) {}
+        : Channel(astChannel(detail::source, detail::sink, "%s", options.c_str()), stream) {
+    assertOK();
+}
 
 Channel::Channel(AstChannel *chan, Stream &stream, bool isFits)
         : Object(reinterpret_cast<AstObject *>(chan)), _stream(stream) {

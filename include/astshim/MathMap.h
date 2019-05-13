@@ -376,7 +376,9 @@ public:
             std::string const &options = "")
             : Mapping(reinterpret_cast<AstMapping *>(astMathMap(nin, nout, fwd.size(), getCStrVec(fwd).data(),
                                                                 rev.size(), getCStrVec(rev).data(), "%s",
-                                                                options.c_str()))) {}
+                                                                options.c_str()))) {
+        assertOK();
+    }
 
     virtual ~MathMap() {}
 
