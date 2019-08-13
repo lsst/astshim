@@ -29,7 +29,7 @@
 #include "ndarray.h"
 
 extern "C" {
-#include "ast.h"
+#include "star/ast.h"
 }
 
 // Do not delete this or free functions and enums will not be documented
