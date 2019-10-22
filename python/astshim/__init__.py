@@ -41,7 +41,7 @@ from .mapSplit import *
 from .quadApprox import *
 from .functional import *
 # channels
-from .fitsChan import *
+from .fitsChanContinued import *
 from .xmlChan import *
 # mappings
 from .chebyMap import *

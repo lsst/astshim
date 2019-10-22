@@ -40,6 +40,9 @@ class TestFitsChan(ObjectTestCase):
             "CDELT2  =                0.001",
             "CRVAL1  =                    0",
             "CRVAL2  =                    0",
+            "BOOL    =                    F",
+            "UNDEF   =",
+            "BOOL    =                    T / Repeat",
             "COMMENT  one of two comments",
             "COMMENT  another of two comments",
             "HISTORY  one of two history fields",
@@ -136,8 +139,9 @@ class TestFitsChan(ObjectTestCase):
         ss = ast.StringStream("".join(self.cards))
         fc = ast.FitsChan(ss)
         self.assertEqual(fc.nCard, len(self.cards))
-        # there are 2 COMMENT and 3 HISTORY cards, so 3 fewer unique keys
-        self.assertEqual(fc.nKey, len(self.cards) - 3)
+        # there are 2 COMMENT and 3 HISTORY cards,
+        # and two BOOL cards so 4 fewer unique keys
+        self.assertEqual(fc.nKey, len(self.cards) - 4)
         self.assertEqual(fc.className, "FitsChan")
         fv = fc.getFitsF("CRVAL1")
         self.assertTrue(fv.found)
@@ -750,6 +754,53 @@ class TestFitsChan(ObjectTestCase):
         self.assertEqual(table.columnShape(cname), [1, 5])
         coldata = table.getColumnData1D(cname)
         self.assertEqual(list(coldata), list(wavelength))
+
+    def test_python(self):
+        """Test Python Mapping/Sequence interface to FitsChan"""
+        ss = ast.StringStream("".join(self.cards))
+        fc = ast.FitsChan(ss)
+        self.assertEqual(len(fc), 18)
+        cards = "".join(c for c in fc)
+
+        self.assertEqual(cards, "".join(self.cards))
+        self.assertIn("CTYPE2", fc)
+        self.assertIn(10, fc)
+        self.assertNotIn(-1, fc)
+        self.assertNotIn(20, fc)
+        self.assertNotIn("CTYPE3", fc)
+
+        self.assertEqual(fc["CTYPE1"], "RA--TAN")
+        self.assertEqual(fc["NAXIS2"], 200)
+        self.assertEqual(fc["CDELT2"], 0.001)
+        self.assertEqual(fc["BOOL"], (False, True))
+        self.assertEqual(fc[4].rstrip(), "CRPIX1  =                  100")
+        with self.assertRaises(KeyError):
+            fc["NOTIN"]
+        with self.assertRaises(IndexError):
+            fc[100]
+
+        # Update values
+        fc["BOOL"] = True  # This will remove second card
+        self.assertEqual(fc["BOOL"], True)
+        fc["CRVAL2"] = None
+        self.assertIsNone(fc["CRVAL2"])
+        fc["NEWSTR"] = "Test"
+        self.assertEqual(fc["NEWSTR"], "Test")
+        fc["NEWINT"] = 1024
+        self.assertEqual(fc["NEWINT"], 1024)
+        fc["NEWFLT"] = 3.5
+        self.assertEqual(fc["NEWFLT"], 3.5)
+        fc["UNDEF"] = "not undef"
+        self.assertEqual(fc["UNDEF"], "not undef")
+
+        fc[""] = "A new BLANK comment"
+        fc[0] = "COMMENT Introduction comment"
+        self.assertEqual(fc[0].rstrip(), "COMMENT Introduction comment")
+
+        # Delete the 3rd card
+        fc[2] = None
+        self.assertEqual(fc[2].rstrip(), "CTYPE2  = 'DEC-TAN '")
+        self.assertEqual(len(fc), 20)
 
 
 if __name__ == "__main__":
