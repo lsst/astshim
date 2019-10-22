@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 import os.path
 import unittest
+import numpy as np
 
 import astshim as ast
 from astshim.test import ObjectTestCase
@@ -697,6 +698,58 @@ class TestFitsChan(ObjectTestCase):
         fitsChan = ast.FitsChan(strStream, "Encoding=FITS-WCS")
         # This FrameSet can be represtented as FITS-WCS, so 1 object is written
         self.assertEqual(fitsChan.write(frameSet), 1)
+
+    def test_FitsChanTAB(self):
+        """Test that FITS -TAB WCS can be created.
+        """
+
+        wavelength = np.array([0., 0.5, 1.5, 3., 5.])
+
+        # Create a FrameSet using a LutMap with non-linear coordinates
+        pixelFrame = ast.Frame(1, "Domain=PIXELS")
+        wavelengthFrame = ast.SpecFrame("System=wave, unit=nm")
+        lutMap = ast.LutMap(wavelength, 1, 1)
+        frameSet = ast.FrameDict(pixelFrame)
+        frameSet.addFrame("PIXELS", lutMap, wavelengthFrame)
+
+        # Now serialize it using -TAB WCS
+        fc = writeFitsWcs(frameSet, "TabOk=1")
+
+        fv = fc.getFitsS("CTYPE1")
+        self.assertEqual(fv.value, "WAVE-TAB")
+
+        # PS1_0 is the table extension name
+        fv = fc.getFitsS("PS1_0")
+        waveext = fv.value
+        self.assertEqual(waveext, "WCS-TAB")
+
+        # PS1_1 is the column name for the wavelength
+        fv = fc.getFitsS("PS1_1")
+        wavecol = fv.value
+        self.assertEqual(wavecol, "COORDS1")
+
+        # Get the WCS table from the FitsChan
+        km = fc.getTables()
+        table = km.getA(waveext, 0)
+        fc_bintab = table.getTableHeader()
+
+        fv = fc_bintab.getFitsS("TDIM1")
+        self.assertEqual(fv.value, "(1,5)")
+
+        self.assertEqual(table.nRow, 1)
+        self.assertEqual(table.nColumn, 1)
+
+        # 1-based column numbering to match FITS
+        cname = table.columnName(1)
+        self.assertEqual(cname, "COORDS1")
+        self.assertEqual(table.columnType(cname), ast.DataType.DoubleType)
+        self.assertEqual(table.columnSize(cname), 40)
+        self.assertEqual(table.columnNdim(cname), 2)
+        self.assertEqual(table.columnUnit(cname), "nm")
+        self.assertEqual(table.columnLength(cname), 5)
+        self.assertEqual(table.columnShape(cname), [1, 5])
+        coldata = table.getColumnData1D(cname)
+        self.assertEqual(list(coldata), list(wavelength))
 
 
 if __name__ == "__main__":

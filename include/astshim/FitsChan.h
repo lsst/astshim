@@ -30,6 +30,7 @@
 #include "astshim/Object.h"
 #include "astshim/Stream.h"
 #include "astshim/Channel.h"
+#include "astshim/KeyMap.h"
 
 namespace ast {
 
@@ -1033,6 +1034,28 @@ public:
     Set @ref FitsChan_Card "Card": the index of the current card, where 1 is the first card.
     */
     void setCard(int ind) { setI("Card", ind); }
+
+    std::shared_ptr<KeyMap> getTables() const {
+        auto *rawKeyMap = reinterpret_cast<AstObject *>(astGetTables(getRawPtr()));
+        assertOK(rawKeyMap);
+        if (!rawKeyMap) {
+            throw std::runtime_error("getTables failed (returned a null keymap)");
+        }
+        return Object::fromAstObject<KeyMap>(rawKeyMap, true);
+    }
+
+
+    /**
+    Construct a FitsChan from a raw AstFitsChan
+    */
+    explicit FitsChan(AstFitsChan *rawFitsChan) : Channel(reinterpret_cast<AstChannel *>(rawFitsChan)) {
+        if (!astIsAFitsChan(getRawPtr())) {
+            std::ostringstream os;
+            os << "this is a " << getClassName() << ", which is not a FitsChan";
+            throw std::invalid_argument(os.str());
+        }
+        assertOK();
+    }
 };
 
 }  // namespace ast

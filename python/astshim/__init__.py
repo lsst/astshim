@@ -32,6 +32,9 @@ from .frame import *
 from .frameSet import *
 from .frameDict import *
 from .keyMap import *
+# Table
+from .table import *
+from .fitsTable import *
 # misc
 from .mapBox import *
 from .mapSplit import *
