@@ -34,7 +34,7 @@ from .frameDict import *
 from .keyMap import *
 # Table
 from .table import *
-from .fitsTable import *
+from .fitsTableContinued import *
 # misc
 from .mapBox import *
 from .mapSplit import *

@@ -755,6 +755,12 @@ class TestFitsChan(ObjectTestCase):
         coldata = table.getColumnData1D(cname)
         self.assertEqual(list(coldata), list(wavelength))
 
+        # This will be shaped correctly as a numpy array with third dimension
+        # the row count.
+        coldata = table.getColumnData(cname)
+        self.assertEqual(coldata.ndim, 3)
+        self.assertEqual(coldata.shape, (1, 5, 1))
+
     def test_python(self):
         """Test Python Mapping/Sequence interface to FitsChan"""
         ss = ast.StringStream("".join(self.cards))
