@@ -155,7 +155,8 @@ def setitem(self, name, value):
     """name can be integer index or keyword.
 
     If an integer, the value is deemed to be a full card to replace the
-    existing one. If the value is None or empty string the card is deleted.
+    existing one. If the value is None or empty string a blank header
+    card is created at the location.
 
     This can affect the position of the current card since cards can be
     inserted."""
@@ -164,11 +165,11 @@ def setitem(self, name, value):
         # Correct to 1-based
         self.setCard(name + 1)
 
-        # Overwrite the current card or delete it
-        if value:
-            self.putFits(value, True)
-        else:
-            self.delFits()
+        if not value:
+            value = " "
+
+        # Overwrite the entire value
+        self.putFits(value, True)
         return
 
     # A blank name results in a comment card being inserted at the

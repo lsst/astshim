@@ -812,6 +812,14 @@ class TestFitsChan(ObjectTestCase):
         del fc["HISTORY"]
         self.assertEqual(len(fc), 17)
 
+        # Change a card to blank
+        fc[3] = None
+        self.assertEqual(fc[3].strip(), "")
+        fc[3] = "COMMENT 1"
+        self.assertEqual(fc[3].strip(), "COMMENT 1")
+        fc[3] = ""
+        self.assertEqual(fc[3].strip(), "")
+
         # Test stringification
         header = str(fc)
         self.assertIn("BOOL    =                    1", header)
