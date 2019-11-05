@@ -151,18 +151,11 @@ def getitem(self, name):
             # Reinstate the original card position
             self.setCard(currentCard)
 
-        # We may have multiple values. For consistency with pyast we return
-        # a single item for a single match, else a tuple
-        result = None
         if not values:
             raise KeyError(f"{name}")
 
-        if len(values) == 1:
-            result = values[0]
-        else:
-            result = tuple(values)
-
-        return result
+        # We may have multiple values. Unlike pyast we always return a tuple.
+        return tuple(values)
 
     raise ValueError(f"Supplied key, '{name}' of unsupported type")
 
