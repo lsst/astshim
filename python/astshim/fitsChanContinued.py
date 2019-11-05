@@ -47,9 +47,11 @@ def contains(self, name):
             return True
     elif isinstance(name, str):
         currentCard = self.getCard()
-        self.clearCard()
-        result = self.findFits(name, False)
-        self.setCard(currentCard)
+        try:
+            self.clearCard()
+            result = self.findFits(name, False)
+        finally:
+            self.setCard(currentCard)
         if result.found:
             return True
 
@@ -61,7 +63,12 @@ FitsChan.__contains__ = contains
 
 def getitem(self, name):
     """Return the value if a keyword is specified, or the entire card if
-    an integer index is specified."""
+    an integer index is specified.
+
+    Returns a single value when integer index is used, returns a tuple
+    if a card name is used (since a FITS header can contain multiple
+    cards with the same name).
+    """
 
     # Save current card position
     currentCard = self.getCard()
@@ -69,57 +76,61 @@ def getitem(self, name):
     if isinstance(name, int):
         # FITS is 1-based and Python is zero-based so add 1
         self.setCard(name + 1)
-        result = self.findFits("%f", False)
-        self.setCard(currentCard)
+        try:
+            result = self.findFits("%f", False)
+        finally:
+            self.setCard(currentCard)
         if not result.found:
             raise IndexError(f"No FITS card at index {name}")
         return result.value
 
     elif isinstance(name, str):
-        # Rewind FitsChan so we search all cards
-        self.clearCard()
 
-        # Method look up table for obtaining values
-        typeLut = {CardType.INT: self.getFitsI,
-                   CardType.FLOAT: self.getFitsF,
-                   CardType.STRING: self.getFitsS,
-                   CardType.COMPLEXF: self.getFitsCF,
-                   CardType.LOGICAL: self.getFitsL
-                   }
+        try:
+            # Rewind FitsChan so we search all cards
+            self.clearCard()
 
-        # We can have multiple matches
-        values = []
+            # Method look up table for obtaining values
+            typeLut = {CardType.INT: self.getFitsI,
+                       CardType.FLOAT: self.getFitsF,
+                       CardType.STRING: self.getFitsS,
+                       CardType.COMPLEXF: self.getFitsCF,
+                       CardType.LOGICAL: self.getFitsL
+                       }
 
-        # Loop over each item that matches
-        while True:
-            result = self.findFits(name, False)
-            if not result.found:
-                break
+            # We can have multiple matches
+            values = []
 
-            # Get the data type for this matching card
-            ctype = self.getCardType()
+            # Loop over each item that matches
+            while True:
+                result = self.findFits(name, False)
+                if not result.found:
+                    break
 
-            # Go back one card so we can ask for the value in the correct
-            # data type (getFitsX starts from the next card)
-            thiscard = self.getCard()
-            self.setCard(thiscard - 1)
+                # Get the data type for this matching card
+                ctype = self.getCardType()
 
-            if ctype == CardType.UNDEF:
-                values.append(None)
-            elif ctype in typeLut:
-                found = typeLut[ctype](name)
-                if found.found:
-                    values.append(found.value)
+                # Go back one card so we can ask for the value in the correct
+                # data type (getFitsX starts from the next card)
+                thiscard = self.getCard()
+                self.setCard(thiscard - 1)
+
+                if ctype == CardType.UNDEF:
+                    values.append(None)
+                elif ctype in typeLut:
+                    found = typeLut[ctype](name)
+                    if found.found:
+                        values.append(found.value)
+                    else:
+                        raise RuntimeError(f"Unexpectedly failed to find card '{name}'")
                 else:
-                    raise RuntimeError(f"Unexpectedly failed to find card '{name}'")
-            else:
-                raise RuntimeError(f"Type, {ctype} of FITS card '{name}' not supported")
+                    raise RuntimeError(f"Type, {ctype} of FITS card '{name}' not supported")
 
-            # Increment the card number to continue search
-            self.setCard(thiscard + 1)
-
-        # Reinstate the original card position
-        self.setCard(currentCard)
+                # Increment the card number to continue search
+                self.setCard(thiscard + 1)
+        finally:
+            # Reinstate the original card position
+            self.setCard(currentCard)
 
         # We may have multiple values. For consistency with pyast we return
         # a single item for a single match, else a tuple
@@ -168,36 +179,37 @@ def setitem(self, name, value):
 
     # Get current card position and rewind
     currentCard = self.getCard()
-    self.clearCard()
+    try:
+        self.clearCard()
 
-    # Look for a card with the specified name
-    # We do not care about the result, if nothing is found we will be at the
-    # end of the header
-    self.findFits(name, False)
+        # Look for a card with the specified name
+        # We do not care about the result, if nothing is found we will be at the
+        # end of the header
+        self.findFits(name, False)
 
-    # pyast seems to want to delete items if the value is None but
-    # astropy and PropertyList think the key should be undefined.
-    if value is None:
-        self.setFitsU(name, overwrite=True)
-    elif isinstance(value, int):
-        self.setFitsI(name, value, overwrite=True)
-    elif isinstance(value, float):
-        self.setFitsF(name, value, overwrite=True)
-    elif isinstance(value, bool):
-        self.setFitsL(name, value, overwrite=True)
-    else:
-        # Force to string
-        self.setFitsS(name, str(value), overwrite=True)
+        # pyast seems to want to delete items if the value is None but
+        # astropy and PropertyList think the key should be undefined.
+        if value is None:
+            self.setFitsU(name, overwrite=True)
+        elif isinstance(value, int):
+            self.setFitsI(name, value, overwrite=True)
+        elif isinstance(value, float):
+            self.setFitsF(name, value, overwrite=True)
+        elif isinstance(value, bool):
+            self.setFitsL(name, value, overwrite=True)
+        else:
+            # Force to string
+            self.setFitsS(name, str(value), overwrite=True)
 
-    # Delete any later cards with matching keyword
-    while True:
-        found = self.findFits(name, False)
-        if not found.found:
-            break
-        self.delFits()
-
-    # Try to reinstate the current card
-    self.setCard(currentCard)
+        # Delete any later cards with matching keyword
+        while True:
+            found = self.findFits(name, False)
+            if not found.found:
+                break
+            self.delFits()
+    finally:
+        # Try to reinstate the current card
+        self.setCard(currentCard)
 
 
 FitsChan.__setitem__ = setitem
