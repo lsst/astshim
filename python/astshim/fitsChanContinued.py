@@ -2,6 +2,24 @@ from .fitsChan import FitsChan, CardType
 from .fitsChan import *  # noqa: F403 F401
 
 
+def _calc_card_pos(self, index):
+    """Convert a python index into a FitsChan position.
+
+    Parameters
+    ----------
+    self : `FitsChan`
+        The FitsChan to index.
+    index : `int`
+        0-based index into header. If negative, counts from end.
+    """
+    # Calculate 0-based index
+    if index < 0:
+        index = len(self) + index
+
+    # Convert to 1-based index
+    return index + 1
+
+
 def length(self):
     return self.nCard
 
@@ -74,8 +92,9 @@ def getitem(self, name):
     currentCard = self.getCard()
 
     if isinstance(name, int):
-        # FITS is 1-based and Python is zero-based so add 1
-        self.setCard(name + 1)
+        # Calculate position in FitsChan (0-based to 1-based)
+        newpos = _calc_card_pos(self, name)
+        self.setCard(newpos)
         try:
             result = self.findFits("%f", False)
         finally:
@@ -162,8 +181,9 @@ def setitem(self, name, value):
     inserted."""
 
     if isinstance(name, int):
-        # Correct to 1-based
-        self.setCard(name + 1)
+        # Calculate position in FitsChan (0-based to 1-based)
+        newpos = _calc_card_pos(self, name)
+        self.setCard(newpos)
 
         if not value:
             value = " "
@@ -224,7 +244,8 @@ def delitem(self, name):
     """
     if isinstance(name, int):
         # Correct to 1-based
-        self.setCard(name + 1)
+        newpos = _calc_card_pos(self, name)
+        self.setCard(newpos)
         self.delFits()
         return
 

@@ -820,6 +820,17 @@ class TestFitsChan(ObjectTestCase):
         fc[3] = ""
         self.assertEqual(fc[3].strip(), "")
 
+        # Use negative index
+        self.assertEqual(fc[-1], fc[fc.nCard-1])
+        fc[-2] = "COMMENT new comment"
+        self.assertEqual(fc[-2], fc[fc.nCard-2])
+        self.assertEqual(fc[-2].rstrip(), "COMMENT new comment")
+        fc[fc.nCard+1] = "COMMENT X"
+
+        # Delete final card
+        del fc[-1]
+        self.assertEqual(fc[-1].rstrip(), "NEWFLT  =                  3.5")
+
         # Test stringification
         header = str(fc)
         self.assertIn("BOOL    =                    1", header)
