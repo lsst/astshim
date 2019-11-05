@@ -29,6 +29,15 @@ def next(self):
 FitsChan.__next__ = next
 
 
+def to_string(self):
+    """A FitsChan string representation is a FITS header with newlines
+    after each header card."""
+    return "\n".join(c for c in self)
+
+
+FitsChan.__str__ = to_string
+
+
 def contains(self, name):
     """Returns True if either the supplied name is present in the FitsChan
     or the supplied integer is acceptable to the FitsChan."""

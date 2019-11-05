@@ -808,6 +808,10 @@ class TestFitsChan(ObjectTestCase):
         self.assertEqual(fc[2].rstrip(), "CTYPE2  = 'DEC-TAN '")
         self.assertEqual(len(fc), 20)
 
+        # Test stringification
+        header = str(fc)
+        self.assertIn("BOOL    =                    1", header)
+
 
 if __name__ == "__main__":
     unittest.main()
