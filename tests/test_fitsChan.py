@@ -804,9 +804,13 @@ class TestFitsChan(ObjectTestCase):
         self.assertEqual(fc[0].rstrip(), "COMMENT Introduction comment")
 
         # Delete the 3rd card
-        fc[2] = None
+        del fc[2]
         self.assertEqual(fc[2].rstrip(), "CTYPE2  = 'DEC-TAN '")
         self.assertEqual(len(fc), 20)
+
+        # Delete all the HISTORY cards
+        del fc["HISTORY"]
+        self.assertEqual(len(fc), 17)
 
         # Test stringification
         header = str(fc)

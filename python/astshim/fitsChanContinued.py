@@ -213,3 +213,27 @@ def setitem(self, name, value):
 
 
 FitsChan.__setitem__ = setitem
+
+
+def delitem(self, name):
+    """Delete an item from the FitsChan either by index (0-based) or by name.
+
+    If a name is given all instances of the name will be deleted.
+    The current card position is not retained.
+    """
+    if isinstance(name, int):
+        # Correct to 1-based
+        self.setCard(name + 1)
+        self.delFits()
+        return
+
+    self.clearCard()
+    # Delete any cards with matching keyword
+    while True:
+        found = self.findFits(name, False)
+        if not found.found:
+            break
+        self.delFits()
+
+
+FitsChan.__delitem__ = delitem
