@@ -28,7 +28,8 @@ FitsChan.__len__ = length
 
 
 def iter(self):
-    """The FitsChan itself is the iterator."""
+    """The FitsChan itself is the iterator.
+    """
     self.clearCard()
     return self
 
@@ -37,7 +38,8 @@ FitsChan.__iter__ = iter
 
 
 def next(self):
-    """Return the entire header card until we run out of cards"""
+    """Return the entire header card until we run out of cards.
+    """
     card = self.findFits("%f", True)
     if not card.found:
         raise StopIteration
@@ -49,7 +51,8 @@ FitsChan.__next__ = next
 
 def to_string(self):
     """A FitsChan string representation is a FITS header with newlines
-    after each header card."""
+    after each header card.
+    """
     return "\n".join(c for c in self)
 
 
@@ -58,7 +61,8 @@ FitsChan.__str__ = to_string
 
 def contains(self, name):
     """Returns True if either the supplied name is present in the FitsChan
-    or the supplied integer is acceptable to the FitsChan."""
+    or the supplied integer is acceptable to the FitsChan.
+    """
     if isinstance(name, int):
         # index will be zero-based
         if name >= 0 and name < self.nCard:

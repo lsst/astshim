@@ -762,7 +762,8 @@ class TestFitsChan(ObjectTestCase):
         self.assertEqual(coldata.shape, (1, 5, 1))
 
     def test_python(self):
-        """Test Python Mapping/Sequence interface to FitsChan"""
+        """Test Python Mapping/Sequence interface to FitsChan.
+        """
         ss = ast.StringStream("".join(self.cards))
         fc = ast.FitsChan(ss)
         self.assertEqual(len(fc), 18)
