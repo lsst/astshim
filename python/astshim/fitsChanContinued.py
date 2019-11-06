@@ -32,6 +32,51 @@ def _calc_card_pos(self, index):
     return index + 1
 
 
+def _get_current_card_value(self):
+    """Retrieve the value of the current card.
+
+    Returns
+    -------
+    name : `str`
+        The name of the current card.
+    value : `object`
+        The value in the correct Python type.
+    """
+    # Method look up table for obtaining values
+    typeLut = {CardType.INT: self.getFitsI,
+               CardType.FLOAT: self.getFitsF,
+               CardType.STRING: self.getFitsS,
+               CardType.COMPLEXF: self.getFitsCF,
+               CardType.LOGICAL: self.getFitsL
+               }
+
+    # Get the data type for this matching card
+    ctype = self.getCardType()
+
+    # Get the name of the card
+    name = self.getCardName()
+
+    # Go back one card so we can ask for the value in the correct
+    # data type (getFitsX starts from the next card)
+    # thiscard = self.getCard()
+    # self.setCard(thiscard - 1)
+
+    if ctype == CardType.UNDEF:
+        value = None
+    elif ctype in typeLut:
+        found = typeLut[ctype]("")  # "" indicates current card
+        if found.found:
+            value = found.value
+        else:
+            raise RuntimeError(f"Unexpectedly failed to find card '{name}'")
+    elif ctype == CardType.COMMENT:
+        value = self.getCardComm()
+    else:
+        raise RuntimeError(f"Type, {ctype} of FITS card '{name}' not supported")
+
+    return name, value
+
+
 def length(self):
     return self.nCard
 
@@ -286,3 +331,23 @@ def delitem(self, name):
 
 
 FitsChan.__delitem__ = delitem
+
+
+def items(self):
+    """Iterate over each card, returning the keyword and value in a tuple.
+
+    The position of the iterator is internal to the FitsChan.  Do not
+    change the card position when iterating.
+    """
+    self.clearCard()
+    nCards = self.nCard
+    thisCard = self.getCard()
+
+    while thisCard <= nCards:
+        name, value = _get_current_card_value(self)
+        yield name, value
+        self.setCard(thisCard + 1)
+        thisCard = self.getCard()
+
+
+FitsChan.items = items

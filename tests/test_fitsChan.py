@@ -867,6 +867,12 @@ class TestFitsChan(ObjectTestCase):
         header = str(fc)
         self.assertIn("BOOL    =                    1", header)
 
+        # All the items
+        collected = []
+        for k, v in fc.items():
+            collected.append((k, v))
+        self.assertEqual(len(collected), len(fc))
+
 
 if __name__ == "__main__":
     unittest.main()
