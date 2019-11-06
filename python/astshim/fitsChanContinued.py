@@ -174,14 +174,6 @@ def getitem(self, name):
             # Rewind FitsChan so we search all cards
             self.clearCard()
 
-            # Method look up table for obtaining values
-            typeLut = {CardType.INT: self.getFitsI,
-                       CardType.FLOAT: self.getFitsF,
-                       CardType.STRING: self.getFitsS,
-                       CardType.COMPLEXF: self.getFitsCF,
-                       CardType.LOGICAL: self.getFitsL
-                       }
-
             # We can have multiple matches
             values = []
 
@@ -191,27 +183,14 @@ def getitem(self, name):
                 if not result.found:
                     break
 
-                # Get the data type for this matching card
-                ctype = self.getCardType()
+                this_name, value = _get_current_card_value(self)
+                if this_name != name:
+                    raise RuntimeError(f"Internal inconsistency in get: {this_name} != {name}")
 
-                # Go back one card so we can ask for the value in the correct
-                # data type (getFitsX starts from the next card)
-                thiscard = self.getCard()
-                self.setCard(thiscard - 1)
-
-                if ctype == CardType.UNDEF:
-                    values.append(None)
-                elif ctype in typeLut:
-                    found = typeLut[ctype](name)
-                    if found.found:
-                        values.append(found.value)
-                    else:
-                        raise RuntimeError(f"Unexpectedly failed to find card '{name}'")
-                else:
-                    raise RuntimeError(f"Type, {ctype} of FITS card '{name}' not supported")
+                values.append(value)
 
                 # Increment the card number to continue search
-                self.setCard(thiscard + 1)
+                self.setCard(self.getCard() + 1)
         finally:
             # Reinstate the original card position
             self.setCard(currentCard)
