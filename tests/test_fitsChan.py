@@ -826,11 +826,42 @@ class TestFitsChan(ObjectTestCase):
         fc[-2] = "COMMENT new comment"
         self.assertEqual(fc[-2], fc[fc.nCard-2])
         self.assertEqual(fc[-2].rstrip(), "COMMENT new comment")
-        fc[fc.nCard+1] = "COMMENT X"
+
+        # Append a comment to the end
+        nCards = len(fc)
+        fc[fc.nCard] = "COMMENT X"
+        self.assertEqual(len(fc), nCards + 1)
+        self.assertEqual(fc[-1].rstrip(), "COMMENT X")
+
+        # Try to access and append using a high index
+        with self.assertRaises(IndexError):
+            fc[fc.nCard + 1]
+        with self.assertRaises(IndexError):
+            fc[fc.nCard + 1] = ""
+        with self.assertRaises(IndexError):
+            fc[fc.nCard]
+
+        # Or the wrong type of key
+        with self.assertRaises(KeyError):
+            fc[3.14] = 52
 
         # Delete final card
+        nCards = len(fc)
         del fc[-1]
         self.assertEqual(fc[-1].rstrip(), "NEWFLT  =                  3.5")
+        self.assertEqual(len(fc), nCards - 1)
+
+        with self.assertRaises(IndexError):
+            del fc[-fc.nCard - 1]
+
+        with self.assertRaises(IndexError):
+            del fc[fc.nCard]
+
+        with self.assertRaises(KeyError):
+            del fc[3.14]
+
+        with self.assertRaises(KeyError):
+            del fc["NOTTHERE"]
 
         # Test stringification
         header = str(fc)

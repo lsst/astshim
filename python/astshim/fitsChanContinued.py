@@ -11,10 +11,22 @@ def _calc_card_pos(self, index):
         The FitsChan to index.
     index : `int`
         0-based index into header. If negative, counts from end.
+
+    Raises
+    ------
+    IndexError
+        Raised if the index exceeds the size of the FitsChan. If the index
+        equals the size of the FitsChan (noting that in 0-based indexing the
+        final card is one less than the size) then this refers to the end of
+        the header.
     """
     # Calculate 0-based index
+    nCards = len(self)
     if index < 0:
-        index = len(self) + index
+        index = nCards + index
+    elif abs(index) > nCards:
+        # We allow index of one higher to indicate append
+        raise IndexError(f"Index {index} exceeds size of FitsChan ({nCards})")
 
     # Convert to 1-based index
     return index + 1
@@ -29,6 +41,10 @@ FitsChan.__len__ = length
 
 def iter(self):
     """The FitsChan itself is the iterator.
+
+    The position of the iterator is handled internally in the FitsChan and
+    is moved to the start of the FitsChan by this call.
+    Whilst iterating do not change the internal card position.
     """
     self.clearCard()
     return self
@@ -38,7 +54,7 @@ FitsChan.__iter__ = iter
 
 
 def next(self):
-    """Return the entire header card until we run out of cards.
+    """Return each 80-character header card until we run out of cards.
     """
     card = self.findFits("%f", True)
     if not card.found:
@@ -195,6 +211,9 @@ def setitem(self, name, value):
         self.setFitsCM(value, False)
         return
 
+    if not isinstance(name, str):
+        raise KeyError(f"Supplied key, '{name}' of unsupported type")
+
     # Get current card position and rewind
     currentCard = self.getCard()
     try:
@@ -242,17 +261,28 @@ def delitem(self, name):
     if isinstance(name, int):
         # Correct to 1-based
         newpos = _calc_card_pos(self, name)
+        if newpos <= 0 or newpos > self.nCard:
+            # AST will ignore this but we raise if the index is out of range
+            raise IndexError(f"No FITS card at index {name}")
         self.setCard(newpos)
         self.delFits()
         return
 
+    if not isinstance(name, str):
+        raise KeyError(f"Supplied key, '{name}' of unsupported type")
+
     self.clearCard()
     # Delete any cards with matching keyword
+    deleted = False
     while True:
         found = self.findFits(name, False)
         if not found.found:
             break
         self.delFits()
+        deleted = True
+
+    if not deleted:
+        raise KeyError(f"No FITS card named {name}")
 
 
 FitsChan.__delitem__ = delitem
