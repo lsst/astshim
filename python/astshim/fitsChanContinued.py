@@ -174,32 +174,20 @@ def getitem(self, name):
             # Rewind FitsChan so we search all cards
             self.clearCard()
 
-            # We can have multiple matches
-            values = []
+            # We are only interested in the first matching card
+            result = self.findFits(name, False)
+            if not result.found:
+                raise KeyError(f"{name}'")
 
-            # Loop over each item that matches
-            while True:
-                result = self.findFits(name, False)
-                if not result.found:
-                    break
+            this_name, value = _get_current_card_value(self)
+            if this_name != name:
+                raise RuntimeError(f"Internal inconsistency in get: {this_name} != {name}")
 
-                this_name, value = _get_current_card_value(self)
-                if this_name != name:
-                    raise RuntimeError(f"Internal inconsistency in get: {this_name} != {name}")
-
-                values.append(value)
-
-                # Increment the card number to continue search
-                self.setCard(self.getCard() + 1)
         finally:
             # Reinstate the original card position
             self.setCard(currentCard)
 
-        if not values:
-            raise KeyError(f"{name}")
-
-        # We may have multiple values. Unlike pyast we always return a tuple.
-        return tuple(values)
+        return value
 
     raise ValueError(f"Supplied key, '{name}' of unsupported type")
 

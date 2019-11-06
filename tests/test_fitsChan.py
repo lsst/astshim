@@ -776,10 +776,10 @@ class TestFitsChan(ObjectTestCase):
         self.assertNotIn(20, fc)
         self.assertNotIn("CTYPE3", fc)
 
-        self.assertEqual(fc["CTYPE1"], ("RA--TAN",))
-        self.assertEqual(fc["NAXIS2"], (200,))
-        self.assertEqual(fc["CDELT2"], (0.001,))
-        self.assertEqual(fc["BOOL"], (False, True))
+        self.assertEqual(fc["CTYPE1"], "RA--TAN")
+        self.assertEqual(fc["NAXIS2"], 200)
+        self.assertEqual(fc["CDELT2"], 0.001)
+        self.assertFalse(fc["BOOL"])
         self.assertEqual(fc[4].rstrip(), "CRPIX1  =                  100")
         with self.assertRaises(KeyError):
             fc["NOTIN"]
@@ -788,17 +788,17 @@ class TestFitsChan(ObjectTestCase):
 
         # Update values
         fc["BOOL"] = True  # This will remove second card
-        self.assertEqual(fc["BOOL"], (True,))
+        self.assertEqual(fc["BOOL"], True)
         fc["CRVAL2"] = None
-        self.assertIsNone(fc["CRVAL2"][0])
+        self.assertIsNone(fc["CRVAL2"])
         fc["NEWSTR"] = "Test"
-        self.assertEqual(fc["NEWSTR"], ("Test",))
+        self.assertEqual(fc["NEWSTR"], "Test")
         fc["NEWINT"] = 1024
-        self.assertEqual(fc["NEWINT"], (1024,))
+        self.assertEqual(fc["NEWINT"], 1024)
         fc["NEWFLT"] = 3.5
-        self.assertEqual(fc["NEWFLT"], (3.5,))
+        self.assertEqual(fc["NEWFLT"], 3.5)
         fc["UNDEF"] = "not undef"
-        self.assertEqual(fc["UNDEF"], ("not undef",))
+        self.assertEqual(fc["UNDEF"], "not undef")
 
         fc[""] = "A new BLANK comment"
         fc[0] = "COMMENT Introduction comment"
