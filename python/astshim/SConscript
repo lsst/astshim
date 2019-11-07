@@ -11,6 +11,8 @@ scripts.BasicSConscript.pybind11([
     "frameSet",
     "frameDict",
     "keyMap/keyMap",
+    "table",
+    "fitsTable",
 
     "mapBox",
     "mapSplit",

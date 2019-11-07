@@ -21,3 +21,4 @@ examples/readwcs
 lib/libastshim.*
 tests/.tests
 version.py
+.coverage

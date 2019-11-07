@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 import os.path
 import unittest
+import numpy as np
 
 import astshim as ast
 from astshim.test import ObjectTestCase
@@ -39,6 +40,9 @@ class TestFitsChan(ObjectTestCase):
             "CDELT2  =                0.001",
             "CRVAL1  =                    0",
             "CRVAL2  =                    0",
+            "BOOL    =                    F",
+            "UNDEF   =",
+            "BOOL    =                    T / Repeat",
             "COMMENT  one of two comments",
             "COMMENT  another of two comments",
             "HISTORY  one of two history fields",
@@ -135,8 +139,9 @@ class TestFitsChan(ObjectTestCase):
         ss = ast.StringStream("".join(self.cards))
         fc = ast.FitsChan(ss)
         self.assertEqual(fc.nCard, len(self.cards))
-        # there are 2 COMMENT and 3 HISTORY cards, so 3 fewer unique keys
-        self.assertEqual(fc.nKey, len(self.cards) - 3)
+        # there are 2 COMMENT and 3 HISTORY cards,
+        # and two BOOL cards so 4 fewer unique keys
+        self.assertEqual(fc.nKey, len(self.cards) - 4)
         self.assertEqual(fc.className, "FitsChan")
         fv = fc.getFitsF("CRVAL1")
         self.assertTrue(fv.found)
@@ -697,6 +702,180 @@ class TestFitsChan(ObjectTestCase):
         fitsChan = ast.FitsChan(strStream, "Encoding=FITS-WCS")
         # This FrameSet can be represtented as FITS-WCS, so 1 object is written
         self.assertEqual(fitsChan.write(frameSet), 1)
+
+    def test_FitsChanTAB(self):
+        """Test that FITS -TAB WCS can be created.
+        """
+
+        wavelength = np.array([0., 0.5, 1.5, 3., 5.])
+
+        # Create a FrameSet using a LutMap with non-linear coordinates
+        pixelFrame = ast.Frame(1, "Domain=PIXELS")
+        wavelengthFrame = ast.SpecFrame("System=wave, unit=nm")
+        lutMap = ast.LutMap(wavelength, 1, 1)
+        frameSet = ast.FrameDict(pixelFrame)
+        frameSet.addFrame("PIXELS", lutMap, wavelengthFrame)
+
+        # Now serialize it using -TAB WCS
+        fc = writeFitsWcs(frameSet, "TabOk=1")
+
+        fv = fc.getFitsS("CTYPE1")
+        self.assertEqual(fv.value, "WAVE-TAB")
+
+        # PS1_0 is the table extension name
+        fv = fc.getFitsS("PS1_0")
+        waveext = fv.value
+        self.assertEqual(waveext, "WCS-TAB")
+
+        # PS1_1 is the column name for the wavelength
+        fv = fc.getFitsS("PS1_1")
+        wavecol = fv.value
+        self.assertEqual(wavecol, "COORDS1")
+
+        # Get the WCS table from the FitsChan
+        km = fc.getTables()
+        table = km.getA(waveext, 0)
+        fc_bintab = table.getTableHeader()
+
+        fv = fc_bintab.getFitsS("TDIM1")
+        self.assertEqual(fv.value, "(1,5)")
+
+        self.assertEqual(table.nRow, 1)
+        self.assertEqual(table.nColumn, 1)
+
+        # 1-based column numbering to match FITS
+        cname = table.columnName(1)
+        self.assertEqual(cname, "COORDS1")
+        self.assertEqual(table.columnType(cname), ast.DataType.DoubleType)
+        self.assertEqual(table.columnSize(cname), 40)
+        self.assertEqual(table.columnNdim(cname), 2)
+        self.assertEqual(table.columnUnit(cname), "nm")
+        self.assertEqual(table.columnLength(cname), 5)
+        self.assertEqual(table.columnShape(cname), [1, 5])
+        coldata = table.getColumnData1D(cname)
+        self.assertEqual(list(coldata), list(wavelength))
+
+        # This will be shaped correctly as a numpy array with third dimension
+        # the row count.
+        coldata = table.getColumnData(cname)
+        self.assertEqual(coldata.ndim, 3)
+        self.assertEqual(coldata.shape, (1, 5, 1))
+
+    def test_python(self):
+        """Test Python Mapping/Sequence interface to FitsChan.
+        """
+        ss = ast.StringStream("".join(self.cards))
+        fc = ast.FitsChan(ss)
+        self.assertEqual(len(fc), 18)
+        cards = "".join(c for c in fc)
+
+        self.assertEqual(cards, "".join(self.cards))
+        self.assertIn("CTYPE2", fc)
+        self.assertIn(10, fc)
+        self.assertNotIn(-1, fc)
+        self.assertNotIn(20, fc)
+        self.assertNotIn("CTYPE3", fc)
+
+        self.assertEqual(fc["CTYPE1"], "RA--TAN")
+        self.assertEqual(fc["NAXIS2"], 200)
+        self.assertEqual(fc["CDELT2"], 0.001)
+        self.assertFalse(fc["BOOL"])
+        self.assertEqual(fc[4].rstrip(), "CRPIX1  =                  100")
+        with self.assertRaises(KeyError):
+            fc["NOTIN"]
+        with self.assertRaises(IndexError):
+            fc[100]
+
+        # Update values
+        fc["BOOL"] = True  # This will remove second card
+        self.assertEqual(fc["BOOL"], True)
+        fc["CRVAL2"] = None
+        self.assertIsNone(fc["CRVAL2"])
+        fc["NEWSTR"] = "Test"
+        self.assertEqual(fc["NEWSTR"], "Test")
+        fc["NEWINT"] = 1024
+        self.assertEqual(fc["NEWINT"], 1024)
+        fc["NEWFLT"] = 3.5
+        self.assertEqual(fc["NEWFLT"], 3.5)
+        fc["UNDEF"] = "not undef"
+        self.assertEqual(fc["UNDEF"], "not undef")
+
+        fc[""] = "A new BLANK comment"
+        fc[0] = "COMMENT Introduction comment"
+        self.assertEqual(fc[0].rstrip(), "COMMENT Introduction comment")
+
+        # This will fail since a string is required
+        with self.assertRaises(TypeError):
+            fc[0] = 52
+
+        # Delete the 3rd card
+        del fc[2]
+        self.assertEqual(fc[2].rstrip(), "CTYPE2  = 'DEC-TAN '")
+        self.assertEqual(len(fc), 20)
+
+        # Delete all the HISTORY cards
+        del fc["HISTORY"]
+        self.assertEqual(len(fc), 17)
+
+        # Change a card to blank
+        fc[3] = None
+        self.assertEqual(fc[3].strip(), "")
+        fc[3] = "COMMENT 1"
+        self.assertEqual(fc[3].strip(), "COMMENT 1")
+        fc[3] = ""
+        self.assertEqual(fc[3].strip(), "")
+
+        # Use negative index
+        self.assertEqual(fc[-1], fc[fc.nCard-1])
+        fc[-2] = "COMMENT new comment"
+        self.assertEqual(fc[-2], fc[fc.nCard-2])
+        self.assertEqual(fc[-2].rstrip(), "COMMENT new comment")
+
+        # Append a comment to the end
+        nCards = len(fc)
+        fc[fc.nCard] = "COMMENT X"
+        self.assertEqual(len(fc), nCards + 1)
+        self.assertEqual(fc[-1].rstrip(), "COMMENT X")
+
+        # Try to access and append using a high index
+        with self.assertRaises(IndexError):
+            fc[fc.nCard + 1]
+        with self.assertRaises(IndexError):
+            fc[fc.nCard + 1] = ""
+        with self.assertRaises(IndexError):
+            fc[fc.nCard]
+
+        # Or the wrong type of key
+        with self.assertRaises(KeyError):
+            fc[3.14] = 52
+
+        # Delete final card
+        nCards = len(fc)
+        del fc[-1]
+        self.assertEqual(fc[-1].rstrip(), "NEWFLT  =                  3.5")
+        self.assertEqual(len(fc), nCards - 1)
+
+        with self.assertRaises(IndexError):
+            del fc[-fc.nCard - 1]
+
+        with self.assertRaises(IndexError):
+            del fc[fc.nCard]
+
+        with self.assertRaises(KeyError):
+            del fc[3.14]
+
+        with self.assertRaises(KeyError):
+            del fc["NOTTHERE"]
+
+        # Test stringification
+        header = str(fc)
+        self.assertIn("BOOL    =                    1", header)
+
+        # All the items
+        collected = []
+        for k, v in fc.items():
+            collected.append((k, v))
+        self.assertEqual(len(collected), len(fc))
 
 
 if __name__ == "__main__":

@@ -112,6 +112,7 @@ PYBIND11_MODULE(fitsChan, mod) {
     cls.def("getCardComm", &FitsChan::getCardComm);
     cls.def("getCardName", &FitsChan::getCardName);
     cls.def("getCardType", &FitsChan::getCardType);
+    cls.def("getTables", &FitsChan::getTables);
     cls.def("purgeWcs", &FitsChan::purgeWcs);
     cls.def("putCards", &FitsChan::putCards, "cards"_a);
     cls.def("putFits", &FitsChan::putFits, "card"_a, "overwrite"_a);

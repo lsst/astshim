@@ -33,6 +33,8 @@
 #include "astshim/Channel.h"
 #include "astshim/ChebyMap.h"
 #include "astshim/CmpFrame.h"
+#include "astshim/FitsChan.h"
+#include "astshim/FitsTable.h"
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
 #include "astshim/FrameDict.h"
@@ -52,6 +54,7 @@
 #include "astshim/SlaMap.h"
 #include "astshim/SpecFrame.h"
 #include "astshim/SphMap.h"
+#include "astshim/Table.h"
 #include "astshim/TimeFrame.h"
 #include "astshim/TimeMap.h"
 #include "astshim/TranMap.h"
@@ -90,6 +93,8 @@ std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
             ClassCasterMap = {
                     {"ChebyMap", makeShim<ChebyMap, AstChebyMap>},
                     {"CmpFrame", makeShim<CmpFrame, AstCmpFrame>},
+                    {"FitsChan", makeShim<FitsChan, AstFitsChan>},
+                    {"FitsTable", makeShim<FitsTable, AstFitsTable>},
                     {"Frame", makeShim<Frame, AstFrame>},
                     {"FrameSet", makeShim<FrameSet, AstFrameSet>},
                     {"FrameDict", makeShim<FrameDict, AstFrameSet>},
@@ -110,6 +115,7 @@ std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
                     {"SpecFrame", makeShim<SpecFrame, AstSpecFrame>},
                     {"SphMap", makeShim<SphMap, AstSphMap>},
                     {"TimeFrame", makeShim<TimeFrame, AstTimeFrame>},
+                    {"Table", makeShim<Table, AstTable>},
                     {"TimeMap", makeShim<TimeMap, AstTimeMap>},
                     {"TranMap", makeShim<TranMap, AstTranMap>},
                     {"UnitMap", makeShim<UnitMap, AstUnitMap>},
@@ -170,6 +176,8 @@ Object::Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
 }
 
 // Explicit instantiations
+template std::shared_ptr<KeyMap> Object::fromAstObject<KeyMap>(AstObject *, bool);
+template std::shared_ptr<FitsChan> Object::fromAstObject<FitsChan>(AstObject *, bool);
 template std::shared_ptr<FrameSet> Object::fromAstObject<FrameSet>(AstObject *, bool);
 template std::shared_ptr<Frame> Object::fromAstObject<Frame>(AstObject *, bool);
 template std::shared_ptr<Mapping> Object::fromAstObject<Mapping>(AstObject *, bool);
