@@ -112,7 +112,7 @@ FitsChan.__next__ = next
 
 def to_string(self):
     """A FitsChan string representation is a FITS header with newlines
-    after each header card.
+    after each 80-character header card.
     """
     return "\n".join(c for c in self)
 
@@ -145,12 +145,28 @@ FitsChan.__contains__ = contains
 
 
 def getitem(self, name):
-    """Return the value if a keyword is specified, or the entire card if
-    an integer index is specified.
+    """Return a value associated with the supplied name.
 
-    Returns a single value when integer index is used, returns a tuple
-    if a card name is used (since a FITS header can contain multiple
-    cards with the same name).
+    Parameters
+    ----------
+    name : `str` or `int`
+        If the FitsChan is being accessed by integer index the returned value
+        will be the corresponding 80-character card.  Index values are 0-based.
+        A negative index counts from the end of the FitsChan.
+        If the FitsChan is being accessed by string the returned value will
+        be the scalar value associated with the first card that matches the
+        supplied name.
+
+    Raises
+    ------
+    IndexError
+        Raised if an integer index is provided and the index is out of range.
+    KeyError
+        Raised if a string is provided and that string is not present in
+        the FitsChan. Also raised if the supplied name is neither an integer
+        not a string.
+    RuntimeError
+        Raised if there is some problem accessing the value in the FitsChan.
     """
 
     # Save current card position
@@ -189,21 +205,40 @@ def getitem(self, name):
 
         return value
 
-    raise ValueError(f"Supplied key, '{name}' of unsupported type")
+    raise KeyError(f"Supplied key, '{name}' of unsupported type")
 
 
 FitsChan.__getitem__ = getitem
 
 
 def setitem(self, name, value):
-    """name can be integer index or keyword.
+    """Set a new value.
 
-    If an integer, the value is deemed to be a full card to replace the
-    existing one. If the value is None or empty string a blank header
-    card is created at the location.
+    Parameters
+    ----------
+    name : `str` or `int`
+        If the name is an integer index the returned value is the corresponding
+        80-character card.  Index values are 0-based. A negative index counts
+        from the end of the FitsChan.  If the index matches the number of
+        cards (e.g. the return value of `len()`) the new value will be
+        appended to the end of the FitsChan.
+        If the name is an empty string or `None`, the value will be inserted
+        at the current card position as a comment card.
+        If the name is a string corresponding to a header card that is already
+        present in the FitsChan, the new value will overwrite the existing
+        value.  Any other cards matching that name later in the header will
+        be removed.  If there is no header with that name, a new card will
+        be inserted at the end of the FitsChan.
+    value : `str`, `int`, `float`, `bool`
+        The new value to be inserted.
 
-    This can affect the position of the current card since cards can be
-    inserted."""
+    Raises
+    ------
+    IndexError
+        Raised if the supplied integer index is out of range.
+    KeyError
+        Raised if the supplied name is neither a string or an integer.
+    """
 
     if isinstance(name, int):
         # Calculate position in FitsChan (0-based to 1-based)
@@ -267,8 +302,20 @@ FitsChan.__setitem__ = setitem
 def delitem(self, name):
     """Delete an item from the FitsChan either by index (0-based) or by name.
 
-    If a name is given all instances of the name will be deleted.
-    The current card position is not retained.
+    Parameters
+    ----------
+    name : `str` or `int`
+        If the name is an integer index the card at that position will be
+        removed.  The index is zero-based.  A negative index counts from the
+        end of the FitsChan.
+        If the name is a string all cards matching that name will be removed.
+
+    Raises
+    ------
+    IndexError
+        Raised if the supplied index is out of range.
+    KeyError
+        Raised if the supplied name is not found in the FitsChan.
     """
     if isinstance(name, int):
         # Correct to 1-based
@@ -303,6 +350,17 @@ FitsChan.__delitem__ = delitem
 def items(self):
     """Iterate over each card, returning the keyword and value in a tuple.
 
+    Returns
+    -------
+    key : `str`
+        The key associated with the card.  Can be an empty string for some
+        comment styles.  The same key name can be returned multiple times
+        and be associated with different values.
+    value : `str`, `int`, `bool`, `float`
+        The value.
+
+    Notes
+    -----
     The position of the iterator is internal to the FitsChan.  Do not
     change the card position when iterating.
     """
