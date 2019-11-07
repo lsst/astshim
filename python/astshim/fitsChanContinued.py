@@ -33,7 +33,7 @@ def _calc_card_pos(self, index):
 
 
 def _get_current_card_value(self):
-    """Retrieve the value of the current card.
+    """Retrieve the value of the current card along with the keyword name.
 
     Returns
     -------
@@ -85,11 +85,14 @@ FitsChan.__len__ = length
 
 
 def iter(self):
-    """The FitsChan itself is the iterator.
+    """The FitsChan is its own iterator, incrementing the card position on
+    each call.
 
     The position of the iterator is handled internally in the FitsChan and
     is moved to the start of the FitsChan by this call.
     Whilst iterating do not change the internal card position.
+
+    The iterator will return 80-character header cards.
     """
     self.clearCard()
     return self
@@ -157,6 +160,12 @@ def getitem(self, name):
         be the scalar value associated with the first card that matches the
         supplied name.
 
+    Returns
+    -------
+    value : `str`, `int`, `float`, `bool`, or `None`
+        The complete 80-character header card if an integer index is supplied,
+        else the first matching value of the named header.
+
     Raises
     ------
     IndexError
@@ -217,8 +226,8 @@ def setitem(self, name, value):
     Parameters
     ----------
     name : `str` or `int`
-        If the name is an integer index the returned value is the corresponding
-        80-character card.  Index values are 0-based. A negative index counts
+        If the name is an integer index this corresponds to a position within
+        the FitsChan.  Index values are 0-based. A negative index counts
         from the end of the FitsChan.  If the index matches the number of
         cards (e.g. the return value of `len()`) the new value will be
         appended to the end of the FitsChan.
@@ -226,11 +235,14 @@ def setitem(self, name, value):
         at the current card position as a comment card.
         If the name is a string corresponding to a header card that is already
         present in the FitsChan, the new value will overwrite the existing
-        value.  Any other cards matching that name later in the header will
+        value leaving the header name and any comment unchanged.
+        Any other cards matching that name later in the header will
         be removed.  If there is no header with that name, a new card will
         be inserted at the end of the FitsChan.
-    value : `str`, `int`, `float`, `bool`
-        The new value to be inserted.
+    value : `str`, `int`, `float`, `bool`, `None`
+        The new value to be inserted.  If an integer index is given it must be
+        a complete FITS header card.  The string will be padded to 80
+        characters.
 
     Raises
     ------
@@ -238,6 +250,9 @@ def setitem(self, name, value):
         Raised if the supplied integer index is out of range.
     KeyError
         Raised if the supplied name is neither a string or an integer.
+    TypeError
+        Raised if an integer index is given but the supplied value is not
+        a string.
     """
 
     if isinstance(name, int):

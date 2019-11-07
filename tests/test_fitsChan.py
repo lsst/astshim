@@ -804,6 +804,10 @@ class TestFitsChan(ObjectTestCase):
         fc[0] = "COMMENT Introduction comment"
         self.assertEqual(fc[0].rstrip(), "COMMENT Introduction comment")
 
+        # This will fail since a string is required
+        with self.assertRaises(TypeError):
+            fc[0] = 52
+
         # Delete the 3rd card
         del fc[2]
         self.assertEqual(fc[2].rstrip(), "CTYPE2  = 'DEC-TAN '")
