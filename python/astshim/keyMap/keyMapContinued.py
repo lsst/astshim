@@ -1,8 +1,6 @@
-from __future__ import absolute_import, division, print_function
+__all__ = ["KeyMap"]
 
 from .keyMap import KeyMap
-
-__all__ = []  # import only for side effects
 
 
 def keys(self):

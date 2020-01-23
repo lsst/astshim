@@ -1,5 +1,6 @@
-from .fitsChan import FitsChan, CardType
-from .fitsChan import *  # noqa: F403 F401
+__all__ = ["CardType", "FitsChan", "FitsKeyState"]
+
+from .fitsChan import CardType, FitsChan, FitsKeyState
 
 
 def _calc_card_pos(self, index):
@@ -297,7 +298,7 @@ def setitem(self, name, value):
         elif isinstance(value, bool):
             self.setFitsL(name, value, overwrite=True)
         else:
-            # Force to string
+            # Force to string.
             self.setFitsS(name, str(value), overwrite=True)
 
         # Delete any later cards with matching keyword

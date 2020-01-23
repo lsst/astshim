@@ -339,8 +339,8 @@ class TestFitsChan(ObjectTestCase):
         fc.setFitsI("ANINT", 200)
         fc.setFitsS("ASTRING", "string value")
         fc.setCard(fc.nCard + 1)
-        self.assertEqual(fc.getCardType(), ast.NOTYPE)
-        self.assertEqual(fc.testFits(), ast.ABSENT)
+        self.assertEqual(fc.getCardType(), ast.CardType.NOTYPE)
+        self.assertEqual(fc.testFits(), ast.FitsKeyState.ABSENT)
         with self.assertRaises(RuntimeError):
             fc.getFitsCN()
         with self.assertRaises(RuntimeError):
@@ -620,17 +620,17 @@ class TestFitsChan(ObjectTestCase):
         fc.setFitsS("ASTRING", "a string")
         fc.setFitsU("UNDEFVAL")
 
-        self.assertEqual(fc.testFits("AFLOAT"), ast.PRESENT)
-        self.assertEqual(fc.testFits("ASTRING"), ast.PRESENT)
-        self.assertEqual(fc.testFits("UNDEFVAL"), ast.NOVALUE)
-        self.assertEqual(fc.testFits("BADNAME"), ast.ABSENT)
+        self.assertEqual(fc.testFits("AFLOAT"), ast.FitsKeyState.PRESENT)
+        self.assertEqual(fc.testFits("ASTRING"), ast.FitsKeyState.PRESENT)
+        self.assertEqual(fc.testFits("UNDEFVAL"), ast.FitsKeyState.NOVALUE)
+        self.assertEqual(fc.testFits("BADNAME"), ast.FitsKeyState.ABSENT)
 
         fc.setCard(1)
         self.assertEqual(fc.getCardName(), "AFLOAT")
-        self.assertEqual(fc.testFits(), ast.PRESENT)
+        self.assertEqual(fc.testFits(), ast.FitsKeyState.PRESENT)
         fc.setCard(3)
         self.assertEqual(fc.getCardName(), "UNDEFVAL")
-        self.assertEqual(fc.testFits(), ast.NOVALUE)
+        self.assertEqual(fc.testFits(), ast.FitsKeyState.NOVALUE)
 
     def test_FitsChanInsertShift(self):
         """Check that a simple WCS can still be written as FITS-WCS
@@ -660,7 +660,7 @@ class TestFitsChan(ObjectTestCase):
             fv = fc3.getFitsF("CRPIX%d" % (i,))
             self.assertAlmostEqual(fv.value, 100 - shift)
         for name in fc2.getAllCardNames():
-            self.assertEqual(fc3.testFits(name), ast.PRESENT)
+            self.assertEqual(fc3.testFits(name), ast.FitsKeyState.PRESENT)
 
     def test_FitsChanFitsTol(self):
         """Test that increasing FitsTol allows writing a WCS with distortion
