@@ -28,7 +28,8 @@ class TestMakeRadialMapping(MappingTestCase):
         self.assertTrue(mapping1d.hasForward)
         self.assertFalse(mapping1d.hasInverse)
 
-        # if center = [0.0] then the radial_map mapping is identical to mapping1d
+        # If center = [0.0] then the radial_map mapping is identical to
+        # mapping1d.
         radial_map = ast.makeRadialMapping([0], mapping1d)
         self.assertTrue(radial_map.hasForward)
         self.assertFalse(radial_map.hasInverse)

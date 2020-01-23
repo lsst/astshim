@@ -281,9 +281,9 @@ def setitem(self, name, value):
     try:
         self.clearCard()
 
-        # Look for a card with the specified name
-        # We do not care about the result, if nothing is found we will be at the
-        # end of the header
+        # Look for a card with the specified name.
+        # We do not care about the result; if nothing is found we will be
+        # at the end of the header.
         self.findFits(name, False)
 
         # pyast seems to want to delete items if the value is None but

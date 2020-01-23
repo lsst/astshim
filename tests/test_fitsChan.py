@@ -52,7 +52,8 @@ class TestFitsChan(ObjectTestCase):
         self.cards = [pad(card) for card in shortCards]
 
     def insertPixelMapping(self, mapping, frameSet):
-        """Make a new WCS by inserting a new mapping at the beginnning of the GRID-IWC mapping
+        """Make a new WCS by inserting a new mapping at the beginnning of the
+        GRID-IWC mapping
 
         Return the new FrameSet (the original is not altered).
         """
@@ -74,7 +75,8 @@ class TestFitsChan(ObjectTestCase):
         oldGridToIwc = frameSet.getMapping(gridIndex, oldIwcIndex)
         iwcToSky = frameSet.getMapping(oldIwcIndex, oldSkyIndex)
 
-        # Remove frames in order high to low, so removal doesn't alter the indices remaining to be removed;
+        # Remove frames in order high to low, so removal doesn't alter the
+        # indices remaining to be removed;
         # update gridIndex during removal so it still points to the GRID frame
         framesToRemove = reversed(sorted([oldIwcIndex, oldSkyIndex]))
         for index in framesToRemove:
@@ -153,9 +155,10 @@ class TestFitsChan(ObjectTestCase):
                          [card.split(" ", 1)[0] for card in self.cards])
 
     def test_FitsChanFileStream(self):
-        """Test a FitsChan with a FileStream
+        """Test a FitsChan with a FileStream/
 
-        In particular, make sure that cards are written as the channel is destroyed
+        In particular, make sure that cards are written as the channel is
+        destroyed.
         """
         path = os.path.join(self.dataDir, "test_fitsChanFileStream.fits")
         fc1 = ast.FitsChan(ast.FileStream(path, True))
@@ -355,7 +358,8 @@ class TestFitsChan(ObjectTestCase):
         self.assertEqual(fc.getCardComm(), "")
 
     def test_FitsChanGetFitsMissing(self):
-        """Test FitsChan.getFits<X> for missing cards, with and without defaults
+        """Test FitsChan.getFits<X> for missing cards, with and without
+        defaults
         """
         fc = ast.FitsChan(ast.StringStream())
         fc.setFitsI("ANINT", 200)
@@ -660,7 +664,8 @@ class TestFitsChan(ObjectTestCase):
             self.assertEqual(fc3.testFits(name), ast.PRESENT)
 
     def test_FitsChanFitsTol(self):
-        """Test that increasing FitsTol allows writing a WCS with distortion as FITS-WCS
+        """Test that increasing FitsTol allows writing a WCS with distortion
+        as FITS-WCS.
         """
         ss = ast.StringStream("".join(self.cards))
         fc = ast.FitsChan(ss, "Encoding=FITS-WCS, IWC=1")

@@ -122,7 +122,8 @@ class TestFrameSetAppend(unittest.TestCase):
         self.assertEqual(set12.applyForward(x), y)
 
     def test_AppendMismatch(self):
-        """Check that append behaves as expected when joining non-identical frames.
+        """Check that append behaves as expected when joining non-identical
+        frames.
         """
         set1 = self.makeFrameSet(3, 2)
         set2 = self.makeFrameSet(2, 3)

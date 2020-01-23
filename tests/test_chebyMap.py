@@ -298,8 +298,10 @@ class TestChebyMap(MappingTestCase):
         ])
 
         # Coefficients for the following gently varying polynomial:
-        # y1 = -2.0 T0(x1') T0(x2') + 0.11 T1(x1') T0(x2') - 0.2 T0(x1') T1(x2') + 0.001 T2(x1') T1(x2')
-        # y2 =  5.1 T0(x1') T0(x2') - 0.55 T1(x1') T0(x2') + 0.13 T0(x1') T1(x2') - 0.002 T1(x1') T2(x2')
+        # y1 = -2.0 T0(x1') T0(x2') + 0.11 T1(x1') T0(x2')
+        #      - 0.2 T0(x1') T1(x2') + 0.001 T2(x1') T1(x2')
+        # y2 =  5.1 T0(x1') T0(x2') - 0.55 T1(x1') T0(x2')
+        #       + 0.13 T0(x1') T1(x2') - 0.002 T1(x1') T2(x2')
         coeff_f = np.array([
             [-2.0, 1, 0, 0],
             [0.11, 1, 1, 0],
@@ -353,8 +355,8 @@ class TestChebyMap(MappingTestCase):
         roundTripIn2 = chebyMap2.applyInverse(outdata)
         npt.assert_allclose(roundTripIn2, indata, atol=0.0002)
 
-        # fit an inverse transform with default bounds (which are the same bounds
-        # used for fitting chebyMap2, so the results should be the same)
+        # fit an inverse transform with default bounds (which are the same
+        # bounds used for fitting chebyMap2, so the results should be the same)
         chebyMap3 = chebyMap1.polyTran(forward=False, acc=0.0001, maxacc=0.001, maxorder=6)
         self.assertTrue(chebyMap2.hasForward)
         self.assertTrue(chebyMap2.hasInverse)

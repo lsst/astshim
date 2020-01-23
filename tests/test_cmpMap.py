@@ -111,7 +111,8 @@ class TestCmpMap(MappingTestCase):
         self.checkMappingPersistence(parmap3, indata)
 
     def test_SeriesMapMatrixShiftSimplify(self):
-        """Test that a non-square matrix map followed by a shift map can be simplified
+        """Test that a non-square matrix map followed by a shift map can be
+        simplified.
 
         This is ticket DM-10946
         """

@@ -135,7 +135,8 @@ class TestFrameSet(MappingTestCase):
         # remove the frame named "base", leaving the frame named "current"
         frameSet.removeFrame(1)
         self.assertEqual(frameSet.nFrame, 1)
-        # removing one frame leaves frame, newFrame and a copy of newFrame in FrameSet
+        # Removing one frame leaves frame, newFrame and a copy of newFrame in
+        # FrameSet.
         self.assertEqual(frame.getNObject(), initialNumFrames + 2)
         self.assertEqual(zoomMap.getNObject(), initialNumZoomMap)
         frameDeep = frameSet.getFrame(1)

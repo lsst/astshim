@@ -13,8 +13,9 @@ class TestUnitNormMap(MappingTestCase):
     def test_UnitNormMapBasics(self):
         """Test basics of UnitNormMap including applyForward
         """
-        # `full_` variables contain data for 3 axes; the variables without the `full_` prefix
-        # are a subset containing the number of axes being tested
+        # `full_` variables contain data for 3 axes; the variables without
+        # the `full_` prefix are a subset containing the number of axes
+        # being tested.
         full_center = np.array([-1, 1, 2], dtype=float)
         full_indata = np.array([
             [full_center[0], 1.0, 2.0, -6.0, 30.0, 1.0],
@@ -64,8 +65,8 @@ class TestUnitNormMap(MappingTestCase):
 
         Basic simplification is tested elsewhere.
 
-        ShiftMap              + UnitNormMap(forward)            = UnitNormMap(forward)
-        UnitNormMap(inverted) + ShiftMap                        = UnitNormMap(inverted)
+        ShiftMap              + UnitNormMap(forward) = UnitNormMap(forward)
+        UnitNormMap(inverted) + ShiftMap             = UnitNormMap(inverted)
         UnitNormMap(forward)  + non-equal UnitNormMap(inverted) = ShiftMap
         """
         center1 = [2, -1, 0]

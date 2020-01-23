@@ -16,9 +16,10 @@ class TestMapBox(MappingTestCase):
         zoom = np.array([2.0, 3.0])
         winmap = ast.WinMap(
             [0, 0], [1, 1], zoom * [0, 0] + shift, zoom * [1, 1] + shift)
-        # arbitrary values chosen so that inbnd_a is NOT < inbnd_b for both axes because
-        # MapBox uses the minimum of inbnd_b, inbnd_a for each axis for the lower bound,
-        # and the maximum for the upper bound
+        # arbitrary values chosen so that inbnd_a is NOT < inbnd_b for both
+        # axes because MapBox uses the minimum of inbnd_b, inbnd_a for
+        # each axis for the lower bound,
+        # and the maximum for the upper bound.
         inbnd_a = np.array([-1.2, 3.3])
         inbnd_b = np.array([2.7, 2.2])
         mapbox = ast.MapBox(winmap, inbnd_a, inbnd_b)
