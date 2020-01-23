@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
@@ -23,7 +22,8 @@ class TestBase(ObjectTestCase):
         dataArr2 = ast.arrayFromVector(vec=list(dataVec), nAxes=nAxes)
         assert_equal(dataArr2, desiredDataArr)
 
-        # make sure dataArr is a deep copy; changing dataVec should not change dataArr
+        # make sure dataArr is a deep copy; changing dataVec should
+        # not change dataArr
         dataVec[0] += 10
         assert_equal(dataArr, desiredDataArr)
 

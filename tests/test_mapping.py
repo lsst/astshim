@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function
 import unittest
 
 import numpy as np
@@ -53,9 +52,9 @@ class TestMapping(MappingTestCase):
         zoom = np.array([2.0, 3.0])
         winmap = ast.WinMap(
             [0, 0], [1, 1], zoom * [0, 0] + shift, zoom * [1, 1] + shift)
-        # arbitrary values chosen so that inbnd_a is NOT < inbnd_b for both axes because
-        # MapBox uses the minimum of inbnd_b, inbnd_a for each axis for the lower bound,
-        # and the maximum for the upper bound
+        # Arbitrary values chosen so that inbnd_a is NOT < inbnd_b for both
+        # axes, because MapBox uses the minimum of inbnd_b, inbnd_a for each
+        # axis for the lower bound, and the maximum for the upper bound.
         inbnd_a = np.array([-1.2, 3.3])
         inbnd_b = np.array([2.7, 2.2])
         mapbox = ast.MapBox(winmap, inbnd_a, inbnd_b)
@@ -149,7 +148,8 @@ class TestMapping(MappingTestCase):
             self.assertEqual(split.origOut[0], i + 1)
 
     def test_ZeroPoints(self):
-        """Test that Mapping.applyForward and applyInverse can handle zero points
+        """Test that Mapping.applyForward and applyInverse can handle
+        zero points
         """
         mapping = makeTwoWayPolyMap(2, 3)
         out_points1 = mapping.applyForward([])

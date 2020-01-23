@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function
 import os.path
 import unittest
 import numpy as np
@@ -52,7 +51,8 @@ class TestFitsChan(ObjectTestCase):
         self.cards = [pad(card) for card in shortCards]
 
     def insertPixelMapping(self, mapping, frameSet):
-        """Make a new WCS by inserting a new mapping at the beginnning of the GRID-IWC mapping
+        """Make a new WCS by inserting a new mapping at the beginnning of the
+        GRID-IWC mapping
 
         Return the new FrameSet (the original is not altered).
         """
@@ -74,7 +74,8 @@ class TestFitsChan(ObjectTestCase):
         oldGridToIwc = frameSet.getMapping(gridIndex, oldIwcIndex)
         iwcToSky = frameSet.getMapping(oldIwcIndex, oldSkyIndex)
 
-        # Remove frames in order high to low, so removal doesn't alter the indices remaining to be removed;
+        # Remove frames in order high to low, so removal doesn't alter the
+        # indices remaining to be removed;
         # update gridIndex during removal so it still points to the GRID frame
         framesToRemove = reversed(sorted([oldIwcIndex, oldSkyIndex]))
         for index in framesToRemove:
@@ -153,9 +154,10 @@ class TestFitsChan(ObjectTestCase):
                          [card.split(" ", 1)[0] for card in self.cards])
 
     def test_FitsChanFileStream(self):
-        """Test a FitsChan with a FileStream
+        """Test a FitsChan with a FileStream/
 
-        In particular, make sure that cards are written as the channel is destroyed
+        In particular, make sure that cards are written as the channel is
+        destroyed.
         """
         path = os.path.join(self.dataDir, "test_fitsChanFileStream.fits")
         fc1 = ast.FitsChan(ast.FileStream(path, True))
@@ -337,8 +339,8 @@ class TestFitsChan(ObjectTestCase):
         fc.setFitsI("ANINT", 200)
         fc.setFitsS("ASTRING", "string value")
         fc.setCard(fc.nCard + 1)
-        self.assertEqual(fc.getCardType(), ast.NOTYPE)
-        self.assertEqual(fc.testFits(), ast.ABSENT)
+        self.assertEqual(fc.getCardType(), ast.CardType.NOTYPE)
+        self.assertEqual(fc.testFits(), ast.FitsKeyState.ABSENT)
         with self.assertRaises(RuntimeError):
             fc.getFitsCN()
         with self.assertRaises(RuntimeError):
@@ -355,7 +357,8 @@ class TestFitsChan(ObjectTestCase):
         self.assertEqual(fc.getCardComm(), "")
 
     def test_FitsChanGetFitsMissing(self):
-        """Test FitsChan.getFits<X> for missing cards, with and without defaults
+        """Test FitsChan.getFits<X> for missing cards, with and without
+        defaults
         """
         fc = ast.FitsChan(ast.StringStream())
         fc.setFitsI("ANINT", 200)
@@ -617,17 +620,17 @@ class TestFitsChan(ObjectTestCase):
         fc.setFitsS("ASTRING", "a string")
         fc.setFitsU("UNDEFVAL")
 
-        self.assertEqual(fc.testFits("AFLOAT"), ast.PRESENT)
-        self.assertEqual(fc.testFits("ASTRING"), ast.PRESENT)
-        self.assertEqual(fc.testFits("UNDEFVAL"), ast.NOVALUE)
-        self.assertEqual(fc.testFits("BADNAME"), ast.ABSENT)
+        self.assertEqual(fc.testFits("AFLOAT"), ast.FitsKeyState.PRESENT)
+        self.assertEqual(fc.testFits("ASTRING"), ast.FitsKeyState.PRESENT)
+        self.assertEqual(fc.testFits("UNDEFVAL"), ast.FitsKeyState.NOVALUE)
+        self.assertEqual(fc.testFits("BADNAME"), ast.FitsKeyState.ABSENT)
 
         fc.setCard(1)
         self.assertEqual(fc.getCardName(), "AFLOAT")
-        self.assertEqual(fc.testFits(), ast.PRESENT)
+        self.assertEqual(fc.testFits(), ast.FitsKeyState.PRESENT)
         fc.setCard(3)
         self.assertEqual(fc.getCardName(), "UNDEFVAL")
-        self.assertEqual(fc.testFits(), ast.NOVALUE)
+        self.assertEqual(fc.testFits(), ast.FitsKeyState.NOVALUE)
 
     def test_FitsChanInsertShift(self):
         """Check that a simple WCS can still be written as FITS-WCS
@@ -657,10 +660,11 @@ class TestFitsChan(ObjectTestCase):
             fv = fc3.getFitsF("CRPIX%d" % (i,))
             self.assertAlmostEqual(fv.value, 100 - shift)
         for name in fc2.getAllCardNames():
-            self.assertEqual(fc3.testFits(name), ast.PRESENT)
+            self.assertEqual(fc3.testFits(name), ast.FitsKeyState.PRESENT)
 
     def test_FitsChanFitsTol(self):
-        """Test that increasing FitsTol allows writing a WCS with distortion as FITS-WCS
+        """Test that increasing FitsTol allows writing a WCS with distortion
+        as FITS-WCS.
         """
         ss = ast.StringStream("".join(self.cards))
         fc = ast.FitsChan(ss, "Encoding=FITS-WCS, IWC=1")

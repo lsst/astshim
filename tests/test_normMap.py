@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function
 from math import pi
 import sys
 import unittest
@@ -46,8 +45,9 @@ class TestNormMap(MappingTestCase):
         else:
             wrap pi to range [-pi, pi]
 
-        This test intentionally stays a small delta away from boundaries (except 0)
-        because the expected behavior is not certain and not important
+        This test intentionally stays a small delta away from boundaries
+        (except 0) because the expected behavior is not certain
+        and not important.
         """
         normmap = ast.NormMap(ast.SkyFrame())
         self.assertEqual(normmap.className, "NormMap")

@@ -136,8 +136,10 @@ class MappingTestCase(ObjectTestCase):
         """Check basic simplfication for a reversible mapping
 
         Check the following:
-        - A compound mapping of a amap and its inverse simplifies to a unit amap
-        - A compound mapping of a amap and a unit amap simplifies to the original amap
+        - A compound mapping of a amap and its inverse simplifies to
+          a unit amap.
+        - A compound mapping of a amap and a unit amap simplifies to
+          the original amap.
         """
         amapinv = amap.inverted()
         cmp1 = amap.then(amapinv)
@@ -220,7 +222,8 @@ class MappingTestCase(ObjectTestCase):
         obj1: first object in compound object
         obj2: second object in compound object
         cmpObj: compound object (SeriesMap, ParallelMap, CmpMap or CmpFrame)
-        isSeries: is compound object in series? None to not test (e.g. CmpFrame)
+        isSeries: is compound object in series? None to not test
+          (e.g. CmpFrame)
         """
         # if obj1 and obj2 are the same type then copying the compound object
         # will increase the NObject of each by 2, otherwise 1
@@ -240,8 +243,8 @@ class MappingTestCase(ObjectTestCase):
             elif isSeries is False:
                 self.assertFalse(cmpObj.series)
 
-        # making a deep copy should increase the object count of the contained objects
-        # but should not affect the reference count
+        # Making a deep copy should increase the object count of the contained
+        # objects but should not affect the reference count.
         cp = cmpObj.copy()
         self.assertEqual(cmpObj.getRefCount(), initialRefCountCmpObj)
         self.assertEqual(cmpObj.getNObject(), initialNumCmpObj + 1)
@@ -261,7 +264,8 @@ class MappingTestCase(ObjectTestCase):
 
 
 def makePolyMapCoeffs(nIn, nOut):
-    """Make an array of coefficients for astshim.PolyMap for the following equation:
+    """Make an array of coefficients for astshim.PolyMap for the following
+    equation:
 
     fj(x) = C0j x0^2 + C1j x1^2 + C2j x2^2 + ... + CNj xN^2
     where:
@@ -284,15 +288,17 @@ def makeTwoWayPolyMap(nIn, nOut):
     """Make an astshim.PolyMap suitable for testing
 
     The forward transform is as follows:
-    fj(x) = C0j x0^2 + C1j x1^2 + C2j x2^2 + ... + CNj xN^2 where Cij = 0.001 (i+j+1)
+    fj(x) = C0j x0^2 + C1j x1^2 + C2j x2^2 + ...
+            + CNj xN^2 where Cij = 0.001 (i+j+1)
 
     The reverse transform is the same equation with i and j reversed
     thus it is NOT the inverse of the forward direction,
     but is something that can be easily evaluated.
 
     The equation is chosen for the following reasons:
-    - It is well defined for any positive value of nIn, nOut
-    - It stays small for small x, to avoid wraparound of angles for SpherePoint endpoints
+    - It is well defined for any positive value of nIn, nOut.
+    - It stays small for small x, to avoid wraparound of angles for
+      SpherePoint endpoints.
     """
     forwardCoeffs = makePolyMapCoeffs(nIn, nOut)
     reverseCoeffs = makePolyMapCoeffs(nOut, nIn)
@@ -311,8 +317,9 @@ def makeForwardPolyMap(nIn, nOut):
     This map does not have a reverse transform.
 
     The equation is chosen for the following reasons:
-    - It is well defined for any positive value of nIn, nOut
-    - It stays small for small x, to avoid wraparound of angles for SpherePoint endpoints
+    - It is well defined for any positive value of nIn, nOut.
+    - It stays small for small x, to avoid wraparound of angles for
+      SpherePoint endpoints.
     """
     forwardCoeffs = makePolyMapCoeffs(nIn, nOut)
     polyMap = PolyMap(forwardCoeffs, nOut, "IterInverse=0")

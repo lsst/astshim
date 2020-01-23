@@ -1,6 +1,7 @@
-from .fitsTable import *  # noqa: F401 F403
+__all__ = ["FitsTable", "getColumnData"]
+
+from . import base
 from .fitsTable import FitsTable
-from .base import DataType as _DataType
 
 
 def getColumnData(self, column):
@@ -20,7 +21,7 @@ def getColumnData(self, column):
     shape = self.columnShape(column)
     dtype = self.columnType(column)
 
-    if dtype == _DataType.DoubleType:
+    if dtype == base.DataType.DoubleType:
         newshape = list(shape)
         newshape.append(nrows)
         coldata = self.getColumnData1D(column)
