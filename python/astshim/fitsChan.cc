@@ -62,7 +62,6 @@ PYBIND11_MODULE(fitsChan, mod) {
             .value("STRING", CardType::STRING)
             .value("COMPLEXF", CardType::COMPLEXF)
             .value("COMPLEXI", CardType::COMPLEXI)
-            .value("COMPLEXI", CardType::COMPLEXI)
             .value("LOGICAL", CardType::LOGICAL)
             .value("CONTINUE", CardType::CONTINUE)
             .value("UNDEF", CardType::UNDEF)
