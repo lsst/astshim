@@ -144,6 +144,10 @@ inline bool escapes(int include = -1) {
     return ret;
 }
 
+inline int version(void) {
+  return astVersion;
+}
+
 }  // namespace ast
 
 #endif

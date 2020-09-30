@@ -32,6 +32,10 @@ class TestBase(ObjectTestCase):
             with self.assertRaises(RuntimeError):
                 ast.arrayFromVector(vec=badDataVec, nAxes=nAxes)
 
+    def testVersion(self):
+        version = ast.version()
+        self.assertGreaterEqual(version, 9001000)
+
 
 if __name__ == "__main__":
     unittest.main()
