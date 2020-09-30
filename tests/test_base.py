@@ -33,7 +33,7 @@ class TestBase(ObjectTestCase):
                 ast.arrayFromVector(vec=badDataVec, nAxes=nAxes)
 
     def testVersion(self):
-        version = ast.version()
+        version = ast.astVersion()
         self.assertGreaterEqual(version, 9001000)
 
 

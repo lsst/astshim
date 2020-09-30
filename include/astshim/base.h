@@ -144,7 +144,7 @@ inline bool escapes(int include = -1) {
     return ret;
 }
 
-inline int version(void) {
+inline int ast_version(void) {
   return astVersion;
 }
 
