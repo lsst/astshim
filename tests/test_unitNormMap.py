@@ -88,8 +88,13 @@ class TestUnitNormMap(MappingTestCase):
         winmap_notunitscale = ast.WinMap(
             np.zeros(3), shift, np.ones(3), np.ones(3) * 2 + shift)
 
+        if ast.astVersion() >= 9001003:
+            expected_map = "ShiftMap"  # ShiftMap is ShiftMap in 9.1.3
+        else:
+            expected_map = "WinMap"  # ShiftMap gets simplified to WinMap
+
         for map1, map2, pred_simplified_class_name in (
-            (unm1, unm2inv, "WinMap"),  # ShiftMap gets simplified to WinMap
+            (unm1, unm2inv, expected_map),
             (shiftmap, unm1, "UnitNormMap"),
             (winmap_unitscale, unm1, "UnitNormMap"),
             (winmap_notunitscale, unm1, "SeriesMap"),
