@@ -34,6 +34,7 @@ namespace {
 PYBIND11_MODULE(base, mod) {
     mod.def("assertOK", &assertOK, "rawObj1"_a = nullptr, "rawObj2"_a = nullptr);
     mod.def("escapes", &escapes, "include"_a = -1);
+    mod.def("astVersion", &ast_version);
 
     // Make a deep copy to avoid memory issues in Python
     mod.def("arrayFromVector", [](std::vector<double> const& data, int nAxes) {
