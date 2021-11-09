@@ -49,7 +49,6 @@ public:
     FrameDictMaker() = default;
     ~FrameDictMaker() = default;
     std::shared_ptr<Object> operator()(std::string const &state) {
-        std::cout << "FrameDictMaker() called\n";
         ast::StringStream stream(state);
         ast::Channel chan(stream);
         auto objPtr = chan.read();
