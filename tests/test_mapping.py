@@ -90,7 +90,7 @@ class TestMapping(MappingTestCase):
             [1.3, 0.0],
             [0.0, 1.3]
         ], dtype=float)
-        assert_allclose(coeffs, descoeffs)
+        assert_allclose(coeffs, descoeffs, atol=10E-14)
 
     def test_QuadApprox(self):
         # simple parabola
