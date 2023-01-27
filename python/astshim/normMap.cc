@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
 #include "astshim/Mapping.h"
@@ -31,18 +32,14 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(normMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<NormMap, std::shared_ptr<NormMap>, Mapping> cls(mod, "NormMap");
-
-    cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
-    cls.def(py::init<NormMap const &>());
-
-    cls.def("copy", &NormMap::copy);
+void wrapNormMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyNormMap =  py::class_<NormMap, std::shared_ptr<NormMap>, Mapping>;
+    wrappers.wrapType(PyNormMap(wrappers.module, "NormMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
+        cls.def(py::init<NormMap const &>());
+        cls.def("copy", &NormMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

@@ -26,42 +26,40 @@ using namespace pybind11::literals;
 
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
+#include "lsst/cpputils/python.h"
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(frameSet, mod) {
-    py::module::import("astshim.frame");
+void wrapFrameSet(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyFrameSet = py::class_<FrameSet, std::shared_ptr<FrameSet>, Frame>;
+    wrappers.wrapType(PyFrameSet(wrappers.module, "FrameSet"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
+        cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
+                "mapping"_a, "currentFrame"_a, "options"_a = "");
+        cls.def(py::init<Frame const &>());
 
-    py::class_<FrameSet, std::shared_ptr<FrameSet>, Frame> cls(mod, "FrameSet");
+        // def_readonly_static makes in only available in the class, not instances, so...
+        cls.attr("BASE") = py::cast(AST__BASE);
+        cls.attr("CURRENT") = py::cast(AST__CURRENT);
+        cls.attr("NOFRAME") = py::cast(AST__NOFRAME);
 
-    cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
-    cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
-            "mapping"_a, "currentFrame"_a, "options"_a = "");
-    cls.def(py::init<Frame const &>());
+        cls.def_property("base", &FrameSet::getBase, &FrameSet::setBase);
+        cls.def_property("current", &FrameSet::getCurrent, &FrameSet::setCurrent);
+        cls.def_property_readonly("nFrame", &FrameSet::getNFrame);
 
-    // def_readonly_static makes in only available in the class, not instances, so...
-    cls.attr("BASE") = py::cast(AST__BASE);
-    cls.attr("CURRENT") = py::cast(AST__CURRENT);
-    cls.attr("NOFRAME") = py::cast(AST__NOFRAME);
-
-    cls.def_property("base", &FrameSet::getBase, &FrameSet::setBase);
-    cls.def_property("current", &FrameSet::getCurrent, &FrameSet::setCurrent);
-    cls.def_property_readonly("nFrame", &FrameSet::getNFrame);
-
-    cls.def("copy", &FrameSet::copy);
-    cls.def("addAxes", &FrameSet::addAxes);
-    cls.def("addFrame", &FrameSet::addFrame, "iframe"_a, "map"_a, "frame"_a);
-    cls.def("addVariant", &FrameSet::addVariant, "map"_a, "name"_a);
-    cls.def("getAllVariants", &FrameSet::getAllVariants);
-    cls.def("getFrame", &FrameSet::getFrame, "iframe"_a, "copy"_a = true);
-    cls.def("getMapping", &FrameSet::getMapping, "from"_a = FrameSet::BASE, "to"_a = FrameSet::CURRENT);
-    cls.def("getVariant", &FrameSet::getVariant);
-    cls.def("mirrorVariants", &FrameSet::mirrorVariants, "iframe"_a);
-    cls.def("remapFrame", &FrameSet::remapFrame, "iframe"_a, "map"_a);
-    cls.def("removeFrame", &FrameSet::removeFrame, "iframe"_a);
-    cls.def("renameVariant", &FrameSet::renameVariant, "name"_a);
+        cls.def("copy", &FrameSet::copy);
+        cls.def("addAxes", &FrameSet::addAxes);
+        cls.def("addFrame", &FrameSet::addFrame, "iframe"_a, "map"_a, "frame"_a);
+        cls.def("addVariant", &FrameSet::addVariant, "map"_a, "name"_a);
+        cls.def("getAllVariants", &FrameSet::getAllVariants);
+        cls.def("getFrame", &FrameSet::getFrame, "iframe"_a, "copy"_a = true);
+        cls.def("getMapping", &FrameSet::getMapping, "from"_a = FrameSet::BASE, "to"_a = FrameSet::CURRENT);
+        cls.def("getVariant", &FrameSet::getVariant);
+        cls.def("mirrorVariants", &FrameSet::mirrorVariants, "iframe"_a);
+        cls.def("remapFrame", &FrameSet::remapFrame, "iframe"_a, "map"_a);
+        cls.def("removeFrame", &FrameSet::removeFrame, "iframe"_a);
+        cls.def("renameVariant", &FrameSet::renameVariant, "name"_a);
+    });
 }
 
-}  // namespace
 }  // namespace ast

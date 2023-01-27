@@ -21,6 +21,7 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "ndarray/pybind11.h"
 #include "astshim/base.h"
@@ -29,34 +30,33 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(base, mod) {
-    mod.def("assertOK", &assertOK, "rawObj1"_a = nullptr, "rawObj2"_a = nullptr);
-    mod.def("escapes", &escapes, "include"_a = -1);
-    mod.def("astVersion", &ast_version);
+void wrapBase(lsst::cpputils::python::WrapperCollection &wrappers) {
+    wrappers.module.def("assertOK", &assertOK, "rawObj1"_a = nullptr, "rawObj2"_a = nullptr);
+    wrappers.module.def("escapes", &escapes, "include"_a = -1);
+    wrappers.module.def("astVersion", &ast_version);
 
     // Make a deep copy to avoid memory issues in Python
-    mod.def("arrayFromVector", [](std::vector<double> const& data, int nAxes) {
+    wrappers.module.def("arrayFromVector", [](std::vector<double> const& data, int nAxes) {
         auto const arrayShallow = arrayFromVector(data, nAxes);
         Array2D arrayDeep = allocate(arrayShallow.getShape());
         arrayDeep.deep() = arrayShallow;
         return arrayDeep;
     }, "vec"_a, "nAxes"_a);
 
-    py::enum_<DataType>(mod, "DataType")
-            .value("IntType", DataType::IntType)
-            .value("ShortIntType", DataType::ShortIntType)
-            .value("ByteType", DataType::ByteType)
-            .value("DoubleType", DataType::DoubleType)
-            .value("FloatType", DataType::FloatType)
-            .value("StringType", DataType::StringType)
-            .value("ObjectType", DataType::ObjectType)
-            .value("PointerType", DataType::PointerType)
-            .value("UndefinedType", DataType::UndefinedType)
-            .value("BadType", DataType::BadType)
-            .export_values();
+    wrappers.wrapType(py::enum_<DataType>(wrappers.module, "DataType"), [](auto &mod, auto &enm) {
+        enm.value("IntType", DataType::IntType);
+        enm.value("ShortIntType", DataType::ShortIntType);
+        enm.value("ByteType", DataType::ByteType);
+        enm.value("DoubleType", DataType::DoubleType);
+        enm.value("FloatType", DataType::FloatType);
+        enm.value("StringType", DataType::StringType);
+        enm.value("ObjectType", DataType::ObjectType);
+        enm.value("PointerType", DataType::PointerType);
+        enm.value("UndefinedType", DataType::UndefinedType);
+        enm.value("BadType", DataType::BadType);
+        enm.export_values();
+    });
 }
 
-}  // namespace
 }  // namespace ast

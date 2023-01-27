@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/CmpMap.h"
 #include "astshim/Mapping.h"
@@ -31,19 +32,15 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(parallelMap, mod) {
-    py::module::import("astshim.cmpMap");
-
-    py::class_<ParallelMap, std::shared_ptr<ParallelMap>, CmpMap> cls(mod, "ParallelMap");
-
-    cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
-            "options"_a = "");
-    cls.def(py::init<ParallelMap const &>());
-
-    cls.def("copy", &ParallelMap::copy);
+void wrapParallelMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyParallelMap = py::class_<ParallelMap, std::shared_ptr<ParallelMap>, CmpMap>;
+    wrappers.wrapType(PyParallelMap(wrappers.module, "ParallelMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
+                "options"_a = "");
+        cls.def(py::init<ParallelMap const &>());
+        cls.def("copy", &ParallelMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

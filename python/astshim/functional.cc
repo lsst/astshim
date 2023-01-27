@@ -21,7 +21,7 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include "ndarray/pybind11.h"
+#include "lsst/cpputils/python.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -29,15 +29,10 @@ using namespace pybind11::literals;
 #include "astshim/functional.h"
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(functional, mod) {
-    py::module::import("astshim.frameSet");
-    py::module::import("astshim.mapping");
-
-    mod.def("append", &append, "first"_a, "second"_a);
-    mod.def("makeRadialMapping", &makeRadialMapping, "center"_a, "mapping1d"_a);
+void wrapFunctional(lsst::utils::python::WrapperCollection &wrappers) {
+    wrappers.module.def("append", &append, "first"_a, "second"_a);
+    wrappers.module.def("makeRadialMapping", &makeRadialMapping, "center"_a, "mapping1d"_a);
 }
 
-}  // namespace
 }  // namespace ast

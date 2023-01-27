@@ -21,6 +21,7 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/detail/testUtils.h"
 
@@ -30,11 +31,17 @@ using namespace pybind11::literals;
 namespace ast {
 namespace detail {
 namespace {
+void declareUtils(lsst::utils::python::WrapperCollection &wrappers) {
+    wrappers.module.def("makeFrameDict", makeFrameDict);
+}
+} // namespace
 
 PYBIND11_MODULE(testUtils, mod) {
-    mod.def("makeFrameDict", makeFrameDict);
+    using lsst::cpputils::python::WrapperCollection;
+    lsst::utils::python::WrapperCollection wrappers(mod, "astshim.detail.testUtils");
+    declareUtils(wrappers);
+    wrappers.finish();
 }
 
-}  // namespace
 }  // namespace detail
 }  // namespace ast

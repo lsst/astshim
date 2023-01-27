@@ -20,10 +20,11 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <memory>
-#include <vector>
+#include <string>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
 #include "astshim/TimeFrame.h"
@@ -32,24 +33,22 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(timeFrame, mod) {
-    py::module::import("astshim.frame");
+void wrapTimeFrame(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyTimeFrame=py::class_<TimeFrame, std::shared_ptr<TimeFrame>, Frame>;
+    wrappers.wrapType(PyTimeFrame(wrappers.module, "TimeFrame"), [](auto &mod, auto &cls) {
 
-    py::class_<TimeFrame, std::shared_ptr<TimeFrame>, Frame> cls(mod, "TimeFrame");
+        cls.def(py::init<std::string const &>(), "options"_a = "");
+        cls.def(py::init<TimeFrame const &>());
 
-    cls.def(py::init<std::string const &>(), "options"_a = "");
-    cls.def(py::init<TimeFrame const &>());
+        cls.def_property("alignTimeScale", &TimeFrame::getAlignTimeScale, &TimeFrame::setAlignTimeScale);
+        cls.def_property("ltOffset", &TimeFrame::getLTOffset, &TimeFrame::setLTOffset);
+        cls.def_property("timeOrigin", &TimeFrame::getTimeOrigin, &TimeFrame::setTimeOrigin);
+        cls.def_property("timeScale", &TimeFrame::getTimeScale, &TimeFrame::setTimeScale);
 
-    cls.def_property("alignTimeScale", &TimeFrame::getAlignTimeScale, &TimeFrame::setAlignTimeScale);
-    cls.def_property("ltOffset", &TimeFrame::getLTOffset, &TimeFrame::setLTOffset);
-    cls.def_property("timeOrigin", &TimeFrame::getTimeOrigin, &TimeFrame::setTimeOrigin);
-    cls.def_property("timeScale", &TimeFrame::getTimeScale, &TimeFrame::setTimeScale);
-
-    cls.def("copy", &TimeFrame::copy);
-    cls.def("currentTime", &TimeFrame::currentTime);
+        cls.def("copy", &TimeFrame::copy);
+        cls.def("currentTime", &TimeFrame::currentTime);
+    });
 }
 
-}  // namespace
 }  // namespace ast

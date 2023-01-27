@@ -24,57 +24,55 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
-#include "astshim/Mapping.h"
 #include "astshim/SkyFrame.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(skyFrame, mod) {
-    py::module::import("astshim.frame");
+void wrapSkyFrame(lsst::utils::python::WrapperCollection &wrappers) {
+    using PySkyFrame = py::class_<SkyFrame, std::shared_ptr<SkyFrame>, Frame>;
+    wrappers.wrapType(PySkyFrame(wrappers.module, "SkyFrame"), [](auto &mod, auto &cls) {
 
-    py::class_<SkyFrame, std::shared_ptr<SkyFrame>, Frame> cls(mod, "SkyFrame");
+        cls.def(py::init<std::string const &>(), "options"_a = "");
+        cls.def(py::init<SkyFrame const &>());
 
-    cls.def(py::init<std::string const &>(), "options"_a = "");
-    cls.def(py::init<SkyFrame const &>());
+        cls.def("copy", &SkyFrame::copy);
 
-    cls.def("copy", &SkyFrame::copy);
+        cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
+        cls.def_property("asTime", [](SkyFrame const &self) {
+                             return std::make_pair(self.getAsTime(1), self.getAsTime(2));
+                         },
+                         [](SkyFrame &self, std::pair<bool, bool> asTime) {
+                             self.setAsTime(1, asTime.first);
+                             self.setAsTime(2, asTime.second);
+                         });
+        cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
+        cls.def_property("equinox", &SkyFrame::getEquinox, &SkyFrame::setEquinox);
+        cls.def_property_readonly("latAxis", &SkyFrame::getLatAxis);
+        cls.def_property_readonly("lonAxis", &SkyFrame::getLonAxis);
+        cls.def_property("negLon", &SkyFrame::getNegLon, &SkyFrame::setNegLon);
+        cls.def_property("projection", &SkyFrame::getProjection, &SkyFrame::setProjection);
+        cls.def_property("skyRefIs", &SkyFrame::getSkyRefIs, &SkyFrame::setSkyRefIs);
+        cls.def_property("skyTol", &SkyFrame::getSkyTol, &SkyFrame::setSkyTol);
 
-    cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
-    cls.def_property("asTime", [](SkyFrame const &self) {
-        return std::make_pair(self.getAsTime(1), self.getAsTime(2));
-    },
-    [](SkyFrame &self, std::pair<bool, bool> asTime) {
-        self.setAsTime(1, asTime.first);
-        self.setAsTime(2, asTime.second);
+        cls.def("getAsTime", &SkyFrame::getAsTime, "axis"_a);
+        cls.def("getIsLatAxis", &SkyFrame::getIsLatAxis, "axis"_a);
+        cls.def("getIsLonAxis", &SkyFrame::getIsLonAxis, "axis"_a);
+        cls.def("getSkyRef", &SkyFrame::getSkyRef);
+        cls.def("getSkyRefP", &SkyFrame::getSkyRefP);
+        cls.def("setAsTime", &SkyFrame::setAsTime, "axis"_a, "asTime"_a);
+        cls.def("setEquinox", &SkyFrame::setEquinox);
+        cls.def("setNegLon", &SkyFrame::setNegLon);
+        cls.def("setProjection", &SkyFrame::setProjection);
+        cls.def("setSkyRef", &SkyFrame::setSkyRef);
+        cls.def("setSkyRefP", &SkyFrame::setSkyRefP);
+        cls.def("skyOffsetMap", &SkyFrame::skyOffsetMap);
     });
-    cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
-    cls.def_property("equinox", &SkyFrame::getEquinox, &SkyFrame::setEquinox);
-    cls.def_property_readonly("latAxis", &SkyFrame::getLatAxis);
-    cls.def_property_readonly("lonAxis", &SkyFrame::getLonAxis);
-    cls.def_property("negLon", &SkyFrame::getNegLon, &SkyFrame::setNegLon);
-    cls.def_property("projection", &SkyFrame::getProjection, &SkyFrame::setProjection);
-    cls.def_property("skyRefIs", &SkyFrame::getSkyRefIs, &SkyFrame::setSkyRefIs);
-    cls.def_property("skyTol", &SkyFrame::getSkyTol, &SkyFrame::setSkyTol);
-
-    cls.def("getAsTime", &SkyFrame::getAsTime, "axis"_a);
-    cls.def("getIsLatAxis", &SkyFrame::getIsLatAxis, "axis"_a);
-    cls.def("getIsLonAxis", &SkyFrame::getIsLonAxis, "axis"_a);
-    cls.def("getSkyRef", &SkyFrame::getSkyRef);
-    cls.def("getSkyRefP", &SkyFrame::getSkyRefP);
-    cls.def("setAsTime", &SkyFrame::setAsTime, "axis"_a, "asTime"_a);
-    cls.def("setEquinox", &SkyFrame::setEquinox);
-    cls.def("setNegLon", &SkyFrame::setNegLon);
-    cls.def("setProjection", &SkyFrame::setProjection);
-    cls.def("setSkyRef", &SkyFrame::setSkyRef);
-    cls.def("setSkyRefP", &SkyFrame::setSkyRefP);
-    cls.def("skyOffsetMap", &SkyFrame::skyOffsetMap);
 }
 
-}  // namespace
 }  // namespace ast

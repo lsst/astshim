@@ -24,6 +24,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/WinMap.h"
@@ -32,20 +33,18 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(winMap, mod) {
-    py::module::import("astshim.mapping");
+void wrapWinMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyWinMap = py::class_<WinMap, std::shared_ptr<WinMap>, Mapping>;
+    wrappers.wrapType(PyWinMap(wrappers.module, "WinMap"), [](auto &mod, auto &cls) {
 
-    py::class_<WinMap, std::shared_ptr<WinMap>, Mapping> cls(mod, "WinMap");
+        cls.def(py::init<std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
+                        std::vector<double> const &, std::string const &>(),
+                "ina"_a, "inb"_a, "outa"_a, "outb"_a, "options"_a = "");
+        cls.def(py::init<WinMap const &>());
 
-    cls.def(py::init<std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
-                     std::vector<double> const &, std::string const &>(),
-            "ina"_a, "inb"_a, "outa"_a, "outb"_a, "options"_a = "");
-    cls.def(py::init<WinMap const &>());
-
-    cls.def("copy", &WinMap::copy);
+        cls.def("copy", &WinMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

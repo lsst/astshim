@@ -1,6 +1,6 @@
 __all__ = ["CardType", "FitsChan", "FitsKeyState"]
 
-from .fitsChan import CardType, FitsChan, FitsKeyState
+from ._astshimLib import CardType, FitsChan, FitsKeyState
 
 
 def _calc_card_pos(self, index):

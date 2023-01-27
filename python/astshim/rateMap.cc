@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/RateMap.h"
@@ -30,19 +31,15 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(rateMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<RateMap, std::shared_ptr<RateMap>, Mapping> cls(mod, "RateMap");
-
-    cls.def(py::init<Mapping const &, int, int, std::string const &>(), "map"_a, "ax1"_a, "ax2"_a,
-            "options"_a = "");
-    cls.def(py::init<RateMap const &>());
-
-    cls.def("copy", &RateMap::copy);
+void wrapRateMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyRateMap =  py::class_<RateMap, std::shared_ptr<RateMap>, Mapping> ;
+    wrappers.wrapType(PyRateMap(wrappers.module, "RateMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, int, int, std::string const &>(), "map"_a, "ax1"_a, "ax2"_a,
+                "options"_a = "");
+        cls.def(py::init<RateMap const &>());
+        cls.def("copy", &RateMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

@@ -1,6 +1,6 @@
 __all__ = ["KeyMap"]
 
-from .keyMap import KeyMap
+from .._astshimLib import KeyMap
 
 
 def keys(self):

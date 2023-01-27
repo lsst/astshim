@@ -20,8 +20,8 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
-#include "astshim/base.h"
 #include "astshim/Stream.h"
 #include "astshim/Channel.h"
 #include "astshim/Object.h"
@@ -52,53 +52,53 @@ public:
         return chan.read();
     }
 };
+}
 
-PYBIND11_MODULE(object, mod) {
-    py::module::import("astshim.base");
+void wrapObject(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyObjectMaker = py::class_<ObjectMaker, std::shared_ptr<ObjectMaker>>;
+    static auto makerCls = wrappers.wrapType(PyObjectMaker(wrappers.module, "ObjectMaker"), [](auto &mod, auto &cls) {
+        cls.def(py::init<>());
+        cls.def("__call__", &ObjectMaker::operator());
+        cls.def("__reduce__",
+                     [cls](ObjectMaker const &self) { return py::make_tuple(cls, py::tuple()); });
+    });
 
-    py::class_<ObjectMaker, std::shared_ptr<ObjectMaker>> makerCls(mod, "ObjectMaker");
-    makerCls.def(py::init<>());
-    makerCls.def("__call__", &ObjectMaker::operator());
-    makerCls.def("__reduce__",
-                       [makerCls](ObjectMaker const &self) { return py::make_tuple(makerCls, py::tuple()); });
+    using PyObject = py::class_<Object, std::shared_ptr<Object>>;
+    wrappers.wrapType(PyObject(wrappers.module, "Object"), [](auto &mod, auto &cls) {
+        cls.def_static("fromString", &Object::fromString);
+        // do not wrap fromAstObject because it uses a bare AST pointer
+        cls.def("__str__", &Object::getClassName);
+        cls.def("__repr__", [](Object const &self) { return "astshim." + self.getClassName(); });
+        cls.def("__eq__", &Object::operator==, py::is_operator());
+        cls.def("__ne__", &Object::operator!=, py::is_operator());
 
-    py::class_<Object, std::shared_ptr<Object>> cls(mod, "Object");
+        cls.def_property_readonly("className", &Object::getClassName);
+        cls.def_property("id", &Object::getID, &Object::setID);
+        cls.def_property("ident", &Object::getIdent, &Object::setIdent);
+        cls.def_property_readonly("objSize", &Object::getObjSize);
+        cls.def_property("useDefs", &Object::getUseDefs, &Object::setUseDefs);
 
-    cls.def_static("fromString", &Object::fromString);
-    // do not wrap fromAstObject because it uses a bare AST pointer
+        cls.def("copy", &Object::copy);
+        cls.def("clear", &Object::clear, "attrib"_a);
+        cls.def("hasAttribute", &Object::hasAttribute, "attrib"_a);
+        cls.def("getNObject", &Object::getNObject);
+        cls.def("getRefCount", &Object::getRefCount);
+        cls.def("lock", &Object::lock, "wait"_a);
+        cls.def("same", &Object::same, "other"_a);
+        // do not wrap the ostream version of show, since there is no obvious Python equivalent to ostream
+        cls.def("show", py::overload_cast<bool>(&Object::show, py::const_), "showComments"_a = true);
 
-    cls.def("__str__", &Object::getClassName);
-    cls.def("__repr__", [](Object const &self) { return "astshim." + self.getClassName(); });
-    cls.def("__eq__", &Object::operator==, py::is_operator());
-    cls.def("__ne__", &Object::operator!=, py::is_operator());
+        cls.def("test", &Object::test, "attrib"_a);
+        cls.def("unlock", &Object::unlock, "report"_a = false);
+        // do not wrap getRawPtr, since it returns a bare AST pointer
 
-    cls.def_property_readonly("className", &Object::getClassName);
-    cls.def_property("id", &Object::getID, &Object::setID);
-    cls.def_property("ident", &Object::getIdent, &Object::setIdent);
-    cls.def_property_readonly("objSize", &Object::getObjSize);
-    cls.def_property("useDefs", &Object::getUseDefs, &Object::setUseDefs);
-
-    cls.def("copy", &Object::copy);
-    cls.def("clear", &Object::clear, "attrib"_a);
-    cls.def("hasAttribute", &Object::hasAttribute, "attrib"_a);
-    cls.def("getNObject", &Object::getNObject);
-    cls.def("getRefCount", &Object::getRefCount);
-    cls.def("lock", &Object::lock, "wait"_a);
-    cls.def("same", &Object::same, "other"_a);
-    // do not wrap the ostream version of show, since there is no obvious Python equivalent to ostream
-    cls.def("show", py::overload_cast<bool>(&Object::show, py::const_), "showComments"_a = true);
-
-    cls.def("test", &Object::test, "attrib"_a);
-    cls.def("unlock", &Object::unlock, "report"_a = false);
-    // do not wrap getRawPtr, since it returns a bare AST pointer
-
-    // add pickling support
-    cls.def("__reduce__", [makerCls](Object const &self) {
-        std::string state = self.show(false);
-        auto unpickleArgs = py::make_tuple(state);
-        return py::make_tuple(makerCls(), unpickleArgs);
+        // add pickling support
+        cls.def("__reduce__", [](Object const &self) {
+            std::string state = self.show(false);
+            auto unpickleArgs = py::make_tuple(state);
+            return py::make_tuple(makerCls(), unpickleArgs);
+        });
     });
 }
 
-}  // namespace
 }  // namespace ast

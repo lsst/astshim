@@ -22,6 +22,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include "ndarray/pybind11.h"
+#include "lsst/cpputils/python.h"
 
 #include "astshim/base.h"
 #include "astshim/Mapping.h"
@@ -33,50 +34,44 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(mapping, mod) {
-    py::module::import("astshim.object");
-    py::module::import("astshim.mapBox");
-    py::module::import("astshim.mapSplit");
-
-    py::class_<Mapping, std::shared_ptr<Mapping>, Object> cls(mod, "Mapping");
-
-    cls.def_property_readonly("nIn", &Mapping::getNIn);
-    cls.def_property_readonly("nOut", &Mapping::getNOut);
-    cls.def_property_readonly("isSimple", &Mapping::getIsSimple);
-    cls.def_property_readonly("hasForward", &Mapping::hasForward);
-    cls.def_property_readonly("hasInverse", &Mapping::hasInverse);
-    cls.def_property_readonly("isInverted", &Mapping::isInverted);
-    cls.def_property_readonly("isLinear", &Mapping::getIsLinear);
-    cls.def_property("report", &Mapping::getReport, &Mapping::setReport);
-
-    cls.def("copy", &Mapping::copy);
-    cls.def("inverted", &Mapping::inverted);
-    cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
-    cls.def("then", &Mapping::then, "next"_a);
-    cls.def("under", &Mapping::under, "next"_a);
-    cls.def("rate", &Mapping::rate, "at"_a, "ax1"_a, "ax2"_a);
-    cls.def("simplified", &Mapping::simplified);
-    // wrap the overloads of applyForward, applyInverse, tranGridForward and tranGridInverse that return a new
-    // result
-    cls.def("applyForward", py::overload_cast<ConstArray2D const &>(&Mapping::applyForward, py::const_),
-            "from"_a);
-    cls.def("applyForward",
-            py::overload_cast<std::vector<double> const &>(&Mapping::applyForward, py::const_), "from"_a);
-    cls.def("applyInverse", py::overload_cast<ConstArray2D const &>(&Mapping::applyInverse, py::const_),
-            "from"_a);
-    cls.def("applyInverse",
-            py::overload_cast<std::vector<double> const &>(&Mapping::applyInverse, py::const_), "from"_a);
-    cls.def("tranGridForward",
-            py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridForward,
-                                                                                py::const_),
-            "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
-    cls.def("tranGridInverse",
-            py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridInverse,
-                                                                                py::const_),
-            "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
+void wrapMapping(lsst::utils::python::WrapperCollection &wrappers) {
+using PyMapping = py::class_<Mapping, std::shared_ptr<Mapping>, Object>;
+    wrappers.wrapType(PyMapping(wrappers.module, "Mapping"), [](auto &mod, auto &cls) {
+        cls.def_property_readonly("nIn", &Mapping::getNIn);
+        cls.def_property_readonly("nOut", &Mapping::getNOut);
+        cls.def_property_readonly("isSimple", &Mapping::getIsSimple);
+        cls.def_property_readonly("hasForward", &Mapping::hasForward);
+        cls.def_property_readonly("hasInverse", &Mapping::hasInverse);
+        cls.def_property_readonly("isInverted", &Mapping::isInverted);
+        cls.def_property_readonly("isLinear", &Mapping::getIsLinear);
+        cls.def_property("report", &Mapping::getReport, &Mapping::setReport);
+        cls.def("copy", &Mapping::copy);
+        cls.def("inverted", &Mapping::inverted);
+        cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
+        cls.def("then", &Mapping::then, "next"_a);
+        cls.def("under", &Mapping::under, "next"_a);
+        cls.def("rate", &Mapping::rate, "at"_a, "ax1"_a, "ax2"_a);
+        cls.def("simplified", &Mapping::simplified);
+        // wrap the overloads of applyForward, applyInverse, tranGridForward and tranGridInverse that return a new
+        // result
+        cls.def("applyForward", py::overload_cast<ConstArray2D const &>(&Mapping::applyForward, py::const_),
+                "from"_a);
+        cls.def("applyForward",
+                py::overload_cast<std::vector<double> const &>(&Mapping::applyForward, py::const_), "from"_a);
+        cls.def("applyInverse", py::overload_cast<ConstArray2D const &>(&Mapping::applyInverse, py::const_),
+                "from"_a);
+        cls.def("applyInverse",
+                py::overload_cast<std::vector<double> const &>(&Mapping::applyInverse, py::const_), "from"_a);
+        cls.def("tranGridForward",
+                py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridForward,
+                                                                                    py::const_),
+                "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
+        cls.def("tranGridInverse",
+                py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridInverse,
+                                                                                    py::const_),
+                "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
+    });
 }
 
-}  // namespace
 }  // namespace ast

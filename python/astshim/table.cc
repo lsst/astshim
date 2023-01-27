@@ -21,6 +21,7 @@
  */
 #include <complex>
 #include <memory>
+#include "lsst/cpputils/python.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/complex.h>
@@ -33,27 +34,22 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
+void wrapTable(lsst::utils::python::WrapperCollection &wrappers) {
+  using PyTable = py::class_<Table, std::shared_ptr<Table>, KeyMap>;
+  wrappers.wrapType(
+      PyTable(wrappers.module, "Tsble"), [](auto &mod, auto &cls) {
+        cls.def(py::init<std::string const &>(), "options"_a = "");
 
-PYBIND11_MODULE(table, mod) {
-  py::module::import("astshim.keyMap");
-
-  // Wrap FitsTable
-  py::class_<Table, std::shared_ptr<Table>, KeyMap> cls(mod, "Table");
-
-  cls.def(py::init<std::string const &>(), "options"_a = "");
-
-  cls.def("columnName", &Table::columnName, "index"_a);
-  cls.def("columnType", &Table::columnType, "column"_a);
-  cls.def("columnLength", &Table::columnLength, "column"_a);
-  cls.def("columnNdim", &Table::columnNdim, "column"_a);
-  cls.def("columnUnit", &Table::columnUnit, "column"_a);
-  cls.def("columnLenC", &Table::columnLenC, "column"_a);
-  cls.def("columnShape", &Table::columnShape, "column"_a);
-  cls.def_property_readonly("nColumn", &Table::getNColumn);
-  cls.def_property_readonly("nRow", &Table::getNRow);
-
+        cls.def("columnName", &Table::columnName, "index"_a);
+        cls.def("columnType", &Table::columnType, "column"_a);
+        cls.def("columnLength", &Table::columnLength, "column"_a);
+        cls.def("columnNdim", &Table::columnNdim, "column"_a);
+        cls.def("columnUnit", &Table::columnUnit, "column"_a);
+        cls.def("columnLenC", &Table::columnLenC, "column"_a);
+        cls.def("columnShape", &Table::columnShape, "column"_a);
+        cls.def_property_readonly("nColumn", &Table::getNColumn);
+        cls.def_property_readonly("nRow", &Table::getNRow);
+      });
 }
 
-}  // namespace
 }  // namespace ast

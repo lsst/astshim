@@ -4,11 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose, assert_array_equal
 
-from .channel import Channel
-from .fitsChan import FitsChan
-from .polyMap import PolyMap
-from .xmlChan import XmlChan
-from .stream import StringStream
+from ._astshimLib import Channel, FitsChan, PolyMap, XmlChan, StringStream
 
 
 class ObjectTestCase(unittest.TestCase):

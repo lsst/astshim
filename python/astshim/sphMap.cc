@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/SphMap.h"
@@ -30,21 +31,18 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
+void wrapSphMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PySphMap=py::class_<SphMap, std::shared_ptr<SphMap>, Mapping>;
+    wrappers.wrapType(PySphMap(wrappers.module, "SphMap"), [](auto &mod, auto &cls) {
 
-PYBIND11_MODULE(sphMap, mod) {
-    py::module::import("astshim.mapping");
+        cls.def(py::init<std::string const &>(), "options"_a = "");
+        cls.def(py::init<SphMap const &>());
 
-    py::class_<SphMap, std::shared_ptr<SphMap>, Mapping> cls(mod, "SphMap");
+        cls.def_property_readonly("unitRadius", &SphMap::getUnitRadius);
+        cls.def_property_readonly("polarLong", &SphMap::getPolarLong);
 
-    cls.def(py::init<std::string const &>(), "options"_a = "");
-    cls.def(py::init<SphMap const &>());
-
-    cls.def_property_readonly("unitRadius", &SphMap::getUnitRadius);
-    cls.def_property_readonly("polarLong", &SphMap::getPolarLong);
-
-    cls.def("copy", &SphMap::copy);
+        cls.def("copy", &SphMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

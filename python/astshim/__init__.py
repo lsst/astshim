@@ -22,51 +22,8 @@
 
 """lsst.astshim
 """
-from .base import *
-from .object import *
-from .stream import *
-from .channel import *
-from .mapping import *
-from .frame import *
-from .frameSet import *
-from .frameDict import *
+
 from .keyMap import *
-# Table
-from .table import *
+from ._astshimLib import *
 from .fitsTableContinued import *
-# misc
-from .mapBox import *
-from .mapSplit import *
-from .quadApprox import *
-from .functional import *
-# channels
 from .fitsChanContinued import *
-from .xmlChan import *
-# mappings
-from .chebyMap import *
-from .cmpMap import *
-from .lutMap import *
-from .mathMap import *
-from .matrixMap import *
-from .normMap import *
-from .parallelMap import *
-from .seriesMap import *
-from .pcdMap import *
-from .permMap import *
-from .polyMap import *
-from .rateMap import *
-from .shiftMap import *
-from .slaMap import *
-from .sphMap import *
-from .timeMap import *
-from .tranMap import *
-from .unitMap import *
-from .unitNormMap import *
-from .wcsMap import *
-from .winMap import *
-from .zoomMap import *
-# frames
-from .cmpFrame import *
-from .skyFrame import *
-from .specFrame import *
-from .timeFrame import *

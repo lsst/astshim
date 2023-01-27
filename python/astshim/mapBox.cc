@@ -22,6 +22,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include "ndarray/pybind11.h"
+#include "lsst/cpputils/python.h"
 
 #include "astshim/MapBox.h"
 #include "astshim/Mapping.h"
@@ -30,23 +31,21 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(mapBox, mod) {
-    py::class_<MapBox> cls(mod, "MapBox");
-
-    cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
-            "map"_a, "lbnd"_a, "ubnd"_a, "minOutCoord"_a = 1, "maxOutCoord"_a = 0);
-
-    cls.def_readonly("lbndIn", &MapBox::lbndIn);
-    cls.def_readonly("ubndIn", &MapBox::ubndIn);
-    cls.def_readonly("minOutCoord", &MapBox::minOutCoord);
-    cls.def_readonly("maxOutCoord", &MapBox::maxOutCoord);
-    cls.def_readonly("lbndOut", &MapBox::lbndOut);
-    cls.def_readonly("ubndOut", &MapBox::ubndOut);
-    cls.def_readonly("xl", &MapBox::xl);
-    cls.def_readonly("xu", &MapBox::xu);
+void wrapMapBox(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyMapBox = py::class_<MapBox>;
+    wrappers.wrapType(PyMapBox(wrappers.module, "MapBox"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
+                "map"_a, "lbnd"_a, "ubnd"_a, "minOutCoord"_a = 1, "maxOutCoord"_a = 0);
+        cls.def_readonly("lbndIn", &MapBox::lbndIn);
+        cls.def_readonly("ubndIn", &MapBox::ubndIn);
+        cls.def_readonly("minOutCoord", &MapBox::minOutCoord);
+        cls.def_readonly("maxOutCoord", &MapBox::maxOutCoord);
+        cls.def_readonly("lbndOut", &MapBox::lbndOut);
+        cls.def_readonly("ubndOut", &MapBox::ubndOut);
+        cls.def_readonly("xl", &MapBox::xl);
+        cls.def_readonly("xu", &MapBox::xu);
+    });
 }
 
-}  // namespace
 }  // namespace ast

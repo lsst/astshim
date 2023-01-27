@@ -19,10 +19,10 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <iostream>
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Stream.h"
 
@@ -30,37 +30,36 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(stream, mod) {
-    // Stream
-    py::class_<Stream, std::shared_ptr<Stream>> clsStream(mod, "Stream");
+void wrapStream(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyStream = py::class_<Stream, std::shared_ptr<Stream>>;
+    wrappers.wrapType(PyStream(wrappers.module, "Stream"), [](auto &mod, auto &clsStream) {
 
-    clsStream.def(py::init<std::istream *, std::ostream *>(), "istream"_a, "ostream"_a);
-    clsStream.def(py::init<>());
+        clsStream.def(py::init<std::istream *, std::ostream *>(), "istream"_a, "ostream"_a);
+        clsStream.def(py::init<>());
 
-    clsStream.def_property_readonly("isFits", &Stream::getIsFits);
-    clsStream.def_property_readonly("hasStdStream", &Stream::hasStdStream);
+        clsStream.def_property_readonly("isFits", &Stream::getIsFits);
+        clsStream.def_property_readonly("hasStdStream", &Stream::hasStdStream);
 
-    clsStream.def("source", &Stream::source);
-    clsStream.def("sink", &Stream::sink, "str"_a);
+        clsStream.def("source", &Stream::source);
+        clsStream.def("sink", &Stream::sink, "str"_a);
+    });
 
-    // FileStream
-    py::class_<FileStream, std::shared_ptr<FileStream>, Stream> clsFileStream(mod, "FileStream");
+    using PyFileStream = py::class_<FileStream, std::shared_ptr<FileStream>, Stream>;
+    wrappers.wrapType(PyFileStream(wrappers.module, "FileStream"), [](auto &mod, auto &clsFileStream) {
+        clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a = false);
 
-    clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a = false);
+        clsFileStream.def_property_readonly("path", &FileStream::getPath);
+    });
 
-    clsFileStream.def_property_readonly("path", &FileStream::getPath);
+    using PyStringStream = py::class_<StringStream, std::shared_ptr<StringStream>, Stream>;
+    wrappers.wrapType(PyStringStream(wrappers.module, "StringStream"), [](auto &mod, auto &clsStringStream) {
+        clsStringStream.def(py::init<std::string const &>(), "data"_a = "");
 
-    // StringStream
-    py::class_<StringStream, std::shared_ptr<StringStream>, Stream> clsStringStream(mod, "StringStream");
-
-    clsStringStream.def(py::init<std::string const &>(), "data"_a = "");
-
-    clsStringStream.def("getSourceData", &StringStream::getSourceData);
-    clsStringStream.def("getSinkData", &StringStream::getSinkData);
-    clsStringStream.def("sinkToSource", &StringStream::sinkToSource);
+        clsStringStream.def("getSourceData", &StringStream::getSourceData);
+        clsStringStream.def("getSinkData", &StringStream::getSinkData);
+        clsStringStream.def("sinkToSource", &StringStream::sinkToSource);
+    });
 }
 
-}  // namespace
 }  // namespace ast

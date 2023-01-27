@@ -23,6 +23,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/WcsMap.h"
@@ -31,61 +32,61 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(wcsMap, mod) {
-    py::module::import("astshim.mapping");
+void wrapWcsMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyWcsType=py::enum_<WcsType>;
+    wrappers.wrapType(PyWcsType(wrappers.module, "WcsType"), [](auto &mod, auto &enm) {
+        enm.value("AZP", WcsType::AZP);
+        enm.value("SZP", WcsType::SZP);
+        enm.value("TAN", WcsType::TAN);
+        enm.value("STG", WcsType::STG);
+        enm.value("SIN", WcsType::SIN);
+        enm.value("ARC", WcsType::ARC);
+        enm.value("ZPN", WcsType::ZPN);
+        enm.value("ZEA", WcsType::ZEA);
+        enm.value("AIR", WcsType::AIR);
+        enm.value("CYP", WcsType::CYP);
+        enm.value("CEA", WcsType::CEA);
+        enm.value("CAR", WcsType::CAR);
+        enm.value("MER", WcsType::MER);
+        enm.value("SFL", WcsType::SFL);
+        enm.value("PAR", WcsType::PAR);
+        enm.value("MOL", WcsType::MOL);
+        enm.value("AIT", WcsType::AIT);
+        enm.value("COP", WcsType::COP);
+        enm.value("COE", WcsType::COE);
+        enm.value("COD", WcsType::COD);
+        enm.value("COO", WcsType::COO);
+        enm.value("BON", WcsType::BON);
+        enm.value("PCO", WcsType::PCO);
+        enm.value("TSC", WcsType::TSC);
+        enm.value("CSC", WcsType::CSC);
+        enm.value("QSC", WcsType::QSC);
+        enm.value("NCP", WcsType::NCP);
+        enm.value("GLS", WcsType::GLS);
+        enm.value("TPN", WcsType::TPN);
+        enm.value("HPX", WcsType::HPX);
+        enm.value("XPH", WcsType::XPH);
+        enm.value("WCSBAD", WcsType::WCSBAD);
+        enm.export_values();
+    });
 
-    py::enum_<WcsType>(mod, "WcsType")
-            .value("AZP", WcsType::AZP)
-            .value("SZP", WcsType::SZP)
-            .value("TAN", WcsType::TAN)
-            .value("STG", WcsType::STG)
-            .value("SIN", WcsType::SIN)
-            .value("ARC", WcsType::ARC)
-            .value("ZPN", WcsType::ZPN)
-            .value("ZEA", WcsType::ZEA)
-            .value("AIR", WcsType::AIR)
-            .value("CYP", WcsType::CYP)
-            .value("CEA", WcsType::CEA)
-            .value("CAR", WcsType::CAR)
-            .value("MER", WcsType::MER)
-            .value("SFL", WcsType::SFL)
-            .value("PAR", WcsType::PAR)
-            .value("MOL", WcsType::MOL)
-            .value("AIT", WcsType::AIT)
-            .value("COP", WcsType::COP)
-            .value("COE", WcsType::COE)
-            .value("COD", WcsType::COD)
-            .value("COO", WcsType::COO)
-            .value("BON", WcsType::BON)
-            .value("PCO", WcsType::PCO)
-            .value("TSC", WcsType::TSC)
-            .value("CSC", WcsType::CSC)
-            .value("QSC", WcsType::QSC)
-            .value("NCP", WcsType::NCP)
-            .value("GLS", WcsType::GLS)
-            .value("TPN", WcsType::TPN)
-            .value("HPX", WcsType::HPX)
-            .value("XPH", WcsType::XPH)
-            .value("WCSBAD", WcsType::WCSBAD)
-            .export_values();
+    using PyWcsMap= py::class_<WcsMap, std::shared_ptr<WcsMap>, Mapping>;
+    wrappers.wrapType(PyWcsMap (wrappers.module, "WcsMap"), [](auto &mod, auto &cls) {
 
-    py::class_<WcsMap, std::shared_ptr<WcsMap>, Mapping> cls(mod, "WcsMap");
+        cls.def(py::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,
+                "latax"_a, "options"_a = "");
+        cls.def(py::init<WcsMap const &>());
 
-    cls.def(py::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,
-            "latax"_a, "options"_a = "");
-    cls.def(py::init<WcsMap const &>());
+        cls.def_property_readonly("natLat", &WcsMap::getNatLat);
+        cls.def_property_readonly("natLon", &WcsMap::getNatLon);
+        cls.def_property_readonly("wcsType", &WcsMap::getWcsType);
+        cls.def_property_readonly("wcsAxis", &WcsMap::getWcsAxis);
 
-    cls.def_property_readonly("natLat", &WcsMap::getNatLat);
-    cls.def_property_readonly("natLon", &WcsMap::getNatLon);
-    cls.def_property_readonly("wcsType", &WcsMap::getWcsType);
-    cls.def_property_readonly("wcsAxis", &WcsMap::getWcsAxis);
-
-    cls.def("copy", &WcsMap::copy);
-    cls.def("getPVi_m", &WcsMap::getPVi_m, "i"_a, "m"_a);
-    cls.def("getPVMax", &WcsMap::getPVMax);
+        cls.def("copy", &WcsMap::copy);
+        cls.def("getPVi_m", &WcsMap::getPVi_m, "i"_a, "m"_a);
+        cls.def("getPVMax", &WcsMap::getPVMax);
+    });
 }
 
-}  // namespace
 }  // namespace ast

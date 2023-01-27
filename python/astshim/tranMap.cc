@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/TranMap.h"
@@ -30,22 +31,19 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(tranMap, mod) {
-    py::module::import("astshim.mapping");
+void wrapTranMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyTranMap = py::class_<TranMap, std::shared_ptr<TranMap>, Mapping>;
+    wrappers.wrapType(PyTranMap(wrappers.module, "TranMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
+                "options"_a = "");
+        cls.def(py::init<TranMap const &>());
 
-    py::class_<TranMap, std::shared_ptr<TranMap>, Mapping> cls(mod, "TranMap");
+        cls.def("__getitem__", &TranMap::operator[], py::is_operator());
+        cls.def("__len__", [](TranMap const &) { return 2; });
 
-    cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
-            "options"_a = "");
-    cls.def(py::init<TranMap const &>());
-
-    cls.def("__getitem__", &TranMap::operator[], py::is_operator());
-    cls.def("__len__", [](TranMap const &) { return 2; });
-
-    cls.def("copy", &TranMap::copy);
+        cls.def("copy", &TranMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

@@ -24,6 +24,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/ShiftMap.h"
@@ -32,18 +33,14 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(shiftMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<ShiftMap, std::shared_ptr<ShiftMap>, Mapping> cls(mod, "ShiftMap");
-
-    cls.def(py::init<std::vector<double> const &, std::string const &>(), "shift"_a, "options"_a = "");
-    cls.def(py::init<ShiftMap const &>());
-
-    cls.def("copy", &ShiftMap::copy);
+void wrapShiftMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyShiftMap = py::class_<ShiftMap, std::shared_ptr<ShiftMap>, Mapping>;
+    wrappers.wrapType(PyShiftMap(wrappers.module, "ShiftMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<std::vector<double> const &, std::string const &>(), "shift"_a, "options"_a = "");
+        cls.def(py::init<ShiftMap const &>());
+        cls.def("copy", &ShiftMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

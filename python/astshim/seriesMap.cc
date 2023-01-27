@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/CmpMap.h"
 #include "astshim/Mapping.h"
@@ -31,19 +32,15 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(seriesMap, mod) {
-    py::module::import("astshim.cmpMap");
-
-    py::class_<SeriesMap, std::shared_ptr<SeriesMap>, CmpMap> cls(mod, "SeriesMap");
-
-    cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
-            "options"_a = "");
-    cls.def(py::init<SeriesMap const &>());
-
-    cls.def("copy", &SeriesMap::copy);
+void wrapSeriesMap(lsst::utils::python::WrapperCollection &wrappers){
+    using PySeriesMap =  py::class_<SeriesMap, std::shared_ptr<SeriesMap>, CmpMap>;
+    wrappers.wrapType(PySeriesMap(wrappers.module, "SeriesMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
+                "options"_a = "");
+        cls.def(py::init<SeriesMap const &>());
+        cls.def("copy", &SeriesMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast
