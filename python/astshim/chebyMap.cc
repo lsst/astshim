@@ -25,6 +25,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include "ndarray/pybind11.h"
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/ChebyMap.h"
@@ -33,41 +34,37 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-void declareChebyDomain(py::module const &mod) {
-    py::class_<ChebyDomain, std::shared_ptr<ChebyDomain>> cls(mod, "ChebyDomain");
+void wrapChebyMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyChebyDomain = py::class_<ChebyDomain, std::shared_ptr<ChebyDomain>>;
+    wrappers.wrapType(PyChebyDomain(wrappers.module, "ChebyDomain"), [](auto &mod, auto &cls) {
 
-    cls.def(py::init<std::vector<double> const &, std::vector<double> const &>(), "lbnd"_a, "ubnd"_a);
-    cls.def_readonly("lbnd", &ChebyDomain::lbnd);
-    cls.def_readonly("ubnd", &ChebyDomain::ubnd);
+        cls.def(py::init<std::vector<double> const &, std::vector<double> const &>(), "lbnd"_a, "ubnd"_a);
+        cls.def_readonly("lbnd", &ChebyDomain::lbnd);
+        cls.def_readonly("ubnd", &ChebyDomain::ubnd);
+    });
+
+    using PyChebyMap =  py::class_<ChebyMap, std::shared_ptr<ChebyMap>, Mapping>;
+    wrappers.wrapType(PyChebyMap(wrappers.module, "ChebyMap"), [](auto &mod, auto &cls) {
+
+        cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::vector<double> const &,
+                        std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
+                        std::string const &>(),
+                "coeff_i"_a, "coeff_i"_a, "lbnds_f"_a, "ubnds_f"_a, "lbnds_i"_a, "ubnds_i"_a, "options"_a = "");
+        cls.def(py::init<ConstArray2D const &, int, std::vector<double> const &, std::vector<double> const &,
+                        std::string const &>(),
+                "coeff_i"_a, "nout"_a, "lbnds_f"_a, "ubnds_f"_a, "options"_a = "");
+        cls.def(py::init<ChebyMap const &>());
+
+        cls.def("copy", &ChebyMap::copy);
+        cls.def("getDomain", &ChebyMap::getDomain, "forward"_a);
+        cls.def("polyTran",
+                py::overload_cast<bool, double, double, int, std::vector<double> const &,
+                        std::vector<double> const &>(&ChebyMap::polyTran, py::const_),
+                "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a, "ubnd"_a);
+        cls.def("polyTran", py::overload_cast<bool, double, double, int>(&ChebyMap::polyTran, py::const_),
+                "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a);
+    });
 }
 
-PYBIND11_MODULE(chebyMap, mod) {
-    py::module::import("astshim.mapping");
-
-    declareChebyDomain(mod);
-
-    py::class_<ChebyMap, std::shared_ptr<ChebyMap>, Mapping> cls(mod, "ChebyMap");
-
-    cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::vector<double> const &,
-                     std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
-                     std::string const &>(),
-            "coeff_i"_a, "coeff_i"_a, "lbnds_f"_a, "ubnds_f"_a, "lbnds_i"_a, "ubnds_i"_a, "options"_a = "");
-    cls.def(py::init<ConstArray2D const &, int, std::vector<double> const &, std::vector<double> const &,
-                     std::string const &>(),
-            "coeff_i"_a, "nout"_a, "lbnds_f"_a, "ubnds_f"_a, "options"_a = "");
-    cls.def(py::init<ChebyMap const &>());
-
-    cls.def("copy", &ChebyMap::copy);
-    cls.def("getDomain", &ChebyMap::getDomain, "forward"_a);
-    cls.def("polyTran",
-            py::overload_cast<bool, double, double, int, std::vector<double> const &,
-                              std::vector<double> const &>(&ChebyMap::polyTran, py::const_),
-            "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a, "ubnd"_a);
-    cls.def("polyTran", py::overload_cast<bool, double, double, int>(&ChebyMap::polyTran, py::const_),
-            "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a);
-}
-
-}  // namespace
 }  // namespace ast

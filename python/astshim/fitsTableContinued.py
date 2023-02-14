@@ -1,7 +1,6 @@
 __all__ = ["FitsTable", "getColumnData"]
 
-from . import base
-from .fitsTable import FitsTable
+from ._astshimLib import DataType, FitsTable
 
 
 def getColumnData(self, column):
@@ -21,7 +20,7 @@ def getColumnData(self, column):
     shape = self.columnShape(column)
     dtype = self.columnType(column)
 
-    if dtype == base.DataType.DoubleType:
+    if dtype == DataType.DoubleType:
         newshape = list(shape)
         newshape.append(nrows)
         coldata = self.getColumnData1D(column)

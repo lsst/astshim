@@ -22,7 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
-//#include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Channel.h"
 #include "astshim/KeyMap.h"
@@ -32,27 +32,25 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(channel, mod) {
-    py::module::import("astshim.object");
+void wrapChannel(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyChannel = py::class_<Channel, std::shared_ptr<Channel>, Object>;
+    wrappers.wrapType(PyChannel(wrappers.module, "Channel"), [](auto &mod, auto &cls) {
 
-    py::class_<Channel, std::shared_ptr<Channel>, Object> cls(mod, "Channel");
+        cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
-    cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
+        cls.def_property("comment", &Channel::getComment, &Channel::setComment);
+        cls.def_property("full", &Channel::getFull, &Channel::setFull);
+        cls.def_property("indent", &Channel::getIndent, &Channel::setIndent);
+        cls.def_property("reportLevel", &Channel::getReportLevel, &Channel::setReportLevel);
+        cls.def_property("skip", &Channel::getSkip, &Channel::setSkip);
+        cls.def_property("strict", &Channel::getStrict, &Channel::setStrict);
 
-    cls.def_property("comment", &Channel::getComment, &Channel::setComment);
-    cls.def_property("full", &Channel::getFull, &Channel::setFull);
-    cls.def_property("indent", &Channel::getIndent, &Channel::setIndent);
-    cls.def_property("reportLevel", &Channel::getReportLevel, &Channel::setReportLevel);
-    cls.def_property("skip", &Channel::getSkip, &Channel::setSkip);
-    cls.def_property("strict", &Channel::getStrict, &Channel::setStrict);
-
-    cls.def("copy", &Channel::copy);
-    cls.def("read", &Channel::read);
-    cls.def("write", &Channel::write, "object"_a);
-    cls.def("warnings", &Channel::warnings);
+        cls.def("copy", &Channel::copy);
+        cls.def("read", &Channel::read);
+        cls.def("write", &Channel::write, "object"_a);
+        cls.def("warnings", &Channel::warnings);
+    });
 }
 
-}  // namespace
 }  // namespace ast

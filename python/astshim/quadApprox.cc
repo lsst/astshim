@@ -21,6 +21,7 @@
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/QuadApprox.h"
@@ -29,19 +30,15 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(quadApprox, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<QuadApprox> cls(mod, "QuadApprox");
-
-    cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
-            "map"_a, "lbnd"_a, "ubnd"_a, "nx"_a = 3, "ny"_a = 3);
-
-    cls.def_readonly("fit", &QuadApprox::fit);
-    cls.def_readonly("rms", &QuadApprox::rms);
+void wrapQuadApprox(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyQuadApprox =  py::class_<QuadApprox>;
+    wrappers.wrapType(PyQuadApprox(wrappers.module, "QuadApprox"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
+                "map"_a, "lbnd"_a, "ubnd"_a, "nx"_a = 3, "ny"_a = 3);
+        cls.def_readonly("fit", &QuadApprox::fit);
+        cls.def_readonly("rms", &QuadApprox::rms);
+    });
 }
 
-}  // namespace
 }  // namespace ast

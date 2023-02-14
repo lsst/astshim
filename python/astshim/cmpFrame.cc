@@ -22,7 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
-//#include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/CmpFrame.h"
 #include "astshim/Frame.h"
@@ -31,22 +31,17 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(cmpFrame, mod) {
-    py::module::import("astshim.frame");
-
-    py::class_<CmpFrame, std::shared_ptr<CmpFrame>, Frame> cls(mod, "CmpFrame");
-
-    cls.def(py::init<Frame const &, Frame const &, std::string const &>(), "frame1"_a, "frame2"_a,
-            "options"_a = "");
-    cls.def(py::init<CmpFrame const &>());
-
-    cls.def("__getitem__", &CmpFrame::operator[], py::is_operator());
-    cls.def("__len__", [](CmpFrame const &) { return 2; });
-
-    cls.def("copy", &CmpFrame::copy);
+void wrapCmpFrame(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyCmpFrame =  py::class_<CmpFrame, std::shared_ptr<CmpFrame>, Frame>;
+    wrappers.wrapType(PyCmpFrame(wrappers.module, "CmpFrame"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Frame const &, Frame const &, std::string const &>(), "frame1"_a, "frame2"_a,
+                "options"_a = "");
+        cls.def(py::init<CmpFrame const &>());
+        cls.def("__getitem__", &CmpFrame::operator[], py::is_operator());
+        cls.def("__len__", [](CmpFrame const &) { return 2; });
+        cls.def("copy", &CmpFrame::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

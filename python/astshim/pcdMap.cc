@@ -24,6 +24,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/PcdMap.h"
@@ -32,22 +33,17 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(pcdMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<PcdMap, std::shared_ptr<PcdMap>, Mapping> cls(mod, "PcdMap");
-
-    cls.def(py::init<double, std::vector<double> const &, std::string const &>(), "disco"_a, "pcdcen"_a,
-            "options"_a = "");
-    cls.def(py::init<PcdMap const &>());
-
-    cls.def_property_readonly("disco", &PcdMap::getDisco);
-    cls.def_property_readonly("pcdCen", py::overload_cast<>(&PcdMap::getPcdCen, py::const_));
-
-    cls.def("copy", &PcdMap::copy);
+void wrapPcdMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyPcdMap =  py::class_<PcdMap, std::shared_ptr<PcdMap>, Mapping>;
+    wrappers.wrapType(PyPcdMap(wrappers.module, "PcdMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<double, std::vector<double> const &, std::string const &>(), "disco"_a, "pcdcen"_a,
+                "options"_a = "");
+        cls.def(py::init<PcdMap const &>());
+        cls.def_property_readonly("disco", &PcdMap::getDisco);
+        cls.def_property_readonly("pcdCen", py::overload_cast<>(&PcdMap::getPcdCen, py::const_));
+        cls.def("copy", &PcdMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

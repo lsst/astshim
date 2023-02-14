@@ -24,6 +24,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
 #include "astshim/Mapping.h"
@@ -34,46 +35,43 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(specFrame, mod) {
-    py::module::import("astshim.frame");
+void wrapSpecFrame(lsst::utils::python::WrapperCollection &wrappers) {
+    using PySpecFrame= py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame>;
+    wrappers.wrapType(PySpecFrame(wrappers.module, "SpecFrame"), [](auto &mod, auto &cls) {
+        cls.def(py::init<std::string const &>(), "options"_a = "");
+        cls.def(py::init<SpecFrame const &>());
 
-    py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame> cls(mod, "SpecFrame");
+        cls.def("copy", &SpecFrame::copy);
 
-    cls.def(py::init<std::string const &>(), "options"_a = "");
-    cls.def(py::init<SpecFrame const &>());
+        cls.def("getAlignSpecOffset", &SpecFrame::getAlignSpecOffset);
+        cls.def("getAlignStdOfRest", &SpecFrame::getAlignStdOfRest);
+        cls.def("getRefDec", &SpecFrame::getRefDec);
+        cls.def("getRefRA", &SpecFrame::getRefRA);
+        cls.def("getRefPos", py::overload_cast<SkyFrame const &>(&SpecFrame::getRefPos, py::const_), "frame"_a);
+        cls.def("getRefPos", py::overload_cast<>(&SpecFrame::getRefPos, py::const_));
+        cls.def("getRestFreq", &SpecFrame::getRestFreq);
+        cls.def("getSourceSys", &SpecFrame::getSourceSys);
+        cls.def("getSourceVel", &SpecFrame::getSourceVel);
+        cls.def("getSourceVRF", &SpecFrame::getSourceVRF);
+        cls.def("getSpecOrigin", &SpecFrame::getSpecOrigin);
+        cls.def("getStdOfRest", &SpecFrame::getStdOfRest);
 
-    cls.def("copy", &SpecFrame::copy);
-
-    cls.def("getAlignSpecOffset", &SpecFrame::getAlignSpecOffset);
-    cls.def("getAlignStdOfRest", &SpecFrame::getAlignStdOfRest);
-    cls.def("getRefDec", &SpecFrame::getRefDec);
-    cls.def("getRefRA", &SpecFrame::getRefRA);
-    cls.def("getRefPos", py::overload_cast<SkyFrame const &>(&SpecFrame::getRefPos, py::const_), "frame"_a);
-    cls.def("getRefPos", py::overload_cast<>(&SpecFrame::getRefPos, py::const_));
-    cls.def("getRestFreq", &SpecFrame::getRestFreq);
-    cls.def("getSourceSys", &SpecFrame::getSourceSys);
-    cls.def("getSourceVel", &SpecFrame::getSourceVel);
-    cls.def("getSourceVRF", &SpecFrame::getSourceVRF);
-    cls.def("getSpecOrigin", &SpecFrame::getSpecOrigin);
-    cls.def("getStdOfRest", &SpecFrame::getStdOfRest);
-
-    cls.def("setAlignSpecOffset", &SpecFrame::setAlignSpecOffset, "align"_a);
-    cls.def("setAlignStdOfRest", &SpecFrame::setAlignStdOfRest, "stdOfRest"_a);
-    cls.def("setRefDec", &SpecFrame::setRefDec, "refDec"_a);
-    cls.def("setRefRA", &SpecFrame::setRefRA, "refRA"_a);
-    cls.def("setRefPos", py::overload_cast<SkyFrame const &, double, double>(&SpecFrame::setRefPos),
-            "frame"_a, "lon"_a, "lat"_a);
-    cls.def("setRefPos", py::overload_cast<double, double>(&SpecFrame::setRefPos), "ra"_a, "dec"_a);
-    cls.def("setRestFreq", py::overload_cast<double>(&SpecFrame::setRestFreq), "freq"_a);
-    cls.def("setRestFreq", py::overload_cast<std::string const &>(&SpecFrame::setRestFreq), "freq"_a);
-    cls.def("setSourceSys", &SpecFrame::setSourceSys, "system"_a);
-    cls.def("setSourceVel", &SpecFrame::setSourceVel, "vel"_a);
-    cls.def("setSourceVRF", &SpecFrame::setSourceVRF, "vrf"_a);
-    cls.def("setSpecOrigin", &SpecFrame::setSpecOrigin, "origin"_a);
-    cls.def("setStdOfRest", &SpecFrame::setStdOfRest, "stdOfRest"_a);
+        cls.def("setAlignSpecOffset", &SpecFrame::setAlignSpecOffset, "align"_a);
+        cls.def("setAlignStdOfRest", &SpecFrame::setAlignStdOfRest, "stdOfRest"_a);
+        cls.def("setRefDec", &SpecFrame::setRefDec, "refDec"_a);
+        cls.def("setRefRA", &SpecFrame::setRefRA, "refRA"_a);
+        cls.def("setRefPos", py::overload_cast<SkyFrame const &, double, double>(&SpecFrame::setRefPos),
+                "frame"_a, "lon"_a, "lat"_a);
+        cls.def("setRefPos", py::overload_cast<double, double>(&SpecFrame::setRefPos), "ra"_a, "dec"_a);
+        cls.def("setRestFreq", py::overload_cast<double>(&SpecFrame::setRestFreq), "freq"_a);
+        cls.def("setRestFreq", py::overload_cast<std::string const &>(&SpecFrame::setRestFreq), "freq"_a);
+        cls.def("setSourceSys", &SpecFrame::setSourceSys, "system"_a);
+        cls.def("setSourceVel", &SpecFrame::setSourceVel, "vel"_a);
+        cls.def("setSourceVRF", &SpecFrame::setSourceVRF, "vrf"_a);
+        cls.def("setSpecOrigin", &SpecFrame::setSpecOrigin, "origin"_a);
+        cls.def("setStdOfRest", &SpecFrame::setStdOfRest, "stdOfRest"_a);
+    });
 }
 
-}  // namespace
 }  // namespace ast

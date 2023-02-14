@@ -24,6 +24,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/SlaMap.h"
@@ -32,19 +33,15 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(slaMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<SlaMap, std::shared_ptr<SlaMap>, Mapping> cls(mod, "SlaMap");
-
-    cls.def(py::init<std::string const &>(), "options"_a = "");
-    cls.def(py::init<SlaMap const &>());
-
-    cls.def("copy", &SlaMap::copy);
-    cls.def("add", &SlaMap::add, "cvt"_a, "args"_a = std::vector<double>());
+void wrapSlaMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PySlaMap = py::class_<SlaMap, std::shared_ptr<SlaMap>, Mapping>;
+    wrappers.wrapType(PySlaMap(wrappers.module, "SlaMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<std::string const &>(), "options"_a = "");
+        cls.def(py::init<SlaMap const &>());
+        cls.def("copy", &SlaMap::copy);
+        cls.def("add", &SlaMap::add, "cvt"_a, "args"_a = std::vector<double>());
+    });
 }
 
-}  // namespace
 }  // namespace ast

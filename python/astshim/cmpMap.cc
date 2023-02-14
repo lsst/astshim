@@ -20,7 +20,7 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <pybind11/pybind11.h>
-//#include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/CmpMap.h"
 #include "astshim/Mapping.h"
@@ -29,23 +29,18 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(cmpMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<CmpMap, std::shared_ptr<CmpMap>, Mapping> cls(mod, "CmpMap");
-
-    cls.def(py::init<Mapping const &, Mapping const &, bool, std::string const &>(), "map1"_a, "map2"_a,
-            "series"_a, "options"_a = "");
-    cls.def(py::init<CmpMap const &>());
-
-    cls.def("__getitem__", &CmpMap::operator[], py::is_operator());
-    cls.def("__len__", [](CmpMap const &) { return 2; });
-
-    cls.def("copy", &CmpMap::copy);
-    cls.def_property_readonly("series", &CmpMap::getSeries);
+void wrapCmpMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PrCmpMap = py::class_<CmpMap, std::shared_ptr<CmpMap>, Mapping>;
+    wrappers.wrapType(PrCmpMap(wrappers.module, "CmpMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, Mapping const &, bool, std::string const &>(), "map1"_a, "map2"_a,
+                "series"_a, "options"_a = "");
+        cls.def(py::init<CmpMap const &>());
+        cls.def("__getitem__", &CmpMap::operator[], py::is_operator());
+        cls.def("__len__", [](CmpMap const &) { return 2; });
+        cls.def("copy", &CmpMap::copy);
+        cls.def_property_readonly("series", &CmpMap::getSeries);
+    });
 }
 
-}  // namespace
 }  // namespace ast

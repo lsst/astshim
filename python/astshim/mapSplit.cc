@@ -23,6 +23,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/MapSplit.h"
@@ -31,17 +32,15 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(mapSplit, mod) {
-    py::class_<MapSplit> cls(mod, "MapSplit");
-
-    cls.def(py::init<Mapping const &, std::vector<int> const &>(), "map"_a, "in"_a);
-
-    cls.def_readonly("splitMap", &MapSplit::splitMap);
-    cls.def_readonly("origIn", &MapSplit::origIn);
-    cls.def_readonly("origOut", &MapSplit::origOut);
+void wrapMapSplit(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyMapSplit = py::class_<MapSplit>;
+    wrappers.wrapType(PyMapSplit(wrappers.module, "MapSplit"), [](auto &mod, auto &cls) {
+        cls.def(py::init<Mapping const &, std::vector<int> const &>(), "map"_a, "in"_a);
+        cls.def_readonly("splitMap", &MapSplit::splitMap);
+        cls.def_readonly("origIn", &MapSplit::origIn);
+        cls.def_readonly("origOut", &MapSplit::origOut);
+    });
 }
 
-}  // namespace
 }  // namespace ast

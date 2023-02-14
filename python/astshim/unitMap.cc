@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <pybind11/pybind11.h>
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/UnitMap.h"
@@ -30,18 +31,14 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(unitMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<UnitMap, std::shared_ptr<UnitMap>, Mapping> cls(mod, "UnitMap");
-
-    cls.def(py::init<int, std::string const &>(), "ncoord"_a, "options"_a = "");
-    cls.def(py::init<UnitMap const &>());
-
-    cls.def("copy", &UnitMap::copy);
+void wrapUnitMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyUnitMap = py::class_<UnitMap, std::shared_ptr<UnitMap>, Mapping>;
+    wrappers.wrapType(PyUnitMap(wrappers.module, "UnitMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<int, std::string const &>(), "ncoord"_a, "options"_a = "");
+        cls.def(py::init<UnitMap const &>());
+        cls.def("copy", &UnitMap::copy);
+    });
 }
 
-}  // namespace
 }  // namespace ast

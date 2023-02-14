@@ -25,9 +25,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/complex.h>
 #include <pybind11/stl.h>
+#include "lsst/cpputils/python.h"
 #include "ndarray/pybind11.h"
 
-#include "astshim/KeyMap.h"
 #include "astshim/Table.h"
 #include "astshim/FitsTable.h"
 
@@ -35,21 +35,16 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(fitsTable, mod) {
-  py::module::import("astshim.table");
-
-  // Wrap FitsTable
-  py::class_<FitsTable, std::shared_ptr<FitsTable>, Table> cls(mod, "FitsTable");
-
-  cls.def(py::init<std::string const &>(), "options"_a = "");
-  cls.def(py::init<FitsChan const &, std::string const &>(), "header"_a, "options"_a = "");
-  cls.def("getTableHeader", &FitsTable::getTableHeader);
-  cls.def("columnSize", &FitsTable::columnSize, "column"_a);
-  cls.def("getColumnData1D", &FitsTable::getColumnData1D, "column"_a);
-
+void wrapFitsTable(lsst::utils::python::WrapperCollection &wrappers) {
+  using PyFitsTable = py::class_<FitsTable, std::shared_ptr<FitsTable>, Table>;
+    wrappers.wrapType(PyFitsTable(wrappers.module, "FitsTable"), [](auto &mod, auto &cls) {
+        cls.def(py::init<std::string const &>(), "options"_a = "");
+        cls.def(py::init<FitsChan const &, std::string const &>(), "header"_a, "options"_a = "");
+        cls.def("getTableHeader", &FitsTable::getTableHeader);
+        cls.def("columnSize", &FitsTable::columnSize, "column"_a);
+        cls.def("getColumnData1D", &FitsTable::getColumnData1D, "column"_a);
+    });
 }
 
-}  // namespace
 }  // namespace ast

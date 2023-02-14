@@ -25,6 +25,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include "ndarray/pybind11.h"
+#include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/PolyMap.h"
@@ -33,27 +34,22 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-namespace {
 
-PYBIND11_MODULE(polyMap, mod) {
-    py::module::import("astshim.mapping");
-
-    py::class_<PolyMap, std::shared_ptr<PolyMap>, Mapping> cls(mod, "PolyMap");
-
-    cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::string const &>(), "coeff_f"_a,
-            "coeff_i"_a, "options"_a = "IterInverse=0");
-    cls.def(py::init<ConstArray2D const &, int, std::string const &>(), "coeff_f"_a, "nout"_a,
-            "options"_a = "IterInverse=0");
-    cls.def(py::init<PolyMap const &>());
-
-    cls.def_property_readonly("iterInverse", &PolyMap::getIterInverse);
-    cls.def_property_readonly("nIterInverse", &PolyMap::getNIterInverse);
-    cls.def_property_readonly("tolInverse", &PolyMap::getTolInverse);
-
-    cls.def("copy", &PolyMap::copy);
-    cls.def("polyTran", &PolyMap::polyTran, "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a,
-            "ubnd"_a);
+void wrapPolyMap(lsst::utils::python::WrapperCollection &wrappers){
+    using PyPolyMap = py::class_<PolyMap, std::shared_ptr<PolyMap>, Mapping>;
+    wrappers.wrapType(PyPolyMap (wrappers.module, "PolyMap"), [](auto &mod, auto &cls) {
+        cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::string const &>(), "coeff_f"_a,
+                "coeff_i"_a, "options"_a = "IterInverse=0");
+        cls.def(py::init<ConstArray2D const &, int, std::string const &>(), "coeff_f"_a, "nout"_a,
+                "options"_a = "IterInverse=0");
+        cls.def(py::init<PolyMap const &>());
+        cls.def_property_readonly("iterInverse", &PolyMap::getIterInverse);
+        cls.def_property_readonly("nIterInverse", &PolyMap::getNIterInverse);
+        cls.def_property_readonly("tolInverse", &PolyMap::getTolInverse);
+        cls.def("copy", &PolyMap::copy);
+        cls.def("polyTran", &PolyMap::polyTran, "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a,
+                "ubnd"_a);
+    });
 }
 
-}  // namespace
 }  // namespace ast
