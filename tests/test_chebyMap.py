@@ -125,7 +125,12 @@ class TestChebyMap(MappingTestCase):
                 chebval2d(x1, x2, c2),
             )
 
-        null_coeff = np.zeros(shape=(0, 4))
+        # TODO: DM-38580
+        # This two-step way of creating a zero-size array gives
+        # an array with non-zero strides which makes pybind11/
+        # ndarray happy.
+        null_coeff = np.array([], dtype=float)
+        null_coeff.shape = (0, 4)
         self.assertEqual(nin, null_coeff.shape[1] - 2)
 
         # arbitary input points that cover the full domain

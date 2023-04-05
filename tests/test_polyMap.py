@@ -155,6 +155,10 @@ class TestPolyMap(MappingTestCase):
     def test_PolyMapEmptyForwardCoeffs(self):
         """Test constructing a PolyMap with empty forward coefficients
         """
+        # TODO: DM-38580
+        # This two-step way of creating a zero-size array gives
+        # an array with non-zero strides which makes pybind11/
+        # ndarray happy.
         coeff_f = np.array([], dtype=float)
         coeff_f.shape = (0, 4)
         coeff_i = np.array([
@@ -183,6 +187,10 @@ class TestPolyMap(MappingTestCase):
             [1., 2, 1, 0],
             [-1., 2, 0, 1]
         ])
+        # TODO: DM-38580
+        # This two-step way of creating a zero-size array gives
+        # an array with non-zero strides which makes pybind11/
+        # ndarray happy.
         coeff_i = np.array([], dtype=float)
         coeff_i.shape = (0, 4)
         pm = ast.PolyMap(coeff_f, coeff_i)
@@ -206,6 +214,10 @@ class TestPolyMap(MappingTestCase):
         """Test constructing a PolyMap with neither forward nor inverse
         coefficients
         """
+        # TODO: DM-38580
+        # This two-step way of creating a zero-size array gives
+        # an array with non-zero strides which makes pybind11/
+        # ndarray happy.
         coeff_f = np.array([], dtype=float)
         coeff_f.shape = (0, 4)
         coeff_i = np.array([], dtype=float)
