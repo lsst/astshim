@@ -31,7 +31,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapCmpMap(lsst::utils::python::WrapperCollection &wrappers) {
-    using PrCmpMap = py::class_<CmpMap, std::shared_ptr<CmpMap>, Mapping>;
+    using PrCmpMap = py::class_<CmpMap, Mapping>;
     wrappers.wrapType(PrCmpMap(wrappers.module, "CmpMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, Mapping const &, bool, std::string const &>(), "map1"_a, "map2"_a,
                 "series"_a, "options"_a = "");

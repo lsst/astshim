@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapCmpFrame(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyCmpFrame =  py::class_<CmpFrame, std::shared_ptr<CmpFrame>, Frame>;
+    using PyCmpFrame =  py::class_<CmpFrame, Frame>;
     wrappers.wrapType(PyCmpFrame(wrappers.module, "CmpFrame"), [](auto &mod, auto &cls) {
         cls.def(py::init<Frame const &, Frame const &, std::string const &>(), "frame1"_a, "frame2"_a,
                 "options"_a = "");

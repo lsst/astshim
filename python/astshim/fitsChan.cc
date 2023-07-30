@@ -78,7 +78,7 @@ void wrapFitsChan(lsst::utils::python::WrapperCollection &wrappers) {
     wrapFoundValue<bool>(wrappers, "L");
 
     // Wrap FitsChan
-    using PyFitsChan =  py::class_<FitsChan, std::shared_ptr<FitsChan>, Channel>;
+    using PyFitsChan =  py::class_<FitsChan, Channel>;
     wrappers.wrapType(PyFitsChan(wrappers.module, "FitsChan"), [](auto &mod, auto &cls) {
         cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 

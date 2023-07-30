@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapRateMap(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyRateMap =  py::class_<RateMap, std::shared_ptr<RateMap>, Mapping> ;
+    using PyRateMap =  py::class_<RateMap, Mapping> ;
     wrappers.wrapType(PyRateMap(wrappers.module, "RateMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, int, int, std::string const &>(), "map"_a, "ax1"_a, "ax2"_a,
                 "options"_a = "");

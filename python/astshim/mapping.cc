@@ -36,7 +36,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapMapping(lsst::utils::python::WrapperCollection &wrappers) {
-using PyMapping = py::class_<Mapping, std::shared_ptr<Mapping>, Object>;
+using PyMapping = py::class_<Mapping, Object>;
     wrappers.wrapType(PyMapping(wrappers.module, "Mapping"), [](auto &mod, auto &cls) {
         cls.def_property_readonly("nIn", &Mapping::getNIn);
         cls.def_property_readonly("nOut", &Mapping::getNOut);

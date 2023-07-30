@@ -35,7 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapLutMap(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyLutMap = py::class_<LutMap, std::shared_ptr<LutMap>, Mapping>;
+    using PyLutMap = py::class_<LutMap, Mapping>;
     wrappers.wrapType(PyLutMap(wrappers.module, "LutMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::vector<double> const &, double, double, std::string const &>(), "lut"_a, "start"_a,
                 "inc"_a, "options"_a = "");

@@ -32,7 +32,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapStream(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyStream = py::class_<Stream, std::shared_ptr<Stream>>;
+    using PyStream = py::class_<Stream>;
     wrappers.wrapType(PyStream(wrappers.module, "Stream"), [](auto &mod, auto &clsStream) {
 
         clsStream.def(py::init<std::istream *, std::ostream *>(), "istream"_a, "ostream"_a);
@@ -45,14 +45,14 @@ void wrapStream(lsst::utils::python::WrapperCollection &wrappers) {
         clsStream.def("sink", &Stream::sink, "str"_a);
     });
 
-    using PyFileStream = py::class_<FileStream, std::shared_ptr<FileStream>, Stream>;
+    using PyFileStream = py::class_<FileStream, Stream>;
     wrappers.wrapType(PyFileStream(wrappers.module, "FileStream"), [](auto &mod, auto &clsFileStream) {
         clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a = false);
 
         clsFileStream.def_property_readonly("path", &FileStream::getPath);
     });
 
-    using PyStringStream = py::class_<StringStream, std::shared_ptr<StringStream>, Stream>;
+    using PyStringStream = py::class_<StringStream, Stream>;
     wrappers.wrapType(PyStringStream(wrappers.module, "StringStream"), [](auto &mod, auto &clsStringStream) {
         clsStringStream.def(py::init<std::string const &>(), "data"_a = "");
 

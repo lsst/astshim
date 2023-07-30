@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapParallelMap(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyParallelMap = py::class_<ParallelMap, std::shared_ptr<ParallelMap>, CmpMap>;
+    using PyParallelMap = py::class_<ParallelMap, CmpMap>;
     wrappers.wrapType(PyParallelMap(wrappers.module, "ParallelMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
                 "options"_a = "");

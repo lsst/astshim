@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapSeriesMap(lsst::utils::python::WrapperCollection &wrappers){
-    using PySeriesMap =  py::class_<SeriesMap, std::shared_ptr<SeriesMap>, CmpMap>;
+    using PySeriesMap =  py::class_<SeriesMap, CmpMap>;
     wrappers.wrapType(PySeriesMap(wrappers.module, "SeriesMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
                 "options"_a = "");

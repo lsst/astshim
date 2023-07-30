@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapZoomMap(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyZoomMap = py::class_<ZoomMap, std::shared_ptr<ZoomMap>, Mapping>;
+    using PyZoomMap = py::class_<ZoomMap, Mapping>;
     wrappers.wrapType(PyZoomMap(wrappers.module, "ZoomMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<int, double, std::string const &>(),"ncoord"_a, "zoom"_a, "options"_a = "");
         cls.def(py::init<ZoomMap const &>());

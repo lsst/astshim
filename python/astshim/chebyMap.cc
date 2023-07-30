@@ -36,7 +36,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapChebyMap(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyChebyDomain = py::class_<ChebyDomain, std::shared_ptr<ChebyDomain>>;
+    using PyChebyDomain = py::class_<ChebyDomain>;
     wrappers.wrapType(PyChebyDomain(wrappers.module, "ChebyDomain"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<std::vector<double> const &, std::vector<double> const &>(), "lbnd"_a, "ubnd"_a);
@@ -44,7 +44,7 @@ void wrapChebyMap(lsst::utils::python::WrapperCollection &wrappers) {
         cls.def_readonly("ubnd", &ChebyDomain::ubnd);
     });
 
-    using PyChebyMap =  py::class_<ChebyMap, std::shared_ptr<ChebyMap>, Mapping>;
+    using PyChebyMap =  py::class_<ChebyMap, Mapping>;
     wrappers.wrapType(PyChebyMap(wrappers.module, "ChebyMap"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::vector<double> const &,

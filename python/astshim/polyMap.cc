@@ -36,7 +36,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapPolyMap(lsst::utils::python::WrapperCollection &wrappers){
-    using PyPolyMap = py::class_<PolyMap, std::shared_ptr<PolyMap>, Mapping>;
+    using PyPolyMap = py::class_<PolyMap, Mapping>;
     wrappers.wrapType(PyPolyMap (wrappers.module, "PolyMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::string const &>(), "coeff_f"_a,
                 "coeff_i"_a, "options"_a = "IterInverse=0");

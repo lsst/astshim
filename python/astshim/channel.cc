@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapChannel(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyChannel = py::class_<Channel, std::shared_ptr<Channel>, Object>;
+    using PyChannel = py::class_<Channel, Object>;
     wrappers.wrapType(PyChannel(wrappers.module, "Channel"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");

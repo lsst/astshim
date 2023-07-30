@@ -71,7 +71,7 @@ void wrapWcsMap(lsst::utils::python::WrapperCollection &wrappers) {
         enm.export_values();
     });
 
-    using PyWcsMap= py::class_<WcsMap, std::shared_ptr<WcsMap>, Mapping>;
+    using PyWcsMap= py::class_<WcsMap, Mapping>;
     wrappers.wrapType(PyWcsMap (wrappers.module, "WcsMap"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,

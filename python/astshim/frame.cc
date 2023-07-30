@@ -72,7 +72,7 @@ void wrapFrame(lsst::utils::python::WrapperCollection &wrappers) {
     wrapResolvedPoint(wrappers);
     wrapFrameMapping(wrappers);
 
-    using PyFrame = py::class_<Frame, std::shared_ptr<Frame>, Mapping>;
+    using PyFrame = py::class_<Frame, Mapping>;
     wrappers.wrapType(PyFrame(wrappers.module, "Frame"), [](auto &mod, auto &cls) {
         cls.def(py::init<int, std::string const &>(), "naxes"_a, "options"_a = "");
         cls.def(py::init<Frame const &>());

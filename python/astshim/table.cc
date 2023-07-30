@@ -35,7 +35,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 void wrapTable(lsst::utils::python::WrapperCollection &wrappers) {
-  using PyTable = py::class_<Table, std::shared_ptr<Table>, KeyMap>;
+  using PyTable = py::class_<Table, KeyMap>;
   wrappers.wrapType(
       PyTable(wrappers.module, "Tsble"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::string const &>(), "options"_a = "");

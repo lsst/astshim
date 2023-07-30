@@ -55,7 +55,7 @@ public:
 }
 
 void wrapObject(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyObjectMaker = py::class_<ObjectMaker, std::shared_ptr<ObjectMaker>>;
+    using PyObjectMaker = py::class_<ObjectMaker>;
     static auto makerCls = wrappers.wrapType(PyObjectMaker(wrappers.module, "ObjectMaker"), [](auto &mod, auto &cls) {
         cls.def(py::init<>());
         cls.def("__call__", &ObjectMaker::operator());
@@ -63,7 +63,7 @@ void wrapObject(lsst::utils::python::WrapperCollection &wrappers) {
                      [cls](ObjectMaker const &self) { return py::make_tuple(cls, py::tuple()); });
     });
 
-    using PyObject = py::class_<Object, std::shared_ptr<Object>>;
+    using PyObject = py::class_<Object>;
     wrappers.wrapType(PyObject(wrappers.module, "Object"), [](auto &mod, auto &cls) {
         cls.def_static("fromString", &Object::fromString);
         // do not wrap fromAstObject because it uses a bare AST pointer

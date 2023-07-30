@@ -64,7 +64,7 @@ public:
 }
 
 void wrapFrameDict(lsst::utils::python::WrapperCollection &wrappers) {
-    using PyFrameDictMaker = py::class_<FrameDictMaker, std::shared_ptr<FrameDictMaker>>;
+    using PyFrameDictMaker = py::class_<FrameDictMaker>;
     static auto  clsMaker = wrappers.wrapType(PyFrameDictMaker(wrappers.module, "FrameDictMaker"), [](auto &mod, auto &cls) {
         cls.def(py::init<>());
         cls.def("__call__", &FrameDictMaker::operator());
@@ -72,7 +72,7 @@ void wrapFrameDict(lsst::utils::python::WrapperCollection &wrappers) {
                 [cls](FrameDictMaker const &self) { return py::make_tuple(cls, py::tuple()); });
     });
 
-    using PyFrameDict = py::class_<FrameDict, std::shared_ptr<FrameDict>, FrameSet>;
+    using PyFrameDict = py::class_<FrameDict, FrameSet>;
     wrappers.wrapType(PyFrameDict(wrappers.module, "FrameDict"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
