@@ -68,7 +68,7 @@ ConstArray2D arrayFromVector(std::vector<double> const &vec, int nAxes) {
 
 Array2D arrayFromVector(std::vector<double> &vec, int nAxes) {
     int nPoints = vec.size() / nAxes;
-    if (nPoints * nAxes != vec.size()) {
+    if (static_cast<std::size_t>(nPoints * nAxes) != vec.size()) {
         std::ostringstream os;
         os << "vec length = " << vec.size() << " not a multiple of nAxes = " << nAxes;
         throw std::runtime_error(os.str());
