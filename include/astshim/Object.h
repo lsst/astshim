@@ -397,11 +397,7 @@ protected:
 
     @throws std::runtime_error if the attribute does not exist or the value cannot be converted
     */
-    int getI(std::string const &attrib) const {
-        int val = astGetI(getRawPtr(), attrib.c_str());
-        assertOK();
-        return val;
-    }
+    int getI(std::string const &attrib) const;
 
     /**
     Get the value of an attribute as a long int
