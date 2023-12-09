@@ -175,6 +175,12 @@ Object::Object(AstObject *object) : _objPtr(object, &detail::annulAstObject) {
     }
 }
 
+int Object::getI(std::string const &attrib) const {
+    int val = astGetI(getRawPtr(), attrib.c_str());
+    assertOK();
+    return val;
+}
+
 // Explicit instantiations
 template std::shared_ptr<KeyMap> Object::fromAstObject<KeyMap>(AstObject *, bool);
 template std::shared_ptr<FitsChan> Object::fromAstObject<FitsChan>(AstObject *, bool);
