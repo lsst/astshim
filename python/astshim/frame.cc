@@ -19,8 +19,10 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/CmpFrame.h"
@@ -28,41 +30,41 @@
 #include "astshim/FrameSet.h"
 #include "astshim/Mapping.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapDirectionPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<DirectionPoint>(wrappers.module, "DirectionPoint"), [](auto &mod, auto &cls) {
-        cls.def(py::init<double, PointD>(), "direction"_a, "point"_a);
-        cls.def_readwrite("direction", &DirectionPoint::direction);
-        cls.def_readwrite("point", &DirectionPoint::point);
+    wrappers.wrapType(nb::class_<DirectionPoint>(wrappers.module, "DirectionPoint"), [](auto &mod, auto &cls) {
+        cls.def(nb::init<double, PointD>(), "direction"_a, "point"_a);
+        cls.def_rw("direction", &DirectionPoint::direction);
+        cls.def_rw("point", &DirectionPoint::point);
     });
 }
 
 void wrapNReadValue(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<NReadValue>(wrappers.module, "NReadValue"), [](auto &mod, auto &cls) {
-        cls.def(py::init<int, double>(), "nread"_a, "value"_a);
-        cls.def_readwrite("nread", &NReadValue::nread);
-        cls.def_readwrite("value", &NReadValue::value);
+    wrappers.wrapType(nb::class_<NReadValue>(wrappers.module, "NReadValue"), [](auto &mod, auto &cls) {
+        cls.def(nb::init<int, double>(), "nread"_a, "value"_a);
+        cls.def_rw("nread", &NReadValue::nread);
+        cls.def_rw("value", &NReadValue::value);
     });
 }
 
 void wrapResolvedPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<ResolvedPoint> (wrappers.module, "ResolvedPoint"), [](auto &mod, auto &cls) {
-        cls.def(py::init<int>(), "naxes"_a);
-        cls.def_readwrite("point", &ResolvedPoint::point);
-        cls.def_readwrite("d1", &ResolvedPoint::d1);
-        cls.def_readwrite("d2", &ResolvedPoint::d2);
+    wrappers.wrapType(nb::class_<ResolvedPoint> (wrappers.module, "ResolvedPoint"), [](auto &mod, auto &cls) {
+        cls.def(nb::init<int>(), "naxes"_a);
+        cls.def_rw("point", &ResolvedPoint::point);
+        cls.def_rw("d1", &ResolvedPoint::d1);
+        cls.def_rw("d2", &ResolvedPoint::d2);
     });
 }
 
 void wrapFrameMapping(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<FrameMapping>(wrappers.module, "FrameMapping"), [](auto &mod, auto &cls) {
-        cls.def(py::init<std::shared_ptr<Frame>, std::shared_ptr<Mapping>>(), "frame"_a, "mapping"_a);
-        cls.def_readwrite("frame", &FrameMapping::frame);
-        cls.def_readwrite("mapping", &FrameMapping::mapping);
+    wrappers.wrapType(nb::class_<FrameMapping>(wrappers.module, "FrameMapping"), [](auto &mod, auto &cls) {
+        cls.def(nb::init<std::shared_ptr<Frame>, std::shared_ptr<Mapping>>(), "frame"_a, "mapping"_a);
+        cls.def_rw("frame", &FrameMapping::frame);
+        cls.def_rw("mapping", &FrameMapping::mapping);
     });
 }
 
@@ -72,27 +74,27 @@ void wrapFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrapResolvedPoint(wrappers);
     wrapFrameMapping(wrappers);
 
-    using PyFrame = py::class_<Frame, std::shared_ptr<Frame>, Mapping>;
+    using PyFrame = nb::class_<Frame, Mapping>;
     wrappers.wrapType(PyFrame(wrappers.module, "Frame"), [](auto &mod, auto &cls) {
-        cls.def(py::init<int, std::string const &>(), "naxes"_a, "options"_a = "");
-        cls.def(py::init<Frame const &>());
+        cls.def(nb::init<int, std::string const &>(), "naxes"_a, "options"_a = "");
+        cls.def(nb::init<Frame const &>());
 
-        cls.def_property("activeUnit", &Frame::getActiveUnit, &Frame::setActiveUnit);
-        cls.def_property("alignSystem", &Frame::getAlignSystem, &Frame::setAlignSystem);
-        cls.def_property("domain", &Frame::getDomain, &Frame::setDomain);
-        cls.def_property("dut1", &Frame::getDut1, &Frame::setDut1);
-        cls.def_property("epoch", &Frame::getEpoch, py::overload_cast<double>(&Frame::setEpoch));
-        cls.def_property("matchEnd", &Frame::getMatchEnd, &Frame::setMatchEnd);
-        cls.def_property("maxAxes", &Frame::getMaxAxes, &Frame::setMaxAxes);
-        cls.def_property("minAxes", &Frame::getMinAxes, &Frame::setMinAxes);
-        cls.def_property_readonly("nAxes", &Frame::getNAxes);
-        cls.def_property("obsAlt", &Frame::getObsAlt, &Frame::setObsAlt);
-        cls.def_property("obsLat", &Frame::getObsLat, &Frame::setObsLat);
-        cls.def_property("obsLon", &Frame::getObsLon, &Frame::setObsLon);
-        cls.def_property("permute", &Frame::getPermute, &Frame::setPermute);
-        cls.def_property("preserveAxes", &Frame::getPreserveAxes, &Frame::setPreserveAxes);
-        cls.def_property("system", &Frame::getSystem, &Frame::setSystem);
-        cls.def_property("title", &Frame::getTitle, &Frame::setTitle);
+        cls.def_prop_rw("activeUnit", &Frame::getActiveUnit, &Frame::setActiveUnit);
+        cls.def_prop_rw("alignSystem", &Frame::getAlignSystem, &Frame::setAlignSystem);
+        cls.def_prop_rw("domain", &Frame::getDomain, &Frame::setDomain);
+        cls.def_prop_rw("dut1", &Frame::getDut1, &Frame::setDut1);
+        cls.def_prop_rw("epoch", &Frame::getEpoch, nb::overload_cast<double>(&Frame::setEpoch));
+        cls.def_prop_rw("matchEnd", &Frame::getMatchEnd, &Frame::setMatchEnd);
+        cls.def_prop_rw("maxAxes", &Frame::getMaxAxes, &Frame::setMaxAxes);
+        cls.def_prop_rw("minAxes", &Frame::getMinAxes, &Frame::setMinAxes);
+        cls.def_prop_ro("nAxes", &Frame::getNAxes);
+        cls.def_prop_rw("obsAlt", &Frame::getObsAlt, &Frame::setObsAlt);
+        cls.def_prop_rw("obsLat", &Frame::getObsLat, &Frame::setObsLat);
+        cls.def_prop_rw("obsLon", &Frame::getObsLon, &Frame::setObsLon);
+        cls.def_prop_rw("permute", &Frame::getPermute, &Frame::setPermute);
+        cls.def_prop_rw("preserveAxes", &Frame::getPreserveAxes, &Frame::setPreserveAxes);
+        cls.def_prop_rw("system", &Frame::getSystem, &Frame::setSystem);
+        cls.def_prop_rw("title", &Frame::getTitle, &Frame::setTitle);
 
         cls.def("copy", &Frame::copy);
         cls.def("angle", &Frame::angle, "a"_a, "b"_a, "c"_a);
@@ -104,8 +106,8 @@ void wrapFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
         cls.def("findFrame", &Frame::findFrame, "template"_a, "domainlist"_a = "");
         cls.def("format", &Frame::format, "axis"_a, "value"_a);
         cls.def("getBottom", &Frame::getBottom, "axis"_a);
-        cls.def("getDigits", py::overload_cast<>(&Frame::getDigits, py::const_));
-        cls.def("getDigits", py::overload_cast<int>(&Frame::getDigits, py::const_), "axis"_a);
+        cls.def("getDigits", nb::overload_cast<>(&Frame::getDigits, nb::const_));
+        cls.def("getDigits", nb::overload_cast<int>(&Frame::getDigits, nb::const_), "axis"_a);
         cls.def("getDirection", &Frame::getDirection, "axis"_a);
         cls.def("getFormat", &Frame::getFormat, "axis"_a);
         cls.def("getInternalUnit", &Frame::getInternalUnit);
@@ -124,12 +126,12 @@ void wrapFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
         cls.def("permAxes", &Frame::permAxes, "perm"_a);
         cls.def("pickAxes", &Frame::pickAxes, "axes"_a);
         cls.def("resolve", &Frame::resolve, "point1"_a, "point2"_a, "point3"_a);
-        cls.def("setDigits", py::overload_cast<int>(&Frame::setDigits), "digits"_a);
-        cls.def("setDigits", py::overload_cast<int, int>(&Frame::setDigits), "axis"_a, "digits"_a);
+        cls.def("setDigits", nb::overload_cast<int>(&Frame::setDigits), "digits"_a);
+        cls.def("setDigits", nb::overload_cast<int, int>(&Frame::setDigits), "axis"_a, "digits"_a);
         cls.def("setDirection", &Frame::setDirection, "direction"_a, "axis"_a);
 
         // keep setEpoch(string); use the epoch property to deal with it as a float
-        cls.def("setEpoch", py::overload_cast<std::string const &>(&Frame::setEpoch), "epoch"_a);
+        cls.def("setEpoch", nb::overload_cast<std::string const &>(&Frame::setEpoch), "epoch"_a);
         cls.def("setFormat", &Frame::setFormat, "axis"_a, "format"_a"format");
         cls.def("setLabel", &Frame::setLabel, "axis"_a, "label"_a);
         cls.def("setSymbol", &Frame::setSymbol, "axis"_a, "symbol"_a);

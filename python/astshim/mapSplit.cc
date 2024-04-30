@@ -21,25 +21,27 @@
  */
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/MapSplit.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapMapSplit(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyMapSplit = py::class_<MapSplit>;
+    using PyMapSplit = nb::class_<MapSplit>;
     wrappers.wrapType(PyMapSplit(wrappers.module, "MapSplit"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, std::vector<int> const &>(), "map"_a, "in"_a);
-        cls.def_readonly("splitMap", &MapSplit::splitMap);
-        cls.def_readonly("origIn", &MapSplit::origIn);
-        cls.def_readonly("origOut", &MapSplit::origOut);
+        cls.def(nb::init<Mapping const &, std::vector<int> const &>(), "map"_a, "in"_a);
+        cls.def_ro("splitMap", &MapSplit::splitMap);
+        cls.def_ro("origIn", &MapSplit::origIn);
+        cls.def_ro("origOut", &MapSplit::origOut);
     });
 }
 

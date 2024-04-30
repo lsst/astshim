@@ -19,25 +19,24 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/RateMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapRateMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyRateMap =  py::class_<RateMap, std::shared_ptr<RateMap>, Mapping> ;
+    using PyRateMap =  nb::class_<RateMap, Mapping> ;
     wrappers.wrapType(PyRateMap(wrappers.module, "RateMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, int, int, std::string const &>(), "map"_a, "ax1"_a, "ax2"_a,
+        cls.def(nb::init<Mapping const &, int, int, std::string const &>(), "map"_a, "ax1"_a, "ax2"_a,
                 "options"_a = "");
-        cls.def(py::init<RateMap const &>());
+        cls.def(nb::init<RateMap const &>());
         cls.def("copy", &RateMap::copy);
     });
 }

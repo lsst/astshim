@@ -21,24 +21,24 @@
  */
 #include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/CmpFrame.h"
 #include "astshim/Frame.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapCmpFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyCmpFrame =  py::class_<CmpFrame, std::shared_ptr<CmpFrame>, Frame>;
+    using PyCmpFrame =  nb::class_<CmpFrame, Frame>;
     wrappers.wrapType(PyCmpFrame(wrappers.module, "CmpFrame"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Frame const &, Frame const &, std::string const &>(), "frame1"_a, "frame2"_a,
+        cls.def(nb::init<Frame const &, Frame const &, std::string const &>(), "frame1"_a, "frame2"_a,
                 "options"_a = "");
-        cls.def(py::init<CmpFrame const &>());
-        cls.def("__getitem__", &CmpFrame::operator[], py::is_operator());
+        cls.def(nb::init<CmpFrame const &>());
+        cls.def("__getitem__", &CmpFrame::operator[], nb::is_operator());
         cls.def("__len__", [](CmpFrame const &) { return 2; });
         cls.def("copy", &CmpFrame::copy);
     });

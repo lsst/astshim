@@ -21,20 +21,20 @@
  */
 #include <memory>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/WcsMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapWcsMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyWcsType=py::enum_<WcsType>;
+    using PyWcsType=nb::enum_<WcsType>;
     wrappers.wrapType(PyWcsType(wrappers.module, "WcsType"), [](auto &mod, auto &enm) {
         enm.value("AZP", WcsType::AZP);
         enm.value("SZP", WcsType::SZP);
@@ -71,17 +71,17 @@ void wrapWcsMap(lsst::cpputils::python::WrapperCollection &wrappers) {
         enm.export_values();
     });
 
-    using PyWcsMap= py::class_<WcsMap, std::shared_ptr<WcsMap>, Mapping>;
+    using PyWcsMap= nb::class_<WcsMap, Mapping>;
     wrappers.wrapType(PyWcsMap (wrappers.module, "WcsMap"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,
+        cls.def(nb::init<int, WcsType, int, int, std::string const &>(), "ncoord"_a, "type"_a, "lonax"_a,
                 "latax"_a, "options"_a = "");
-        cls.def(py::init<WcsMap const &>());
+        cls.def(nb::init<WcsMap const &>());
 
-        cls.def_property_readonly("natLat", &WcsMap::getNatLat);
-        cls.def_property_readonly("natLon", &WcsMap::getNatLon);
-        cls.def_property_readonly("wcsType", &WcsMap::getWcsType);
-        cls.def_property_readonly("wcsAxis", &WcsMap::getWcsAxis);
+        cls.def_prop_ro("natLat", &WcsMap::getNatLat);
+        cls.def_prop_ro("natLon", &WcsMap::getNatLon);
+        cls.def_prop_ro("wcsType", &WcsMap::getWcsType);
+        cls.def_prop_ro("wcsAxis", &WcsMap::getWcsAxis);
 
         cls.def("copy", &WcsMap::copy);
         cls.def("getPVi_m", &WcsMap::getPVi_m, "i"_a, "m"_a);

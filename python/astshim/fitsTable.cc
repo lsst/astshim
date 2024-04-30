@@ -20,27 +20,26 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <complex>
-#include <memory>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/complex.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/complex.h>
+
 #include "lsst/cpputils/python.h"
-#include "ndarray/pybind11.h"
+#include "ndarray/nanobind.h"
 
 #include "astshim/Table.h"
 #include "astshim/FitsTable.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapFitsTable(lsst::cpputils::python::WrapperCollection &wrappers) {
-  using PyFitsTable = py::class_<FitsTable, std::shared_ptr<FitsTable>, Table>;
+  using PyFitsTable = nb::class_<FitsTable, Table>;
     wrappers.wrapType(PyFitsTable(wrappers.module, "FitsTable"), [](auto &mod, auto &cls) {
-        cls.def(py::init<std::string const &>(), "options"_a = "");
-        cls.def(py::init<FitsChan const &, std::string const &>(), "header"_a, "options"_a = "");
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<FitsChan const &, std::string const &>(), "header"_a, "options"_a = "");
         cls.def("getTableHeader", &FitsTable::getTableHeader);
         cls.def("columnSize", &FitsTable::columnSize, "column"_a);
         cls.def("getColumnData1D", &FitsTable::getColumnData1D, "column"_a);

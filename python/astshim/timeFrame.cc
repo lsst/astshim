@@ -19,32 +19,31 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 #include <string>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
 #include "astshim/TimeFrame.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapTimeFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyTimeFrame=py::class_<TimeFrame, std::shared_ptr<TimeFrame>, Frame>;
+    using PyTimeFrame=nb::class_<TimeFrame, Frame>;
     wrappers.wrapType(PyTimeFrame(wrappers.module, "TimeFrame"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<std::string const &>(), "options"_a = "");
-        cls.def(py::init<TimeFrame const &>());
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<TimeFrame const &>());
 
-        cls.def_property("alignTimeScale", &TimeFrame::getAlignTimeScale, &TimeFrame::setAlignTimeScale);
-        cls.def_property("ltOffset", &TimeFrame::getLTOffset, &TimeFrame::setLTOffset);
-        cls.def_property("timeOrigin", &TimeFrame::getTimeOrigin, &TimeFrame::setTimeOrigin);
-        cls.def_property("timeScale", &TimeFrame::getTimeScale, &TimeFrame::setTimeScale);
+        cls.def_prop_rw("alignTimeScale", &TimeFrame::getAlignTimeScale, &TimeFrame::setAlignTimeScale);
+        cls.def_prop_rw("ltOffset", &TimeFrame::getLTOffset, &TimeFrame::setLTOffset);
+        cls.def_prop_rw("timeOrigin", &TimeFrame::getTimeOrigin, &TimeFrame::setTimeOrigin);
+        cls.def_prop_rw("timeScale", &TimeFrame::getTimeScale, &TimeFrame::setTimeScale);
 
         cls.def("copy", &TimeFrame::copy);
         cls.def("currentTime", &TimeFrame::currentTime);

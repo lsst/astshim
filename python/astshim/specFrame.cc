@@ -19,28 +19,26 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
-#include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
-#include "astshim/Mapping.h"
 #include "astshim/SkyFrame.h"
 #include "astshim/SpecFrame.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapSpecFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PySpecFrame= py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame>;
+    using PySpecFrame= nb::class_<SpecFrame, Frame>;
     wrappers.wrapType(PySpecFrame(wrappers.module, "SpecFrame"), [](auto &mod, auto &cls) {
-        cls.def(py::init<std::string const &>(), "options"_a = "");
-        cls.def(py::init<SpecFrame const &>());
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<SpecFrame const &>());
 
         cls.def("copy", &SpecFrame::copy);
 
@@ -48,8 +46,8 @@ void wrapSpecFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
         cls.def("getAlignStdOfRest", &SpecFrame::getAlignStdOfRest);
         cls.def("getRefDec", &SpecFrame::getRefDec);
         cls.def("getRefRA", &SpecFrame::getRefRA);
-        cls.def("getRefPos", py::overload_cast<SkyFrame const &>(&SpecFrame::getRefPos, py::const_), "frame"_a);
-        cls.def("getRefPos", py::overload_cast<>(&SpecFrame::getRefPos, py::const_));
+        cls.def("getRefPos", nb::overload_cast<SkyFrame const &>(&SpecFrame::getRefPos, nb::const_), "frame"_a);
+        cls.def("getRefPos", nb::overload_cast<>(&SpecFrame::getRefPos, nb::const_));
         cls.def("getRestFreq", &SpecFrame::getRestFreq);
         cls.def("getSourceSys", &SpecFrame::getSourceSys);
         cls.def("getSourceVel", &SpecFrame::getSourceVel);
@@ -61,11 +59,11 @@ void wrapSpecFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
         cls.def("setAlignStdOfRest", &SpecFrame::setAlignStdOfRest, "stdOfRest"_a);
         cls.def("setRefDec", &SpecFrame::setRefDec, "refDec"_a);
         cls.def("setRefRA", &SpecFrame::setRefRA, "refRA"_a);
-        cls.def("setRefPos", py::overload_cast<SkyFrame const &, double, double>(&SpecFrame::setRefPos),
+        cls.def("setRefPos", nb::overload_cast<SkyFrame const &, double, double>(&SpecFrame::setRefPos),
                 "frame"_a, "lon"_a, "lat"_a);
-        cls.def("setRefPos", py::overload_cast<double, double>(&SpecFrame::setRefPos), "ra"_a, "dec"_a);
-        cls.def("setRestFreq", py::overload_cast<double>(&SpecFrame::setRestFreq), "freq"_a);
-        cls.def("setRestFreq", py::overload_cast<std::string const &>(&SpecFrame::setRestFreq), "freq"_a);
+        cls.def("setRefPos", nb::overload_cast<double, double>(&SpecFrame::setRefPos), "ra"_a, "dec"_a);
+        cls.def("setRestFreq", nb::overload_cast<double>(&SpecFrame::setRestFreq), "freq"_a);
+        cls.def("setRestFreq", nb::overload_cast<std::string const &>(&SpecFrame::setRestFreq), "freq"_a);
         cls.def("setSourceSys", &SpecFrame::setSourceSys, "system"_a);
         cls.def("setSourceVel", &SpecFrame::setSourceVel, "vel"_a);
         cls.def("setSourceVRF", &SpecFrame::setSourceVRF, "vrf"_a);

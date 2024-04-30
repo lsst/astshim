@@ -21,26 +21,26 @@
  */
 #include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Channel.h"
 #include "astshim/XmlChan.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapXmlChan(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyXmlChan=py::class_<XmlChan, std::shared_ptr<XmlChan>, Channel>;
+    using PyXmlChan=nb::class_<XmlChan, Channel>;
     wrappers.wrapType(PyXmlChan(wrappers.module, "XmlChan"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
+        cls.def(nb::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
-        cls.def_property("xmlFormat", &XmlChan::getXmlFormat, &XmlChan::setXmlFormat);
-        cls.def_property("xmlLength", &XmlChan::getXmlLength, &XmlChan::setXmlLength);
-        cls.def_property("xmlPrefix", &XmlChan::getXmlPrefix, &XmlChan::setXmlPrefix);
+        cls.def_prop_rw("xmlFormat", &XmlChan::getXmlFormat, &XmlChan::setXmlFormat);
+        cls.def_prop_rw("xmlLength", &XmlChan::getXmlLength, &XmlChan::setXmlLength);
+        cls.def_prop_rw("xmlPrefix", &XmlChan::getXmlPrefix, &XmlChan::setXmlPrefix);
     });
 }
 

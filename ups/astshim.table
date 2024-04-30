@@ -1,5 +1,6 @@
 setupRequired(sconsUtils)
 setupRequired(cpputils)
+setupRequired(libnanobind)
 # The following is boilerplate for all packages.
 # See Tech Note DMTN-001 for details on LSST_LIBRARY_PATH
 # Pure-Python packages only need the last line.

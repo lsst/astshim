@@ -21,23 +21,23 @@
  */
 #include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/ZoomMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapZoomMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyZoomMap = py::class_<ZoomMap, std::shared_ptr<ZoomMap>, Mapping>;
+    using PyZoomMap = nb::class_<ZoomMap, Mapping>;
     wrappers.wrapType(PyZoomMap(wrappers.module, "ZoomMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<int, double, std::string const &>(),"ncoord"_a, "zoom"_a, "options"_a = "");
-        cls.def(py::init<ZoomMap const &>());
-        cls.def_property_readonly("zoom", &ZoomMap::getZoom);
+        cls.def(nb::init<int, double, std::string const &>(),"ncoord"_a, "zoom"_a, "options"_a = "");
+        cls.def(nb::init<ZoomMap const &>());
+        cls.def_prop_ro("zoom", &ZoomMap::getZoom);
         cls.def("copy", &ZoomMap::copy);
     });
 }

@@ -20,25 +20,25 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <complex>
-#include <memory>
 #include "lsst/cpputils/python.h"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/complex.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/complex.h>
+#include <nanobind/stl/vector.h>
+
 
 #include "astshim/KeyMap.h"
 #include "astshim/Table.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 void wrapTable(lsst::cpputils::python::WrapperCollection &wrappers) {
-  using PyTable = py::class_<Table, std::shared_ptr<Table>, KeyMap>;
+  using PyTable = nb::class_<Table, KeyMap>;
   wrappers.wrapType(
       PyTable(wrappers.module, "Tsble"), [](auto &mod, auto &cls) {
-        cls.def(py::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
 
         cls.def("columnName", &Table::columnName, "index"_a);
         cls.def("columnType", &Table::columnType, "column"_a);
@@ -47,8 +47,8 @@ void wrapTable(lsst::cpputils::python::WrapperCollection &wrappers) {
         cls.def("columnUnit", &Table::columnUnit, "column"_a);
         cls.def("columnLenC", &Table::columnLenC, "column"_a);
         cls.def("columnShape", &Table::columnShape, "column"_a);
-        cls.def_property_readonly("nColumn", &Table::getNColumn);
-        cls.def_property_readonly("nRow", &Table::getNRow);
+        cls.def_prop_ro("nColumn", &Table::getNColumn);
+        cls.def_prop_ro("nRow", &Table::getNRow);
       });
 }
 

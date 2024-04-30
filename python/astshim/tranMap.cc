@@ -19,27 +19,26 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/TranMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapTranMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyTranMap = py::class_<TranMap, std::shared_ptr<TranMap>, Mapping>;
+    using PyTranMap = nb::class_<TranMap, Mapping>;
     wrappers.wrapType(PyTranMap(wrappers.module, "TranMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
+        cls.def(nb::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
                 "options"_a = "");
-        cls.def(py::init<TranMap const &>());
+        cls.def(nb::init<TranMap const &>());
 
-        cls.def("__getitem__", &TranMap::operator[], py::is_operator());
+        cls.def("__getitem__", &TranMap::operator[], nb::is_operator());
         cls.def("__len__", [](TranMap const &) { return 2; });
 
         cls.def("copy", &TranMap::copy);

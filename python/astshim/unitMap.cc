@@ -21,22 +21,22 @@
  */
 #include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/UnitMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapUnitMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyUnitMap = py::class_<UnitMap, std::shared_ptr<UnitMap>, Mapping>;
+    using PyUnitMap = nb::class_<UnitMap, Mapping>;
     wrappers.wrapType(PyUnitMap(wrappers.module, "UnitMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<int, std::string const &>(), "ncoord"_a, "options"_a = "");
-        cls.def(py::init<UnitMap const &>());
+        cls.def(nb::init<int, std::string const &>(), "ncoord"_a, "options"_a = "");
+        cls.def(nb::init<UnitMap const &>());
         cls.def("copy", &UnitMap::copy);
     });
 }

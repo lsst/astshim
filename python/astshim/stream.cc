@@ -19,42 +19,41 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Stream.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapStream(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyStream = py::class_<Stream, std::shared_ptr<Stream>>;
+    using PyStream = nb::class_<Stream>;
     wrappers.wrapType(PyStream(wrappers.module, "Stream"), [](auto &mod, auto &clsStream) {
 
-        clsStream.def(py::init<std::istream *, std::ostream *>(), "istream"_a, "ostream"_a);
-        clsStream.def(py::init<>());
+        clsStream.def(nb::init<std::istream *, std::ostream *>(), "istream"_a, "ostream"_a);
+        clsStream.def(nb::init<>());
 
-        clsStream.def_property_readonly("isFits", &Stream::getIsFits);
-        clsStream.def_property_readonly("hasStdStream", &Stream::hasStdStream);
+        clsStream.def_prop_ro("isFits", &Stream::getIsFits);
+        clsStream.def_prop_ro("hasStdStream", &Stream::hasStdStream);
 
         clsStream.def("source", &Stream::source);
         clsStream.def("sink", &Stream::sink, "str"_a);
     });
 
-    using PyFileStream = py::class_<FileStream, std::shared_ptr<FileStream>, Stream>;
+    using PyFileStream = nb::class_<FileStream, Stream>;
     wrappers.wrapType(PyFileStream(wrappers.module, "FileStream"), [](auto &mod, auto &clsFileStream) {
-        clsFileStream.def(py::init<std::string const &, bool>(), "path"_a, "doWrite"_a = false);
+        clsFileStream.def(nb::init<std::string const &, bool>(), "path"_a, "doWrite"_a = false);
 
-        clsFileStream.def_property_readonly("path", &FileStream::getPath);
+        clsFileStream.def_prop_ro("path", &FileStream::getPath);
     });
 
-    using PyStringStream = py::class_<StringStream, std::shared_ptr<StringStream>, Stream>;
+    using PyStringStream = nb::class_<StringStream, Stream>;
     wrappers.wrapType(PyStringStream(wrappers.module, "StringStream"), [](auto &mod, auto &clsStringStream) {
-        clsStringStream.def(py::init<std::string const &>(), "data"_a = "");
+        clsStringStream.def(nb::init<std::string const &>(), "data"_a = "");
 
         clsStringStream.def("getSourceData", &StringStream::getSourceData);
         clsStringStream.def("getSinkData", &StringStream::getSinkData);

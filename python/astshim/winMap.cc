@@ -22,26 +22,27 @@
 #include <memory>
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/WinMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapWinMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyWinMap = py::class_<WinMap, std::shared_ptr<WinMap>, Mapping>;
+    using PyWinMap = nb::class_<WinMap, Mapping>;
     wrappers.wrapType(PyWinMap(wrappers.module, "WinMap"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
+        cls.def(nb::init<std::vector<double> const &, std::vector<double> const &, std::vector<double> const &,
                         std::vector<double> const &, std::string const &>(),
                 "ina"_a, "inb"_a, "outa"_a, "outb"_a, "options"_a = "");
-        cls.def(py::init<WinMap const &>());
+        cls.def(nb::init<WinMap const &>());
 
         cls.def("copy", &WinMap::copy);
     });

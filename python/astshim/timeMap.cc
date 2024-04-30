@@ -19,27 +19,25 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
-#include <vector>
 #include "lsst/cpputils/python.h"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
 
 #include "astshim/Mapping.h"
 #include "astshim/TimeMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapTimeMap(lsst::cpputils::python::WrapperCollection &wrappers){
-    using PyTimeMap= py::class_<TimeMap, std::shared_ptr<TimeMap>, Mapping> ;
+    using PyTimeMap= nb::class_<TimeMap, Mapping> ;
     wrappers.wrapType(PyTimeMap(wrappers.module, "TimeMap"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<std::string const &>(), "options"_a = "");
-        cls.def(py::init<TimeMap const &>());
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<TimeMap const &>());
 
         cls.def("copy", &TimeMap::copy);
         cls.def("add", &TimeMap::add, "cvt"_a, "args"_a);

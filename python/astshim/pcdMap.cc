@@ -19,29 +19,30 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/PcdMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapPcdMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyPcdMap =  py::class_<PcdMap, std::shared_ptr<PcdMap>, Mapping>;
+    using PyPcdMap = nb::class_<PcdMap, Mapping>;
     wrappers.wrapType(PyPcdMap(wrappers.module, "PcdMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<double, std::vector<double> const &, std::string const &>(), "disco"_a, "pcdcen"_a,
+        cls.def(nb::init<double, std::vector<double> const &, std::string const &>(), "disco"_a, "pcdcen"_a,
                 "options"_a = "");
-        cls.def(py::init<PcdMap const &>());
-        cls.def_property_readonly("disco", &PcdMap::getDisco);
-        cls.def_property_readonly("pcdCen", py::overload_cast<>(&PcdMap::getPcdCen, py::const_));
+        cls.def(nb::init<PcdMap const &>());
+        cls.def_prop_ro("disco", &PcdMap::getDisco);
+        cls.def_prop_ro("pcdCen", nb::overload_cast<>(&PcdMap::getPcdCen, nb::const_));
         cls.def("copy", &PcdMap::copy);
     });
 }

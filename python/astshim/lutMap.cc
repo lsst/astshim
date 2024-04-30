@@ -19,29 +19,31 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
+
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/LutMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapLutMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyLutMap = py::class_<LutMap, std::shared_ptr<LutMap>, Mapping>;
+    using PyLutMap = nb::class_<LutMap, Mapping>;
     wrappers.wrapType(PyLutMap(wrappers.module, "LutMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<std::vector<double> const &, double, double, std::string const &>(), "lut"_a, "start"_a,
+        cls.def(nb::init<std::vector<double> const &, double, double, std::string const &>(), "lut"_a, "start"_a,
                 "inc"_a, "options"_a = "");
-        cls.def(py::init<LutMap const &>());
-        cls.def_property_readonly("lutEpsilon", &LutMap::getLutEpsilon);
-        cls.def_property_readonly("lutInterp", &LutMap::getLutInterp);
+        cls.def(nb::init<LutMap const &>());
+        cls.def_prop_ro("lutEpsilon", &LutMap::getLutEpsilon);
+        cls.def_prop_ro("lutInterp", &LutMap::getLutInterp);
         cls.def("copy", &LutMap::copy);
     });
 }

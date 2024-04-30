@@ -20,43 +20,44 @@
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
 #include <complex>
-#include <memory>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/complex.h>
-#include <pybind11/stl.h>
+
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+#include <nanobind/stl/complex.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Channel.h"
 #include "astshim/FitsChan.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 namespace {
 
     template<typename T>
     void wrapFoundValue(lsst::cpputils::python::WrapperCollection &wrappers, std::string const &suffix) {
-        using PyFoundValue = py::class_<FoundValue<T>>;
+        using PyFoundValue = nb::class_<FoundValue<T>>;
         std::string name = "FoundValue" + suffix;
         wrappers.wrapType(PyFoundValue(wrappers.module, name.c_str()), [](auto &mod, auto &cls) {
-            cls.def(py::init<bool, T const &>(), "found"_a, "value"_a);
-            cls.def_readwrite("found", &FoundValue<T>::found);
-            cls.def_readwrite("value", &FoundValue<T>::value);
+            cls.def(nb::init<bool, T const &>(), "found"_a, "value"_a);
+            cls.def_prop_rw("found", [](FoundValue<T> const &self) {return self.found;}, [](FoundValue<T> &self) {return self.found;});
+            cls.def_prop_rw("value", [](FoundValue<T> const &self) {return self.value;}, [](FoundValue<T> &self) {return self.value;});
         });
     }
 } // namespace
 
 void wrapFitsChan(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::enum_<FitsKeyState>(wrappers.module, "FitsKeyState"), [](auto &mod, auto &enm) {
+    wrappers.wrapType(nb::enum_<FitsKeyState>(wrappers.module, "FitsKeyState"), [](auto &mod, auto &enm) {
         enm.value("ABSENT", FitsKeyState::ABSENT);
         enm.value("NOVALUE", FitsKeyState::NOVALUE);
         enm.value("PRESENT", FitsKeyState::PRESENT);
         enm.export_values();
     });
 
-    wrappers.wrapType(py::enum_<CardType>(wrappers.module, "CardType"), [](auto &mod, auto &enm) {
+    wrappers.wrapType(nb::enum_<CardType>(wrappers.module, "CardType"), [](auto &mod, auto &enm) {
         enm.value("NOTYPE", CardType::NOTYPE);
         enm.value("COMMENT", CardType::COMMENT);
         enm.value("INT", CardType::INT);
@@ -78,26 +79,26 @@ void wrapFitsChan(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrapFoundValue<bool>(wrappers, "L");
 
     // Wrap FitsChan
-    using PyFitsChan =  py::class_<FitsChan, std::shared_ptr<FitsChan>, Channel>;
+    using PyFitsChan =  nb::class_<FitsChan, Channel>;
     wrappers.wrapType(PyFitsChan(wrappers.module, "FitsChan"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
+        cls.def(nb::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
-        cls.def_property("carLin", &FitsChan::getCarLin, &FitsChan::setCarLin);
-        cls.def_property("cdMatrix", &FitsChan::getCDMatrix, &FitsChan::setCDMatrix);
-        cls.def_property("clean", &FitsChan::getClean, &FitsChan::setClean);
-        cls.def_property("defB1950", &FitsChan::getDefB1950, &FitsChan::setDefB1950);
-        cls.def_property("encoding", &FitsChan::getEncoding, &FitsChan::setEncoding);
-        cls.def_property("fitsAxisOrder", &FitsChan::getFitsAxisOrder, &FitsChan::setFitsAxisOrder);
-        cls.def_property("fitsDigits", &FitsChan::getFitsDigits, &FitsChan::setFitsDigits);
-        cls.def_property_readonly("nCard", &FitsChan::getNCard);
-        cls.def_property_readonly("nKey", &FitsChan::getNKey);
-        cls.def_property("iwc", &FitsChan::getIwc, &FitsChan::setIwc);
-        cls.def_property("sipOK", &FitsChan::getSipOK, &FitsChan::setSipOK);
-        cls.def_property("sipReplace", &FitsChan::getSipReplace, &FitsChan::setSipReplace);
-        cls.def_property("tabOK", &FitsChan::getTabOK, &FitsChan::setTabOK);
-        cls.def_property("polyTan", &FitsChan::getPolyTan, &FitsChan::setPolyTan);
-        cls.def_property("warnings", &FitsChan::getWarnings, &FitsChan::setWarnings);
-        cls.def_property("fitsTol", &FitsChan::getFitsTol, &FitsChan::setFitsTol);
+        cls.def_prop_rw("carLin", &FitsChan::getCarLin, &FitsChan::setCarLin);
+        cls.def_prop_rw("cdMatrix", &FitsChan::getCDMatrix, &FitsChan::setCDMatrix);
+        cls.def_prop_rw("clean", &FitsChan::getClean, &FitsChan::setClean);
+        cls.def_prop_rw("defB1950", &FitsChan::getDefB1950, &FitsChan::setDefB1950);
+        cls.def_prop_rw("encoding", &FitsChan::getEncoding, &FitsChan::setEncoding);
+        cls.def_prop_rw("fitsAxisOrder", &FitsChan::getFitsAxisOrder, &FitsChan::setFitsAxisOrder);
+        cls.def_prop_rw("fitsDigits", &FitsChan::getFitsDigits, &FitsChan::setFitsDigits);
+        cls.def_prop_ro("nCard", &FitsChan::getNCard);
+        cls.def_prop_ro("nKey", &FitsChan::getNKey);
+        cls.def_prop_rw("iwc", &FitsChan::getIwc, &FitsChan::setIwc);
+        cls.def_prop_rw("sipOK", &FitsChan::getSipOK, &FitsChan::setSipOK);
+        cls.def_prop_rw("sipReplace", &FitsChan::getSipReplace, &FitsChan::setSipReplace);
+        cls.def_prop_rw("tabOK", &FitsChan::getTabOK, &FitsChan::setTabOK);
+        cls.def_prop_rw("polyTan", &FitsChan::getPolyTan, &FitsChan::setPolyTan);
+        cls.def_prop_rw("warnings", &FitsChan::getWarnings, &FitsChan::setWarnings);
+        cls.def_prop_rw("fitsTol", &FitsChan::getFitsTol, &FitsChan::setFitsTol);
 
         cls.def("delFits", &FitsChan::delFits);
         cls.def("emptyFits", &FitsChan::emptyFits);

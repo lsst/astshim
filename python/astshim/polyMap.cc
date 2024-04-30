@@ -22,30 +22,31 @@
 #include <memory>
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include "ndarray/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+#include "ndarray/nanobind.h"
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/PolyMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapPolyMap(lsst::cpputils::python::WrapperCollection &wrappers){
-    using PyPolyMap = py::class_<PolyMap, std::shared_ptr<PolyMap>, Mapping>;
+    using PyPolyMap = nb::class_<PolyMap, Mapping>;
     wrappers.wrapType(PyPolyMap (wrappers.module, "PolyMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<ConstArray2D const &, ConstArray2D const &, std::string const &>(), "coeff_f"_a,
+        cls.def(nb::init<ConstArray2D const &, ConstArray2D const &, std::string const &>(), "coeff_f"_a,
                 "coeff_i"_a, "options"_a = "IterInverse=0");
-        cls.def(py::init<ConstArray2D const &, int, std::string const &>(), "coeff_f"_a, "nout"_a,
+        cls.def(nb::init<ConstArray2D const &, int, std::string const &>(), "coeff_f"_a, "nout"_a,
                 "options"_a = "IterInverse=0");
-        cls.def(py::init<PolyMap const &>());
-        cls.def_property_readonly("iterInverse", &PolyMap::getIterInverse);
-        cls.def_property_readonly("nIterInverse", &PolyMap::getNIterInverse);
-        cls.def_property_readonly("tolInverse", &PolyMap::getTolInverse);
+        cls.def(nb::init<PolyMap const &>());
+        cls.def_prop_ro("iterInverse", &PolyMap::getIterInverse);
+        cls.def_prop_ro("nIterInverse", &PolyMap::getNIterInverse);
+        cls.def_prop_ro("tolInverse", &PolyMap::getTolInverse);
         cls.def("copy", &PolyMap::copy);
         cls.def("polyTran", &PolyMap::polyTran, "forward"_a, "acc"_a, "maxacc"_a, "maxorder"_a, "lbnd"_a,
                 "ubnd"_a);

@@ -22,24 +22,25 @@
 #include <memory>
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/UnitNormMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapUnitNormMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyUnitNormapMap=py::class_<UnitNormMap, std::shared_ptr<UnitNormMap>, Mapping> ;
+    using PyUnitNormapMap=nb::class_<UnitNormMap, Mapping> ;
     wrappers.wrapType(PyUnitNormapMap (wrappers.module, "UnitNormMap"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<std::vector<double> const &, std::string const &>(), "centre"_a, "options"_a = "");
-        cls.def(py::init<UnitNormMap const &>());
+        cls.def(nb::init<std::vector<double> const &, std::string const &>(), "centre"_a, "options"_a = "");
+        cls.def(nb::init<UnitNormMap const &>());
 
         cls.def("copy", &UnitNormMap::copy);
     });
