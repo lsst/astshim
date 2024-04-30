@@ -19,26 +19,27 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/SlaMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
-void wrapSlaMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PySlaMap = py::class_<SlaMap, std::shared_ptr<SlaMap>, Mapping>;
+void wrapSlaMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PySlaMap = nb::class_<SlaMap, Mapping>;
     wrappers.wrapType(PySlaMap(wrappers.module, "SlaMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<std::string const &>(), "options"_a = "");
-        cls.def(py::init<SlaMap const &>());
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<SlaMap const &>());
         cls.def("copy", &SlaMap::copy);
         cls.def("add", &SlaMap::add, "cvt"_a, "args"_a = std::vector<double>());
     });

@@ -19,15 +19,17 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Stream.h"
 #include "astshim/Channel.h"
 #include "astshim/Object.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 namespace {
@@ -55,28 +57,28 @@ public:
 }
 
 void wrapObject(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyObjectMaker = py::class_<ObjectMaker, std::shared_ptr<ObjectMaker>>;
+    using PyObjectMaker = nb::class_<ObjectMaker>;
     static auto makerCls = wrappers.wrapType(PyObjectMaker(wrappers.module, "ObjectMaker"), [](auto &mod, auto &cls) {
-        cls.def(py::init<>());
+        cls.def(nb::init<>());
         cls.def("__call__", &ObjectMaker::operator());
         cls.def("__reduce__",
-                     [cls](ObjectMaker const &self) { return py::make_tuple(cls, py::tuple()); });
+                     [cls](ObjectMaker const &self) { return nb::make_tuple(cls, nb::tuple()); });
     });
 
-    using PyObject = py::class_<Object, std::shared_ptr<Object>>;
+    using PyObject = nb::class_<Object>;
     wrappers.wrapType(PyObject(wrappers.module, "Object"), [](auto &mod, auto &cls) {
         cls.def_static("fromString", &Object::fromString);
         // do not wrap fromAstObject because it uses a bare AST pointer
         cls.def("__str__", &Object::getClassName);
         cls.def("__repr__", [](Object const &self) { return "astshim." + self.getClassName(); });
-        cls.def("__eq__", &Object::operator==, py::is_operator());
-        cls.def("__ne__", &Object::operator!=, py::is_operator());
+        cls.def("__eq__", &Object::operator==, nb::is_operator());
+        cls.def("__ne__", &Object::operator!=, nb::is_operator());
 
-        cls.def_property_readonly("className", &Object::getClassName);
-        cls.def_property("id", &Object::getID, &Object::setID);
-        cls.def_property("ident", &Object::getIdent, &Object::setIdent);
-        cls.def_property_readonly("objSize", &Object::getObjSize);
-        cls.def_property("useDefs", &Object::getUseDefs, &Object::setUseDefs);
+        cls.def_prop_ro("className", &Object::getClassName);
+        cls.def_prop_rw("id", &Object::getID, &Object::setID);
+        cls.def_prop_rw("ident", &Object::getIdent, &Object::setIdent);
+        cls.def_prop_ro("objSize", &Object::getObjSize);
+        cls.def_prop_rw("useDefs", &Object::getUseDefs, &Object::setUseDefs);
 
         cls.def("copy", &Object::copy);
         cls.def("clear", &Object::clear, "attrib"_a);
@@ -86,7 +88,7 @@ void wrapObject(lsst::cpputils::python::WrapperCollection &wrappers) {
         cls.def("lock", &Object::lock, "wait"_a);
         cls.def("same", &Object::same, "other"_a);
         // do not wrap the ostream version of show, since there is no obvious Python equivalent to ostream
-        cls.def("show", py::overload_cast<bool>(&Object::show, py::const_), "showComments"_a = true);
+        cls.def("show", nb::overload_cast<bool>(&Object::show, nb::const_), "showComments"_a = true);
 
         cls.def("test", &Object::test, "attrib"_a);
         cls.def("unlock", &Object::unlock, "report"_a = false);
@@ -95,8 +97,8 @@ void wrapObject(lsst::cpputils::python::WrapperCollection &wrappers) {
         // add pickling support
         cls.def("__reduce__", [](Object const &self) {
             std::string state = self.show(false);
-            auto unpickleArgs = py::make_tuple(state);
-            return py::make_tuple(makerCls(), unpickleArgs);
+            auto unpickleArgs = nb::make_tuple(state);
+            return nb::make_tuple(makerCls(), unpickleArgs);
         });
     });
 }

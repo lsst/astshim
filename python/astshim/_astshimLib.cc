@@ -21,11 +21,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pybind11/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+
 #include "lsst/cpputils/python.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 using lsst::cpputils::python::WrapperCollection;
 
 namespace ast {
@@ -73,7 +75,7 @@ void wrapWinMap(WrapperCollection&);
 void wrapXmlChan(WrapperCollection&);
 void wrapZoomMap(WrapperCollection&);
 
-PYBIND11_MODULE(_astshimLib, mod) {
+NB_MODULE(_astshimLib, mod) {
     using lsst::cpputils::python::WrapperCollection;
     lsst::cpputils::python::WrapperCollection wrappers(mod, "astshim");
     wrapBase(wrappers);

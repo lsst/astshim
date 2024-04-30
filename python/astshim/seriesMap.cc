@@ -19,26 +19,25 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/CmpMap.h"
 #include "astshim/Mapping.h"
 #include "astshim/SeriesMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapSeriesMap(lsst::cpputils::python::WrapperCollection &wrappers){
-    using PySeriesMap =  py::class_<SeriesMap, std::shared_ptr<SeriesMap>, CmpMap>;
+    using PySeriesMap =  nb::class_<SeriesMap, CmpMap>;
     wrappers.wrapType(PySeriesMap(wrappers.module, "SeriesMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
+        cls.def(nb::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
                 "options"_a = "");
-        cls.def(py::init<SeriesMap const &>());
+        cls.def(nb::init<SeriesMap const &>());
         cls.def("copy", &SeriesMap::copy);
     });
 }

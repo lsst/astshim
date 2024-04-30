@@ -19,26 +19,26 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/CmpMap.h"
 #include "astshim/Mapping.h"
 #include "astshim/ParallelMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapParallelMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyParallelMap = py::class_<ParallelMap, std::shared_ptr<ParallelMap>, CmpMap>;
+    using PyParallelMap = nb::class_<ParallelMap, CmpMap>;
     wrappers.wrapType(PyParallelMap(wrappers.module, "ParallelMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
+        cls.def(nb::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,
                 "options"_a = "");
-        cls.def(py::init<ParallelMap const &>());
+        cls.def(nb::init<ParallelMap const &>());
         cls.def("copy", &ParallelMap::copy);
     });
 }

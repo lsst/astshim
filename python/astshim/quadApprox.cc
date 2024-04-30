@@ -19,25 +19,26 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/QuadApprox.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapQuadApprox(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyQuadApprox =  py::class_<QuadApprox>;
+    using PyQuadApprox =  nb::class_<QuadApprox>;
     wrappers.wrapType(PyQuadApprox(wrappers.module, "QuadApprox"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
+        cls.def(nb::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
                 "map"_a, "lbnd"_a, "ubnd"_a, "nx"_a = 3, "ny"_a = 3);
-        cls.def_readonly("fit", &QuadApprox::fit);
-        cls.def_readonly("rms", &QuadApprox::rms);
+        cls.def_ro("fit", &QuadApprox::fit);
+        cls.def_ro("rms", &QuadApprox::rms);
     });
 }
 

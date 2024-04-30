@@ -19,25 +19,25 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
 #include "astshim/Mapping.h"
 #include "astshim/NormMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
-void wrapNormMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyNormMap =  py::class_<NormMap, std::shared_ptr<NormMap>, Mapping>;
+void wrapNormMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PyNormMap =  nb::class_<NormMap, Mapping>;
     wrappers.wrapType(PyNormMap(wrappers.module, "NormMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
-        cls.def(py::init<NormMap const &>());
+        cls.def(nb::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
+        cls.def(nb::init<NormMap const &>());
         cls.def("copy", &NormMap::copy);
     });
 }

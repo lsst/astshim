@@ -19,27 +19,28 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/CmpMap.h"
 #include "astshim/Mapping.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapCmpMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PrCmpMap = py::class_<CmpMap, std::shared_ptr<CmpMap>, Mapping>;
+    using PrCmpMap = nb::class_<CmpMap, Mapping>;
     wrappers.wrapType(PrCmpMap(wrappers.module, "CmpMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, Mapping const &, bool, std::string const &>(), "map1"_a, "map2"_a,
+        cls.def(nb::init<Mapping const &, Mapping const &, bool, std::string const &>(), "map1"_a, "map2"_a,
                 "series"_a, "options"_a = "");
-        cls.def(py::init<CmpMap const &>());
-        cls.def("__getitem__", &CmpMap::operator[], py::is_operator());
+        cls.def(nb::init<CmpMap const &>());
+        cls.def("__getitem__", &CmpMap::operator[], nb::is_operator());
         cls.def("__len__", [](CmpMap const &) { return 2; });
         cls.def("copy", &CmpMap::copy);
-        cls.def_property_readonly("series", &CmpMap::getSeries);
+        cls.def_prop_ro("series", &CmpMap::getSeries);
     });
 }
 

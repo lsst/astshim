@@ -23,28 +23,30 @@
 #include <string>
 #include <memory>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/MathMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapMathMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-using PyMathMap = py::class_<MathMap, std::shared_ptr<MathMap>, Mapping>;
+using PyMathMap = nb::class_<MathMap, Mapping>;
     wrappers.wrapType(PyMathMap(wrappers.module, "MathMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<int, int, std::vector<std::string> const &, std::vector<std::string> const &,
+        cls.def(nb::init<int, int, std::vector<std::string> const &, std::vector<std::string> const &,
                         std::string const &>(),
                 "nin"_a, "nout"_a, "fwd"_a, "ref"_a, "options"_a = "");
-        cls.def(py::init<MathMap const &>());
-        cls.def_property_readonly("seed", &MathMap::getSeed);
-        cls.def_property_readonly("simpFI", &MathMap::getSimpFI);
-        cls.def_property_readonly("simpIF", &MathMap::getSimpIF);
+        cls.def(nb::init<MathMap const &>());
+        cls.def_prop_ro("seed", &MathMap::getSeed);
+        cls.def_prop_ro("simpFI", &MathMap::getSimpFI);
+        cls.def_prop_ro("simpIF", &MathMap::getSimpIF);
         cls.def("copy", &MathMap::copy);
     });
 }

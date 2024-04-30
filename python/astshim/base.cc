@@ -19,15 +19,16 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+#include <nanobind/stl/shared_ptr.h>
 #include "lsst/cpputils/python.h"
 
-#include "ndarray/pybind11.h"
+#include "ndarray/nanobind.h"
 #include "astshim/base.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
@@ -44,7 +45,7 @@ void wrapBase(lsst::cpputils::python::WrapperCollection &wrappers) {
         return arrayDeep;
     }, "vec"_a, "nAxes"_a);
 
-    wrappers.wrapType(py::enum_<DataType>(wrappers.module, "DataType"), [](auto &mod, auto &enm) {
+    wrappers.wrapType(nb::enum_<DataType>(wrappers.module, "DataType"), [](auto &mod, auto &enm) {
         enm.value("IntType", DataType::IntType);
         enm.value("ShortIntType", DataType::ShortIntType);
         enm.value("ByteType", DataType::ByteType);

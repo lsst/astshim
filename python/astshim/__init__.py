@@ -24,6 +24,7 @@
 """
 
 from .keyMap import *
+
 from ._astshimLib import *
 from .fitsTableContinued import *
 from .fitsChanContinued import *

@@ -19,46 +19,46 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Frame.h"
 #include "astshim/SkyFrame.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapSkyFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PySkyFrame = py::class_<SkyFrame, std::shared_ptr<SkyFrame>, Frame>;
+    using PySkyFrame = nb::class_<SkyFrame, Frame>;
     wrappers.wrapType(PySkyFrame(wrappers.module, "SkyFrame"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<std::string const &>(), "options"_a = "");
-        cls.def(py::init<SkyFrame const &>());
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<SkyFrame const &>());
 
         cls.def("copy", &SkyFrame::copy);
 
-        cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
-        cls.def_property("asTime", [](SkyFrame const &self) {
+        cls.def_prop_rw("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
+        cls.def_prop_rw("asTime", [](SkyFrame const &self) {
                              return std::make_pair(self.getAsTime(1), self.getAsTime(2));
                          },
                          [](SkyFrame &self, std::pair<bool, bool> asTime) {
                              self.setAsTime(1, asTime.first);
                              self.setAsTime(2, asTime.second);
                          });
-        cls.def_property("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
-        cls.def_property("equinox", &SkyFrame::getEquinox, &SkyFrame::setEquinox);
-        cls.def_property_readonly("latAxis", &SkyFrame::getLatAxis);
-        cls.def_property_readonly("lonAxis", &SkyFrame::getLonAxis);
-        cls.def_property("negLon", &SkyFrame::getNegLon, &SkyFrame::setNegLon);
-        cls.def_property("projection", &SkyFrame::getProjection, &SkyFrame::setProjection);
-        cls.def_property("skyRefIs", &SkyFrame::getSkyRefIs, &SkyFrame::setSkyRefIs);
-        cls.def_property("skyTol", &SkyFrame::getSkyTol, &SkyFrame::setSkyTol);
+        cls.def_prop_rw("alignOffset", &SkyFrame::getAlignOffset, &SkyFrame::setAlignOffset);
+        cls.def_prop_rw("equinox", &SkyFrame::getEquinox, &SkyFrame::setEquinox);
+        cls.def_prop_ro("latAxis", &SkyFrame::getLatAxis);
+        cls.def_prop_ro("lonAxis", &SkyFrame::getLonAxis);
+        cls.def_prop_rw("negLon", &SkyFrame::getNegLon, &SkyFrame::setNegLon);
+        cls.def_prop_rw("projection", &SkyFrame::getProjection, &SkyFrame::setProjection);
+        cls.def_prop_rw("skyRefIs", &SkyFrame::getSkyRefIs, &SkyFrame::setSkyRefIs);
+        cls.def_prop_rw("skyTol", &SkyFrame::getSkyTol, &SkyFrame::setSkyTol);
 
         cls.def("getAsTime", &SkyFrame::getAsTime, "axis"_a);
         cls.def("getIsLatAxis", &SkyFrame::getIsLatAxis, "axis"_a);

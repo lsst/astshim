@@ -19,32 +19,33 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include "ndarray/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
+
+#include "ndarray/nanobind.h"
 #include "lsst/cpputils/python.h"
 
 #include "astshim/MapBox.h"
 #include "astshim/Mapping.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapMapBox(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyMapBox = py::class_<MapBox>;
+    using PyMapBox = nb::class_<MapBox>;
     wrappers.wrapType(PyMapBox(wrappers.module, "MapBox"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
+        cls.def(nb::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),
                 "map"_a, "lbnd"_a, "ubnd"_a, "minOutCoord"_a = 1, "maxOutCoord"_a = 0);
-        cls.def_readonly("lbndIn", &MapBox::lbndIn);
-        cls.def_readonly("ubndIn", &MapBox::ubndIn);
-        cls.def_readonly("minOutCoord", &MapBox::minOutCoord);
-        cls.def_readonly("maxOutCoord", &MapBox::maxOutCoord);
-        cls.def_readonly("lbndOut", &MapBox::lbndOut);
-        cls.def_readonly("ubndOut", &MapBox::ubndOut);
-        cls.def_readonly("xl", &MapBox::xl);
-        cls.def_readonly("xu", &MapBox::xu);
+        cls.def_ro("lbndIn", &MapBox::lbndIn);
+        cls.def_ro("ubndIn", &MapBox::ubndIn);
+        cls.def_ro("minOutCoord", &MapBox::minOutCoord);
+        cls.def_ro("maxOutCoord", &MapBox::maxOutCoord);
+        cls.def_ro("lbndOut", &MapBox::lbndOut);
+        cls.def_ro("ubndOut", &MapBox::ubndOut);
+        cls.def_ro("xl", &MapBox::xl, nb::rv_policy::reference);
+        cls.def_ro("xu", &MapBox::xu, nb::rv_policy::reference);
     });
 }
 

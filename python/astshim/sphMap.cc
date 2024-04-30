@@ -19,27 +19,26 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/SphMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
-void wrapSphMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PySphMap=py::class_<SphMap, std::shared_ptr<SphMap>, Mapping>;
+void wrapSphMap(lsst::utils::python::WrapperCollection &wrappers) {
+    using PySphMap=nb::class_<SphMap, Mapping>;
     wrappers.wrapType(PySphMap(wrappers.module, "SphMap"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<std::string const &>(), "options"_a = "");
-        cls.def(py::init<SphMap const &>());
+        cls.def(nb::init<std::string const &>(), "options"_a = "");
+        cls.def(nb::init<SphMap const &>());
 
-        cls.def_property_readonly("unitRadius", &SphMap::getUnitRadius);
-        cls.def_property_readonly("polarLong", &SphMap::getPolarLong);
+        cls.def_prop_ro("unitRadius", &SphMap::getUnitRadius);
+        cls.def_prop_ro("polarLong", &SphMap::getPolarLong);
 
         cls.def("copy", &SphMap::copy);
     });

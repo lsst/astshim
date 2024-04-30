@@ -19,10 +19,11 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 #include "astshim/Frame.h"
 #include "astshim/FrameSet.h"
@@ -31,21 +32,21 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapFrameSet(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyFrameSet = py::class_<FrameSet, std::shared_ptr<FrameSet>, Frame>;
+    using PyFrameSet = nb::class_<FrameSet, Frame>;
     wrappers.wrapType(PyFrameSet(wrappers.module, "FrameSet"), [](auto &mod, auto &cls) {
-        cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
-        cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
+        cls.def(nb::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
+        cls.def(nb::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
                 "mapping"_a, "currentFrame"_a, "options"_a = "");
-        cls.def(py::init<Frame const &>());
+        cls.def(nb::init<Frame const &>());
 
-        // def_readonly_static makes in only available in the class, not instances, so...
-        cls.attr("BASE") = py::cast(AST__BASE);
-        cls.attr("CURRENT") = py::cast(AST__CURRENT);
-        cls.attr("NOFRAME") = py::cast(AST__NOFRAME);
+        // def_prop_ro_static makes in only available in the class, not instances, so...
+        cls.attr("BASE") = nb::cast(AST__BASE);
+        cls.attr("CURRENT") = nb::cast(AST__CURRENT);
+        cls.attr("NOFRAME") = nb::cast(AST__NOFRAME);
 
-        cls.def_property("base", &FrameSet::getBase, &FrameSet::setBase);
-        cls.def_property("current", &FrameSet::getCurrent, &FrameSet::setCurrent);
-        cls.def_property_readonly("nFrame", &FrameSet::getNFrame);
+        cls.def_prop_rw("base", &FrameSet::getBase, &FrameSet::setBase);
+        cls.def_prop_rw("current", &FrameSet::getCurrent, &FrameSet::setCurrent);
+        cls.def_prop_ro("nFrame", &FrameSet::getNFrame);
 
         cls.def("copy", &FrameSet::copy);
         cls.def("addAxes", &FrameSet::addAxes);

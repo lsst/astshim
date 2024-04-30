@@ -19,25 +19,27 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include "ndarray/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
+#include "ndarray/nanobind.h"
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Mapping.h"
 #include "astshim/MatrixMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapMatrixMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyMatrixMap = py::class_<MatrixMap, std::shared_ptr<MatrixMap>, Mapping>;
+    using PyMatrixMap = nb::class_<MatrixMap, Mapping>;
     wrappers.wrapType(PyMatrixMap(wrappers.module, "MatrixMap"), [](auto &mod, auto &cls) {
-        cls.def(py::init<ConstArray2D const &, std::string const &>(), "matrix"_a, "options"_a = "");
-        cls.def(py::init<std::vector<double> const &, std::string const &>(), "diag"_a, "options"_a = "");
-        cls.def(py::init<MatrixMap const &>());
+        cls.def(nb::init<ConstArray2D const &, std::string const &>(), "matrix"_a, "options"_a = "");
+        cls.def(nb::init<std::vector<double> const &, std::string const &>(), "diag"_a, "options"_a = "");
+        cls.def(nb::init<MatrixMap const &>());
         cls.def("copy", &MatrixMap::copy);
     });
 }

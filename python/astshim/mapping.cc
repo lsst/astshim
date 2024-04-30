@@ -19,9 +19,11 @@
  * the GNU General Public License along with this program.  If not,
  * see <https://www.lsstcorp.org/LegalNotices/>.
  */
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include "ndarray/pybind11.h"
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
+
+#include "ndarray/nanobind.h"
 #include "lsst/cpputils/python.h"
 
 #include "astshim/base.h"
@@ -30,22 +32,22 @@
 #include "astshim/ParallelMap.h"
 #include "astshim/SeriesMap.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapMapping(lsst::cpputils::python::WrapperCollection &wrappers) {
-using PyMapping = py::class_<Mapping, std::shared_ptr<Mapping>, Object>;
+using PyMapping = nb::class_<Mapping, Object>;
     wrappers.wrapType(PyMapping(wrappers.module, "Mapping"), [](auto &mod, auto &cls) {
-        cls.def_property_readonly("nIn", &Mapping::getNIn);
-        cls.def_property_readonly("nOut", &Mapping::getNOut);
-        cls.def_property_readonly("isSimple", &Mapping::getIsSimple);
-        cls.def_property_readonly("hasForward", &Mapping::hasForward);
-        cls.def_property_readonly("hasInverse", &Mapping::hasInverse);
-        cls.def_property_readonly("isInverted", &Mapping::isInverted);
-        cls.def_property_readonly("isLinear", &Mapping::getIsLinear);
-        cls.def_property("report", &Mapping::getReport, &Mapping::setReport);
+        cls.def_prop_ro("nIn", &Mapping::getNIn);
+        cls.def_prop_ro("nOut", &Mapping::getNOut);
+        cls.def_prop_ro("isSimple", &Mapping::getIsSimple);
+        cls.def_prop_ro("hasForward", &Mapping::hasForward);
+        cls.def_prop_ro("hasInverse", &Mapping::hasInverse);
+        cls.def_prop_ro("isInverted", &Mapping::isInverted);
+        cls.def_prop_ro("isLinear", &Mapping::getIsLinear);
+        cls.def_prop_rw("report", &Mapping::getReport, &Mapping::setReport);
         cls.def("copy", &Mapping::copy);
         cls.def("inverted", &Mapping::inverted);
         cls.def("linearApprox", &Mapping::linearApprox, "lbnd"_a, "ubnd"_a, "tol"_a);
@@ -55,21 +57,21 @@ using PyMapping = py::class_<Mapping, std::shared_ptr<Mapping>, Object>;
         cls.def("simplified", &Mapping::simplified);
         // wrap the overloads of applyForward, applyInverse, tranGridForward and tranGridInverse that return a new
         // result
-        cls.def("applyForward", py::overload_cast<ConstArray2D const &>(&Mapping::applyForward, py::const_),
+        cls.def("applyForward", nb::overload_cast<ConstArray2D const &>(&Mapping::applyForward, nb::const_),
                 "from"_a);
         cls.def("applyForward",
-                py::overload_cast<std::vector<double> const &>(&Mapping::applyForward, py::const_), "from"_a);
-        cls.def("applyInverse", py::overload_cast<ConstArray2D const &>(&Mapping::applyInverse, py::const_),
+                nb::overload_cast<std::vector<double> const &>(&Mapping::applyForward, nb::const_), "from"_a);
+        cls.def("applyInverse", nb::overload_cast<ConstArray2D const &>(&Mapping::applyInverse, nb::const_),
                 "from"_a);
         cls.def("applyInverse",
-                py::overload_cast<std::vector<double> const &>(&Mapping::applyInverse, py::const_), "from"_a);
+                nb::overload_cast<std::vector<double> const &>(&Mapping::applyInverse, nb::const_), "from"_a);
         cls.def("tranGridForward",
-                py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridForward,
-                                                                                    py::const_),
+                nb::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridForward,
+                                                                                    nb::const_),
                 "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
         cls.def("tranGridInverse",
-                py::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridInverse,
-                                                                                    py::const_),
+                nb::overload_cast<PointI const &, PointI const &, double, int, int>(&Mapping::tranGridInverse,
+                                                                                    nb::const_),
                 "lbnd"_a, "ubnd"_a, "tol"_a, "maxpix"_a, "nPoints"_a);
     });
 }

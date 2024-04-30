@@ -21,30 +21,30 @@
  */
 #include <memory>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 #include "lsst/cpputils/python.h"
 
 #include "astshim/Channel.h"
 #include "astshim/KeyMap.h"
 #include "astshim/Object.h"
 
-namespace py = pybind11;
-using namespace pybind11::literals;
+namespace nb = nanobind;
+using namespace nanobind::literals;
 
 namespace ast {
 
 void wrapChannel(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyChannel = py::class_<Channel, std::shared_ptr<Channel>, Object>;
+    using PyChannel = nb::class_<Channel, Object>;
     wrappers.wrapType(PyChannel(wrappers.module, "Channel"), [](auto &mod, auto &cls) {
 
-        cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
+        cls.def(nb::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 
-        cls.def_property("comment", &Channel::getComment, &Channel::setComment);
-        cls.def_property("full", &Channel::getFull, &Channel::setFull);
-        cls.def_property("indent", &Channel::getIndent, &Channel::setIndent);
-        cls.def_property("reportLevel", &Channel::getReportLevel, &Channel::setReportLevel);
-        cls.def_property("skip", &Channel::getSkip, &Channel::setSkip);
-        cls.def_property("strict", &Channel::getStrict, &Channel::setStrict);
+        cls.def_prop_rw("comment", &Channel::getComment, &Channel::setComment);
+        cls.def_prop_rw("full", &Channel::getFull, &Channel::setFull);
+        cls.def_prop_rw("indent", &Channel::getIndent, &Channel::setIndent);
+        cls.def_prop_rw("reportLevel", &Channel::getReportLevel, &Channel::setReportLevel);
+        cls.def_prop_rw("skip", &Channel::getSkip, &Channel::setSkip);
+        cls.def_prop_rw("strict", &Channel::getStrict, &Channel::setStrict);
 
         cls.def("copy", &Channel::copy);
         cls.def("read", &Channel::read);
