@@ -223,7 +223,7 @@ class MappingTestCase(ObjectTestCase):
         """
         # if obj1 and obj2 are the same type then copying the compound object
         # will increase the NObject of each by 2, otherwise 1
-        deltaObj = 2 if type(obj1) == type(obj2) else 1
+        deltaObj = 2 if type(obj1) is type(obj2) else 1
 
         initialNumObj1 = obj1.getNObject()
         initialNumObj2 = obj2.getNObject()
