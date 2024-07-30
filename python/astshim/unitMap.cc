@@ -32,7 +32,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapUnitMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapUnitMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyUnitMap = py::class_<UnitMap, std::shared_ptr<UnitMap>, Mapping>;
     wrappers.wrapType(PyUnitMap(wrappers.module, "UnitMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<int, std::string const &>(), "ncoord"_a, "options"_a = "");

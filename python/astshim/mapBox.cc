@@ -32,7 +32,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapMapBox(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapMapBox(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyMapBox = py::class_<MapBox>;
     wrappers.wrapType(PyMapBox(wrappers.module, "MapBox"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),

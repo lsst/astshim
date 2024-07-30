@@ -36,7 +36,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapFitsTable(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapFitsTable(lsst::cpputils::python::WrapperCollection &wrappers) {
   using PyFitsTable = py::class_<FitsTable, std::shared_ptr<FitsTable>, Table>;
     wrappers.wrapType(PyFitsTable(wrappers.module, "FitsTable"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::string const &>(), "options"_a = "");

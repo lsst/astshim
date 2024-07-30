@@ -36,7 +36,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapSpecFrame(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapSpecFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PySpecFrame= py::class_<SpecFrame, std::shared_ptr<SpecFrame>, Frame>;
     wrappers.wrapType(PySpecFrame(wrappers.module, "SpecFrame"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::string const &>(), "options"_a = "");

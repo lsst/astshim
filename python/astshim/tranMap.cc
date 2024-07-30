@@ -32,7 +32,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapTranMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapTranMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyTranMap = py::class_<TranMap, std::shared_ptr<TranMap>, Mapping>;
     wrappers.wrapType(PyTranMap(wrappers.module, "TranMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, Mapping const &, std::string const &>(), "map1"_a, "map2"_a,

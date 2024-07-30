@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapWinMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapWinMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyWinMap = py::class_<WinMap, std::shared_ptr<WinMap>, Mapping>;
     wrappers.wrapType(PyWinMap(wrappers.module, "WinMap"), [](auto &mod, auto &cls) {
 

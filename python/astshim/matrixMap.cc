@@ -32,7 +32,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapMatrixMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapMatrixMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyMatrixMap = py::class_<MatrixMap, std::shared_ptr<MatrixMap>, Mapping>;
     wrappers.wrapType(PyMatrixMap(wrappers.module, "MatrixMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<ConstArray2D const &, std::string const &>(), "matrix"_a, "options"_a = "");

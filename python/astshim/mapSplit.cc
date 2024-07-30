@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapMapSplit(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapMapSplit(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyMapSplit = py::class_<MapSplit>;
     wrappers.wrapType(PyMapSplit(wrappers.module, "MapSplit"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, std::vector<int> const &>(), "map"_a, "in"_a);

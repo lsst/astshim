@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapWcsMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapWcsMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyWcsType=py::enum_<WcsType>;
     wrappers.wrapType(PyWcsType(wrappers.module, "WcsType"), [](auto &mod, auto &enm) {
         enm.value("AZP", WcsType::AZP);

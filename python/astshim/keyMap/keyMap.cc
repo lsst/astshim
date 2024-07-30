@@ -33,7 +33,7 @@ namespace py = pybind11;
 using namespace pybind11::literals;
 
 namespace ast {
-void wrapKeyMap(lsst::utils::python::WrapperCollection &wrappers){
+void wrapKeyMap(lsst::cpputils::python::WrapperCollection &wrappers){
     using PyKeyMap =  py::class_<KeyMap, std::shared_ptr<KeyMap>, Object> ;
     wrappers.wrapType(PyKeyMap (wrappers.module, "KeyMap"), [](auto &mod, auto &cls) {
 

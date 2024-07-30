@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapPermMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapPermMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyPermMap = py::class_<PermMap, std::shared_ptr<PermMap>, Mapping>;
     wrappers.wrapType(PyPermMap (wrappers.module, "PermMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::vector<int> const &, std::vector<int> const &, std::vector<double> const &,
