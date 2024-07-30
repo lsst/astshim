@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapChannel(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapChannel(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyChannel = py::class_<Channel, std::shared_ptr<Channel>, Object>;
     wrappers.wrapType(PyChannel(wrappers.module, "Channel"), [](auto &mod, auto &cls) {
 

@@ -30,7 +30,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapFunctional(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapFunctional(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrappers.module.def("append", &append, "first"_a, "second"_a);
     wrappers.module.def("makeRadialMapping", &makeRadialMapping, "center"_a, "mapping1d"_a);
 }

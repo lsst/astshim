@@ -31,7 +31,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapStream(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapStream(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyStream = py::class_<Stream, std::shared_ptr<Stream>>;
     wrappers.wrapType(PyStream(wrappers.module, "Stream"), [](auto &mod, auto &clsStream) {
 

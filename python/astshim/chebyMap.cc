@@ -35,7 +35,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapChebyMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapChebyMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyChebyDomain = py::class_<ChebyDomain, std::shared_ptr<ChebyDomain>>;
     wrappers.wrapType(PyChebyDomain(wrappers.module, "ChebyDomain"), [](auto &mod, auto &cls) {
 

@@ -31,14 +31,14 @@ using namespace pybind11::literals;
 namespace ast {
 namespace detail {
 namespace {
-void declareUtils(lsst::utils::python::WrapperCollection &wrappers) {
+void declareUtils(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrappers.module.def("makeFrameDict", makeFrameDict);
 }
 } // namespace
 
 PYBIND11_MODULE(testUtils, mod) {
     using lsst::cpputils::python::WrapperCollection;
-    lsst::utils::python::WrapperCollection wrappers(mod, "astshim.detail.testUtils");
+    lsst::cpputils::python::WrapperCollection wrappers(mod, "astshim.detail.testUtils");
     declareUtils(wrappers);
     wrappers.finish();
 }

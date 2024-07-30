@@ -37,7 +37,7 @@ namespace ast {
 namespace {
 
     template<typename T>
-    void wrapFoundValue(lsst::utils::python::WrapperCollection &wrappers, std::string const &suffix) {
+    void wrapFoundValue(lsst::cpputils::python::WrapperCollection &wrappers, std::string const &suffix) {
         using PyFoundValue = py::class_<FoundValue<T>>;
         std::string name = "FoundValue" + suffix;
         wrappers.wrapType(PyFoundValue(wrappers.module, name.c_str()), [](auto &mod, auto &cls) {
@@ -48,7 +48,7 @@ namespace {
     }
 } // namespace
 
-void wrapFitsChan(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapFitsChan(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrappers.wrapType(py::enum_<FitsKeyState>(wrappers.module, "FitsKeyState"), [](auto &mod, auto &enm) {
         enm.value("ABSENT", FitsKeyState::ABSENT);
         enm.value("NOVALUE", FitsKeyState::NOVALUE);

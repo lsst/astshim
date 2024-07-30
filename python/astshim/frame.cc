@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapDirectionPoint(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapDirectionPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrappers.wrapType(py::class_<DirectionPoint>(wrappers.module, "DirectionPoint"), [](auto &mod, auto &cls) {
         cls.def(py::init<double, PointD>(), "direction"_a, "point"_a);
         cls.def_readwrite("direction", &DirectionPoint::direction);
@@ -41,7 +41,7 @@ void wrapDirectionPoint(lsst::utils::python::WrapperCollection &wrappers) {
     });
 }
 
-void wrapNReadValue(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapNReadValue(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrappers.wrapType(py::class_<NReadValue>(wrappers.module, "NReadValue"), [](auto &mod, auto &cls) {
         cls.def(py::init<int, double>(), "nread"_a, "value"_a);
         cls.def_readwrite("nread", &NReadValue::nread);
@@ -49,7 +49,7 @@ void wrapNReadValue(lsst::utils::python::WrapperCollection &wrappers) {
     });
 }
 
-void wrapResolvedPoint(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapResolvedPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrappers.wrapType(py::class_<ResolvedPoint> (wrappers.module, "ResolvedPoint"), [](auto &mod, auto &cls) {
         cls.def(py::init<int>(), "naxes"_a);
         cls.def_readwrite("point", &ResolvedPoint::point);
@@ -58,7 +58,7 @@ void wrapResolvedPoint(lsst::utils::python::WrapperCollection &wrappers) {
     });
 }
 
-void wrapFrameMapping(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapFrameMapping(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrappers.wrapType(py::class_<FrameMapping>(wrappers.module, "FrameMapping"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::shared_ptr<Frame>, std::shared_ptr<Mapping>>(), "frame"_a, "mapping"_a);
         cls.def_readwrite("frame", &FrameMapping::frame);
@@ -66,7 +66,7 @@ void wrapFrameMapping(lsst::utils::python::WrapperCollection &wrappers) {
     });
 }
 
-void wrapFrame(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrapDirectionPoint(wrappers);
     wrapNReadValue(wrappers);
     wrapResolvedPoint(wrappers);

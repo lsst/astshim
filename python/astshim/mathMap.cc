@@ -35,7 +35,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapMathMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapMathMap(lsst::cpputils::python::WrapperCollection &wrappers) {
 using PyMathMap = py::class_<MathMap, std::shared_ptr<MathMap>, Mapping>;
     wrappers.wrapType(PyMathMap(wrappers.module, "MathMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<int, int, std::vector<std::string> const &, std::vector<std::string> const &,

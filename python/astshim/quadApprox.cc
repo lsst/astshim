@@ -31,7 +31,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapQuadApprox(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapQuadApprox(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyQuadApprox =  py::class_<QuadApprox>;
     wrappers.wrapType(PyQuadApprox(wrappers.module, "QuadApprox"), [](auto &mod, auto &cls) {
         cls.def(py::init<Mapping const &, std::vector<double> const &, std::vector<double> const &, int, int>(),

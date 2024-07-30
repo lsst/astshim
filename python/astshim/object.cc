@@ -54,7 +54,7 @@ public:
 };
 }
 
-void wrapObject(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapObject(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyObjectMaker = py::class_<ObjectMaker, std::shared_ptr<ObjectMaker>>;
     static auto makerCls = wrappers.wrapType(PyObjectMaker(wrappers.module, "ObjectMaker"), [](auto &mod, auto &cls) {
         cls.def(py::init<>());

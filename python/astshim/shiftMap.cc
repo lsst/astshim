@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapShiftMap(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapShiftMap(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyShiftMap = py::class_<ShiftMap, std::shared_ptr<ShiftMap>, Mapping>;
     wrappers.wrapType(PyShiftMap(wrappers.module, "ShiftMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::vector<double> const &, std::string const &>(), "shift"_a, "options"_a = "");

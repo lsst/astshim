@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapTimeFrame(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapTimeFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyTimeFrame=py::class_<TimeFrame, std::shared_ptr<TimeFrame>, Frame>;
     wrappers.wrapType(PyTimeFrame(wrappers.module, "TimeFrame"), [](auto &mod, auto &cls) {
 

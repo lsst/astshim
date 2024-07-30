@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapTimeMap(lsst::utils::python::WrapperCollection &wrappers){
+void wrapTimeMap(lsst::cpputils::python::WrapperCollection &wrappers){
     using PyTimeMap= py::class_<TimeMap, std::shared_ptr<TimeMap>, Mapping> ;
     wrappers.wrapType(PyTimeMap(wrappers.module, "TimeMap"), [](auto &mod, auto &cls) {
 

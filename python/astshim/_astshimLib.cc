@@ -75,7 +75,7 @@ void wrapZoomMap(WrapperCollection&);
 
 PYBIND11_MODULE(_astshimLib, mod) {
     using lsst::cpputils::python::WrapperCollection;
-    lsst::utils::python::WrapperCollection wrappers(mod, "astshim");
+    lsst::cpputils::python::WrapperCollection wrappers(mod, "astshim");
     wrapBase(wrappers);
     wrapObject(wrappers);
     wrapKeyMap(wrappers);

@@ -30,7 +30,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 
-void wrapFrameSet(lsst::utils::python::WrapperCollection &wrappers) {
+void wrapFrameSet(lsst::cpputils::python::WrapperCollection &wrappers) {
     using PyFrameSet = py::class_<FrameSet, std::shared_ptr<FrameSet>, Frame>;
     wrappers.wrapType(PyFrameSet(wrappers.module, "FrameSet"), [](auto &mod, auto &cls) {
         cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
