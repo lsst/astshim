@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapNormMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyNormMap =  py::class_<NormMap, Mapping>;
+    using PyNormMap =  py::classh<NormMap, Mapping>;
     wrappers.wrapType(PyNormMap(wrappers.module, "NormMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
         cls.def(py::init<NormMap const &>());

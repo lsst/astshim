@@ -35,7 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapUnitNormMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyUnitNormapMap=py::class_<UnitNormMap, Mapping> ;
+    using PyUnitNormapMap=py::classh<UnitNormMap, Mapping> ;
     wrappers.wrapType(PyUnitNormapMap (wrappers.module, "UnitNormMap"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<std::vector<double> const &, std::string const &>(), "centre"_a, "options"_a = "");

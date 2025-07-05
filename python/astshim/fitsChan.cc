@@ -38,7 +38,7 @@ namespace {
 
     template<typename T>
     void wrapFoundValue(lsst::cpputils::python::WrapperCollection &wrappers, std::string const &suffix) {
-        using PyFoundValue = py::class_<FoundValue<T>>;
+        using PyFoundValue = py::classh<FoundValue<T>>;
         std::string name = "FoundValue" + suffix;
         wrappers.wrapType(PyFoundValue(wrappers.module, name.c_str()), [](auto &mod, auto &cls) {
             cls.def(py::init<bool, T const &>(), "found"_a, "value"_a);
@@ -78,7 +78,7 @@ void wrapFitsChan(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrapFoundValue<bool>(wrappers, "L");
 
     // Wrap FitsChan
-    using PyFitsChan =  py::class_<FitsChan, Channel>;
+    using PyFitsChan =  py::classh<FitsChan, Channel>;
     wrappers.wrapType(PyFitsChan(wrappers.module, "FitsChan"), [](auto &mod, auto &cls) {
         cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");
 

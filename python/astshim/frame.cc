@@ -34,7 +34,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapDirectionPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<DirectionPoint>(wrappers.module, "DirectionPoint"), [](auto &mod, auto &cls) {
+    wrappers.wrapType(py::classh<DirectionPoint>(wrappers.module, "DirectionPoint"), [](auto &mod, auto &cls) {
         cls.def(py::init<double, PointD>(), "direction"_a, "point"_a);
         cls.def_readwrite("direction", &DirectionPoint::direction);
         cls.def_readwrite("point", &DirectionPoint::point);
@@ -42,7 +42,7 @@ void wrapDirectionPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
 }
 
 void wrapNReadValue(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<NReadValue>(wrappers.module, "NReadValue"), [](auto &mod, auto &cls) {
+    wrappers.wrapType(py::classh<NReadValue>(wrappers.module, "NReadValue"), [](auto &mod, auto &cls) {
         cls.def(py::init<int, double>(), "nread"_a, "value"_a);
         cls.def_readwrite("nread", &NReadValue::nread);
         cls.def_readwrite("value", &NReadValue::value);
@@ -50,7 +50,7 @@ void wrapNReadValue(lsst::cpputils::python::WrapperCollection &wrappers) {
 }
 
 void wrapResolvedPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<ResolvedPoint> (wrappers.module, "ResolvedPoint"), [](auto &mod, auto &cls) {
+    wrappers.wrapType(py::classh<ResolvedPoint> (wrappers.module, "ResolvedPoint"), [](auto &mod, auto &cls) {
         cls.def(py::init<int>(), "naxes"_a);
         cls.def_readwrite("point", &ResolvedPoint::point);
         cls.def_readwrite("d1", &ResolvedPoint::d1);
@@ -59,7 +59,7 @@ void wrapResolvedPoint(lsst::cpputils::python::WrapperCollection &wrappers) {
 }
 
 void wrapFrameMapping(lsst::cpputils::python::WrapperCollection &wrappers) {
-    wrappers.wrapType(py::class_<FrameMapping>(wrappers.module, "FrameMapping"), [](auto &mod, auto &cls) {
+    wrappers.wrapType(py::classh<FrameMapping>(wrappers.module, "FrameMapping"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::shared_ptr<Frame>, std::shared_ptr<Mapping>>(), "frame"_a, "mapping"_a);
         cls.def_readwrite("frame", &FrameMapping::frame);
         cls.def_readwrite("mapping", &FrameMapping::mapping);
@@ -72,7 +72,7 @@ void wrapFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
     wrapResolvedPoint(wrappers);
     wrapFrameMapping(wrappers);
 
-    using PyFrame = py::class_<Frame, Mapping>;
+    using PyFrame = py::classh<Frame, Mapping>;
     wrappers.wrapType(PyFrame(wrappers.module, "Frame"), [](auto &mod, auto &cls) {
         cls.def(py::init<int, std::string const &>(), "naxes"_a, "options"_a = "");
         cls.def(py::init<Frame const &>());

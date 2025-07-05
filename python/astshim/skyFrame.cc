@@ -35,7 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapSkyFrame(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PySkyFrame = py::class_<SkyFrame, Frame>;
+    using PySkyFrame = py::classh<SkyFrame, Frame>;
     wrappers.wrapType(PySkyFrame(wrappers.module, "SkyFrame"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<std::string const &>(), "options"_a = "");

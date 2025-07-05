@@ -32,7 +32,7 @@ using namespace pybind11::literals;
 
 namespace ast {
 void wrapSphMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PySphMap=py::class_<SphMap, Mapping>;
+    using PySphMap=py::classh<SphMap, Mapping>;
     wrappers.wrapType(PySphMap(wrappers.module, "SphMap"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<std::string const &>(), "options"_a = "");

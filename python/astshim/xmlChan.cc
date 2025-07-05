@@ -33,7 +33,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapXmlChan(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyXmlChan=py::class_<XmlChan, Channel>;
+    using PyXmlChan=py::classh<XmlChan, Channel>;
     wrappers.wrapType(PyXmlChan(wrappers.module, "XmlChan"), [](auto &mod, auto &cls) {
 
         cls.def(py::init<Stream &, std::string const &>(), "stream"_a, "options"_a = "");

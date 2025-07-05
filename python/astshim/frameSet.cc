@@ -31,7 +31,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapFrameSet(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PyFrameSet = py::class_<FrameSet, Frame>;
+    using PyFrameSet = py::classh<FrameSet, Frame>;
     wrappers.wrapType(PyFrameSet(wrappers.module, "FrameSet"), [](auto &mod, auto &cls) {
         cls.def(py::init<Frame const &, std::string const &>(), "frame"_a, "options"_a = "");
         cls.def(py::init<Frame const &, Mapping const &, Frame const &, std::string const &>(), "baseFrame"_a,
