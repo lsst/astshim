@@ -35,7 +35,7 @@ using namespace pybind11::literals;
 namespace ast {
 
 void wrapSlaMap(lsst::cpputils::python::WrapperCollection &wrappers) {
-    using PySlaMap = py::class_<SlaMap, std::shared_ptr<SlaMap>, Mapping>;
+    using PySlaMap = py::classh<SlaMap, Mapping>;
     wrappers.wrapType(PySlaMap(wrappers.module, "SlaMap"), [](auto &mod, auto &cls) {
         cls.def(py::init<std::string const &>(), "options"_a = "");
         cls.def(py::init<SlaMap const &>());
