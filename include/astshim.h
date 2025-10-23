@@ -41,6 +41,7 @@
 #include "astshim/ShiftMap.h"
 #include "astshim/SlaMap.h"
 #include "astshim/SphMap.h"
+#include "astshim/SplineMap.h"
 #include "astshim/TimeMap.h"
 #include "astshim/TranMap.h"
 #include "astshim/UnitMap.h"

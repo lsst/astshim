@@ -33,6 +33,7 @@ scripts.BasicSConscript.python(['_astshimLib'], [
     "slaMap.cc",
     "specFrame.cc",
     "sphMap.cc",
+    "splineMap.cc",
     "stream.cc",
     "table.cc",
     "timeFrame.cc",

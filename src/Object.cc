@@ -54,6 +54,7 @@
 #include "astshim/SlaMap.h"
 #include "astshim/SpecFrame.h"
 #include "astshim/SphMap.h"
+#include "astshim/SplineMap.h"
 #include "astshim/Table.h"
 #include "astshim/TimeFrame.h"
 #include "astshim/TimeMap.h"
@@ -114,6 +115,7 @@ std::shared_ptr<Object> Object::_basicFromAstObject(AstObject *rawObj) {
                     {"SlaMap", makeShim<SlaMap, AstSlaMap>},
                     {"SpecFrame", makeShim<SpecFrame, AstSpecFrame>},
                     {"SphMap", makeShim<SphMap, AstSphMap>},
+                    {"SplineMap", makeShim<SplineMap, AstSplineMap>},
                     {"TimeFrame", makeShim<TimeFrame, AstTimeFrame>},
                     {"Table", makeShim<Table, AstTable>},
                     {"TimeMap", makeShim<TimeMap, AstTimeMap>},

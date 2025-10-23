@@ -61,6 +61,7 @@ void wrapSkyFrame(WrapperCollection&);
 void wrapSlaMap(WrapperCollection&);
 void wrapSpecFrame(WrapperCollection&);
 void wrapSphMap(WrapperCollection&);
+void wrapSplineMap(WrapperCollection&);
 void wrapStream(WrapperCollection&);
 void wrapTable(WrapperCollection&);
 void wrapTimeFrame(WrapperCollection&);
@@ -110,6 +111,7 @@ PYBIND11_MODULE(_astshimLib, mod) {
     wrapSlaMap(wrappers);
     wrapSpecFrame(wrappers);
     wrapSphMap(wrappers);
+    wrapSplineMap(wrappers);
     wrapStream(wrappers);
     wrapTimeFrame(wrappers);
     wrapTimeMap(wrappers);
