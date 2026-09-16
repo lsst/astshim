@@ -132,7 +132,6 @@ Many portions of AST have not yet been wrapped. Here are some highlights:
 - @anchor astTune and astTuneC.
 
 The Python interface could present a more dict-like view of KeyMap and FitsChan, as pyast does.
-*/
 
 ## To build
 
