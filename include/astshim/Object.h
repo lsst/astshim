@@ -198,6 +198,9 @@ public:
     - This function returns without action if the AST library has
     been built without POSIX thread support (i.e. the "-with-pthreads"
     option was not specified when running the "configure" script).
+    - astshim never calls this function itself, and so assumes an AST built
+    without POSIX thread support. See the "Thread safety" section of the
+    main page before using astshim from more than one Python thread.
     */
     void lock(bool wait) {
         astLock(getRawPtr(), static_cast<int>(wait));
