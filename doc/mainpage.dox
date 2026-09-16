@@ -3,7 +3,7 @@ namespace ast {
 \mainpage astshim
 
 A C++ and Python shim around a subset of
-<a href="http://starlink.eao.hawaii.edu/starlink/AST">Starlink AST</a> 
+<a href="http://starlink.eao.hawaii.edu/starlink/AST">Starlink AST</a>
 a library for handling world coordinate systems in astronomy.
 
 For detailed documentation of AST see http://starlink.eao.hawaii.edu/devdocs/sun211.htx/sun211.html.
@@ -73,6 +73,14 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
         (implementing `astMapPutElem...<X>`).
 - @ref PolyMap has two separate constructors, one that takes foward and inverse coefficients,
     one that takes only forward coefficients. Neither provides an iterative inverse by default.
+
+## Supported AST versions
+
+astshim works against Starlink AST 9.3.x and 9.5.0 or later.
+**AST 9.4.x will not pass the packages tests.**
+This is because there is an edge case in one of the tests that causes a FITS solution to fail.
+This problem is fixed in 9.5.0.
+Where appropriate the tests do change behavior based on AST version since the role of this library is to assert that the result agrees with the C library even if that result depended on a bug.
 
 ## Thread safety
 
