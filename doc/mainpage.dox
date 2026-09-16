@@ -3,7 +3,7 @@ namespace ast {
 \mainpage astshim
 
 A C++ and Python shim around a subset of
-<a href="http://starlink.eao.hawaii.edu/starlink/AST">Starlink AST</a> 
+<a href="http://starlink.eao.hawaii.edu/starlink/AST">Starlink AST</a>
 a library for handling world coordinate systems in astronomy.
 
 For detailed documentation of AST see http://starlink.eao.hawaii.edu/devdocs/sun211.htx/sun211.html.
@@ -74,6 +74,54 @@ that support time, spectra and tables have yet been wrapped. The python wrapper 
 - @ref PolyMap has two separate constructors, one that takes foward and inverse coefficients,
     one that takes only forward coefficients. Neither provides an iterative inverse by default.
 
+## Supported AST versions
+
+astshim works against Starlink AST 9.3.x and 9.5.0 or later.
+**AST 9.4.x will not pass the packages tests.**
+This is because there is an edge case in one of the tests that causes a FITS solution to fail.
+This problem is fixed in 9.5.0.
+Where appropriate the tests do change behavior based on AST version since the role of this library is to assert that the result agrees with the C library even if that result depended on a bug.
+
+## Thread safety
+
+astshim requires a build of AST that does **not** have POSIX thread support,
+which is how the `starlink-ast` conda-forge package is built
+(its recipe passes `--without-pthreads` to AST's `configure`).
+Against an AST built with thread support, astshim is unsafe to use from more than one Python thread,
+and the failure is a process-level crash rather than an exception.
+
+In a thread-safe AST every object is locked to the thread that created it,
+and moving one to another thread requires the creating thread to unlock it
+and the receiving thread to lock it.
+@ref Object.lock and @ref Object.unlock wrap those calls,
+but nothing inside astshim uses them,
+so any object that is created on one thread and used on another is rejected by AST.
+
+This is easy to hit without writing threaded code.
+Pickling an @ref Object serializes it to text and rebuilds it with @ref Channel.read,
+so the object that arrives is a genuinely separate AST object rather than a shared pointer -
+but it is created by whichever thread performs the unpickling.
+`multiprocessing.Pool` unpickles results on its internal result-handler thread
+while the main thread consumes them,
+so `pool.map` returning astshim objects is enough to trigger it.
+Against a thread-safe AST that reports
+"Invalid Object pointer ... owned by another thread"
+and then terminates the process,
+because the error escapes from a destructor.
+
+What makes the current arrangement safe is CPython's global interpreter lock.
+The pybind11 bindings never release it,
+so two threads are never inside AST at the same time,
+and no astshim method leaves an AST operation open across calls:
+AST's global error status is checked,
+and the static buffers that functions such as `astGetC` return are copied into a `std::string`,
+before each wrapper function returns.
+AST's remaining global state is therefore only ever read and written while one thread holds the GIL.
+
+Two changes would remove that protection and require a real locking discipline:
+running under a free-threaded CPython build (PEP 703),
+or releasing the GIL around AST calls in the bindings.
+
 ## Missing Functionality
 
 Many portions of AST have not yet been wrapped. Here are some highlights:
@@ -92,7 +140,6 @@ Many portions of AST have not yet been wrapped. Here are some highlights:
 - @anchor astTune and astTuneC.
 
 The Python interface could present a more dict-like view of KeyMap and FitsChan, as pyast does.
-*/
 
 ## To build
 

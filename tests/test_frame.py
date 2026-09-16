@@ -36,7 +36,16 @@ class TestFrame(MappingTestCase):
             self.assertTrue(frame.getDirection(axis))
             self.assertEqual(frame.getDigits(axis), 7)
             self.assertEqual(frame.getInternalUnit(axis), "")
-            self.assertEqual(frame.getNormUnit(axis), "")
+            # NormUnit is derived from Unit, and equals it when nothing can
+            # be simplified. That holds from AST 9.5.0 on; before it the
+            # value came from the Axis InternalUnit. AST 9.4.x is not
+            # supported at all - see the mainpage - so it is not accounted
+            # for here.
+            if ast.astVersion() >= 9005000:
+                self.assertEqual(frame.getNormUnit(axis), frame.getUnit(axis))
+                self.assertEqual(frame.getNormUnit(axis), "")
+            else:
+                self.assertEqual(frame.getNormUnit(axis), "")
             self.assertEqual(frame.getSymbol(axis), "x{}".format(axis))
             self.assertEqual(frame.getUnit(axis), "")
 

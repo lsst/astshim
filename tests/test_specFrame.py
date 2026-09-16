@@ -29,7 +29,14 @@ class TestSpecFrame(MappingTestCase):
         self.assertGreater(frame.getTop(1), frame.getBottom(1))
         self.assertTrue(frame.getDirection(1))
         self.assertEqual(frame.getInternalUnit(1), "Angstrom")
-        self.assertEqual(frame.getNormUnit(1), "")
+        # SpecFrame reports a Unit of its own while leaving the Axis Unit
+        # unset, so before AST 9.5.0 NormUnit tracked the Axis, whose Unit is
+        # blank. See the comment in test_frame.py about AST versions.
+        if ast.astVersion() >= 9005000:
+            self.assertEqual(frame.getNormUnit(1), frame.getUnit(1))
+            self.assertEqual(frame.getNormUnit(1), "Angstrom")
+        else:
+            self.assertEqual(frame.getNormUnit(1), "")
         self.assertEqual(frame.getSymbol(1), "WAVE")
         self.assertEqual(frame.getUnit(1), "Angstrom")
 
