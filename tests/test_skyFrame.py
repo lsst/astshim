@@ -35,7 +35,14 @@ class TestSkyFrame(MappingTestCase):
         self.assertGreater(frame.getTop(1), frame.getBottom(1))
         self.assertFalse(frame.getDirection(1))
         self.assertEqual(frame.getInternalUnit(1), "rad")
-        self.assertEqual(frame.getNormUnit(1), "rad")
+        # A sexagesimal format is not a units expression, so NormUnit equals
+        # Unit. See the comment in test_frame.py about AST versions; before
+        # 9.5.0 this reported the Axis InternalUnit, which is radians.
+        if ast.astVersion() >= 9005000:
+            self.assertEqual(frame.getNormUnit(1), frame.getUnit(1))
+            self.assertEqual(frame.getNormUnit(1), "hh:mm:ss.s")
+        else:
+            self.assertEqual(frame.getNormUnit(1), "rad")
         self.assertEqual(frame.getSymbol(1), "RA")
         self.assertEqual(frame.getUnit(1), "hh:mm:ss.s")
 
@@ -43,7 +50,11 @@ class TestSkyFrame(MappingTestCase):
         self.assertAlmostEqual(frame.getTop(2), math.pi / 2)
         self.assertTrue(frame.getDirection(2))
         self.assertEqual(frame.getInternalUnit(2), "rad")
-        self.assertEqual(frame.getNormUnit(2), "rad")
+        if ast.astVersion() >= 9005000:
+            self.assertEqual(frame.getNormUnit(2), frame.getUnit(2))
+            self.assertEqual(frame.getNormUnit(2), "ddd:mm:ss")
+        else:
+            self.assertEqual(frame.getNormUnit(2), "rad")
         self.assertEqual(frame.getSymbol(2), "Dec")
         self.assertEqual(frame.getUnit(2), "ddd:mm:ss")
 
