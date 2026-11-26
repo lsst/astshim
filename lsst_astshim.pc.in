@@ -1,0 +1,12 @@
+prefix=${pcfiledir}/../..
+includedir=${prefix}/include
+libdir=${prefix}/lib
+doxygen_tag=${prefix}/doc/astshim.tag
+lsst_build_requires=pybind11 python3
+
+Name: lsst_astshim
+Description: Python and C++ interface to the Starlink AST library
+Version: @VERSION@
+Requires: lsst_cpputils ndarray numpy starlink_ast
+Cflags: -I${includedir}
+Libs: -L${libdir} -lastshim
